@@ -13,9 +13,10 @@ Dit is de master branch voor de bachelorproef Open-Webslides.
 
 ### Inhoud van de master branch
 * Projectbranches: 
-  * Open webslides webapp: front-end
-  * Directory guard: back-end koppeling tussen front & back
-  * Converter: back-end
+  * webslides_webapp: front-end
+  * directory_guard: back-end koppeling tussen front & back
+  * open_webslides-converter: back-end
+  * zipper, logger en webslides_conversion_test: zipper en logger zijn zelfgeschreven libraries, webslides_conversion_test is een integratietest
 
 Het project is modulair en dat wordt hier weerspiegeld, elk deel kan apart getest worden.  
 Het geheel testen kan in de gedeployde versie op *todo: add URL of webserver*.
