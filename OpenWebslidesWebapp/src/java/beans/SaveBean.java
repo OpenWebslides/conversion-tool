@@ -18,7 +18,6 @@ import org.primefaces.model.UploadedFile;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 
 /**
@@ -28,14 +27,29 @@ import org.primefaces.event.FileUploadEvent;
 @RequestScoped
 public class SaveBean  {
 
-    private UploadedFile uploadedFile;
-
+    private UploadedFile uploadedFile;    
+    private String colour;
+   
     /**
      * Creates a new instance of SaveBean
      */
     public SaveBean() {
     }
 
+
+    public String getColour() {
+        return colour;
+    }
+
+    public void setColour(String colour) {
+        System.out.println("I set the colour to "+colour);
+        this.colour = colour;
+    }
+    
+    
+    
+    
+   
     public UploadedFile getFile() {
         return uploadedFile;
     }

@@ -5,9 +5,9 @@
       xmlns:b="http://bootsfaces.net/ui"
       xmlns:h="http://java.sun.com/jsf/html"
 
-      xmlns:p="http://primefaces.org/ui">
-    <!--h:outputScript library="js" name="index.js" /-->
-
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
     <ui:composition template="./WEB-INF/master_template.xhtml">
 
         <ui:define name="top">
@@ -25,7 +25,19 @@
 
             <h:form enctype="multipart/form-data" id="form">
                 <p:fileUpload fileUploadListener="#{SaveBean.handleFileUpload}" cancelLabel="#{i18n.upload_cancel}" label="#{i18n.upload_choose}" uploadLabel="#{i18n.upload_confirm}" mode="advanced" dragDropSupport="true" update="messages" allowTypes="/(\.|\/)(pptx)$/" multiple="true"/>
-                <p:growl id="messages" showDetail="true" />
+                <p:growl id="messages" showDetail="true" />           
+            </h:form>
+
+
+
+
+            <h:form>
+                <p:selectOneRadio value="#{SaveBean.colour}">
+                    <f:selectItem itemLabel="Red" itemValue="Red" />
+                    <f:selectItem itemLabel="Green" itemValue="Green" />
+                    <f:selectItem itemLabel="Blue" itemValue="Blue" />
+                    <p:ajax />
+                </p:selectOneRadio>
             </h:form>
 
 
