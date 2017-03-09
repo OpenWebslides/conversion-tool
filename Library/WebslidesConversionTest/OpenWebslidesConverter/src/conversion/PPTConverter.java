@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import objects.*;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
+import org.apache.poi.xslf.usermodel.XSLFAutoShape;
 import org.apache.poi.xslf.usermodel.XSLFShape;
 import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFTextShape;
@@ -67,7 +68,8 @@ public class PPTConverter implements IConverter{
         if(slide.getTitle() != null) return new Titel(slide.getTitle());
         List<XSLFShape> shapes = slide.getShapes();
         for(XSLFShape shape : shapes){
-            if(shape.getClass().equals(XSLFTextShape.class)){
+            System.out.println(shape.getShapeName());
+            if(shape.getShapeName().contains("Text")||shape.getShapeName().contains("Auto")){
                 return new Titel(((XSLFTextShape)shape).getText());
             }
         }
@@ -132,13 +134,12 @@ public class PPTConverter implements IConverter{
         for (String line : lines) {
             String tmp = line;
             if (line.contains("<a:pPr") && line.contains("lvl=")) {
-                System.out.println(tmp);
-                System.out.println(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));
+               /* System.out.println(tmp);
+                System.out.println(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));*/
                 level = Integer.parseInt(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));
               //  level = Integer.parseInt(tmp.substring(k1,k2));
             } else if (line.contains("<a:t>")) {
-              //  System.out.println(line);
-                text += tmp.substring(5, tmp.length() - 6);
+                text += tmp.substring(5, tmp.length() - 6) + " ";
             } 
         }
              map.put(level,text);
