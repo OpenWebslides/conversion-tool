@@ -26,4 +26,9 @@
         <managed-bean-class>beans.SaveBean</managed-bean-class>
         <managed-bean-scope>request</managed-bean-scope>
     </managed-bean>
+    <managed-bean>
+        <managed-bean-name>DownloadBean</managed-bean-name>
+        <managed-bean-class>beans.DownloadBean</managed-bean-class>
+        <managed-bean-scope>request</managed-bean-scope>
+    </managed-bean>
 </faces-config>
