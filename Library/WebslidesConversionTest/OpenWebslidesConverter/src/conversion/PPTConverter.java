@@ -38,7 +38,7 @@ public class PPTConverter implements IConverter{
             pptSource = new XMLSlideShow(new FileInputStream(file));
             List<XSLFSlide> slides = pptSource.getSlides();
             int slideNr = 0;
-           /* for(XSLFSlide slide : slides){ //*/XSLFSlide slide = slides.get(2);
+            for(XSLFSlide slide : slides){ //XSLFSlide slide = slides.get(2);
                     Slide webslide = new Slide();
                     
                     webslide.addPPTObject(getTitel(slide));
@@ -50,7 +50,7 @@ public class PPTConverter implements IConverter{
                     ppt.getSlides().add(webslide);
                     
                     slideNr++;
-            //}
+            }
             pptSource.close();
         } catch (Exception ex) {
             Logger.getLogger(PPTConverter.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,7 +107,7 @@ public class PPTConverter implements IConverter{
         HashMap<Integer, String> temp = new HashMap<>();
         int lastLevel = 0;
         for (CTTextParagraph pArray1 : pArray) {
-            //System.out.println(pArray1);
+         //   System.out.println(pArray1);
             evaluateBlock(temp, pArray1.toString().split("\r"));
             addToList(temp, lastLevel, currentList);
             lastLevel = (int)temp.keySet().toArray()[0];
@@ -130,14 +130,11 @@ public class PPTConverter implements IConverter{
         String text = "";
         
         for (String line : lines) {
-            String tmp = line.trim();
+            String tmp = line;
             if (line.contains("<a:pPr") && line.contains("lvl=")) {
-                //System.out.println(tmp);
-               // System.out.println(tmp.indexOf("lvl=\"")+5);
-                int k1 = tmp.indexOf("lvl=\""+5);
-                int k2 = 1;
-                System.out.println(tmp.length());
-                System.out.println(tmp.substring(k1, k2));
+                System.out.println(tmp);
+                System.out.println(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));
+                level = Integer.parseInt(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));
               //  level = Integer.parseInt(tmp.substring(k1,k2));
             } else if (line.contains("<a:t>")) {
               //  System.out.println(line);
@@ -160,18 +157,26 @@ public class PPTConverter implements IConverter{
             Maak een nieuw lijstobject en steek hierin een bullet met de tekstvalue
             Plaats de lijst in zijn juiste level
         */
-        Lijst lst = new Lijst();
-        lst.addPPTObject(new Bullet((String)temp.values().toArray()[0]));
-        if(lastLevel < (int)temp.keySet().toArray()[0]){
-            Lijst atm = currentList.get(currentList.size()-1);
-            currentList.add(((Lijst)currentList.get(currentList.size()-1).getBullets().get(currentList.get(currentList.size()-1).getBullets().size()-1)));
+        try{
+            Lijst lst = new Lijst();
+            lst.addPPTObject(new Bullet((String)temp.values().toArray()[0]));
+            if(lastLevel < (int)temp.keySet().toArray()[0]){
+                    Lijst l1 = currentList.get(currentList.size()-1);
+                    Lijst l1b = (Lijst) l1.getBullets().get(l1.getBullets().size()-1);
+                    currentList.add(l1b);
+
+    //currentList.add(((Lijst)currentList.get(currentList.size()-1).getBullets().get(currentList.get(currentList.size()-1).getBullets().size()-1)));
+            }
+            else if(lastLevel > (int)temp.keySet().toArray()[0]){
+                for(int i = 0; i < lastLevel - (int)temp.keySet().toArray()[0];i++)
+                    currentList.remove(currentList.size()-1);
+            }
+
+            currentList.get(currentList.size()-1).addPPTObject(lst);
         }
-        else if(lastLevel > (int)temp.keySet().toArray()[0]){
-            for(int i = 0; i < lastLevel - (int)temp.keySet().toArray()[0];i++)
-                currentList.remove(currentList.size()-1);
-        }
-        
-        currentList.get(currentList.size()-1).addPPTObject(lst);
+        catch(ArrayIndexOutOfBoundsException e){
+                
+         }
     }
     
 }
