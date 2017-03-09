@@ -66,10 +66,6 @@ public class Template {
         "\t</header>\n\n";
     
     private final static String FOOTER = "\n\n\t<footer>\n" +
-        "\t\t<p class=\"license\">\n" +
-        "\t\t\t<a rel=\"license\" href=\"http://creativecommons.org/licenses/by/4.0/\"><img alt=\"Creative Commons License\" src=\"_shared/images/cc-by-small.svg\" /></a>\n" +
-        "\t\t\tExcept where otherwise noted, the content of these slides is licensed under a <a rel=\"license\" href=\"http://creativecommons.org/licenses/by/4.0/\">Creative Commons Attribution 4.0 International License</a>.\n" +
-        "\t\t</p>\n" +
         "\t</footer>\n" +
         "\t<script src=\"_shared/scripts/shower.min.js\"></script>\n" +
         "\t<script src=\"_shared/scripts/enhancements.js\"></script>\n" +
