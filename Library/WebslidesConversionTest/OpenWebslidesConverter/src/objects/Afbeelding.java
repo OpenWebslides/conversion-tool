@@ -10,7 +10,12 @@ package objects;
  * @author Joann
  */
 public class Afbeelding implements PPTObject{
-
+    
+    /**
+     * Return the html code from this element
+     * @param indentation
+     * @return 
+     */
     @Override
     public String toHtml(int indentation) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

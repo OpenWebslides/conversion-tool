@@ -13,13 +13,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import objects.*;
-import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFAutoShape;
-import org.apache.poi.xslf.usermodel.XSLFShape;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
-import org.apache.poi.xslf.usermodel.XSLFTextShape;
+import org.apache.poi.xslf.usermodel.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextParagraph;
-import org.openxmlformats.schemas.presentationml.x2006.main.CTShape;
 
 /**
  *
@@ -27,12 +22,17 @@ import org.openxmlformats.schemas.presentationml.x2006.main.CTShape;
  */
 public class PPTConverter implements IConverter{
     
-    private File file;
+    private final File file;
     
     public PPTConverter(File file){
         this.file = file;   
     }
 
+    /**
+     * Parse the file to the given ppt
+     * @param ppt 
+     */
+    @Override
     public void parse(PPT ppt) {
         XMLSlideShow pptSource;
         try {

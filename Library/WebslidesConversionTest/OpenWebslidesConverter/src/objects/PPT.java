@@ -7,12 +7,19 @@ import java.util.List;
 public class PPT {
 
     //metadata
-    private List<Slide> slides;
+    private final List<Slide> slides;
 
+    /**
+     * Create an PPT objectS
+     */
     public PPT() {
         slides = new ArrayList<>();
     }
-
+    /**
+     * Return the html code from this element
+     * @param indentation
+     * @return 
+     */
     public String toHTML() {
         String temp = "";
         for(PPTObject obj : slides){
@@ -21,6 +28,10 @@ public class PPT {
         return temp;
     }
 
+    /**
+     * Return the slides
+     * @return 
+     */
     public List<Slide> getSlides() {
         return slides;
     }
