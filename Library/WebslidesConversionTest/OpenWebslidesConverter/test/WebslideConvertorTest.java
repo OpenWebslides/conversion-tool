@@ -35,11 +35,11 @@ public class WebslideConvertorTest {
     
     @Test
     public void testRun() {
-        File file = new File("C:\\temp\\ppt.pptx");
+        File file = new File("C:\\temp\\slides.pptx");
         
         IConverter converter = ConverterFactory.getConverter(file);
         
-        PPT ppt = new PPT(new File(""));
+        PPT ppt = new PPT();
         
         converter.parse(ppt);
         

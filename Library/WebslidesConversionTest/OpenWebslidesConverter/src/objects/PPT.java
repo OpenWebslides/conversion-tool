@@ -8,10 +8,8 @@ public class PPT {
 
     //metadata
     private List<Slide> slides;
-    private File ppt;
 
-    public PPT(File file) {
-        ppt = file;
+    public PPT() {
         slides = new ArrayList<>();
     }
 
@@ -26,11 +24,5 @@ public class PPT {
     public List<Slide> getSlides() {
         return slides;
     }
-
-
-    public File getPpt() {
-        return ppt;
-    }
-
     
 }

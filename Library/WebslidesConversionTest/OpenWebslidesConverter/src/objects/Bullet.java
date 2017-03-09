@@ -19,18 +19,20 @@ public class Bullet implements PPTObject{
     
     @Override
     public String toHtml(int indentation) {
-        
-        String temp = "";
-        for(int i = 0; i < indentation ; i++)
-            temp += "\t";
-        temp+="<li style=\"\">\n";
-        for(int i = 0; i < indentation+1 ; i++)
-            temp += "\t";
-        temp+=content+"\n";
-        for(int i = 0; i < indentation ; i++)
-            temp += "\t";
-        temp+="</li>\n";
-        return temp;
+        if(!content.equals("")){
+            String temp = "";
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
+            temp+="<li style=\"\">\n";
+            for(int i = 0; i < indentation+1 ; i++)
+                temp += "\t";
+            temp+=content+"\n";
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
+            temp+="</li>\n";
+            return temp;
+            }
+        return "";
     }
 
     public String getContent() {

@@ -132,13 +132,14 @@ public class PPTConverter implements IConverter{
         String text = "";
         
         for (String line : lines) {
-            String tmp = line;
-            if (line.contains("<a:pPr") && line.contains("lvl=")) {
-               /* System.out.println(tmp);
-                System.out.println(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));*/
+            String tmp = line.replaceFirst("^\\s*", "");
+            if (tmp.contains("<a:pPr") && tmp.contains("lvl=")) {
+               System.out.println(tmp);
+               /* System.out.println(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));*/
                 level = Integer.parseInt(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));
               //  level = Integer.parseInt(tmp.substring(k1,k2));
-            } else if (line.contains("<a:t>")) {
+            } else if (tmp.contains("<a:t>")) {
+               System.out.println(tmp);
                 text += tmp.substring(5, tmp.length() - 6) + " ";
             } 
         }
