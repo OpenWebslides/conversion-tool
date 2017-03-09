@@ -48,9 +48,7 @@ public class OpenWebslidesConverter {
     private static void startConverter(String[] args, Output output){
         try{
             Converter converter = resolveParams(args, output);
-            
-            //dummy output
-            converter.dummyOutput();
+            converter.convert();
         }
         catch(ParseException | InvalidParameterException e){
             output.error("Error: " + e.getMessage(), null);
