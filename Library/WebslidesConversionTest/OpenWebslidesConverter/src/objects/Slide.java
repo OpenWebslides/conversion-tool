@@ -29,10 +29,15 @@ public class Slide implements PPTObject {
     @Override
     public String toHtml(int indentation) {
         if(!testOutput()){
-            String temp = "<div class=\"slide\" id=\"slide" + slideNr + "\">\n";
+            String temp = "";            
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
+            temp += "<div class=\"slide\" id=\"slide" + slideNr + "\">\n";
             for(PPTObject obj : pptObjects){
                  temp += obj.toHtml(indentation+1);
             }
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
             return adjustHeight(temp + "</div>\n");
             }
         return "";
