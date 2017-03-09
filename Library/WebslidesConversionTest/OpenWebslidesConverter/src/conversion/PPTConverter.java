@@ -5,13 +5,18 @@
  */
 package conversion;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import objects.*;
 import org.apache.poi.xslf.usermodel.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextParagraph;
@@ -39,12 +44,15 @@ public class PPTConverter implements IConverter{
             pptSource = new XMLSlideShow(new FileInputStream(file));
             List<XSLFSlide> slides = pptSource.getSlides();
             int slideNr = 0;
+            loadPictures(pptSource);
             for(XSLFSlide slide : slides){ //XSLFSlide slide = slides.get(2);
                     Slide webslide = new Slide();
                     
                     webslide.addPPTObject(getTitel(slide));
                     
                     webslide.addPPTObject(getContent(slide));
+                    
+                    webslide.addPPTObject(getImages(slide));
                     
                     webslide.setSlideNr(slideNr);
                     
@@ -68,7 +76,6 @@ public class PPTConverter implements IConverter{
         if(slide.getTitle() != null) return new Titel(slide.getTitle());
         List<XSLFShape> shapes = slide.getShapes();
         for(XSLFShape shape : shapes){
-            System.out.println(shape.getShapeName());
             if(shape.getShapeName().contains("Text")||shape.getShapeName().contains("Auto")){
                 return new Titel(((XSLFTextShape)shape).getText());
             }
@@ -109,7 +116,7 @@ public class PPTConverter implements IConverter{
         HashMap<Integer, String> temp = new HashMap<>();
         int lastLevel = 0;
         for (CTTextParagraph pArray1 : pArray) {
-         //   System.out.println(pArray1);
+           // System.out.println(pArray1);
             evaluateBlock(temp, pArray1.toString().split("\r"));
             addToList(temp, lastLevel, currentList);
             lastLevel = (int)temp.keySet().toArray()[0];
@@ -134,12 +141,12 @@ public class PPTConverter implements IConverter{
         for (String line : lines) {
             String tmp = line.replaceFirst("^\\s*", "");
             if (tmp.contains("<a:pPr") && tmp.contains("lvl=")) {
-               System.out.println(tmp);
+             //  System.out.println(tmp);
                /* System.out.println(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));*/
                 level = Integer.parseInt(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));
               //  level = Integer.parseInt(tmp.substring(k1,k2));
             } else if (tmp.contains("<a:t>")) {
-               System.out.println(tmp);
+              // System.out.println(tmp);
                 text += tmp.substring(5, tmp.length() - 6) + " ";
             } 
         }
@@ -179,6 +186,43 @@ public class PPTConverter implements IConverter{
         catch(ArrayIndexOutOfBoundsException e){
                 
          }
+    }
+
+    
+    private PPTObject getImages(XSLFSlide slide) {
+        Lijst l = new Lijst();
+        for(XSLFShape sh : slide.getShapes()){
+            System.out.println(sh.getShapeName() + " " +sh.getShapeId());
+            if(sh.getShapeName().contains("Picture")){
+                System.out.println(((XSLFPictureShape) sh).getPictureData().getFileName());
+                l.addPPTObject(new Afbeelding(((XSLFPictureShape) sh).getPictureData().getFileName()));
+            }
+        }
+        
+        return l;
+
+    }
+
+    private void loadPictures(XMLSlideShow ppt) {
+        
+        for(XSLFPictureData data : ppt.getPictureData()){
+         
+         byte[] bytes = data.getData();
+         String fileName = data.getFileName();
+         System.out.println("picture name: " + fileName);
+         InputStream in = new ByteArrayInputStream(bytes);
+	 BufferedImage bImageFromConvert = null;
+            try {
+                bImageFromConvert = ImageIO.read(in);
+            } catch (IOException ex) {
+                Logger.getLogger(PPTConverter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                ImageIO.write(bImageFromConvert, "jpg", new File("c:\\temp\\"+fileName));
+            } catch (Exception ex) {
+                Logger.getLogger(PPTConverter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }	    
     }
     
 }
