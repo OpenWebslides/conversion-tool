@@ -27,12 +27,22 @@ public class ConversionThread extends Thread{
     private final Queue<Queue<String>> logQueue;
     private Queue<String> queue;
     
+    /**
+     * Creates an instance of the class ConversionThread.
+     * @param args the command line arguments
+     * @param logQueue A queue of queues of strings. The inner queue of strings will be filled with the log output from the logger.
+     * @param id A unique identification for the thread. Used in the log to keep the different converters apart.
+     */
     public ConversionThread(String[] args, Queue<Queue<String>> logQueue, long id){
         this.args = args;
         this.logQueue = logQueue;
         this.id = id;
     }
     
+    /**
+     * The run method of the thread. Contains al the logic of the class. It passes the arguments from the constructor to the converter via reflection.
+     * At the end the queue of strings with the logs from the converter will be pushed into logQueue.
+     */
     @Override
     public void run(){
         try {
@@ -71,6 +81,10 @@ public class ConversionThread extends Thread{
         }
     }
     
+    /**
+     * Private help method to write a message to the log queue. The id of the thread and a timestamp will be added before the message.
+     * @param msg 
+     */
     private void logToQueue(String msg){
         queue.offer(id + " " + new Timestamp(new Date().getTime()) + " " + msg);
     }
