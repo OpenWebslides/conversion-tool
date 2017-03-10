@@ -20,7 +20,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 /**
- *
+ * Resolves the parameters and starts the matching converter.
  * @author Laurens
  */
 public class OpenWebslidesConverter {
@@ -45,6 +45,11 @@ public class OpenWebslidesConverter {
         startConverter(args, output);
     }
     
+    /**
+     * Creates a Converter object and starts the conversion.
+     * @param args The arguments for the converter.
+     * @param output The output channel of the converter.
+     */
     private static void startConverter(String[] args, Output output){
         try{
             Converter converter = resolveParams(args, output);
@@ -55,6 +60,14 @@ public class OpenWebslidesConverter {
         }
     }
     
+    /**
+     * Resolves the arguments to create the matching Converter.
+     * @param args The arguments for the converter.
+     * @param output The output channel for the converter.
+     * @return
+     * @throws ParseException
+     * @throws InvalidParameterException 
+     */
     private static Converter resolveParams(String[] args, Output output) throws ParseException,InvalidParameterException {
         Options options = new Options();
         options.addOption("i", true, "input file");
@@ -73,6 +86,13 @@ public class OpenWebslidesConverter {
         }*/
     }
     
+    /**
+     * Creates a Converter object that matches the CommandLine options.
+     * @param cmd The CommandLine with the arguments for the Converter.
+     * @param out The output channel for the converter.
+     * @return
+     * @throws InvalidParameterException 
+     */
     private static Converter createConverter(CommandLine cmd, Output out) throws InvalidParameterException{
         String inputFile;
         String outputType = PropertiesReader.getValue(PropertiesReader.OUTPUT_TYPE);

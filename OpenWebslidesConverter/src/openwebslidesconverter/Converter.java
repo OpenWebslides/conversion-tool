@@ -17,7 +17,7 @@ import openwebslides.output.Output;
 import openwebslides.template.Template;
 
 /**
- *
+ * Converts a .pptx file.
  * @author Jonas
  */
 public class Converter {
@@ -31,9 +31,9 @@ public class Converter {
     private Output output;
     
     /**
-     * Create a new converter instance
-     * @param file The file to be converted
-     * @param output
+     * Create a new converter instance.
+     * @param file The file to be converted.
+     * @param output The output channel that should be used. All messages and errors are printed to there.
      */
     public Converter(String file, Output output){
         this(null,file,null,output);
@@ -44,7 +44,7 @@ public class Converter {
      * @param outputType the type your file should be converted to
      * @param inputFile the file to be converted
      * @param outputDir the output folder
-     * @param output
+     * @param output The output channel that should be used. All messages and errors are printed to there.
      * @throws InvalidParameterException 
      */
     public Converter(String outputType, String inputFile, String outputDir, Output output) throws InvalidParameterException{
@@ -79,7 +79,7 @@ public class Converter {
     }
     
     /**
-     * Create a dummy output
+     * Starts the conversion. The result is written to the output directory.
      */
     public void convert(){
         output.println("Start conversion");
@@ -116,7 +116,7 @@ public class Converter {
     }
     
     /**
-     * 
+     * Writes the html output of the PPT to the BufferedWriter. The slides are embedded in the template code if shower is true.
      * @param out 
      */
     private void writePPT(PPT ppt, BufferedWriter out) throws IOException{
@@ -131,7 +131,7 @@ public class Converter {
     }
     
     /**
-     * Generate the output filename
+     * Generate the output filename.
      * @return 
      */
     private String getOutputFileName(){

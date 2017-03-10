@@ -9,7 +9,7 @@ import java.io.FileInputStream;
 import java.util.Properties;
 
 /**
- *
+ * Reads the converter.properties file and holds the values. Contains also the default values.
  * @author Jonas
  */
 public class PropertiesReader {
@@ -23,6 +23,11 @@ public class PropertiesReader {
     public static final int OUTPUT_TYPE = 1;
     public static final int OUTPUT_DIR = 2;
     
+    /**
+     * Returns the value that should be used for the corresponding parameter.
+     * @param k The key of the parameter wanted. The value should be a constant int from this class.
+     * @return 
+     */
     public static String getValue(int k){
         if(k > 2 || k < 0) return null;
         
@@ -52,6 +57,11 @@ public class PropertiesReader {
         }
     }
     
+    /**
+     * Returns the default value for the parameter that matches with the key.
+     * @param k The key of the parameter wanted. The value should be a constant int from this class.
+     * @return 
+     */
     public static String returnDefault(int k){
         switch(k){
                 case LOG_FILE:

@@ -13,7 +13,7 @@ import objects.Slide;
 import org.apache.commons.io.FileUtils;
 
 /**
- *
+ * Generates the code for the template around the slides.
  * @author Jonas
  */
 public class Template {
@@ -21,12 +21,23 @@ public class Template {
     private String course;
     private String chapter;
     
+    /**
+     * Creates an instance of the class Template.
+     * @param ppt The PPT object which contains the slides that the template should contain.
+     * @param course The name of the course.
+     * @param chapter The name of the chapter.
+     */
     public Template(PPT ppt, String course, String chapter){
         this.course = course != null ? course : "Opleidingsonderdeel";
         this.chapter = chapter != null ? chapter : "Hoofdstuk";
         this.ppt = ppt;
     }
     
+    /**
+     * Prints the html of the template together with the code for the slides to the BufferedWriter.
+     * @param out
+     * @throws IOException 
+     */
     public void print(BufferedWriter out) throws IOException{
         out.write(HEADER);
         //out.write("\t"+DUMMYSLIDES);
@@ -38,6 +49,11 @@ public class Template {
         out.write(FOOTER);
     }
     
+    /**
+     * Creates a copy of the needed files to use the template into the targetDir.
+     * @param targetDir The directory where the files should be copied to.
+     * @throws IOException 
+     */
     public void copySharedFolder(String targetDir) throws IOException{
         File source = new File("Template/_shared");
         File target = new File(targetDir+"/_shared");
