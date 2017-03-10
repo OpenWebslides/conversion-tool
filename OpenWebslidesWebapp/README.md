@@ -1,15 +1,19 @@
-# webslides-01
+# Webslides Webapp manual
 
-## OPEN_WEBSLIDES_WEBAPP branch readme
+## overview
+1. What it does
+2. How to use
 
-Webpagina met pptx-upload op 2 manieren:
-* Drag and drop
-* Selecteren met kies-knop
+## What it does
+The webslides webapp is a simple web application. On this site, you can upload a .pptx file that you want to convert to Open Webslides. After the conversion, the Open Webslides will be returned in a downloadable zip file.
 
-Bijkomende opties voor geconverteerd bestand
-* Enkel tekst (Teruggave van ZIP-file met HTML-bestanden zonder opmaak)
-* Met opmaak (Teruggave van ZIP-file met HTML-bestanden met opmaak)
+(Currently, it does not return any converted files yet. This will be implemented in a later version.)
 
-Ondersteuning van meerdere talen
-* Nederlands (nl)
-* Engels (en)
+## How to use
+Files can be selected in two ways.
+* Select your files using the choose button
+* Drag your selected files in the indicated area
+
+The selected files must be of type .pptx. Files with other extensions will not get accepted.
+After selecting the files you want to convert, click the convert button to get the .pptx files as Open Webslides.
+
