@@ -12,13 +12,17 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import objects.*;
+import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.xslf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFDrawing;
+import org.openxmlformats.schemas.drawingml.x2006.chart.*;
 import org.openxmlformats.schemas.drawingml.x2006.main.CTTextParagraph;
 
 /**
@@ -45,14 +49,16 @@ public class PPTConverter implements IConverter{
             List<XSLFSlide> slides = pptSource.getSlides();
             int slideNr = 0;
             loadPictures(pptSource);
-            for(XSLFSlide slide : slides){ //XSLFSlide slide = slides.get(2);
+            for(XSLFSlide slide : slides){ //XSLFSlide slide = slides.get(13);
                     Slide webslide = new Slide();
                     
-                    webslide.addPPTObject(getTitel(slide));
+                  /*  webslide.addPPTObject(getTitel(slide));
                     
-                    webslide.addPPTObject(getContent(slide));
+                   webslide.addPPTObject(getContent(slide));
                     
-                    webslide.addPPTObject(getImages(slide));
+                    webslide.addPPTObject(getImages(slide));*/
+                    
+                    webslide.addPPTObject(getCharts(slide));
                     
                     webslide.setSlideNr(slideNr);
                     
@@ -73,11 +79,21 @@ public class PPTConverter implements IConverter{
      * @return 
      */
     private PPTObject getTitel(XSLFSlide slide) {
-        if(slide.getTitle() != null) return new Titel(slide.getTitle());
+        if(slide.getTitle() != null){
+            return new Titel(slide.getTitle());
+        }
         List<XSLFShape> shapes = slide.getShapes();
         for(XSLFShape shape : shapes){
-            if(shape.getShapeName().contains("Text")||shape.getShapeName().contains("Auto")){
-                return new Titel(((XSLFTextShape)shape).getText());
+            if(shape.getShapeName().contains("Auto")){
+                if(!((XSLFTextShape)shape).getText().equals("") && ((XSLFTextShape)shape).getText()!=null){
+                    return new Titel(((XSLFTextShape)shape).getText());
+                }
+            }
+        }for(XSLFShape shape : shapes){
+            if(shape.getShapeName().contains("Text")){
+                if(!((XSLFTextShape)shape).getText().equals("") && ((XSLFTextShape)shape).getText()!=null){
+                    return new Titel(((XSLFTextShape)shape).getText());
+                }
             }
         }
         return new Titel("");
@@ -192,9 +208,9 @@ public class PPTConverter implements IConverter{
     private PPTObject getImages(XSLFSlide slide) {
         Lijst l = new Lijst();
         for(XSLFShape sh : slide.getShapes()){
-            System.out.println(sh.getShapeName() + " " +sh.getShapeId());
+            //System.out.println(sh.getShapeName() + " " +sh.getShapeId());
             if(sh.getShapeName().contains("Picture")){
-                System.out.println(((XSLFPictureShape) sh).getPictureData().getFileName());
+                //System.out.println(((XSLFPictureShape) sh).getPictureData().getFileName());
                 l.addPPTObject(new Afbeelding(((XSLFPictureShape) sh).getPictureData().getFileName()));
             }
         }
@@ -209,7 +225,7 @@ public class PPTConverter implements IConverter{
          
          byte[] bytes = data.getData();
          String fileName = data.getFileName();
-         System.out.println("picture name: " + fileName);
+       //  System.out.println("picture name: " + fileName);
          InputStream in = new ByteArrayInputStream(bytes);
 	 BufferedImage bImageFromConvert = null;
             try {
@@ -223,6 +239,56 @@ public class PPTConverter implements IConverter{
                 Logger.getLogger(PPTConverter.class.getName()).log(Level.SEVERE, null, ex);
             }
         }	    
+    }
+
+    private PPTObject getCharts(XSLFSlide slide) {
+        Lijst l = new Lijst();
+        XSLFChart chart = null; 
+        
+        for(POIXMLDocumentPart part : slide.getRelations()){
+            if(part instanceof XSLFChart){
+                chart = (XSLFChart) part;
+                break;
+            }
+        } 
+        if(chart == null) return l;
+        
+        try{
+            CTChart ctChart = chart.getCTChart();
+            //System.out.println(ctChart);
+            Chart c = new Chart();
+            c.setTitle(getChartTitle(ctChart));
+            c.setChartType(getChartType(ctChart));
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        return null;
+    }
+
+    private String getChartTitle(CTChart ctChart) {
+        String text = "";
+        for (String line : ctChart.toString().split("\r")) {
+            String tmp = line.replaceFirst("^\\s*", "");
+            if (tmp.contains("<a:t>")) {
+                text += tmp.substring(5, tmp.length() - 6) + " ";
+            } 
+        }
+        return text;
+    }
+
+    private String getChartType(CTChart ctChart) {
+        String text = "";
+        String[] lines = ctChart.toString().split("\r");
+        for (int i = 0; i < lines.length; i++) {
+            String tmp = lines[i].replaceFirst("^\\s*", "");
+            if (tmp.contains("<c:plotArea>")) {
+                tmp = lines[i+2].replaceFirst("^\\s*", "");
+                text += tmp.substring(3, tmp.length() - 1) + " ";
+            } 
+        }
+        return text;
     }
     
 }
