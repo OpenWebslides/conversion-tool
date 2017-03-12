@@ -6,17 +6,15 @@
 package beans;
 
 import java.io.File;
-import java.io.FileInputStream;
+
 import java.io.IOException;
-import java.io.OutputStream;
+
 import javax.faces.bean.ManagedBean;
 
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import org.omnifaces.util.Faces;
+
+
+
 
 /**
  *
@@ -34,9 +32,7 @@ public class DownloadBean {
     }
 
     public void download() throws IOException {
-        File file = new File("C:\\Temp\\fto.jpg");
-        Faces.sendFile(file, true);
-
+       
     }
 
 }

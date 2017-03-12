@@ -29,6 +29,8 @@ public class SaveBean  {
 
     private UploadedFile uploadedFile;    
     private String colour;
+    //private String visibility = "false";
+    
    
     /**
      * Creates a new instance of SaveBean
@@ -36,6 +38,22 @@ public class SaveBean  {
     public SaveBean() {
     }
 
+   /* public String getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(String visibility) {
+        this.visibility = visibility;
+    }
+    public void makeVisible(){
+        if(visibility.equals("false")){
+            visibility = "true";
+        }
+        else{
+            visibility = "false"; //niet zeker wat de gebruiker liever zou hebben...
+        }
+    }*/
+    
 
     public String getColour() {
         return colour;
