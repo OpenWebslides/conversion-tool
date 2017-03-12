@@ -24,9 +24,17 @@
             </div>
 
             <h:form enctype="multipart/form-data" id="form">
-                <p:fileUpload fileUploadListener="#{SaveBean.handleFileUpload}" cancelLabel="#{i18n.upload_cancel}" label="#{i18n.upload_choose}" uploadLabel="#{i18n.upload_confirm}" mode="advanced" dragDropSupport="true" update="messages" allowTypes="/(\.|\/)(pptx)$/" multiple="true"/>
-                <p:growl id="messages" showDetail="true" />           
+                <p:fileUpload fileUploadListener="#{SaveBean.handleFileUpload}" cancelLabel="#{i18n.upload_cancel}" label="#{i18n.upload_choose}" uploadLabel="#{i18n.upload_confirm}" mode="advanced" dragDropSupport="true" update="messages @form" allowTypes="/(\.|\/)(pptx)$/" multiple="true"/>
+                <p:growl id="messages" showDetail="true" />       
+                <h:outputText id="downloadFileName" value="#{SaveBean.downloadFileName}" style="display: none" />    
             </h:form>
+            
+            <h:form id="download">
+                <p:commandButton id="downloadLink" value="Download" ajax="false" actionListener="#{SaveBean.prepDownload()}">
+                  <p:fileDownload value="#{SaveBean.download}"  />
+                </p:commandButton>
+            </h:form>
+<<<<<<< HEAD
 
 
 
@@ -40,6 +48,8 @@
                     </p:selectOneRadio>
                 </h:form>
             
+=======
+>>>>>>> 04cc84b09afa6683fa9a8c5819dc647f8c11a97d
 
             <h:form>
                 <p:commandButton value="meer opties..." action="#{examinationFormBean.makeIssue()}"
@@ -58,6 +68,7 @@
                              value="#{examinationFormBean.comment}"
                              rendered="#{examinationFormBean.radioVal eq 'haveissue'}"/>
             </h:form>
+<<<<<<< HEAD
 
             
             
@@ -65,6 +76,9 @@
             
             
             <p:button onclick="#{DownloadBean.download()}" value="downloadTest"/>
+=======
+            
+>>>>>>> 04cc84b09afa6683fa9a8c5819dc647f8c11a97d
 
         </ui:define>
 

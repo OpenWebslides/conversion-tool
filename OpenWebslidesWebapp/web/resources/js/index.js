@@ -20,8 +20,18 @@
 //    
 //}
 
-//knop voor meer opties
 
 
 
+
+//
+$(function() {
+    $('#downloadFileName').on('change', ChangeValue);
+});
+
+function ChangeValue(){
+    if($('#downloadFileName').val()!==""){
+        $('#downloadFileName').removeAttr("style");
+    }
+}
 
