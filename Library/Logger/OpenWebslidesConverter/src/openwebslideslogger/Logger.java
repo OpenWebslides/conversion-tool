@@ -164,6 +164,9 @@ public class Logger {
         writeLogToFile();
     }
     
+    /**
+     * Writes the content of the string log to the file using a BufferedWriter and FileWriter
+     */
     private void writeLogToFile(){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))){
             writer.write(log);
@@ -174,6 +177,11 @@ public class Logger {
         }
     }
     
+    /**
+     * Writes the content of the queue of strings to the file using a BufferedWriter and FileWriter.
+     * If the queue is empty nothing happens, no exceptions are thrown.
+     * @param queue 
+     */
     public void writeQueue(Queue<String> queue){
         if(queue.isEmpty()) return;
         
