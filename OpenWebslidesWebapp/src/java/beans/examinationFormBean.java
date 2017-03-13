@@ -18,7 +18,7 @@ import javax.faces.bean.ViewScoped;
 public class examinationFormBean implements Serializable{
     
     private String comment;
-    private String radioVal = "ok";
+    private String visible = "ok";
     
     
     public examinationFormBean(){
@@ -30,19 +30,19 @@ public class examinationFormBean implements Serializable{
     public void makeIssue(){
         //mag enkel 2e keer er geklikt wordt (bij opstarten doet hij dat blijkbaar ook al eens...)
         
-        radioVal = "haveissue";
+        visible = "true";
         
     }
     public void setComment(String comment) {
         this.comment = comment;
     }
 
-    public String getRadioVal() {
-        return radioVal;
+    public String getVisible() {
+        return visible;
     }
 
-    public void setRadioVal(String radioVal) {
-        this.radioVal = radioVal;
+    public void setVisible(String v) {
+        this.visible = v;
     }
 
 }

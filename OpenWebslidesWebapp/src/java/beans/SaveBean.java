@@ -35,7 +35,7 @@ import org.primefaces.model.DefaultStreamedContent;
 public class SaveBean  {
 
     private UploadedFile uploadedFile;    
-    private String colour;
+    private String optie;
 
     private DefaultStreamedContent download;
     private String downloadFileName;
@@ -68,13 +68,13 @@ public class SaveBean  {
     }*/
     
 
-    public String getColour() {
-        return colour;
+    public String getOptie() {
+        return optie;
     }
 
-    public void setColour(String colour) {
-        System.out.println("I set the colour to "+colour);
-        this.colour = colour;
+    public void setOptie(String opt) {
+        
+        this.optie = opt;
     }
     
     
