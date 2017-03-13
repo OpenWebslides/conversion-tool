@@ -1,0 +1,92 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package openwebslides.template;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import objects.PPT;
+import objects.Slide;
+import org.apache.commons.io.FileUtils;
+
+/**
+ * Generates the code for the template around the slides.
+ * @author Jonas
+ */
+public class Template {
+    private PPT ppt;
+    private String course;
+    private String chapter;
+    
+    /**
+     * Creates an instance of the class Template.
+     * @param ppt The PPT object which contains the slides that the template should contain.
+     * @param course The name of the course.
+     * @param chapter The name of the chapter.
+     */
+    public Template(PPT ppt, String course, String chapter){
+        this.course = course != null ? course : "Opleidingsonderdeel";
+        this.chapter = chapter != null ? chapter : "Hoofdstuk";
+        this.ppt = ppt;
+    }
+    
+    /**
+     * Prints the html of the template together with the code for the slides to the BufferedWriter.
+     * @param out
+     * @throws IOException 
+     */
+    public void print(BufferedWriter out) throws IOException{
+        out.write(HEADER);
+        //out.write("\t"+DUMMYSLIDES);
+        
+        for(Slide s : ppt.getSlides()){
+            out.write(s.toHtml(1));
+        }
+        
+        out.write(FOOTER);
+    }
+    
+    /**
+     * Creates a copy of the needed files to use the template into the targetDir.
+     * @param targetDir The directory where the files should be copied to.
+     * @throws IOException 
+     */
+    public void copySharedFolder(String targetDir) throws IOException{
+        File source = new File("Template/_shared");
+        File target = new File(targetDir+"/_shared");
+        FileUtils.copyDirectory(source, target);
+    }
+    
+    private final static String DUMMYSLIDES = "<div class=\"slide\" id=\"testid\"></div>";
+    
+    private final static String HEADER = "<!DOCTYPE html>\n" +
+        "<html lang=\"en\">\n" +
+        "<head>\n" +
+        "\t<title>Introduction</title>\n" +
+        "\t<meta charset=\"utf-8\">\n" +
+        "\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n" +
+        "\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n" +
+        "\t<link rel=\"stylesheet\" href=\"_shared/styles/screen-16x10.css\">\n" +
+        "</head>\n" +
+        "<body class=\"shower list\">\n" +
+        "\t<header class=\"caption\">\n" +
+        "\t\t<h1>\n" +
+        "\t\t\t<a class=\"series\" href=\"#title\">Opleidingsonderdeel</a><br>\n" +
+        "\t\t\t<a class=\"module\" href=\"#title\">Hoofdstuk</a>\n" +
+        "\t\t</h1>\n" +
+        "\t\t<p>\n" +
+        "\t\t</p>\n" +
+        "\t</header>\n\n";
+    
+    private final static String FOOTER = "\n\n\t<footer>\n" +
+        "\t</footer>\n" +
+        "\t<script src=\"_shared/scripts/shower.min.js\"></script>\n" +
+        "\t<script src=\"_shared/scripts/enhancements.js\"></script>\n" +
+        "\t<script>ga=function(){ga.q.push(arguments)};ga.q=[['create','UA-6142365-12','auto'],['require','autotrack'],['send','pageview']];ga.l=1*new Date</script>\n" +
+        "\t<script async src=\"_shared/scripts/autotrack.js\"></script>\n" +
+        "</body>\n" +
+        "</html>";
+}

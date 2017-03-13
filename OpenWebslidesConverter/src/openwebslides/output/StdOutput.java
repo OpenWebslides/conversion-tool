@@ -6,7 +6,7 @@
 package openwebslides.output;
 
 /**
- *
+ * Output channel that writes to the screen.
  * @author Jonas
  */
 public class StdOutput implements Output {
