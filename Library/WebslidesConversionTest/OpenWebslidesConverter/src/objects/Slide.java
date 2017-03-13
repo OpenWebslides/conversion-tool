@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Slide implements PPTObject {
 
-    private List<PPTObject> pptObjects;
+    private final List<PPTObject> pptObjects;
     private int slideNr;
 
     public int getSlideNr() {
@@ -26,13 +26,24 @@ public class Slide implements PPTObject {
         pptObjects = new ArrayList<>();
     }
 
+    /**
+     * Return the html code from this element
+     * @param indentation
+     * @return 
+     */
     @Override
     public String toHtml(int indentation) {
         if(!testOutput()){
-            String temp = "<div class=\"slide\" id=\"slide" + slideNr + "\">\n";
-            for(PPTObject obj : pptObjects){
-                 temp += obj.toHtml(indentation+1);
-            }
+            String temp = "";            
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
+            if(slideNr == 0)
+                temp += "<div class=\"titel slide\" id=\"slide" + slideNr + "\">\n";
+            else
+                temp += "<div class=\"slide\" id=\"slide" + slideNr + "\">\n";
+            temp = pptObjects.stream().map((obj) -> obj.toHtml(indentation+1)).reduce(temp, String::concat);
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
             return adjustHeight(temp + "</div>\n");
             }
         return "";

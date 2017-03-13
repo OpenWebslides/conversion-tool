@@ -13,6 +13,12 @@ import java.io.File;
  */
 public class ConverterFactory {
     
+    /**
+     * Return an IConverter object
+     * The correct implementation is decided by the file type
+     * @param file
+     * @return 
+     */
     public static IConverter getConverter(File file){
         String ext2 = getExtension(file.getName());
         switch(ext2){

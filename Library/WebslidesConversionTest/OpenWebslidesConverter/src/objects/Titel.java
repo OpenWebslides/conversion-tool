@@ -11,12 +11,20 @@ package objects;
  */
 public class Titel implements PPTObject{
 
-    private String content;
+    private final String content;
     
+    /**
+     * Create a Titel object
+     * @param content 
+     */
     public Titel(String content){
         this.content = content;
     }
-    
+     /**
+     * Return the html code from this element
+     * @param indentation
+     * @return 
+     */   
     @Override
     public String toHtml(int indentation) {
         if(!content.equals("")){
@@ -35,6 +43,10 @@ public class Titel implements PPTObject{
         return "";
     }
 
+    /**
+     * Return the content
+     * @return 
+     */
     public String getContent() {
         return content;
     }

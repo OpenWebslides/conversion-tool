@@ -15,16 +15,23 @@ import java.util.List;
  */
 public class Lijst implements PPTObject{
 
-    private List<PPTObject> bullets;
+    private final List<PPTObject> bullets;
 
     public List<PPTObject> getBullets() {
         return bullets;
     }
     
+    /**
+     * Create a Lijst object
+     */
     public Lijst(){
         bullets = new ArrayList<>();
     }
-    
+    /**
+     * Return the html code from this element
+     * @param indentation
+     * @return 
+     */    
     @Override
     public String toHtml(int indentation) {
         if(!bullets.isEmpty()){
@@ -42,6 +49,10 @@ public class Lijst implements PPTObject{
         return "";
     }
     
+    /**
+     * Return th PPTObjects
+     * @param obj 
+     */
     public void addPPTObject(PPTObject obj){
         bullets.add(obj);
     }

@@ -10,10 +10,33 @@ package objects;
  * @author Joann
  */
 public class Afbeelding implements PPTObject{
-
+    
+    private String filename;
+    
+    public Afbeelding(String filename){
+        this.filename = filename;
+    }
+    /**
+     * Return the html code from this element
+     * @param indentation
+     * @return 
+     */
     @Override
     public String toHtml(int indentation) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(!filename.equals("")){
+            String temp = "";
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
+            temp+="<li style=\"\">\n";
+            for(int i = 0; i < indentation+1 ; i++)
+                temp += "\t";
+            temp+="<img src=\"" + filename + "\"/>\n";
+            for(int i = 0; i < indentation ; i++)
+                temp += "\t";
+            temp+="</li>\n";
+            return temp;
+            }
+        return "";
     }
     
 }
