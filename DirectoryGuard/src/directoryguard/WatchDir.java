@@ -212,6 +212,10 @@ public class WatchDir {
         }
     }
     
+    /**
+     * Starts a new ConversionThread to convert the file. A unique id is provided for the thread.
+     * @param file The path of the file that should be converted.
+     */
     private void convertFile(String file){
         String targetDir = "convertedFiles\\"+file.substring(0, file.lastIndexOf(".pptx"));
         
@@ -236,11 +240,19 @@ public class WatchDir {
         logger.println(new Timestamp(new Date().getTime()) + " " + id + " thread started");
     }
 
+    /**
+     * Prints an error to the screen which arguments should be used to call this class.
+     */
     static void usage() {
         System.err.println("usage: java WatchDir [-r] dir");
         System.exit(-1);
     }
 
+    /**
+     * Checks if the arguments are valid. A new WatchDir object is created, on which the method processEvents() is called.
+     * @param args
+     * @throws IOException 
+     */
     public static void main(String[] args) throws IOException {
         // parse arguments
         if (args.length == 0 || args.length > 2)
