@@ -23,7 +23,7 @@ public class LanguageBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
     private String localeCode;
-
+    
     private final Map<String, Object> countries;
 
     public LanguageBean(){
