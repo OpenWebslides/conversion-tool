@@ -5,17 +5,19 @@
  */
 package openwebslidesconverter;
 
-import java.io.BufferedReader;
+import conversion.ConverterFactory;
+import conversion.IConverter;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import objects.PPT;
 import openwebslides.output.Output;
+import openwebslides.template.Template;
 
 /**
- *
+ * Converts a .pptx file.
  * @author Jonas
  */
 public class Converter {
@@ -29,9 +31,9 @@ public class Converter {
     private Output output;
     
     /**
-     * Create a new converter instance
-     * @param file The file to be converted
-     * @param output
+     * Create a new converter instance.
+     * @param file The file to be converted.
+     * @param output The output channel that should be used. All messages and errors are printed to there.
      */
     public Converter(String file, Output output){
         this(null,file,null,output);
@@ -42,7 +44,7 @@ public class Converter {
      * @param outputType the type your file should be converted to
      * @param inputFile the file to be converted
      * @param outputDir the output folder
-     * @param output
+     * @param output The output channel that should be used. All messages and errors are printed to there.
      * @throws InvalidParameterException 
      */
     public Converter(String outputType, String inputFile, String outputDir, Output output) throws InvalidParameterException{
@@ -77,14 +79,19 @@ public class Converter {
     }
     
     /**
-     * Create a dummy output
+     * Starts the conversion. The result is written to the output directory.
      */
-    public void dummyOutput(){
+    public void convert(){
         output.println("Start conversion");
         
-        //nodig om mee te geven in de error
-        String pathError = null;
+        PPT ppt = new PPT();
         
+        IConverter converter = ConverterFactory.getConverter(new File(inputFile));
+        converter.parse(ppt);
+        
+        output.println("Start writing to output file");
+        //needed for the error
+        String pathError = null;
         try{
             File outputFile = new File(outputDir+"/index.html");
             pathError = outputFile.getParentFile().toString();
@@ -94,10 +101,8 @@ public class Converter {
 
             try(BufferedWriter out = new BufferedWriter(new FileWriter(outputFile))){
 
-                if(shower)
-                    showerOutput(out);
-                else
-                    contentOutput(out);
+                //write the converted files out
+                writePPT(ppt, out);
 
                 output.println("Conversion done");
             }
@@ -110,55 +115,23 @@ public class Converter {
         }
     }
     
-    //schrijft de slides samen de code voor shower uit
-    //gebruikt contentOutput(BufferedWriter out)
     /**
-     * Create a shower output
-     * @param out BufferedWriter the slide should be written to
-     * @throws IOException 
+     * Writes the html output of the PPT to the BufferedWriter. The slides are embedded in the template code if shower is true.
+     * @param out 
      */
-    private void showerOutput(BufferedWriter out) throws IOException{
-        //te kopiëren tekst openen
-        try(BufferedReader br = new BufferedReader(new FileReader("shower.html"))){
-            
-            String currentLine;
-            
-            while ((currentLine = br.readLine()) != null) {
-                
-                if(currentLine.equals("###title###"))
-                    out.write("\t<title>"+getOutputFileName()+"</title>");
-                else if(currentLine.equals("###module###"))
-                    out.write("\t<a class=\"module\" href=\"#title\">"+getOutputFileName()+"</a>");
-                else if(currentLine.equals("###content###"))
-                    contentOutput(out);
-                else
-                    out.write(currentLine);
-                
-                out.write("\n");
-            }
+    private void writePPT(PPT ppt, BufferedWriter out) throws IOException{
+        if(shower){
+            Template template = new Template(ppt,null,null);
+            template.print(out);
+            template.copySharedFolder(outputDir);
+        }
+        else{
+            out.write(ppt.toHTML());
         }
     }
     
     /**
-     * Create a raw output
-     * @param out BufferedWriter the slide should be written to
-     * @throws IOException 
-     */
-    private void contentOutput(BufferedWriter out) throws IOException{
-        //te kopiëren tekst openen
-        try(BufferedReader br = new BufferedReader(new FileReader("content.html"))){
-            
-            String currentLine;
-            
-            while ((currentLine = br.readLine()) != null) {
-                if(shower) out.write("\t");
-                out.write(currentLine+"\n");
-            }
-        }
-    }
-    
-    /**
-     * Generate the output filename
+     * Generate the output filename.
      * @return 
      */
     private String getOutputFileName(){

@@ -10,12 +10,16 @@ import java.util.Date;
 import openwebslideslogger.Logger;
 
 /**
- *
+ * Output channel to a openwebslides.Logger object.
  * @author Jonas
  */
 public class LogOutput implements Output {
     private final Logger logger;
     
+    /**
+     * Creates an instance of the class LogOutput.
+     * @param logger The logger where the messages are printed to.
+     */
     public LogOutput(Logger logger){
         this.logger = logger;
     }

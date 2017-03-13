@@ -8,13 +8,17 @@ package openwebslides.output;
 import openwebslideslogger.Logger;
 
 /**
- *
+ * A combination of the StdOutput class and LogOutput class. The messages are printed both to the screen and the logger.
  * @author Jonas
  */
 public class StdLogOutput implements Output {
     private final Output stdOutput;
     private final Output logOutput;
 
+    /**
+     * Creates an instance of the class StdLogOutput.
+     * @param logger The logger where the messages are printed to.
+     */
     public StdLogOutput(Logger logger){
         this.stdOutput = new StdOutput();
         this.logOutput = new LogOutput(logger);
