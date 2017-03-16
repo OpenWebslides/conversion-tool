@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package openwebslides.template;
+package openwebslides.writer;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,42 +12,55 @@ import objects.PPT;
 import objects.Slide;
 import org.apache.commons.io.FileUtils;
 
-/**
- * Generates the code for the template around the slides.
- * @author Jonas
- */
-public class Template {
-    private PPT ppt;
+
+public class TemplateWriter extends Writer {
+    private final Indentation writer;
     private String course;
     private String chapter;
     
     /**
-     * Creates an instance of the class Template.
-     * @param ppt The PPT object which contains the slides that the template should contain.
-     * @param course The name of the course.
-     * @param chapter The name of the chapter.
+     *
+     * @param writer
+     * @param course
+     * @param chapter
      */
-    public Template(PPT ppt, String course, String chapter){
+    public TemplateWriter(Indentation writer, String course, String chapter){
+        this.writer = writer;
         this.course = course != null ? course : "Opleidingsonderdeel";
         this.chapter = chapter != null ? chapter : "Hoofdstuk";
-        this.ppt = ppt;
     }
     
     /**
-     * Prints the html of the template together with the code for the slides to the BufferedWriter.
+     *
      * @param out
-     * @throws IOException 
+     * @param ppt
+     * @throws IOException
      */
-    public void print(BufferedWriter out) throws IOException{
+    @Override
+    public void write(BufferedWriter out, PPT ppt) throws IOException{
+        //header
         out.write(HEADER);
-        //out.write("\t"+DUMMYSLIDES);
         
-        for(Slide s : ppt.getSlides()){
-            out.write(s.toHtml(1));
+        //slides
+        for(Slide slide : ppt.getSlides()){
+            out.newLine();
+            out.write(writeSlide(slide));
         }
         
+        //footer
         out.write(FOOTER);
     }
+    
+    /**
+     *
+     * @param slide
+     * @return
+     */
+    @Override
+    public String writeSlide(Slide slide) {
+        return writer.writeSlide(slide, 1);
+    }
+    
     
     /**
      * Creates a copy of the needed files to use the template into the targetDir.
@@ -60,8 +73,9 @@ public class Template {
         FileUtils.copyDirectory(source, target);
     }
     
-    private final static String DUMMYSLIDES = "<div class=\"slide\" id=\"testid\"></div>";
-    
+    /*
+    * Header and footer are the same for every template
+    */
     private final static String HEADER = "<!DOCTYPE html>\n" +
         "<html lang=\"en\">\n" +
         "<head>\n" +
@@ -89,4 +103,22 @@ public class Template {
         "\t<script async src=\"_shared/scripts/autotrack.js\"></script>\n" +
         "</body>\n" +
         "</html>";
+
+    public String getCourse() {
+        return course;
+    }
+
+    public void setCourse(String course) {
+        this.course = course;
+    }
+
+    public String getChapter() {
+        return chapter;
+    }
+
+    public void setChapter(String chapter) {
+        this.chapter = chapter;
+    }
+    
+    
 }

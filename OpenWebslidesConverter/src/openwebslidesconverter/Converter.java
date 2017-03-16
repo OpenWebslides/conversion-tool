@@ -10,13 +10,14 @@ import conversion.IConverter;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.security.InvalidParameterException;
 import objects.PPT;
 import openwebslides.output.Output;
-import openwebslides.template.Template;
+import openwebslides.writer.HTMLWriter;
+import openwebslides.writer.TemplateWriter;
+import openwebslides.writer.Writer;
 
 /**
  * Converts a .pptx file.
@@ -128,13 +129,17 @@ public class Converter {
      * @param out
      */
     private void writePPT(PPT ppt, BufferedWriter out) throws IOException {
-        if (shower) {
-            Template template = new Template(ppt, null, null);
-            template.print(out);
-            template.copySharedFolder(outputDir);
-        } else {
-            out.write(ppt.toHTML());
+        Writer writer;
+        
+        if (shower){
+            TemplateWriter tw = new TemplateWriter(new HTMLWriter(), null, null);
+            tw.copySharedFolder(outputDir);
+            writer = tw;
         }
+        else
+            writer = new HTMLWriter();
+        
+        writer.write(out, ppt);
     }
 
     /**
