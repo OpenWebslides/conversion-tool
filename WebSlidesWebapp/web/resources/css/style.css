@@ -1,0 +1,65 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 18-mrt-2017, 11:43:19
+    Author     : Joann
+*/
+@font-face
+{
+    font-family: ugentpannotext-medium;
+    src: url(../fonts/ugentpannotext-medium-web.woff);
+}
+
+
+.btn, .btn:active, .btn:focus{
+    color: #1E64C8;
+    background-color: #E9F0FA;
+    padding: 7px;
+    border:none;
+    margin-right: 5px;
+}
+
+.btn:hover{
+    color: #FFFFFF;
+    background-color: #1E64C8;
+}
+
+.dragndrop {
+    padding: 30px;
+    border: 2px solid #1E64C8;
+    border-radius: 15px;
+}
+
+.collapse-options{
+    margin-top: 20px;
+}
+
+.radio-type {
+    margin-top: 15px;
+}
+
+.header {
+    background-color: #F2F2F2;
+    padding: 30px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.header-text{
+    font-family: ugentpannotext-medium;
+}
+
+.header-title{
+    font-size: 60px;
+}
+.header-subtext{
+    font-size: 20px;
+}
+
+.dropzone{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
