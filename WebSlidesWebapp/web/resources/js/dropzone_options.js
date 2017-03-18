@@ -33,7 +33,7 @@ Dropzone.options.myAwesomeDropzone = {
             myDropzone.processQueue();
         });
         $("#btn-cancel").click(function () {
-            myDropzone.removeAllFiles();
+            myDropzone.removeAllFiles(true);
         });
     }
 };

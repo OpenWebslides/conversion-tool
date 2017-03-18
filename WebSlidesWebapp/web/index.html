@@ -36,42 +36,45 @@ and open the template in the editor.
                     <span class="sr-only">Error:</span>
                     <span id="message_alert"></span>
                 </div>
+
+                <div class="alert alert-success" role="alert" id="success">
+                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                    <span class="sr-only">Success:</span>
+                    <span id="message_success"></span>
+                </div>
             </div>
         </div>
 
-
-
         <div class="container dragndrop">
-                <div class="row">
-                    <button class="btn col-md-1" type="button" id="btn-convert">
-                        Convert
-                    </button>
-                    <button class="btn col-md-1" type="button" id="btn-cancel">
-                        Cancel
-                    </button>
-                </div>
-                <div class="row">
+            <div class="row">
+                <button class="btn col-md-1" type="button" id="btn-convert">
+                    Convert
+                </button>
+                <button class="btn col-md-1" type="button" id="btn-cancel">
+                    Cancel
+                </button>
+            </div>
+            <div class="row">
 
-                    <form action="/file-upload" class="dropzone dz-clickable col-xs-12 col-md-12" id="my-awesome-dropzone">
-                    </form>
-                </div>
-                <div class="row">
-
-
-                    <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOptions" aria-controls="collapseOptions" id="btn-options">
-                        More options...
-                    </button>
+                <form action="/file-upload" class="dropzone dz-clickable col-xs-12 col-md-12" id="my-awesome-dropzone">
+                </form>
+            </div>
+            <div class="row">
 
 
-                    <div class="collapse" id="collapseOptions">
-                        <div class="radio-type">
-                            <label class="radio-inline"><input type="radio" name="output_type" value="raw" checked>Raw</label>
-                            <label class="radio-inline"><input type="radio" name="output_type" value="shower">Shower</label>
-                        </div>
-                    </div> 
-                </div>
+                <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOptions" aria-controls="collapseOptions" id="btn-options">
+                    More options...
+                </button>
+
+
+                <div class="collapse" id="collapseOptions">
+                    <div class="radio-type">
+                        <label class="radio-inline"><input type="radio" name="output_type" value="raw" checked>Raw</label>
+                        <label class="radio-inline"><input type="radio" name="output_type" value="shower">Shower</label>
+                    </div>
+                </div> 
+            </div>
         </div>
-
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
