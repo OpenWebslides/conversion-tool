@@ -9,15 +9,15 @@ package objects;
  *
  * @author Joann
  */
-public class Bullet implements PPTObject{
+public class Title extends Text{
 
     private final String content;
     
     /**
-     * Create a Bullet object
+     * Create a Titel object
      * @param content 
      */
-    public Bullet(String content){
+    public Title(String content){
         this.content = content;
     }
 

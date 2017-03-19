@@ -15,18 +15,6 @@ public class PPT {
     public PPT() {
         slides = new ArrayList<>();
     }
-    /**
-     * Return the html code from this element
-     * @param indentation
-     * @return 
-     */
-    public String toHTML() {
-        String temp = "";
-        for(PPTObject obj : slides){
-             temp += obj.toHtml(0);
-        }
-        return temp;
-    }
 
     /**
      * Return the slides

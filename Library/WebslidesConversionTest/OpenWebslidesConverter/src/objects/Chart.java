@@ -18,10 +18,6 @@ public class Chart implements PPTObject {
     private HashMap<String, ArrayList<Double>> content;
     private String chartType;
     
-    @Override
-    public String toHtml(int indentation) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     public Chart() {
        this.content = new HashMap<>();

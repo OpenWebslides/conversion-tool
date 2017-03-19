@@ -28,7 +28,7 @@ public class WebslideConvertorTest {
     
     @Test
     public void testRun() {
-        File file = new File("C:\\temp\\slides.pptx");
+        File file = new File("C:\\temp\\pres.pptx");
         
         IConverter converter = ConverterFactory.getConverter(file);
         
@@ -40,7 +40,6 @@ public class WebslideConvertorTest {
 
         try {
                 fw = new FileWriter("C:\\temp\\test.html");
-                fw.write(ppt.toHTML());
         } catch (Exception e) {
         } finally {
             try {

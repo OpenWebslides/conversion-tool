@@ -11,10 +11,5 @@ package objects;
  */
 public interface PPTObject {
     
-    /**
-     * Return the html from this PPTObject
-     * @param indentation
-     * @return 
-     */
-    public String toHtml(int indentation);
+    
 }
