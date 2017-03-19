@@ -19,9 +19,8 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public class TekstHandler extends DefaultHandler {
 
-    private ArrayList<Text> text;
     private Textpart currentTextpart;
-    private Text currentTekst;
+    private Text currentText;
     
     private final String TEXT = "xml-fragment";
     private final String TEXTWITHLEVEL = "a:pPr";
@@ -48,18 +47,15 @@ public class TekstHandler extends DefaultHandler {
     
     
     
-    public TekstHandler(ArrayList<Text> td) {
-        this.text = td;
+    public TekstHandler(Text td) {
+        this.currentText = td;
     }
     
     public void startElement(String uri, String localName,String qName, Attributes attributes) throws SAXException {
         try{
-            if(qName.equals(TEXT)){
-                currentTekst = new Text();
-            }
             if(qName.equals(TEXTWITHLEVEL)){
                 if(attributes.getValue(LEVEL)!=null)
-                    currentTekst.setLevel(Integer.parseInt(attributes.getValue(LEVEL)));
+                    currentText.setLevel(Integer.parseInt(attributes.getValue(LEVEL)));
             }
             if(qName.equals(TEXTPARTSTART))
                 currentTextpart = new Textpart();
@@ -97,12 +93,8 @@ public class TekstHandler extends DefaultHandler {
         
         if(qName.equals(TEXTPARTCONTENT)&&currentTextpart != null){
              ////   System.out.println(currentTekstdeel + " added");
-                currentTekst.addTekstdeel(currentTextpart);
+                currentText.addTekstdeel(currentTextpart);
         }
-        
-        if(qName.equals(TEXT) && currentTekst != null)
-            //System.out.println(currentTekst + " tEKST added");
-                text.add(currentTekst);
 
     }
 

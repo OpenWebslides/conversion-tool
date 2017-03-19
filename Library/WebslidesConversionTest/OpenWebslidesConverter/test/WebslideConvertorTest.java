@@ -34,7 +34,7 @@ public class WebslideConvertorTest {
         
         PPT ppt = new PPT();
         
-        converter.parse(ppt);
+        converter.parse(ppt, "C:\\temp");
         
 	FileWriter fw = null;
 

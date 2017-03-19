@@ -12,15 +12,6 @@ import java.util.List;
 public class Slide implements PPTObject {
 
     private final List<PPTObject> pptObjects;
-    private int slideNr;
-
-    public int getSlideNr() {
-        return slideNr;
-    }
-
-    public void setSlideNr(int slideNr) {
-        this.slideNr = slideNr;
-    }
 
     public Slide() {
         pptObjects = new ArrayList<>();
@@ -32,6 +23,10 @@ public class Slide implements PPTObject {
 
     public List<PPTObject> getPptObjects() {
         return pptObjects;
+    }
+
+    public void addPPTObjects(ArrayList<Text> content) {
+        pptObjects.addAll(content);
     }
 
 }

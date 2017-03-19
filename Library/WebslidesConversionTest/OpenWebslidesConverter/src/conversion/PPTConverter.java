@@ -6,17 +6,22 @@
 package conversion;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import objects.*;
@@ -41,6 +46,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class PPTConverter implements IConverter{
     
     private final File file;
+    private String saveLocation;
     
     public PPTConverter(File file){
         this.file = file;   
@@ -51,29 +57,24 @@ public class PPTConverter implements IConverter{
      * @param ppt 
      */
     @Override
-    public void parse(PPT ppt) {
+    public void parse(PPT ppt, String saveLocation) {
+        this.saveLocation = saveLocation;
         XMLSlideShow pptSource;
         try {
             pptSource = new XMLSlideShow(new FileInputStream(file));
             List<XSLFSlide> slides = pptSource.getSlides();
-            int slideNr = 0;
-            loadPictures(pptSource);
             for(XSLFSlide slide : slides){ //XSLFSlide slide = slides.get(13);
                     Slide webslide = new Slide();
                     
-                  //  webslide.addPPTObject(getTitel(slide));
+                    webslide.addPPTObject(getTitel(slide));
+                    webslide.addPPTObjects(getContent(slide));
                     
-                   webslide.addPPTObject(getContent(slide));
-                    
-                  //  webslide.addPPTObject(getImages(slide));
+                    webslide.addPPTObject(getImages(slide));
                     
                   //  webslide.addPPTObject(getCharts(slide));
                     
-                    webslide.setSlideNr(slideNr);
-                    
                     ppt.getSlides().add(webslide);
                     
-                    slideNr++;
             }
             pptSource.close();
         } catch (Exception ex) {
@@ -96,17 +97,18 @@ public class PPTConverter implements IConverter{
 
     /**
      * Get the rest of the content from the slide. The rest of the content will be collected in a lijst
+     * Return a 
      * @param slide
      * @return 
      */
-    private PPTObject getContent(XSLFSlide slide) {
+    private ArrayList<Text> getContent(XSLFSlide slide) {
         /*
             Een slide bevat meerdere blokken -> iedere blok is een item in slideLijst
             Overloop iedere shape in een lijst, iedere shape komt overeen met een 'kader' in PowerPoint
         */
-        PPTList slideLijst = new PPTList();
+        ArrayList<Text> slideLijst = new ArrayList<>();
         slide.getXmlObject().getCSld().getSpTree().getSpList().forEach((shape) -> {
-            extractLijst(shape.getTxBody().getPArray());
+            slideLijst.addAll(extractTextPerSlide(shape.getTxBody().getPArray()));
         });
         return slideLijst;
     }
@@ -116,127 +118,65 @@ public class PPTConverter implements IConverter{
      * @param pArray
      * @return 
      */
-    private ArrayList<ArrayList<Text>>  extractLijst(CTTextParagraph[] pArray) {
+    private ArrayList<Text>  extractTextPerSlide(CTTextParagraph[] pArray) {
         /*
             Een blok bevat een lijst -> iedere lijst is een item in lijst
             Overloop iedere blok en haal er al zijn lijsten uit
         */
-      //  System.out.println(Arrays.toString(pArray))
-       // Lijst blokLijst = new Lijst();
-       // ArrayList<Lijst> currentList = new ArrayList<>();
-       // currentList.add(blokLijst);
-        //HashMap<Integer, String> temp = new HashMap<>();
-       // int lastLevel = 0;
-       ArrayList<ArrayList<Text>> slideData = new ArrayList<>();
+       ArrayList<Text> slideData = new ArrayList<>();
         for (CTTextParagraph pArray1 : pArray) {
-            System.out.println(pArray1);
-            //evaluateBlock(temp, pArray1.toString().split("\r"));
-            //addToList(temp, lastLevel, currentList);
-            ArrayList<Text> tekstobj = extractData(pArray1.toString());
-          //  lastLevel = (int)temp.keySet().toArray()[0];
-            //temp = new HashMap<>();
+            Text tekstobj = extractData(pArray1.toString());
             slideData.add(tekstobj);
         }
         return slideData;
     }
     
-    private ArrayList<Text> extractData(String lines){
+    private Text extractData(String lines){
         try {
+            Text td = new Text();
             
             SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser sp = factory.newSAXParser();
-            
-            ArrayList<Text> td = new ArrayList<>();
+            SAXParser sp = factory.newSAXParser();        
             DefaultHandler handler = new TekstHandler(td);
-            
             sp.parse(new InputSource(new StringReader(lines)), handler);
-            
-            for(Text t : td){
-                System.out.println(t.toString());
-            }
+                      
             return td;
-            
-      /*      System.out.println(lines);
-            System.out.println(td.size()); */
         } catch (Exception ex) {
             Logger.getLogger(PPTConverter.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
-    /**
-     * Extract items from list
-     * @param map
-     * @param lines 
-     */
-    private void evaluateBlock(HashMap<Integer, String> map, String[] lines) {
-        /*
-            Een lijst bevat ev. meerdere lijsten 
-            haal de info per lijst eruit (a:pPr is het level van lijst, a:t is de tekst)
-        */
-        int level = 0;
-        String text = "";
         
-        for (String line : lines) {
-            String tmp = line.replaceFirst("^\\s*", "");
-            if (tmp.contains("<a:pPr") && tmp.contains("lvl=")) {
-             //  System.out.println(tmp);
-               /* System.out.println(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));*/
-                level = Integer.parseInt(tmp.substring(tmp.indexOf("lvl=")+5,tmp.indexOf("lvl=")+6));
-              //  level = Integer.parseInt(tmp.substring(k1,k2));
-            } else if (tmp.contains("<a:t>")) {
-              // System.out.println(tmp);
-                text += tmp.substring(5, tmp.length() - 6) + " ";
-            } 
-        }
-             map.put(level,text);
-        
-    }
-
-    /**
-     * Add bullet to the correct list
-     * @param lijst
-     * @param temp
-     * @param lastLevel
-     * @param currentList 
-     */
-    /*private void addToList(HashMap<Integer, String> temp, int lastLevel, ArrayList<Lijst> currentList) {
-        
-         //   Maak een nieuw lijstobject en steek hierin een bullet met de tekstvalue
-         //   Plaats de lijst in zijn juiste level
-        
-        try{
-            Lijst lst = new Lijst();
-            lst.addPPTObject(new Bullet((String)temp.values().toArray()[0]));
-            if(lastLevel < (int)temp.keySet().toArray()[0]){
-                    Lijst l1 = currentList.get(currentList.size()-1);
-                    Lijst l1b = (Lijst) l1.getBullets().get(l1.getBullets().size()-1);
-                    currentList.add(l1b);
-
-    //currentList.add(((Lijst)currentList.get(currentList.size()-1).getBullets().get(currentList.get(currentList.size()-1).getBullets().size()-1)));
-            }
-            else if(lastLevel > (int)temp.keySet().toArray()[0]){
-                for(int i = 0; i < lastLevel - (int)temp.keySet().toArray()[0];i++)
-                    currentList.remove(currentList.size()-1);
-            }
-
-            currentList.get(currentList.size()-1).addPPTObject(lst);
-        }
-        catch(ArrayIndexOutOfBoundsException e){
-                
-         }
-    }
-*/
-    
     private PPTObject getImages(XSLFSlide slide) {
         PPTList l = new PPTList();
-        System.out.println(slide.getXmlObject().getCSld().getSpTree());
+      //  System.out.println(slide.getXmlObject().getCSld().getSpTree());
         for(XSLFShape sh : slide.getShapes()){
             //size van image is aantal cm * 360000
             //System.out.println(sh.getShapeName() + " " +sh.getShapeId());
             if(sh.getShapeName().contains("Picture")){
-                //System.out.println(((XSLFPictureShape) sh).getPictureData().getFileName());
-                
+                String name = ((XSLFPictureShape) sh).getPictureData().getFileName();
+                try{
+                File f = new File(saveLocation + "\\img\\" + name);
+                f.getParentFile().mkdirs();
+                OutputStream out = new FileOutputStream(f);
+                FileInputStream fin = new FileInputStream(file.getAbsoluteFile());
+                BufferedInputStream bin = new BufferedInputStream(fin);
+                ZipInputStream zin = new ZipInputStream(bin);
+                ZipEntry ze = null;
+                while ((ze = zin.getNextEntry()) != null) {
+                    if (ze.getName().equals("ppt/media/"+name)) {
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        while ((len = zin.read(buffer)) != -1) {
+                            out.write(buffer, 0, len);
+                        }
+                        out.close();
+                        break;
+                    }
+                }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                 l.addPPTObject(new Image(((XSLFPictureShape) sh).getPictureData().getFileName(),((XSLFPictureShape) sh).getPictureData().getImageDimension()));
             }
         }
@@ -244,27 +184,6 @@ public class PPTConverter implements IConverter{
     }
     
 
-    private void loadPictures(XMLSlideShow ppt) {
-        
-        for(XSLFPictureData data : ppt.getPictureData()){
-         
-         byte[] bytes = data.getData();
-         String fileName = data.getFileName();
-       //  System.out.println("picture name: " + fileName);
-         InputStream in = new ByteArrayInputStream(bytes);
-	 BufferedImage bImageFromConvert = null;
-            try {
-                bImageFromConvert = ImageIO.read(in);
-            } catch (IOException ex) {
-                Logger.getLogger(PPTConverter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                ImageIO.write(bImageFromConvert, "jpg", new File("c:\\temp\\"+fileName));
-            } catch (Exception ex) {
-                Logger.getLogger(PPTConverter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }	    
-    }
 
     private PPTObject getCharts(XSLFSlide slide) {
         PPTList l = new PPTList();
