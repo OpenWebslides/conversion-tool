@@ -11,29 +11,56 @@ Dropzone.options.myAwesomeDropzone = {
     acceptedFiles: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     addRemoveLinks: true,
     autoProcessQueue: false,
-    error: function (file, message) {
-        if (!file.accepted)
-            this.removeFile(file);
-        $("#message_alert").text(message);
-        $("#alert").attr("style", "");
-        setTimeout(function () {
-            $("#alert").fadeOut(700);
-        }, 3000);
-    },
-    accept: function (file, done) {
-        $('.dz-progress').hide();
-    },
+    parallelUploads: 10,
+    maxFiles: 10,
+    /*error: function (file, message) {
+     if (!file.accepted)
+     this.removeFile(file);
+     $("#message_alert").text(message);
+     $("#alert").attr("style", "");
+     setTimeout(function () {
+     $("#alert").fadeOut(700);
+     }, 3000);
+     console.log("Error");
+     },
+     accept: function (file, done) {
+     //$('.dz-progress').hide();
+     console.log("Accept");
+     },
+     
+     
+     sending: function (file, xhr, formData) {
+     formData.append("output-type", $('input[name="output_type"]:checked').val());
+     console.log("Sending");
+     },*/
     init: function () {
-        var myDropzone = this;
+        var Dropzone = this;
         $("#btn-convert").click(function () {
-            myDropzone.on("sending", function (file, xhr, formData) {
-                formData.append("output-type", $('input[name="output_type"]:checked').val());
-            });
-            $('.dz-progress').show();
-            myDropzone.processQueue();
+            console.log("Clicked btn convert");
+            //$('.dz-progress').show();
+            Dropzone.processQueue();
+
+            console.log("Process Queue started");
         });
         $("#btn-cancel").click(function () {
-            myDropzone.removeAllFiles(true);
+            console.log("Clicked btn cancel");
+            Dropzone.removeAllFiles(true);
+        });
+        Dropzone.on("sending", function (file, xhr, formData) {
+            formData.append("output-type", $('input[name="output_type"]:checked').val());
+            console.log("Sending");
+        });
+        Dropzone.on("error", function (file, message) {
+            if (!file.accepted)
+                this.removeFile(file);
+            $("#message_alert").text(message);
+            $("#alert").attr("style", "");
+            setTimeout(function () {
+                $("#alert").fadeOut(700);
+            }, 3000);
+        });
+        Dropzone.on("accept", function (file, done) {
+            //$('.dz-progress').hide();
         });
     }
 };
