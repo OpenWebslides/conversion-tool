@@ -13,6 +13,14 @@ import objects.Slide;
 
 public class HTMLWriter extends Writer implements Indentation{
 
+    private final static String SLIDE_TAG_OPEN_0 = "<div class=\"";
+    private final static String SLIDE_TAG_OPEN_1 = "\" id=\"slide";
+    private final static String SLIDE_TAG_OPEN_2 = "\">";
+    private final static String SLIDE_NORMAL = "slide";
+    private final static String SLIDE_TITLE = "title slide";
+    private final static String SLIDE_TAG_CLOSE = "</div>";
+    
+    private int slideIndex = 0;
     /**
      * 
      * @param slide
@@ -31,8 +39,10 @@ public class HTMLWriter extends Writer implements Indentation{
      */
     @Override
     public String writeSlide(Slide slide, int indentation) {
-        //begin of slide
-        String res = getTabs(indentation) + "<slide>";
+        //open slide tag
+        String res = getTabs(indentation) + SLIDE_TAG_OPEN_0;
+        res += slideIndex==0 ? SLIDE_TITLE : SLIDE_NORMAL;
+        res += SLIDE_TAG_OPEN_1 + slideIndex++ + SLIDE_TAG_OPEN_2;
         
         //content of slide
         for(PPTObject pptObj : slide.getPptObjects()){
@@ -52,8 +62,8 @@ public class HTMLWriter extends Writer implements Indentation{
             }
             
         }
-        //end of slide
-        res += "\n" + getTabs(indentation) + "</slide>";
+        //close slide tag
+        res += "\n" + getTabs(indentation) + SLIDE_TAG_CLOSE;
         return res;
     }
     
