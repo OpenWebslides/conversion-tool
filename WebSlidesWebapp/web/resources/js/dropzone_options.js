@@ -11,35 +11,19 @@ Dropzone.options.myAwesomeDropzone = {
     acceptedFiles: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
     addRemoveLinks: true,
     autoProcessQueue: false,
-    parallelUploads: 10,
-    maxFiles: 10,
-    /*error: function (file, message) {
-     if (!file.accepted)
-     this.removeFile(file);
-     $("#message_alert").text(message);
-     $("#alert").attr("style", "");
-     setTimeout(function () {
-     $("#alert").fadeOut(700);
-     }, 3000);
-     console.log("Error");
-     },
-     accept: function (file, done) {
-     //$('.dz-progress').hide();
-     console.log("Accept");
-     },
-     
-     
-     sending: function (file, xhr, formData) {
-     formData.append("output-type", $('input[name="output_type"]:checked').val());
-     console.log("Sending");
-     },*/
+    parallelUploads: 8,
+    maxFiles: 8,
+    accept: function (file, done) {
+        console.log("Accept");
+        $('.dz-progress').hide();
+        return done();
+    },
     init: function () {
         var Dropzone = this;
         $("#btn-convert").click(function () {
             console.log("Clicked btn convert");
-            //$('.dz-progress').show();
+            $('.dz-progress').show();
             Dropzone.processQueue();
-
             console.log("Process Queue started");
         });
         $("#btn-cancel").click(function () {
@@ -51,6 +35,7 @@ Dropzone.options.myAwesomeDropzone = {
             console.log("Sending");
         });
         Dropzone.on("error", function (file, message) {
+            console.log("Error");
             if (!file.accepted)
                 this.removeFile(file);
             $("#message_alert").text(message);
@@ -58,9 +43,6 @@ Dropzone.options.myAwesomeDropzone = {
             setTimeout(function () {
                 $("#alert").fadeOut(700);
             }, 3000);
-        });
-        Dropzone.on("accept", function (file, done) {
-            //$('.dz-progress').hide();
         });
     }
 };

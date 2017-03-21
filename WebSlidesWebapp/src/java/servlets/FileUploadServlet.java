@@ -29,7 +29,7 @@ import javax.servlet.http.Part;
 @WebServlet(name = "FileUploadServlet", urlPatterns = {"/upload"})
 @MultipartConfig
 public class FileUploadServlet extends HttpServlet {
-    
+
     private final static Logger LOGGER = Logger.getLogger(FileUploadServlet.class.getCanonicalName());
 
     /**
@@ -42,23 +42,26 @@ public class FileUploadServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        // System.out.println(request.getParameter("output-type"));
+        
         response.setContentType("text/html;charset=UTF-8");
         // Create path components to save the file
         final String path = "C:/temp"; //request.getParameter("destination");
         final Part filePart = request.getPart("file");
         final String fileName = getFileName(filePart);
-        
+
         OutputStream out = null;
         InputStream filecontent = null;
         final PrintWriter writer = response.getWriter();
-        
+
         try {
             out = new FileOutputStream(new File(path + File.separator + fileName));
             filecontent = filePart.getInputStream();
-            
+
             int read = 0;
             final byte[] bytes = new byte[1024];
-            
+
             while ((read = filecontent.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
@@ -70,7 +73,7 @@ public class FileUploadServlet extends HttpServlet {
                     + "trying to upload a file to a protected or nonexistent "
                     + "location.");
             writer.println("<br/> ERROR: " + fne.getMessage());
-            
+
             LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
                     new Object[]{fne.getMessage()});
         } finally {
@@ -85,7 +88,7 @@ public class FileUploadServlet extends HttpServlet {
             }
         }
     }
-    
+
     private String getFileName(final Part part) {
         final String partHeader = part.getHeader("content-disposition");
         LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);

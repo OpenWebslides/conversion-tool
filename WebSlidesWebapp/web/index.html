@@ -17,34 +17,17 @@ and open the template in the editor.
 
 
         <div class="container header">
-            <div class="col-xs-5 col-sm-5 col-md-2">
+            <div class="col-xs-2">
                 <a href="./">
-                    <img src="resources/images/logo-ugent-EN.svg" alt="Ghent University" id="logo-ugent" class="img-responsive"/>
+                    <img src="resources/images/logo-ugent-EN.svg" alt="Ghent University" id="logo-ugent"/>
                 </a>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-10 header-text">
+            <div class="col-xs-offset-1 col-xs-9 header-text">
                 <h2 class="header-title">Open Webslides Portal</h2>
                 <p class="header-subtext">A Ghent University project</p>
             </div>
         </div>
 
-
-        <div class="container">
-            <div class="row">
-                <div class="alert alert-danger" role="alert" style="display: none" id="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                    <span class="sr-only">Error:</span>
-                    <span id="message_alert"></span>
-                </div>
-
-                <div class="alert alert-success" role="alert" style="display: none" id="success">
-                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                    <span class="sr-only">Success:</span>
-                    <span id="message_success">Example</span>
-                    <a href="https://styleguide.ugent.be/files/uploads/logo_UGent_EN_RGB_2400_kleur_witbg.pngg" download="logo-ugent">Download</a>
-                </div>
-            </div>
-        </div>
 
         <div class="container dragndrop">
             <div class="row">
@@ -56,17 +39,31 @@ and open the template in the editor.
                 </button>
             </div>
             <div class="row">
-                <form action="upload" class="dropzone dz-clickable col-xs-12 col-md-12" id="my-awesome-dropzone">
+                <form action="upload" class="dropzone dz-clickable col-xs-12" id="my-awesome-dropzone">
                 </form>
+            </div>
+            <div class="row">
+                <div class="alert alert-danger" role="alert" style="display: none" id="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    <span id="message_alert"></span>
+                </div>
+
+                <div class="alert alert-success" role="alert" style="display: none" id="success">
+                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                    <span class="sr-only">Success:</span>
+                    <span id="message_success">Example</span>
+                    <a href="https://styleguide.ugent.be/files/uploads/logo_UGent_EN_RGB_2400_kleur_witbg.png" download="logo-ugent">Download</a>
+                </div>
             </div>
             <div class="row">
                 <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOptions" aria-controls="collapseOptions" id="btn-options">
                     More options...
                 </button>
 
-
                 <div class="collapse" id="collapseOptions">
-                    <div class="radio-type">
+                    <div class="radio-type ">
+                        <span class="col-md-2">Output type: </span>
                         <label class="radio-inline"><input type="radio" name="output_type" value="raw" checked>Raw</label>
                         <label class="radio-inline"><input type="radio" name="output_type" value="shower">Shower</label>
                     </div>

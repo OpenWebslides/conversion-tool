@@ -7,11 +7,13 @@ and open the template in the editor.
     Created on : 18-mrt-2017, 11:43:19
     Author     : Joann
 */
+
 @font-face
 {
-    font-family: ugentpannotext-medium;
-    src: url(../fonts/ugentpannotext-medium-web.woff);
+    font-family: Oswald;
+    src: url(../fonts/Oswald-Regular.ttf);
 }
+
 
 #message_success{
     padding-right: 10px;
@@ -45,25 +47,101 @@ and open the template in the editor.
     margin-top: 15px;
 }
 
-.header {
-    background-color: #F2F2F2;
-    padding: 30px;
-    margin-bottom: 20px;
-    margin-top: 20px;
-}
-
 .header-text{
-    font-family: ugentpannotext-medium;
-}
-
-.header-title{
-    font-size: 60px;
-}
-.header-subtext{
-    font-size: 20px;
+    font-family: 'Oswald', sans-serif;
+    background-color: #1E64C8;
+    color: #FFF;
 }
 
 .dropzone{
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+@media screen {
+    .header-title{
+        font-size: 20px;
+    }
+    .header-subtext{
+        font-size: 13px;
+    }
+    #logo-ugent{
+        height: 70px;
+    }
+    .header-text{
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .header{
+        padding: 3px;
+    }
+}
+
+@media screen and (min-width: 480px){
+    .header-title{
+        font-size: 30px;
+    }
+    .header-subtext{
+        font-size: 13px;
+    }
+    #logo-ugent{
+        height: 85px;
+    }
+    .header-text{
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .header{
+        padding: 5px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .header-title{
+        font-size: 50px;
+    }
+    .header-subtext{
+        font-size: 17px;
+    }
+    #logo-ugent{
+        height: 110px;
+    }
+    .header-text{
+        padding-bottom: 15px;
+        padding-top: 15px;
+    }
+    .header{
+        padding: 15px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .header-title{
+        font-size: 55px;
+    }
+    .header-subtext{
+        font-size: 17px;
+    }
+    #logo-ugent{
+        height: 120px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .header-title{
+        font-size: 60px;
+    }
+    .header-subtext{
+        font-size: 20px;
+    }
+    #logo-ugent{
+        height: 140px;
+    }
+    .header-text{
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+    .header{
+        padding: 20px;
+    }
 }
