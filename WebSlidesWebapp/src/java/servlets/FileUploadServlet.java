@@ -14,12 +14,15 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContainerInitializer;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -44,12 +47,15 @@ public class FileUploadServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // System.out.println(request.getParameter("output-type"));
+        HttpSession sess = request.getSession(true);
+        System.out.println("---------"+ServletContext.TEMPDIR);        
+        
         
         response.setContentType("text/html;charset=UTF-8");
         // Create path components to save the file
         final String path = "C:/temp"; //request.getParameter("destination");
         final Part filePart = request.getPart("file");
-        final String fileName = getFileName(filePart);
+        final String fileName = sess.getId().concat(getFileName(filePart));
 
         OutputStream out = null;
         InputStream filecontent = null;
@@ -66,7 +72,7 @@ public class FileUploadServlet extends HttpServlet {
                 out.write(bytes, 0, read);
             }
             writer.println("New file " + fileName + " created at " + path);
-            LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
+            LOGGER.log(Level.INFO, "File {0} being uploaded to {1}",
                     new Object[]{fileName, path});
         } catch (FileNotFoundException fne) {
             writer.println("You either did not specify a file to upload or are "
