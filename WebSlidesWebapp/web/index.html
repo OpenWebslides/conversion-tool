@@ -15,16 +15,24 @@ and open the template in the editor.
     </head>
     <body>
 
-
         <div class="container header">
             <div class="col-xs-2">
                 <a href="./">
-                    <img src="resources/images/logo-ugent-EN.svg" alt="Ghent University" id="logo-ugent"/>
+                    <img src="resources/images/logo-ugent_en.svg" alt="Ghent University" id="logo-ugent"/>
                 </a>
             </div>
             <div class="col-xs-offset-1 col-xs-9 header-text">
-                <h2 class="header-title">Open Webslides Portal</h2>
-                <p class="header-subtext">A Ghent University project</p>
+                <div class="col-xs-11">
+                    <h2 class="header-title">Open Webslides Portal</h2>
+                    <p class="header-subtext">A Ghent University project</p>
+                </div>
+                <div class="col-xs-1">
+                    <div class="row">
+                        <span class="language" id="lang-en">en</span>
+                        <span> | </span>
+                        <span class="language" id="lang-nl">nl</span>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -63,14 +71,13 @@ and open the template in the editor.
 
                 <div class="collapse" id="collapseOptions">
                     <div class="radio-type ">
-                        <span class="col-md-2">Output type: </span>
+                        <span class="col-md-2" id="output-type">Output type: </span>
                         <label class="radio-inline"><input type="radio" name="output_type" value="raw" checked>Raw</label>
                         <label class="radio-inline"><input type="radio" name="output_type" value="shower">Shower</label>
                     </div>
                 </div> 
             </div>
         </div>
-
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
         <script src="resources/js/bootstrap.min.js"></script>
