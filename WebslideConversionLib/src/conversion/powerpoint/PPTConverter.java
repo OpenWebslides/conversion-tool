@@ -57,9 +57,13 @@ public class PPTConverter implements IConverter{
                     try{
                         //Webslide object
                         Slide webslide = new Slide();
-
+                        
+                        //If the slide has a title
+                        if(slide.getTitle()!=null)
+                            webslide.getPptObjects().add(new Title(slide.getTitle()));
+                        
                         //for testing
-                        //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                        output.println(slide.getXmlObject().getCSld().getSpTree().toString());
 
                         //handler that will parse the xml data
                         handler = new PowerpointHandler(webslide.getPptObjects(),output);
@@ -75,9 +79,9 @@ public class PPTConverter implements IConverter{
                         MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file,output);
 
                         //print the slide for testing
-                        output.println(webslide.toString());
+                       output.println(webslide.toString());
 
-                        output.println("");
+                       // output.println("");
                     }catch(Exception e){
                         output.println(Logger.error("Error while parsing slide + " + slides.indexOf(slide)+1 + " in the powerpoint", e));
                     }

@@ -28,6 +28,10 @@ public class Title extends Text{
     public String getContent() {
         return content;
     }
+    @Override
+    /**
+     * Return a string with the content of the title
+     */
     public String toString(){
         return content;
     }

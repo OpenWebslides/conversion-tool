@@ -10,14 +10,15 @@ public class PPT {
     private final List<Slide> slides;
 
     /**
-     * Create an PPT objectS
+     * Create a PPT object
      */
     public PPT() {
         slides = new ArrayList<>();
     }
 
     /**
-     * Return the slides
+     * Return the slides, this will be an editable list.
+     * Any changes made to this list will be saved in the PPT object
      * @return 
      */
     public List<Slide> getSlides() {

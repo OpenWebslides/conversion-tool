@@ -18,9 +18,8 @@ import output.Output;
 public class GarbageHandler {
     
     public static void handle(List<PPTObject> pptObjects,Output output){
-        removeNullValues(pptObjects);
+        removeNullValues(pptObjects);   
     }
-
     private static void removeNullValues(List<PPTObject> pptObjects) {
        pptObjects.removeAll(Collections.singleton(null));
     }

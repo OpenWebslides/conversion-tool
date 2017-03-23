@@ -53,7 +53,8 @@ public class PowerpointHandler extends DefaultHandler {
      * The implementation of startElement, to keep it organized it has been split it startText, startImage,..
      */
     public void startElement(String uri, String localName,String qName, Attributes attributes) throws SAXException {
-        if(qName.equals(PPTXMLConstants.TEXTBODY)){
+        try{
+            if(qName.equals(PPTXMLConstants.TEXTBODY)){
             textbody = true;
             imagebody = false;
         }else if(qName.equals(PPTXMLConstants.IMAGEBODY)){
@@ -64,6 +65,10 @@ public class PowerpointHandler extends DefaultHandler {
             startText(qName, attributes);
         else if (imagebody)
             startImage(qName, attributes);
+        }
+        catch(Exception e){
+            output.println(Logger.error("Error while reading slide data (DefaultHandler startElement)", e));
+        }
     }
     
     @Override
@@ -103,6 +108,12 @@ public class PowerpointHandler extends DefaultHandler {
              switch (qName) {
                  case PPTXMLConstants.TEXT:
                      text = new Text();
+                     break;
+                 case PPTXMLConstants.UNORDEREDLIST:
+                     if(list!=null) list.setOrdered(false);
+                     break;
+                 case PPTXMLConstants.ORDEREDLIST:
+                     if(list!=null) list.setOrdered(true);
                      break;
                  case PPTXMLConstants.TEXTLEVEL:
                      if(attributes.getValue(PPTXMLConstants.LEVEL)!=null){
@@ -160,7 +171,7 @@ public class PowerpointHandler extends DefaultHandler {
         try{
         switch (qName) {
             case PPTXMLConstants.TEXTPART:
-                text.addTextdeel(textpart);
+                text.addTextpart(textpart);
                 break;
             case PPTXMLConstants.TEXT:
                 if(list!=null && text.getLevel()==null){
@@ -229,19 +240,18 @@ public class PowerpointHandler extends DefaultHandler {
             if(qName.equals(PPTXMLConstants.IMAGEDETAILS)){
                 image = new Image();
                 image.setId(attributes.getValue(PPTXMLConstants.ID));
+            }else if(qName.equals(PPTXMLConstants.IMAGEBOX)){
+                imagesize = true;
             }
-            else if(qName.equals(PPTXMLConstants.IMAGESIZE)&&imagesize==true){
+            else if(qName.equals(PPTXMLConstants.IMAGESIZE)&&imagesize){
                 int width = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGEWIDTH))/360000;
                 int height = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGEHEIGHT))/360000;
                 image.getDimension().setSize(width, height);
-            }else if(qName.equals(PPTXMLConstants.IMAGELOCATION)&&imagesize==true){
+                imagesize = false;
+            }else if(qName.equals(PPTXMLConstants.IMAGELOCATION)&&imagesize){
                 int offsetX = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGELOCX))/360000;
                 int offsetY = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGELOCY))/360000;
                 image.getLocation().setSize(offsetX, offsetY);
-                imagesize = false;
-            }else if(qName.equals(PPTXMLConstants.IMAGEBOX)){
-                imagesize = true;
-            }else if(qName.equals(PPTXMLConstants.IMAGEDETAILS)){
             }
         }catch(Exception e){
             output.println(Logger.error("Error while reading slide image tags (DefaultHandler startElement)", e));

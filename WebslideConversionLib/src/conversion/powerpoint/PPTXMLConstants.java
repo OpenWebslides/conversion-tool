@@ -21,6 +21,8 @@ public class PPTXMLConstants {
     //Text elements
     public static final String TEXTBODY = "p:txBody";
     public static final String TEXT = "a:p";
+    public static final String ORDEREDLIST = "a:buAutoNum";
+    public static final String UNORDEREDLIST = "a:buChar";
     public static final String TEXTLEVEL = "a:pPr";
     public static final String TEXTPART = "a:r";
     public static final String TEXTCONTENT = "a:t";

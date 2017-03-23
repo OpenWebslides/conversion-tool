@@ -57,7 +57,7 @@ public class Textpart implements PPTObject{
     
     @Override
     public String toString(){
-        if(!content.equals("")){
+      /*  if(!content.equals("")){
         String toret = "["+content+"]" + " (";
         for(FontDecoration fd : type){
             toret += fd.name() + " ";
@@ -65,7 +65,8 @@ public class Textpart implements PPTObject{
         if(size!=0) toret += " sz " + size;
         if(charachterSpacing!=0) toret += " spc " + charachterSpacing;
         if(color!=null&&!color.equals("")) toret += " color " + color;
-        return toret + ")";}return "";
+        return toret + ")";}return "";*/ return content;
+
     }
 
     public HashSet<FontDecoration> getType() {
