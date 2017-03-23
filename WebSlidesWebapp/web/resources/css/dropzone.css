@@ -301,6 +301,12 @@
     left: 50%;
     margin-left: -27px;
     margin-top: -27px; }
+.dropzone .dz-preview .dz-success-mark {
+    background-color: #3c763d; }
+
+.dropzone .dz-preview .dz-error-mark {
+    background-color: #c9302c; }
+
 .dropzone .dz-preview .dz-success-mark svg, .dropzone .dz-preview .dz-error-mark svg {
     display: block;
     width: 54px;
