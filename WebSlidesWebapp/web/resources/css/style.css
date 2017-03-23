@@ -15,7 +15,7 @@ and open the template in the editor.
 }
 
 
-#message_success{
+#message-success{
     padding-right: 10px;
     padding-left: 10px;
 }
@@ -56,6 +56,14 @@ and open the template in the editor.
 .dropzone{
     margin-top: 15px;
     margin-bottom: 15px;
+}
+
+.language-choice {
+    float: right;
+}
+
+.language-selected{
+    font-size: 140%;
 }
 
 @media screen {
