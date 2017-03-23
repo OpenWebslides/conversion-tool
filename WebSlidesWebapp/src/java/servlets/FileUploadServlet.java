@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.ServletContainerInitializer;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -47,13 +46,12 @@ public class FileUploadServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // System.out.println(request.getParameter("output-type"));
-        HttpSession sess = request.getSession(true);
-        System.out.println("---------"+ServletContext.TEMPDIR);        
+        HttpSession sess = request.getSession(true);         
         
         
         response.setContentType("text/html;charset=UTF-8");
         // Create path components to save the file
-        final String path = "C:/temp"; //request.getParameter("destination");
+        final String path = "C:/Temp/uploads"; //request.getParameter("destination");
         final Part filePart = request.getPart("file");
         final String fileName = sess.getId().concat(getFileName(filePart));
 
