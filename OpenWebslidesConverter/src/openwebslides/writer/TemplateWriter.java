@@ -39,7 +39,25 @@ public class TemplateWriter extends Writer {
     @Override
     public void write(BufferedWriter out, PPT ppt) throws IOException{
         //header
-        out.write(HEADER);
+        //out.write(HEADER);
+        out.write("<!DOCTYPE html>\n" +
+            "<html lang=\"en\">\n" +
+            "<head>\n" +
+            "\t<title>Introduction</title>\n" +
+            "\t<meta charset=\"utf-8\">\n" +
+            "\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n" +
+            "\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n" +
+            "\t<link rel=\"stylesheet\" href=\"_shared/styles/screen-16x10.css\">\n" +
+            "</head>\n" +
+            "<body class=\"shower list\">\n" +
+            "\t<header class=\"caption\">\n" +
+            "\t\t<h1>\n" +
+            "\t\t\t<a class=\"series\" href=\"#title\">" + course + "</a><br>\n" +
+            "\t\t\t<a class=\"module\" href=\"#title\">" + chapter + "</a>\n" +
+            "\t\t</h1>\n" +
+            "\t\t<p>\n" +
+            "\t\t</p>\n" +
+            "\t</header>\n\n");
         
         //slides
         for(Slide slide : ppt.getSlides()){
@@ -48,7 +66,14 @@ public class TemplateWriter extends Writer {
         }
         
         //footer
-        out.write(FOOTER);
+        out.write("\n\n\t<footer>\n" +
+            "\t</footer>\n" +
+            "\t<script src=\"_shared/scripts/shower.min.js\"></script>\n" +
+            "\t<script src=\"_shared/scripts/enhancements.js\"></script>\n" +
+            "\t<script>ga=function(){ga.q.push(arguments)};ga.q=[['create','UA-6142365-12','auto'],['require','autotrack'],['send','pageview']];ga.l=1*new Date</script>\n" +
+            "\t<script async src=\"_shared/scripts/autotrack.js\"></script>\n" +
+            "</body>\n" +
+            "</html>");
     }
     
     /**
@@ -72,37 +97,6 @@ public class TemplateWriter extends Writer {
         File target = new File(targetDir+"/_shared");
         FileUtils.copyDirectory(source, target);
     }
-    
-    /*
-    * Header and footer are the same for every template
-    */
-    private final static String HEADER = "<!DOCTYPE html>\n" +
-        "<html lang=\"en\">\n" +
-        "<head>\n" +
-        "\t<title>Introduction</title>\n" +
-        "\t<meta charset=\"utf-8\">\n" +
-        "\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n" +
-        "\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n" +
-        "\t<link rel=\"stylesheet\" href=\"_shared/styles/screen-16x10.css\">\n" +
-        "</head>\n" +
-        "<body class=\"shower list\">\n" +
-        "\t<header class=\"caption\">\n" +
-        "\t\t<h1>\n" +
-        "\t\t\t<a class=\"series\" href=\"#title\">Opleidingsonderdeel</a><br>\n" +
-        "\t\t\t<a class=\"module\" href=\"#title\">Hoofdstuk</a>\n" +
-        "\t\t</h1>\n" +
-        "\t\t<p>\n" +
-        "\t\t</p>\n" +
-        "\t</header>\n\n";
-    
-    private final static String FOOTER = "\n\n\t<footer>\n" +
-        "\t</footer>\n" +
-        "\t<script src=\"_shared/scripts/shower.min.js\"></script>\n" +
-        "\t<script src=\"_shared/scripts/enhancements.js\"></script>\n" +
-        "\t<script>ga=function(){ga.q.push(arguments)};ga.q=[['create','UA-6142365-12','auto'],['require','autotrack'],['send','pageview']];ga.l=1*new Date</script>\n" +
-        "\t<script async src=\"_shared/scripts/autotrack.js\"></script>\n" +
-        "</body>\n" +
-        "</html>";
 
     public String getCourse() {
         return course;
