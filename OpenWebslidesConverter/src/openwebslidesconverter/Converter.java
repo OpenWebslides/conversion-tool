@@ -98,7 +98,10 @@ public class Converter {
         PPT ppt = new PPT();
 
         IConverter converter = ConverterFactory.getConverter(new File(inputFile));
-        converter.parse(ppt);
+        //converter.setOutput(output); //TODO: nieuwe output lib toevoegen
+        converter.parse(ppt,""); //TODO: dir voor images instellen
+        
+        System.out.println("aantal slides in ppt:"+ppt.getSlides().size());
 
         output.println("Start writing to output file");
         //needed for the error
