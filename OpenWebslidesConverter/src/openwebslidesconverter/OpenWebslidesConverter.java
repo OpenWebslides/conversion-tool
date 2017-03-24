@@ -7,12 +7,8 @@ package openwebslidesconverter;
 
 import java.security.InvalidParameterException;
 import java.util.Queue;
-import openwebslides.output.GuardOutput;
-import openwebslides.output.LogOutput;
-import openwebslides.output.Output;
-import openwebslides.output.StdLogOutput;
-import openwebslides.output.StdOutput;
-import openwebslideslogger.Logger;
+import output.*;
+import logger.Logger;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;

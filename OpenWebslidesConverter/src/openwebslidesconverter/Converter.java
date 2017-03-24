@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.security.InvalidParameterException;
 import objects.PPT;
-import openwebslides.output.Output;
+import output.Output;
 import openwebslides.writer.HTMLWriter;
 import openwebslides.writer.TemplateWriter;
 import openwebslides.writer.Writer;
@@ -98,10 +98,10 @@ public class Converter {
         PPT ppt = new PPT();
 
         IConverter converter = ConverterFactory.getConverter(new File(inputFile));
-        //converter.setOutput(output); //TODO: nieuwe output lib toevoegen
+        converter.setOutput(output);
         converter.parse(ppt,""); //TODO: dir voor images instellen
         
-        System.out.println("aantal slides in ppt:"+ppt.getSlides().size());
+        System.err.println("aantal slides in ppt:"+ppt.getSlides().size());
 
         output.println("Start writing to output file");
         //needed for the error
