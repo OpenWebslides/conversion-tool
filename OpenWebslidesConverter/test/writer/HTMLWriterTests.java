@@ -162,7 +162,7 @@ public class HTMLWriterTests {
     }
     
     @Test
-    //1 slide with a bold, underlined and italic textpart
+    //1 slide with bold, underlined and italic textparts
     public void writePPTTest3() throws IOException{
         String result;
         try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
@@ -190,14 +190,47 @@ public class HTMLWriterTests {
             parts[6] = new Textpart();
             parts[6].setContent(" word.");
             
-            Text[] text = new Text[1];
+            Text[] text = new Text[3];
             text[0] = new Text();
+            text[1] = new Text();
+            text[2] = new Text();
             
             for(Textpart p : parts){
                 text[0].addTextpart(p);
             }
             
+            Textpart[] parts2 = new Textpart[3];
+            parts2[0] = new Textpart();
+            parts2[0].setContent("You could be using ");
+            parts2[1] = new Textpart();
+            parts2[1].getType().add(FontDecoration.STRIKETHROUH);
+            parts2[1].setContent("deprecated");
+            parts2[2] = new Textpart();
+            parts2[2].setContent(" code.");
+            
+            for(Textpart p : parts2){
+                text[1].addTextpart(p);
+            }
+            
+            Textpart[] parts3 = new Textpart[3];
+            parts3[0] = new Textpart();
+            parts3[0].setContent("Some ");
+            parts3[1] = new Textpart();
+            parts3[1].getType().add(FontDecoration.BOLD);
+            parts3[1].getType().add(FontDecoration.ITALIC);
+            parts3[1].getType().add(FontDecoration.UNDERLINE);
+            parts3[1].getType().add(FontDecoration.STRIKETHROUH);
+            parts3[1].setContent("nested");
+            parts3[2] = new Textpart();
+            parts3[2].setContent(" tags.");
+            
+            for(Textpart p : parts3){
+                text[2].addTextpart(p);
+            }
+            
             slides[0].getPptObjects().add(text[0]);
+            slides[0].getPptObjects().add(text[1]);
+            slides[0].getPptObjects().add(text[2]);
             
             for(Slide s : slides){
                 ppt.getSlides().add(s);
