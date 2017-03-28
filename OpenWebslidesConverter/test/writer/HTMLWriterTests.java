@@ -243,11 +243,11 @@ public class HTMLWriterTests {
             result = sw.toString();
         }
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
-        System.out.println(result);
+        //System.out.println(result);
         
-        //String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<h2>Lorem ipsum dolor sit amet</h2>\n\t<p>Consectetur adipiscing elit. Nullam tincidunt ligula quis ligula bibendum pharetra. Donec eget lectus ut nisi laoreet aliquam. Curabitur eget posuere purus.</p>\n</div>\r\n<div class=\"slide\" id=\"slide1\">\n\t<h2>Vivamus posuere neque</h2>\n\t<p>Sit amet ante porta, vitae ornare nunc luctus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam volutpat dictum felis quis semper. Phasellus vitae nisi consectetur, semper lorem vel, tempor nunc.</p>\n</div>";
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<p>This is text with a <strong>important</strong> word, <span style=\"text-decoration: underline;\">underlined</span> word and <em>italic</em> word.</p>\n\t<p>You could be using <strike>deprecated</strike> code.</p>\n\t<p>Some <strike><em><span style=\"text-decoration: underline;\"><strong>nested</strong></span></em></strike> tags.</p>\n</div>";
         
-        //Assert.assertEquals(result, expected);
+        Assert.assertEquals(result, expected);
     }
     
     @Test
