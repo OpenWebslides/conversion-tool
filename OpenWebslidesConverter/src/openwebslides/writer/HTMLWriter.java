@@ -7,6 +7,7 @@ package openwebslides.writer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import objects.*;
 
 
@@ -46,21 +47,7 @@ public class HTMLWriter extends Writer implements Indentation{
         setTABS(++indentation);
         //content of slide
         for(PPTObject pptObj : slide.getPptObjects()){
-            
-            //if a method exists for the object
-            try {
-                Method toHtml = getMethod(pptObj);
-                res += "\n" + TABS + (String)toHtml.invoke(this, pptObj);
-            }
-            //if none method found for the object
-            catch (NoSuchMethodException ex) {
-                //TODO default method
-            }
-            //error
-            catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                //TODO handle output
-            }
-            
+            res += "\n" + TABS + objectToHtml(pptObj);
         }
         setTABS(--indentation);
         
@@ -113,6 +100,24 @@ public class HTMLWriter extends Writer implements Indentation{
         return "<"+tag+">"+content+"</"+tag+">";
     }
     
+    private String objectToHtml(PPTObject pptObj){
+        String res = "";
+        //if a method exists for the object
+        try {
+            Method toHtml = getMethod(pptObj);
+            res += (String)toHtml.invoke(this, pptObj);
+        }
+        //if none method found for the object
+        catch (NoSuchMethodException ex) {
+            //TODO default method
+        }
+        //error
+        catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            //TODO handle output
+        }
+        return res;
+    }
+    
     /**************************************************************************
      * toHtml(pptObject) methods for each pptObject
      **************************************************************************/
@@ -139,5 +144,22 @@ public class HTMLWriter extends Writer implements Indentation{
             res += part;
         }
         return addSimpleTag("p", res);
+    }
+    
+    private String toHtml(PPTList list){
+        String res = "";
+        
+        setTABS(++indentation);
+        for(PPTObject object : list.getBullets()){
+            String html = objectToHtml(object);
+            res += "\n" + TABS + addSimpleTag("li", html);
+        }
+        setTABS(--indentation);
+        
+        res += "\n" + TABS;
+        if(list.isOrdered())
+            return addSimpleTag("ol", res);
+        else
+            return addSimpleTag("ul", res);
     }
 }

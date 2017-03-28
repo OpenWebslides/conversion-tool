@@ -251,6 +251,124 @@ public class HTMLWriterTests {
     }
     
     @Test
+    //1 slide with an ordered list
+    public void writePPTTest4() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            PPTList list = new PPTList();
+            list.setOrdered(true);
+            
+            Text[] objects = new Text[3];
+            
+            for(int i=0; i<3; i++){
+                objects[i] = new Text();
+                Textpart tp = new Textpart();
+                tp.setContent("Line "+i);
+                objects[i].addTextpart(tp);
+                list.addPPTObject(objects[i]);
+            }
+            
+            slide.getPptObjects().add(list);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter();
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        String expected_result = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<ol>\n\t\t<li><p>Line 0</p></li>\n\t\t<li><p>Line 1</p></li>\n\t\t<li><p>Line 2</p></li>\n\t</ol>\n</div>";
+        
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        Assert.assertEquals(result, expected_result);
+    }
+    
+    @Test
+    //1 slide with an unordered list
+    public void writePPTTest5() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            PPTList list = new PPTList();
+            list.setOrdered(false);
+            
+            Text[] objects = new Text[3];
+            
+            for(int i=0; i<3; i++){
+                objects[i] = new Text();
+                Textpart tp = new Textpart();
+                tp.setContent("Line "+i);
+                objects[i].addTextpart(tp);
+                list.addPPTObject(objects[i]);
+            }
+            
+            slide.getPptObjects().add(list);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter();
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        String expected_result = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<ul>\n\t\t<li><p>Line 0</p></li>\n\t\t<li><p>Line 1</p></li>\n\t\t<li><p>Line 2</p></li>\n\t</ul>\n</div>";
+        
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        Assert.assertEquals(result, expected_result);
+    }
+    
+    @Test
+    //1 slide with nested lists
+    public void writePPTTest6() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            PPTList list = new PPTList();
+            list.setOrdered(false);
+            
+            Text[] objects = new Text[3];
+            
+            for(int i=0; i<3; i++){
+                objects[i] = new Text();
+                Textpart tp = new Textpart();
+                tp.setContent("Line "+i);
+                objects[i].addTextpart(tp);
+                list.addPPTObject(objects[i]);
+            }
+            
+            PPTList outerList = new PPTList();
+            outerList.setOrdered(true);
+            outerList.addPPTObject(list);
+            
+            slide.getPptObjects().add(outerList);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter();
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        String expected_result = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<ol>\n\t\t<li><ul>\n\t\t\t<li><p>Line 0</p></li>\n\t\t\t<li><p>Line 1</p></li>\n\t\t\t<li><p>Line 2</p></li>\n\t\t</ul></li>\n\t</ol>\n</div>";
+        
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        Assert.assertEquals(result, expected_result);
+    }
+    
+    @Test
     public void dataTest() {
         Title t = new Title("lorem");
         //System.out.println(t);
