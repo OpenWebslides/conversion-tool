@@ -35,6 +35,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
             Dropzone.removeAllFiles(true);
         });
         Dropzone.on("sending", function (file, xhr, formData) {
+            console.log(xhr);
             formData.append("output-type", $('input[name="output_type"]:checked').val());
             //console.log("Sending");
         });
