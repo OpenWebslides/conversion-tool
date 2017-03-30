@@ -49,4 +49,6 @@ public class ServerEndpoint {
         public void handleMessage(String message, Session session) {
         System.out.println("RECEIVED MESSAGE "+message+" FROM SESSION "+session);
     }
+        
+        
 }
