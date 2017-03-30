@@ -9,7 +9,6 @@ import conversion.IConverter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
-import java.util.Collections;
 import java.util.List;
 import objects.*;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
@@ -59,11 +58,16 @@ public class PPTConverter implements IConverter{
                         Slide webslide = new Slide();
                         
                         //If the slide has a title
-                        if(slide.getTitle()!=null)
-                            webslide.getPptObjects().add(new Title(slide.getTitle()));
+                        if(slide.getTitle()!=null){
+                            Textpart tp = new Textpart();
+                            tp.setContent(slide.getTitle());
+                            Title t = new Title();
+                            t.addTextpart(tp);
+                            webslide.getPptObjects().add(t);
+                        }
                         
                         //for testing
-                        output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                        //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
 
                         //handler that will parse the xml data
                         handler = new PowerpointHandler(webslide.getPptObjects(),output);
@@ -80,6 +84,9 @@ public class PPTConverter implements IConverter{
 
                         //print the slide for testing
                        output.println(webslide.toString());
+                       
+                       //Add to ppt
+                       ppt.getSlides().add(webslide);
 
                        // output.println("");
                     }catch(Exception e){

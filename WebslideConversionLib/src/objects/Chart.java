@@ -15,16 +15,18 @@ import java.util.HashMap;
 public class Chart implements PPTObject {
 
     private String title;
-    private final HashMap<String, ArrayList<Double>> content;
+    private final HashMap<String, HashMap<String, ArrayList<Double>>> content;
     private String chartType;
+    private String id;
     
 
     /**
      * Create a Chart object
      * An empty HashMap of its content will be created
      */
-    public Chart() {
+    public Chart(String id) {
        this.content = new HashMap<>();
+       this.id = id;
     }
 
     /**
@@ -40,7 +42,7 @@ public class Chart implements PPTObject {
      * Changes to this HashMap will be changed in the Chart object
      * @return 
      */
-    public HashMap<String, ArrayList<Double>> getContent() {
+    public HashMap<String, HashMap<String, ArrayList<Double>>> getContent() {
         return content;
     }
 
@@ -79,7 +81,25 @@ public class Chart implements PPTObject {
      * </ul>
      */
     public String toString(){
-        return title;
+        String toret = title + "\n" + chartType + "\n";
+        for(String serie : content.keySet()){
+            toret += serie + "\n";
+            for(String category : content.get(serie).keySet()){
+                toret += "\t" + category + "\n";
+                for(double d : content.get(serie).get(category)){
+                toret += "\t\t" + d + "\n";
+                }
+            }
+        }
+        return toret;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
     
 }

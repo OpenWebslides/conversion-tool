@@ -53,5 +53,9 @@ public class PPTXMLConstants {
     public static final String IMAGELOCX = "x";
     public static final String IMAGELOCY = "y";
     
+    //Chart elements
+    public static final String CHARTBODY = "p:graphicFrame";
+    public static final String CHARTDETAILS = "p:cNvPr";
+    
          
 }

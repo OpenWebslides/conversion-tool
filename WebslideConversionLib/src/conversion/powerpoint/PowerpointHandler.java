@@ -32,6 +32,7 @@ public class PowerpointHandler extends DefaultHandler {
     //Variables optimalization of if statements in startelement
     private boolean textbody = false;
     private boolean imagebody = false;
+    private boolean chartbody = false;
     
     //Variables list
     private PPTList list;
@@ -41,6 +42,9 @@ public class PowerpointHandler extends DefaultHandler {
     //Variables image
     private Image image;
     private boolean imagesize;
+    
+    //Variables chart
+    private Chart chart;
     
     
     PowerpointHandler(List<PPTObject> pptobjects, Output output) {
@@ -60,12 +64,16 @@ public class PowerpointHandler extends DefaultHandler {
         }else if(qName.equals(PPTXMLConstants.IMAGEBODY)){
             imagebody = true;
             textbody = false;
+        }else if(qName.equals(PPTXMLConstants.CHARTBODY)){
+            chartbody = true;
         }
         if(textbody)
             startText(qName, attributes);
         else if (imagebody)
             startImage(qName, attributes);
-        }
+        else if (chartbody)
+            startChart(qName, attributes);
+        }  
         catch(Exception e){
             output.println(Logger.error("Error while reading slide data (DefaultHandler startElement)", e));
         }
@@ -76,9 +84,13 @@ public class PowerpointHandler extends DefaultHandler {
      * The implementation of endElement, to keep it organized it has been split it endText, endImage,..
      */
     public void endElement(String uri, String localName, String qName) throws SAXException {
+        if(textbody)
+            endText(qName);
+        else if (imagebody)
+            endImage(qName);
+        else if (chartbody)
+            endChart(qName);
         
-        endText(qName);
-        endImage(qName);
         
     }
 
@@ -268,7 +280,29 @@ public class PowerpointHandler extends DefaultHandler {
                 image = null;
             }
         }catch(Exception e){
-            output.println(Logger.error("Error while reading slide image tags (DefaultHandler startElement)", e));
+            output.println(Logger.error("Error while reading slide image tags (DefaultHandler endElement)", e));
+        }
+    }
+
+    private void startChart(String qName, Attributes attributes) {
+        try{
+            if(qName.equals(PPTXMLConstants.CHARTDETAILS)){
+                chart = new Chart(attributes.getValue(PPTXMLConstants.ID));
+            }
+        }
+        catch(Exception e){
+            output.println(Logger.error("Error while reading slide chart tags (DefaultHandler startElement)", e));
+        }
+    }
+
+    private void endChart(String qName) {
+        try{
+            if(qName.equals(PPTXMLConstants.CHARTDETAILS)){
+            pptobjects.add(chart);
+            }
+        }
+        catch(Exception e){
+            output.println(Logger.error("Error while ending slide chart tags (DefaultHandler endElement)", e));
         }
     }
 
