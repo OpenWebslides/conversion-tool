@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var socket = new WebSocket("ws://localhost:8080/WebSlidesWebapp/pipe");
+
 
 function onOpen(event){
-    socket.send("This is a client registering");
+    shared_vars.socket.send("This is a client registering");
+    alert("a websocket was opened "+event);
 }
 
 function onMessage(event){
@@ -19,16 +20,15 @@ function onMessage(event){
 
 
 $("#btn-convert").click(function(){
-    socket.send("file-upload started");
+    shared_vars.socket.send("file-upload started");
     console.log("file-upload started");
+    console.log(shared_vars.socket);
 });
 
 $("#download-form").submit(function(){
-    socket.send("file-download started");
+    shared_vars.socket.send("file-download started");
     console.log("file-download started");    
 });
-
-
 
 
 

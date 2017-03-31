@@ -39,4 +39,9 @@ public class SocketSession {
             Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public Set<Session> getSessions() {
+        return sessions;
+    }   
+    
 }
