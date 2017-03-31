@@ -15,7 +15,9 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.inject.Inject;
-
+import mgr.ConverterManager;
+import org.json.JSONObject;
+        
 /**
  *
  * @author dhoogla
@@ -26,8 +28,10 @@ import javax.inject.Inject;
 public class ServerEndpoint {
     
     @Inject
-    private SocketSession _session;
+    private SocketSession _session;     
     
+    private final ConverterManager mgr = new ConverterManager();
+   
     @OnOpen
     public void open(Session s){
         _session.addSession(s);
@@ -48,6 +52,14 @@ public class ServerEndpoint {
     @OnMessage
         public void handleMessage(String message, Session session) {
         System.out.println("RECEIVED MESSAGE "+message+" FROM SESSION "+session);
+        if(message.contains("\"msgType\":\"FILE\"")){
+        JSONObject msg = new JSONObject(message);
+            System.out.println("***************"+msg);
+       String filename= msg.getString("name");
+        long timestamp = msg.getLong("timestamp");
+        String filetype = msg.getString("fileType");
+        mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype));
+        }
     }
         
         

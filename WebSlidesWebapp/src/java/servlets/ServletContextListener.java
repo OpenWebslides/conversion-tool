@@ -25,18 +25,19 @@ public class ServletContextListener implements javax.servlet.ServletContextListe
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         
-        try {
-            pb = new ProcessBuilder("java", "-jar", ServletContextListener.DIRGUARD_JARPATH, "C:\\Temp\\uploads").start();
-        } catch (IOException ex) {
-            Logger.getLogger(ServletContextListener.class.getName()).log(Level.SEVERE,"failed to start process", ex);
-        }
+//        try {
+//            // in commentaar want niet meer nodig & resource hog
+//            //pb = new ProcessBuilder("java", "-jar", ServletContextListener.DIRGUARD_JARPATH, "C:\\Temp\\uploads").start();
+//        } catch (IOException ex) {
+//            Logger.getLogger(ServletContextListener.class.getName()).log(Level.SEVERE,"failed to start process", ex);
+//        }
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         //may be dangerous in the case of random front-end breakage
-        pb.destroy();
-        Logger.getLogger(ServletContextListener.class.getName()).log(Level.SEVERE,"destroyed directory_guard");
+        //pb.destroy();
+        //Logger.getLogger(ServletContextListener.class.getName()).log(Level.SEVERE,"destroyed directory_guard");
     }
 
 }

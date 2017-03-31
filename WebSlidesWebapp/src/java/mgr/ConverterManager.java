@@ -5,12 +5,41 @@
  */
 package mgr;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import websocket.InboundMsgDefinition;
 
 /**
  *
  * @author dhoogla
  */
 public class ConverterManager {
-    private HashMap<Integer,Integer> SessionFiles;
+    private HashMap<String,ArrayList<InboundMsgDefinition>> sessionFiles;
+
+    public ConverterManager() {
+        this.sessionFiles = new HashMap<>();
+    }
+    
+    
+    
+    public void addEntry(String key ,InboundMsgDefinition value){
+        if(sessionFiles.containsKey(key)){
+            sessionFiles.get(key).add(value);
+        }
+        else{
+        sessionFiles.put(key,new ArrayList<>());
+        sessionFiles.get(key).add(value);
+        }
+        System.out.println("***I added to sessionFiles***");        
+        ArrayList<InboundMsgDefinition> p = sessionFiles.get(key);
+        System.out.println("Websocket session key:"+key);
+        for(InboundMsgDefinition t : p){
+            System.out.println(t);
+        }
+    }
+
+    public HashMap<String, ArrayList<InboundMsgDefinition>> getSessionFiles() {
+        return sessionFiles;
+    }
+    
 }

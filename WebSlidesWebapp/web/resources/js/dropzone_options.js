@@ -51,7 +51,9 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         });
         
         Dropzone.on("success",function(file){
-           shared_vars.socket.send("File successfully uploaded");
+           shared_vars.socket.send("File successfully uploaded"+file.toString());
+           //shared_vars.socket.send(JSON.stringify(file));
+           shared_vars.socket.send(JSON.stringify({"msgType":"FILE","name":file.name,"timestamp":file.lastModified,"fileType":file.type}));
            console.log(file);
            console.log("success");
         });
