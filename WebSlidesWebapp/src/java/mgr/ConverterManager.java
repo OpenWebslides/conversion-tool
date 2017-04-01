@@ -14,26 +14,24 @@ import websocket.InboundMsgDefinition;
  * @author dhoogla
  */
 public class ConverterManager {
-    private HashMap<String,ArrayList<InboundMsgDefinition>> sessionFiles;
+
+    private HashMap<String, ArrayList<InboundMsgDefinition>> sessionFiles;
 
     public ConverterManager() {
         this.sessionFiles = new HashMap<>();
     }
-    
-    
-    
-    public void addEntry(String key ,InboundMsgDefinition value){
-        if(sessionFiles.containsKey(key)){
+
+    public void addEntry(String key, InboundMsgDefinition value) {
+        if (sessionFiles.containsKey(key)) {
+            sessionFiles.get(key).add(value);
+        } else {
+            sessionFiles.put(key, new ArrayList<>());
             sessionFiles.get(key).add(value);
         }
-        else{
-        sessionFiles.put(key,new ArrayList<>());
-        sessionFiles.get(key).add(value);
-        }
-        System.out.println("***I added to sessionFiles***");        
+        System.out.println("***I added to sessionFiles***");
         ArrayList<InboundMsgDefinition> p = sessionFiles.get(key);
-        System.out.println("Websocket session key:"+key);
-        for(InboundMsgDefinition t : p){
+        System.out.println("Websocket session key:" + key);
+        for (InboundMsgDefinition t : p) {
             System.out.println(t);
         }
     }
@@ -41,5 +39,14 @@ public class ConverterManager {
     public HashMap<String, ArrayList<InboundMsgDefinition>> getSessionFiles() {
         return sessionFiles;
     }
-    
+
+    public void printSessionFiles() {
+        for (String k : sessionFiles.keySet()) {
+            System.out.println("Websocket session key:" + k);
+
+            for (InboundMsgDefinition t : sessionFiles.get(k)) {
+                System.out.println(t);
+            }
+        }
+    }
 }
