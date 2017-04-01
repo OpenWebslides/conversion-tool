@@ -15,7 +15,7 @@ import websocket.InboundMsgDefinition;
  */
 public class ConverterManager {
 
-    private HashMap<String, ArrayList<InboundMsgDefinition>> sessionFiles;
+    private final HashMap<String, ArrayList<InboundMsgDefinition>> sessionFiles;
 
     public ConverterManager() {
         this.sessionFiles = new HashMap<>();
