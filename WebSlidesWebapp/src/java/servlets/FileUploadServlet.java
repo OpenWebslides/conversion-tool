@@ -43,17 +43,13 @@ public class FileUploadServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        // System.out.println(request.getParameter("output-type"));
-        HttpSession sess = request.getSession(true);         
-        
-        
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {           
+                
         response.setContentType("text/html;charset=UTF-8");
         // Create path components to save the file
         //final String path = "C:/Temp/uploads"; //request.getParameter("destination");
         final Part filePart = request.getPart("file");
-        final String fileName = sess.getId().concat(getFileName(filePart));
+        final String fileName = getFileName(filePart);
 
         OutputStream out = null;
         InputStream filecontent = null;
