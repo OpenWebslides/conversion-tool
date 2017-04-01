@@ -245,6 +245,7 @@ Verwijdert eventuele lokale referenties naar remote branches die niet meer besta
 
 **KLAAR**
 
+####*opm*: als je lokaal tracking branches had die niet langer bestaan op de remote, zal je dat zien in de uitvoer van `git remote show origin`, om deze referenties ook lokaal te verwijderen moet je `git remote prune origin`gebruiken.
 
 
 ###---__Conventies__---###
