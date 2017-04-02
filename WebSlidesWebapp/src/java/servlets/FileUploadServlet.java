@@ -20,7 +20,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 /**
@@ -32,7 +31,7 @@ import javax.servlet.http.Part;
 public class FileUploadServlet extends HttpServlet {
 
     private final static Logger LOGGER = Logger.getLogger(FileUploadServlet.class.getCanonicalName());
-    private final static String UPLOAD_DESTINATION = "C:\\Temp\\uploads";
+    private final static String UPLOAD_DESTINATION = System.getProperty("user.home")+"\\tiwi\\upload\\";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

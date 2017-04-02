@@ -35,13 +35,14 @@ public class ServerEndpoint {
     @OnOpen
     public void open(Session s){
         _session.addSession(s);
-        System.out.println("WEBSOCKET SESSION OPENED"+s);
+        System.out.println("WEBSOCKET SESSION OPENED "+s);
+        System.out.println("LISTING SYSTEM PROPERTIES");        
     }
     
     @OnClose
     public void close(Session s){
         _session.removeSession(s);
-        System.out.println("WEBSOCKET SESSION CLOSED"+s);
+        System.out.println("WEBSOCKET SESSION CLOSED "+s);
     }
     
      @OnError
