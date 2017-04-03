@@ -7,8 +7,6 @@ package conversion;
 
 import java.util.Queue;
 import java.util.Timer;
-import java.util.TimerTask;
-import java.util.logging.Level;
 import openwebslideslogger.Logger;
 
 /**

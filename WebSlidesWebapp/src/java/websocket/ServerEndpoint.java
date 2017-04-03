@@ -5,7 +5,6 @@
  */
 package websocket;
 
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
@@ -17,63 +16,61 @@ import javax.websocket.Session;
 import javax.inject.Inject;
 import mgr.ConverterManager;
 import org.json.JSONObject;
-        
+
 /**
  *
  * @author dhoogla
  */
-
 @ApplicationScoped
 @javax.websocket.server.ServerEndpoint("/pipe")
 public class ServerEndpoint {
-    
+
     @Inject
-    private SocketSession session;     
-    
+    private SocketSession session;
+
     private int nrOpen = 0;
-    
-    private final ConverterManager mgr = ConverterManager.getConverterManager();    
-    
+
+    private final ConverterManager mgr = ConverterManager.getConverterManager();
+
     @OnOpen
-    public void open(Session s){
+    public void open(Session s) {
         session.addSession(s);
-        if(nrOpen == 0){
+        if (nrOpen == 0) {
             mgr.startLogThread();
         }
         ++nrOpen;
-        System.out.println("Serverendpoint opened a session, the new sessioncount is: "+nrOpen);
-        System.out.println("WEBSOCKET SESSION OPENED "+s);
-        
+        System.out.println("Serverendpoint opened a session, the new sessioncount is: " + nrOpen);
+        System.out.println("WEBSOCKET SESSION OPENED " + s);
+
     }
-    
+
     @OnClose
-    public void close(Session s){        
+    public void close(Session s) {
         session.removeSession(s);
         --nrOpen;
-        System.out.println("Serverendpoint closed a session, the new sessioncount is: "+nrOpen);
-        if(nrOpen == 0){
+        System.out.println("Serverendpoint closed a session, the new sessioncount is: " + nrOpen);
+        if (nrOpen == 0) {
             mgr.stopLogThread();
         }
-        System.out.println("WEBSOCKET SESSION CLOSED "+s);
+        System.out.println("WEBSOCKET SESSION CLOSED " + s);
     }
-    
-     @OnError
-        public void onError(Throwable error) {
-            Logger.getLogger(ServerEndpoint.class.getName()).log(Level.SEVERE, null, error);
+
+    @OnError
+    public void onError(Throwable error) {
+        Logger.getLogger(ServerEndpoint.class.getName()).log(Level.SEVERE, null, error);
     }
 
     @OnMessage
-        public void handleMessage(String message, Session session) {
-        System.out.println("RECEIVED MESSAGE "+message+" FROM SESSION "+session);
-        if(message.contains("\"msgType\":\"FILE\"")){
-        JSONObject msg = new JSONObject(message);
-            System.out.println("***************"+msg);
-       String filename= msg.getString("name");
-        long timestamp = msg.getLong("timestamp");
-        String filetype = msg.getString("fileType");
-        mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype));
+    public void handleMessage(String message, Session session) {
+        System.out.println("RECEIVED MESSAGE " + message + " FROM SESSION " + session);
+        if (message.contains("\"msgType\":\"FILE\"")) {
+            JSONObject msg = new JSONObject(message);
+            System.out.println("***************" + msg);
+            String filename = msg.getString("name");
+            long timestamp = msg.getLong("timestamp");
+            String filetype = msg.getString("fileType");
+            mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype));
         }
     }
-        
-        
+
 }
