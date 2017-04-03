@@ -5,38 +5,66 @@
  */
 package mgr;
 
-import conversion.ConversionThread;
-import directoryguard.LogThread;
+import conversion.ConversionCallable;
+import conversion.LogThread;
 import java.util.ArrayList;
 import java.util.HashMap;
 import websocket.InboundMsgDefinition;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import openwebslideslogger.Logger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import javax.annotation.PostConstruct;
 
 /**
  *
  * @author dhoogla
  */
-public class ConverterManager {
+public class ConverterManager implements CallableCallback{
 
     private final HashMap<String, ArrayList<InboundMsgDefinition>> sessionFiles;
     private final Logger logger;
     private final Logger threadLogger;
     private long lastid;
     private InboundMsgDefinition lastMessage;
-    private final Queue<Queue<String>> conversionLogQueue;    
+    private final Queue<Queue<String>> conversionLogQueue;
+    private final ExecutorService executor = Executors.newFixedThreadPool(3);
+    private final LogThread logthread;
+    
     
 
-    public ConverterManager() {
+    private ConverterManager() {
         this.sessionFiles = new HashMap<>();        
         this.logger = new Logger(System.getProperty("user.home")+"\\tiwi\\java_app_logs\\","threadcreation_log","log of the conversionthread lifecycle");
         this.threadLogger = new Logger(System.getProperty("user.home")+"\\tiwi\\java_app_logs\\","conversionprogress_log","log of the progress of the individual loggers");
         this.lastid=0;
         this.conversionLogQueue = new ConcurrentLinkedDeque<>();
+        this.logthread = new LogThread(conversionLogQueue, threadLogger);
+      
     }
+    
+    //open voor Singleton pattern later
+    public static ConverterManager getConverterManager() {
+       return new ConverterManager();     
+    }
+    
+    public void startLogThread(){
+        logthread.start();
+    }
+    
+    public void stopLogThread(){
+        try {
+            logthread.join(1500);
+        } catch (InterruptedException ex) {
+            java.util.logging.Logger.getLogger(ConverterManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 
     public void addEntry(String key, InboundMsgDefinition value) {
         lastMessage=value;
@@ -80,16 +108,18 @@ public class ConverterManager {
         String[] args = new String[] {"-i",file,"-o",targetDir};
         
         ++lastid;
-        logger.println(Logger.log(lastMessage.getName(), "start LogThread"));
-        new LogThread(conversionLogQueue, threadLogger).start();
+        logger.println(Logger.log(lastMessage.getName()));
         logger.println(new Timestamp(new Date().getTime())+" "+lastid);
         System.out.println("Starting conversion thread with id: "+lastid);
-        ConversionThread t = new ConversionThread(args, conversionLogQueue, lastid);     
-        t.start();      
-        // morgen oplossing met callables & futuretasks
-     
-               
+        ConversionCallable t = new ConversionCallable(args, conversionLogQueue, lastid, this);     
+        executor.submit(t);               
+    }
+
+    @Override
+    public void callableComplete(long id) {
+        System.out.println("*-*-*-*The conversion Callable with id "+id+" has finished its work!!!");                 
     }
     
+   
     
 }

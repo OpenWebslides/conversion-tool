@@ -28,20 +28,32 @@ import org.json.JSONObject;
 public class ServerEndpoint {
     
     @Inject
-    private SocketSession _session;     
+    private SocketSession session;     
     
-    private final ConverterManager mgr = new ConverterManager();
-   
+    private int nrOpen = 0;
+    
+    private final ConverterManager mgr = ConverterManager.getConverterManager();    
+    
     @OnOpen
     public void open(Session s){
-        _session.addSession(s);
+        session.addSession(s);
+        if(nrOpen == 0){
+            mgr.startLogThread();
+        }
+        ++nrOpen;
+        System.out.println("Serverendpoint opened a session, the new sessioncount is: "+nrOpen);
         System.out.println("WEBSOCKET SESSION OPENED "+s);
-        System.out.println("LISTING SYSTEM PROPERTIES");        
+        
     }
     
     @OnClose
-    public void close(Session s){
-        _session.removeSession(s);
+    public void close(Session s){        
+        session.removeSession(s);
+        --nrOpen;
+        System.out.println("Serverendpoint closed a session, the new sessioncount is: "+nrOpen);
+        if(nrOpen == 0){
+            mgr.stopLogThread();
+        }
         System.out.println("WEBSOCKET SESSION CLOSED "+s);
     }
     

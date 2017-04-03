@@ -12,10 +12,12 @@ import java.net.URLClassLoader;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Queue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import mgr.CallableCallback;
 
 
-public class ConversionThread extends Thread{
+public class ConversionCallable implements Callable<Integer>{
     private static final String CONVERTER_JAR = /* Windows:*/ System.getProperty("user.home")+"\\tiwi\\java_app_pack\\OpenWebslidesConverter.jar";
             //"/home/tiwi/java_app_pack/OpenWebslidesConverter.jar"; 
     
@@ -25,6 +27,8 @@ public class ConversionThread extends Thread{
     private final long id;
     private final Queue<Queue<String>> logQueue;
     private Queue<String> queue;  
+    private boolean normalfinish = false;
+    private final CallableCallback callback;
         
     /**
      * Creates an instance of the class ConversionThread.
@@ -32,18 +36,29 @@ public class ConversionThread extends Thread{
      * @param logQueue A queue of queues of strings. The inner queue of strings will be filled with the log output from the logger.
      * @param id A unique identification for the thread. Used in the log to keep the different converters apart.
      */
-    public ConversionThread(String[] args, Queue<Queue<String>> logQueue, long id){
+    public ConversionCallable(String[] args, Queue<Queue<String>> logQueue, long id,CallableCallback cb){
         this.args = args;
         this.logQueue = logQueue;
         this.id = id;     
+        this.callback = cb;
     }
-    
+     
+   
     /**
-     * The run method of the thread. Contains all the logic of the class. It passes the arguments from the constructor to the converter via reflection.
+     * Private help method to write a message to the log queue. The id of the thread and a timestamp will be added before the message.
+     * @param msg 
+     */
+    private void logToQueue(String msg){
+        queue.offer(id + " " + new Timestamp(new Date().getTime()) + " " + msg);
+    }
+
+      /**
+     * The call method of the callable. Contains all the logic of the class. It passes the arguments from the constructor to the converter via reflection.
      * At the end the queue of strings with the logs from the converter will be pushed into logQueue.
+     * @throws java.lang.Exception
      */
     @Override
-    public void run(){
+    public Integer call() throws Exception {
         try {
             this.queue = new ConcurrentLinkedDeque<>();
             
@@ -73,18 +88,16 @@ public class ConversionThread extends Thread{
             method.invoke(null, param);
             
             logToQueue("end of thread");
+            normalfinish = true;
         } catch (Exception ex) {
             logToQueue("error:" + ex.getMessage());
         } finally{
             logQueue.offer(queue);
+            callback.callableComplete(this.id);
         }
-    }
-    
-    /**
-     * Private help method to write a message to the log queue. The id of the thread and a timestamp will be added before the message.
-     * @param msg 
-     */
-    private void logToQueue(String msg){
-        queue.offer(id + " " + new Timestamp(new Date().getTime()) + " " + msg);
+        if(normalfinish){
+            return 0;
+        }
+        else return -1;
     }
 }
