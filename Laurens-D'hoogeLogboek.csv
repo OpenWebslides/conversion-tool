@@ -64,3 +64,4 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 31/03/17,20:45,21:30,Extern,Projectwerk,Standaardisatie van berichtuitwisseling front->back,,
 31/03/17,23:45,23:59,Extern,Projectwerk,JSON implementeren voor gestandaaridseerde berichtuitwisseling,,
 01/04/17,00:00,02:15,Extern,Projectwerk,JSON implementeren voor gestandaaridseerde berichtuitwisseling + inspectie met Burpsuite,,
+01/04/17,19:00,21:30,Extern,Projectwerk,Inspectie code directoryguard als startpunt voor webapp integratie,,
