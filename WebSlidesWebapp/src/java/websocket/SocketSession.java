@@ -6,13 +6,13 @@
 package websocket;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
-import javax.json.JsonObject;
+import javax.websocket.EncodeException;
 import javax.websocket.Session;
+import org.json.JSONObject;
 
 /**
  *
@@ -20,28 +20,30 @@ import javax.websocket.Session;
  */
 @ApplicationScoped
 public class SocketSession {
-    private final Set<Session> sessions = new HashSet<>();
+    private final HashMap<String,Session> sessions = new HashMap<>();
     
      public void addSession(Session session) {
-        sessions.add(session);    
+        sessions.put(session.getId(),session);    
          System.out.println("New socket session + "+session);
     }
 
     public void removeSession(Session session) {
-        sessions.remove(session);
+        sessions.remove(session.getId());
     }
     
-    private void sendToSession(Session session, JsonObject message) {
+    public static void sendToSession(Session session, JSONObject message) {
         try {
-            session.getBasicRemote().sendText(message.toString());
-        } catch (IOException ex) {
-            sessions.remove(session);
+            System.out.println("going to send to session: "+session.getId()+" the following message: "+message);
+            session.getBasicRemote().sendObject(message);
+        } catch (IOException ex) {            
+            Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EncodeException ex) {
             Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public Set<Session> getSessions() {
-        return sessions;
+    public Session getOneSession(String sessionKey) {
+        return sessions.get(sessionKey);
     }   
     
 }

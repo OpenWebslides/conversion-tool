@@ -23,14 +23,14 @@ import org.json.JSONObject;
  */
 @ApplicationScoped
 @javax.websocket.server.ServerEndpoint("/pipe")
-public class ServerEndpoint {
+public class ServerEndpoint implements ConversionCompleteCallback{
 
     @Inject
     private SocketSession session;
 
     private int nrOpen = 0;
 
-    private final ConverterManager mgr = ConverterManager.getConverterManager();
+    private final ConverterManager mgr = ConverterManager.getConverterManager(this);
 
     @OnOpen
     public void open(Session s) {
@@ -40,8 +40,7 @@ public class ServerEndpoint {
         }
         ++nrOpen;
         System.out.println("Serverendpoint opened a session, the new sessioncount is: " + nrOpen);
-        System.out.println("WEBSOCKET SESSION OPENED " + s);
-
+        System.out.println("WEBSOCKET SESSION OPENED " + s);        
     }
 
     @OnClose
@@ -53,6 +52,7 @@ public class ServerEndpoint {
             mgr.stopLogThread();
         }
         System.out.println("WEBSOCKET SESSION CLOSED " + s);
+        mgr.removeEntry(s.getId());
     }
 
     @OnError
@@ -72,5 +72,15 @@ public class ServerEndpoint {
             mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype));
         }
     }
+
+    @Override
+    public void conversionComplete(String sessionKey, String file) {
+        Session s = session.getOneSession(sessionKey);
+        OutboundMsgDefinition msg = new OutboundMsgDefinition(file,"download-ready");        
+        System.out.println(new JSONObject(msg.getInfo()).toString());
+        SocketSession.sendToSession(s,new JSONObject(msg.getInfo()));             
+    }
+    
+   
 
 }

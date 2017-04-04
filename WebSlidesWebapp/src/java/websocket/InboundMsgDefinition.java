@@ -10,7 +10,7 @@ package websocket;
  * @author Laurens
  */
 public class InboundMsgDefinition {
-    private final String name;
+    private final String fileName;
     private final String fileType;
     private final long timestamp;
     //private final InboundMsgDefinition.MSGTYPE msgType;
@@ -18,14 +18,14 @@ public class InboundMsgDefinition {
     //public static enum MSGTYPE {INFO,FILE};
     
     public InboundMsgDefinition(String n,long tm, String t){
-    this.name=n;
+    this.fileName=n;
     this.timestamp=tm;
     this.fileType=t;
     
     }
 
-    public String getName() {
-        return name;
+    public String getFileName() {
+        return fileName;
     }
 
     public String getFileType() {
@@ -38,7 +38,7 @@ public class InboundMsgDefinition {
 
     @Override
     public String toString() {
-        return "=> InboundMsgDefinition{" + "name=" + name + ", fileType=" + fileType + ", timestamp=" + timestamp + '}';
+        return "=> InboundMsgDefinition{" + "name=" + fileName + ", fileType=" + fileType + ", timestamp=" + timestamp + '}';
     }
     
     

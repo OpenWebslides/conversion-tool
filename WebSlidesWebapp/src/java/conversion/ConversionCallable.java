@@ -19,7 +19,7 @@ import mgr.CallableCallback;
 
 public class ConversionCallable implements Callable<Integer>{
     private static final String CONVERTER_JAR = /* Windows:*/ System.getProperty("user.home")+"\\tiwi\\java_app_pack\\OpenWebslidesConverter.jar";
-            //"/home/tiwi/java_app_pack/OpenWebslidesConverter.jar"; 
+            //"System.getProperty("user.home")/tiwi/java_app_pack/OpenWebslidesConverter.jar"; 
     
     private static final String CONVERTER_MAIN_CLASS = "openwebslidesconverter.OpenWebslidesConverter";
     
