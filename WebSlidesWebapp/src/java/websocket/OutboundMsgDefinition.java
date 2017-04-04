@@ -8,7 +8,7 @@ package websocket;
 import java.util.HashMap;
 
 /**
- *
+ * The OutboundMsgDefinition is a template for messages that will be sent to the client
  * @author Laurens
  */
 public class OutboundMsgDefinition {

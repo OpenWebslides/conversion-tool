@@ -23,7 +23,9 @@ import java.util.logging.Level;
 import websocket.ConversionCompleteCallback;
 
 /**
- *
+ * The pure java part of the back-end
+ * Receives InboundMsgDefinitions from the ServerEndpoint and signal the ServerEndpoint when the thread doing the conversion has finished.
+ * This class never directly addresses clients nor receives direct messages from them. 
  * @author dhoogla
  */
 public class ConverterManager implements CallableCallback {
@@ -39,6 +41,13 @@ public class ConverterManager implements CallableCallback {
     private final HashMap<Long,Pair<String,String>> threadSessionFile;
     private final ConversionCompleteCallback serverEndpoint;
 
+    /**
+     * The ConverterManager is at the heart of the business logic
+     * It keeps track of the sessionIDs and maps the files that need conversion to them
+     * It is responsible for concurrent logging capabilities, both of the inner conversion threads and the outer management of those threads by this class
+     * Will notify the ServerEndpoint upon completion of a conversion (in a separate thread) to enable a message-based 2-way communication between the client and the server.
+     * @param ccc 
+     */
     private ConverterManager(ConversionCompleteCallback ccc) {
         this.sessionFiles = new HashMap<>();
         this.logger = new Logger(System.getProperty("user.home") + File.separator+"tiwi"+File.separator+"java_app_logs"+File.separator, "threadcreation_log", "log of the conversionthread lifecycle");
@@ -67,6 +76,11 @@ public class ConverterManager implements CallableCallback {
         }
     }
 
+    /**
+     * This is a dual purpose method, first it takes care of the bookkeeping and then calls convertFile which launches the conversion
+     * @param key A Websocket session token to identify the owner of the original file and addressee for the converted file
+     * @param value An InboundMsgDefinition which contains the necessary info for administration & consistency
+     */
     public void addEntry(String key, InboundMsgDefinition value) {
         lastMessage = value;
         if (sessionFiles.containsKey(key)) {
@@ -102,7 +116,17 @@ public class ConverterManager implements CallableCallback {
             }
         }
     }
-
+    
+    /**
+     * This method interprets the file parameter to know which file to convert.
+     * It subsequently sets a location for the output after conversion
+     * The bookkeeping is logged by logger, the conversion threads receive the concurrent data structure to store their messages
+     * The actual conversion is done in a java Callable, starting them done with an ExecutorService.
+     * Finally an internal data structure is used to save which converter is handling which file
+     * @param file the absolute path of the file that requires conversion
+     * @param sessionKey the Websocket session token associated with the user who submitted the file
+     */   
+    
     public void convertFile(String file,String sessionKey) {
         System.out.println("file to convert (should be FULL PATH) " + file);
         String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+file.substring(file.lastIndexOf(File.separator)+1);        
@@ -113,16 +137,20 @@ public class ConverterManager implements CallableCallback {
         String[] args = new String[]{"-i", file, "-o", targetDir};
         ++lastid;
         logger.println(Logger.log(lastMessage.getFileName()));
-        logger.println(new Timestamp(new Date().getTime()) + " " + lastid);
+        logger.println(new Timestamp(new Date().getTime()) + "*** " + lastid);
         System.out.println("Starting conversion thread with id: " + lastid);
+        
         ConversionCallable t = new ConversionCallable(args, conversionLogQueue, lastid, this);        
         executor.submit(t);      
         
-        threadSessionFile.put(lastid,new Pair<>(sessionKey,file.substring(file.lastIndexOf('\\')+1,file.length())));
-        
-        
+        threadSessionFile.put(lastid,new Pair<>(sessionKey,file.substring(file.lastIndexOf(File.separator)+1,file.length())));  
     }
 
+    /**
+     * This callback is used to signal the ServerEndpoint which file from which session was converted.
+     * That info is used by the ServerEndpoint to construct appropriate websocket messages for the client.
+     * @param id The id of the Callable that was used to convert the file
+     */
     @Override
     public void callableComplete(long id) {
         System.out.println("*-*-*-*The conversion Callable with id " + id + " has finished its work!!!");

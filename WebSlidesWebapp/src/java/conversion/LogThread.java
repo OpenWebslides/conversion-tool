@@ -11,12 +11,13 @@ import openwebslideslogger.Logger;
 
 /**
  *
- * @author Jonas
+ * @author Jonas / dhoogla
  */
 public class LogThread extends Thread {
 
     private final Queue<Queue<String>> logQueue;
     private final Logger logger;
+    private final Timer timer;
 
     /**
      * Creates an instance of the class LogThread.
@@ -28,18 +29,16 @@ public class LogThread extends Thread {
     public LogThread(Queue<Queue<String>> logQueue, Logger logger) {
         this.logQueue = logQueue;
         this.logger = logger;
+        this.timer = new Timer();
     }
 
     /**
-     * The run method of the threadToLog. Contains all the logic of the class. It
-     * runs an infinite loop where is checked if there are any messages in the
-     * queue. If a message is added, it will be written to the file with the
-     * logger.
+     * This method will do a LogOperation on the logQueue with the provided logger.
+     * It will start doing this after 5s and then repeat every second
      */
     @Override
-    public void run() {
-        Timer t = new Timer();
-        t.scheduleAtFixedRate(new LogOperation(logQueue, logger), 5000,1000);             
+    public void run() {        
+        timer.scheduleAtFixedRate(new LogOperation(logQueue, logger), 5000,1000);             
     }
 
 }

@@ -6,7 +6,7 @@
 package websocket;
 
 /**
- *
+ * 
  * @author Laurens
  */
 public interface ConversionCompleteCallback {

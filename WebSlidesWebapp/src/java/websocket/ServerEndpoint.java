@@ -5,6 +5,7 @@
  */
 package websocket;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
@@ -14,11 +15,15 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.inject.Inject;
+import javax.websocket.EncodeException;
 import mgr.ConverterManager;
 import org.json.JSONObject;
 
 /**
- *
+ * The ServerEndpoint is the server-side implementation of the websockets protocol
+ * It implements the open, close, onError and handleMessage methods described by the websocket protocol
+ * In addition it is used to send data back to the client. 
+ * has access to the websocket sessions and uses that info to inform the ConverterManager of the
  * @author dhoogla
  */
 @ApplicationScoped
@@ -29,7 +34,6 @@ public class ServerEndpoint implements ConversionCompleteCallback{
     private SocketSession session;
 
     private int nrOpen = 0;
-
     private final ConverterManager mgr = ConverterManager.getConverterManager(this);
 
     @OnOpen
@@ -48,10 +52,10 @@ public class ServerEndpoint implements ConversionCompleteCallback{
         session.removeSession(s);
         --nrOpen;
         System.out.println("Serverendpoint closed a session, the new sessioncount is: " + nrOpen);
+        System.out.println("WEBSOCKET SESSION CLOSED " + s);
         if (nrOpen == 0) {
             mgr.stopLogThread();
-        }
-        System.out.println("WEBSOCKET SESSION CLOSED " + s);
+        }        
         mgr.removeEntry(s.getId());
     }
 
@@ -78,9 +82,19 @@ public class ServerEndpoint implements ConversionCompleteCallback{
         Session s = session.getOneSession(sessionKey);
         OutboundMsgDefinition msg = new OutboundMsgDefinition(file,"download-ready");        
         System.out.println(new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey).toString());
-        SocketSession.sendToSession(s,new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey));             
+        sendToSession(s,new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey));        
     }
     
+     private void sendToSession(Session session, JSONObject message) {
+        try {
+            System.out.println("going to send to session: "+session.getId()+" the following message: "+message);
+            session.getBasicRemote().sendObject(message);
+        } catch (IOException ex) {            
+            Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EncodeException ex) {
+            Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
    
 
 }

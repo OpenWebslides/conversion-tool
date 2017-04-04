@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.websocket.EncodeException;
 import javax.websocket.Session;
-import org.json.JSONObject;
+
 
 /**
  *
@@ -29,19 +29,8 @@ public class SocketSession {
 
     public void removeSession(Session session) {
         sessions.remove(session.getId());
-    }
-    
-    public static void sendToSession(Session session, JSONObject message) {
-        try {
-            System.out.println("going to send to session: "+session.getId()+" the following message: "+message);
-            session.getBasicRemote().sendObject(message);
-        } catch (IOException ex) {            
-            Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncodeException ex) {
-            Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
+    }  
+   
     public Session getOneSession(String sessionKey) {
         return sessions.get(sessionKey);
     }   

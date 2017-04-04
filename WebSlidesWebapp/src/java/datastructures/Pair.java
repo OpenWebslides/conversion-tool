@@ -6,7 +6,7 @@
 package datastructures;
 
 /**
- *
+ * A generic implementation of a Pair datastructure
  * @author Laurens
  */
 public class Pair<L,R> {
@@ -14,6 +14,12 @@ public class Pair<L,R> {
   private final L left;
   private final R right;
 
+  /**
+   * Creates a new Pair with any datatype as left or right part
+   * Also note that the left and right part don't have to be the same datatype
+   * @param left
+   * @param right 
+   */
   public Pair(L left, R right) {
     this.left = left;
     this.right = right;

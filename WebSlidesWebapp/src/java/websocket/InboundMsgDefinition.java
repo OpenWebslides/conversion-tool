@@ -6,7 +6,8 @@
 package websocket;
 
 /**
- *
+ * The InboundMsgDefinition is a template for messages received from the client
+ * 
  * @author Laurens
  */
 public class InboundMsgDefinition {
@@ -20,8 +21,7 @@ public class InboundMsgDefinition {
     public InboundMsgDefinition(String n,long tm, String t){
     this.fileName=n;
     this.timestamp=tm;
-    this.fileType=t;
-    
+    this.fileType=t;    
     }
 
     public String getFileName() {
