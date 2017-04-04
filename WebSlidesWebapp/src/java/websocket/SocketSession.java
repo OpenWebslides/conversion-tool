@@ -5,12 +5,8 @@
  */
 package websocket;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
-import javax.websocket.EncodeException;
 import javax.websocket.Session;
 
 

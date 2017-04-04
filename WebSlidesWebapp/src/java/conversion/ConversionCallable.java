@@ -18,7 +18,7 @@ import mgr.CallableCallback;
 
 
 public class ConversionCallable implements Callable<Integer>{
-    private static final String CONVERTER_JAR = /* Windows:*/ System.getProperty("user.home")+File.separator+"tiwi"+File.separator+"java_app_pack"+File.separator+"OpenWebslidesConverter.jar";   
+    private static final String CONVERTER_JAR = /* Windows & Linux*/ System.getProperty("user.home")+File.separator+"tiwi"+File.separator+"java_app_pack"+File.separator+"OpenWebslidesConverter.jar";   
     
     private static final String CONVERTER_MAIN_CLASS = "openwebslidesconverter.OpenWebslidesConverter";
     
@@ -34,6 +34,7 @@ public class ConversionCallable implements Callable<Integer>{
      * @param args the command line arguments
      * @param logQueue A queue of queues of strings. The inner queue of strings will be filled with the log output from the logger.
      * @param id A unique identification for the thread. Used in the log to keep the different converters apart.
+     * @param cb 
      */
     public ConversionCallable(String[] args, Queue<Queue<String>> logQueue, long id,CallableCallback cb){
         this.args = args;
