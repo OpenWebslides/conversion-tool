@@ -77,8 +77,8 @@ public class ServerEndpoint implements ConversionCompleteCallback{
     public void conversionComplete(String sessionKey, String file) {
         Session s = session.getOneSession(sessionKey);
         OutboundMsgDefinition msg = new OutboundMsgDefinition(file,"download-ready");        
-        System.out.println(new JSONObject(msg.getInfo()).toString());
-        SocketSession.sendToSession(s,new JSONObject(msg.getInfo()));             
+        System.out.println(new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey).toString());
+        SocketSession.sendToSession(s,new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey));             
     }
     
    

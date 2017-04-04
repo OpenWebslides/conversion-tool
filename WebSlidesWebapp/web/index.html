@@ -14,7 +14,6 @@ and open the template in the editor.
         <link href="resources/css/style.css" rel="stylesheet">
     </head>
     <body>
-
         <div class="container header">
             <div class="col-xs-2">
                 <a href="./">
@@ -35,7 +34,6 @@ and open the template in the editor.
                 </div>
             </div>
         </div>
-
 
         <div class="container dragndrop">
             <div class="row">
@@ -82,22 +80,26 @@ and open the template in the editor.
         <div class="container">
             <div class="row" id="field-download">
                 <form action="download" id="download-form" class="col-xs-12">
-                    <button type="submit" class="btn btn-primary btn-block">Download</button>
+                    <input type="hidden" id="download-form-param-1"/>
+                    <input type="hidden" id="download-form-param-2"/>
+                    <button type="button" onclick="startDownload()" class="btn btn-primary btn-block" id="download-form-button">Download</button>
                 </form>
             </div>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- remove the local jquery later on, needed for now when testing with Burpsuite -->
         <script src="resources/js/jquery-3.2.0.min.js"></script>
         <script src="resources/js/bootstrap.min.js"></script>
         <script type="text/javascript">var shared_vars = {
-            socket:new WebSocket("ws://localhost:8080/WebSlidesWebapp/pipe")
+            socket:new WebSocket("ws://localhost:8080/WebSlidesWebapp/pipe"),
+            filesReady: []            
         };
         </script>
         <script src="resources/js/dropzone.js"></script>
         <script src="resources/js/dropzone_options.js"></script>
         <script src="resources/js/websocket.js"></script>          
-
+        <script src="resources/js/download.js"></script>
     </body>
 
 </html>

@@ -14,8 +14,12 @@ shared_vars.socket.onmessage = function (event) {
     console.log(event);
     var msg = JSON.parse(event.data);
     console.log(msg);
+    // dynamically add property to socket
+    shared_vars.socket.WSSessionToken = msg.WSSessionToken;
     if (msg.action === "download-ready") {
         $('#field-download').css({visibility: "visible"}).animate({opacity:1.0},1500);
+        shared_vars.filesReady.push(msg.fileName)
+        console.log(shared_vars.filesReady);
                 //.css({opacity: 1.0, visibility: "visible"});
                 //.animate({opacity: 1.0}, 200);
     }
@@ -32,7 +36,7 @@ $("#btn-convert").click(function () {
     console.log(shared_vars.socket);
 });
 
-$("#download-form").submit(function () {
+$("#download-form").submit(function () {    
     shared_vars.socket.send("file-download started");
     console.log("file-download started");
 });

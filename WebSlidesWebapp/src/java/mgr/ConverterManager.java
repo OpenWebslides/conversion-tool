@@ -41,8 +41,8 @@ public class ConverterManager implements CallableCallback {
 
     private ConverterManager(ConversionCompleteCallback ccc) {
         this.sessionFiles = new HashMap<>();
-        this.logger = new Logger(System.getProperty("user.home") + "\\tiwi\\java_app_logs\\", "threadcreation_log", "log of the conversionthread lifecycle");
-        this.threadLogger = new Logger(System.getProperty("user.home") + "\\tiwi\\java_app_logs\\", "conversionprogress_log", "log of the progress of the individual loggers");
+        this.logger = new Logger(System.getProperty("user.home") + File.separator+"tiwi"+File.separator+"java_app_logs"+File.separator, "threadcreation_log", "log of the conversionthread lifecycle");
+        this.threadLogger = new Logger(System.getProperty("user.home") + File.separator+"tiwi"+File.separator+"java_app_logs"+File.separator, "conversionprogress_log", "log of the progress of the individual loggers");
         this.lastid = 0;
         this.conversionLogQueue = new ConcurrentLinkedDeque<>();
         this.logthread = new LogThread(conversionLogQueue, threadLogger);
@@ -82,8 +82,7 @@ public class ConverterManager implements CallableCallback {
         for (InboundMsgDefinition t : p) {
             System.out.println(t);
         }
-        convertFile(System.getProperty("user.home") + "\\tiwi\\upload\\" + value.getFileName(),key);
-
+        convertFile(System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"upload" +File.separator+ value.getFileName(),key);
     }
     
     public void removeEntry(String key){
@@ -106,10 +105,10 @@ public class ConverterManager implements CallableCallback {
 
     public void convertFile(String file,String sessionKey) {
         System.out.println("file to convert (should be FULL PATH) " + file);
-        String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+file.substring(file.lastIndexOf(File.separator)+1);        
+        String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+file.substring(file.lastIndexOf(File.separator)+1);        
         System.out.println("targetDir = " + targetDir);
         File directory = new File(String.valueOf(targetDir));
-        if(! directory.exists())directory.mkdir();
+        if(! directory.exists())directory.mkdirs();
         // arguments to be passed to the converter
         String[] args = new String[]{"-i", file, "-o", targetDir};
         ++lastid;

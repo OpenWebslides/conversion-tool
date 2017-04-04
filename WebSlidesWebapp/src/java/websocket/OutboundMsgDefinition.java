@@ -22,7 +22,7 @@ public class OutboundMsgDefinition {
     
     public HashMap<String,String> getInfo() {
         HashMap<String,String> tmp = new HashMap<>();
-        tmp.put("filename", fileName);
+        tmp.put("fileName", fileName);
         tmp.put("action",action);
         return tmp;
     }

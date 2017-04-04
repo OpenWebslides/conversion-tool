@@ -5,8 +5,12 @@
  */
 package servlets;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.OutputStream;
+ 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,19 +35,34 @@ public class FileDownloadServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet FileDownloadServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet FileDownloadServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+            String WSSessionToken = request.getParameter("WSSessionToken");
+            String fileName= request.getParameter("fileName");
+            String path = System.getProperty("user.home")+File.separator+"tiwi"+File.separator+"download"+File.separator+WSSessionToken+File.separator+fileName+File.separator+"index.html";
+            System.out.println("Looking for the right file to download, should be here:\n"+path);
+            File toDownload = new File(path);
+            FileInputStream iStream = new FileInputStream(toDownload);
+            
+            ServletContext ctx = getServletContext();            
+            String mimeType = ctx.getMimeType(path);
+            if(mimeType == null){
+                mimeType = "application/octet-stream";
+            }
+            System.out.println("MIME Type file download: "+mimeType);
+            
+            response.setContentType(mimeType);
+            response.setContentLength((int) toDownload.length());
+            response.setHeader("Content-Disposition",String.format("attachment; filename=\"%s\"", fileName.substring(0,fileName.lastIndexOf('.'))+".html"));
+            
+            OutputStream oStream = response.getOutputStream();
+            
+            byte[] buffer = new byte[4096];
+            int bytesRead = -1;
+            
+            while((bytesRead = iStream.read(buffer)) != -1){
+                oStream.write(buffer,0,bytesRead);
+            }
+            iStream.close();
+            oStream.close();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -60,26 +79,8 @@ public class FileDownloadServlet extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
+  
+   
     @Override
     public String getServletInfo() {
         return "Short description";
