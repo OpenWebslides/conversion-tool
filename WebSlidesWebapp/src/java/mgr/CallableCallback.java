@@ -14,5 +14,5 @@ public interface CallableCallback {
     /**
      *This method is used to signal completion of the Callable, this will provide a non-blocking way as opposed to the get() and isDone() methods of Callable
      */
-    void callableComplete(long id);
+    void callableComplete(long id,int status);
 }

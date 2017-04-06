@@ -78,12 +78,7 @@ and open the template in the editor.
         </div>
         
         <div class="container">
-            <div class="row" id="field-download">
-                <form action="download" id="download-form" class="col-xs-12">
-                    <input type="hidden" id="download-form-param-1"/>
-                    <input type="hidden" id="download-form-param-2"/>
-                    <button type="button" onclick="startDownload()" class="btn btn-primary btn-block" id="download-form-button">Download</button>
-                </form>
+            <div class="row" id="field-download">                
             </div>
         </div>
 
@@ -93,6 +88,7 @@ and open the template in the editor.
         <script src="resources/js/bootstrap.min.js"></script>
         <script type="text/javascript">var shared_vars = {
             socket:new WebSocket("ws://localhost:8080/WebSlidesWebapp/pipe"),
+            filesInProgress : [],        
             filesReady: []            
         };
         </script>

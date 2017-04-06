@@ -10,5 +10,5 @@ package websocket;
  * @author Laurens
  */
 public interface ConversionCompleteCallback {
-    void conversionComplete(String sessionKey, String file);
+    void conversionComplete(String sessionKey, String file,String status);
 }

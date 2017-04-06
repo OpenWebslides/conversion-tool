@@ -78,9 +78,11 @@ public class ServerEndpoint implements ConversionCompleteCallback{
     }
 
     @Override
-    public void conversionComplete(String sessionKey, String file) {
+    public void conversionComplete(String sessionKey, String file,String status) {
         Session s = session.getOneSession(sessionKey);
-        OutboundMsgDefinition msg = new OutboundMsgDefinition(file,"download-ready");        
+        OutboundMsgDefinition msg;
+        if(status.equals("SUCCESS")) msg = new OutboundMsgDefinition(file,"download-ready");        
+        else msg = new OutboundMsgDefinition(file, "download-not-ready");
         System.out.println(new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey).toString());
         sendToSession(s,new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey));        
     }

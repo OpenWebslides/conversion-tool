@@ -16,9 +16,11 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutionException;
 import openwebslideslogger.Logger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import websocket.ConversionCompleteCallback;
 
@@ -40,6 +42,7 @@ public class ConverterManager implements CallableCallback {
     private final LogThread logthread;
     private final HashMap<Long,Pair<String,String>> threadSessionFile;
     private final ConversionCompleteCallback serverEndpoint;
+    private final HashMap<Long,Future<Integer>> threadFinishedStatus;
 
     /**
      * The ConverterManager is at the heart of the business logic
@@ -57,6 +60,7 @@ public class ConverterManager implements CallableCallback {
         this.logthread = new LogThread(conversionLogQueue, threadLogger);
         this.threadSessionFile = new HashMap<>();
         this.serverEndpoint =ccc;
+        this.threadFinishedStatus = new HashMap<>();
     }
 
     //open voor Singleton pattern later
@@ -141,24 +145,36 @@ public class ConverterManager implements CallableCallback {
         System.out.println("Starting conversion thread with id: " + lastid);
         
         ConversionCallable t = new ConversionCallable(args, conversionLogQueue, lastid, this);        
-        executor.submit(t);      
-        
+        threadFinishedStatus.put(lastid, executor.submit(t));        
         threadSessionFile.put(lastid,new Pair<>(sessionKey,file.substring(file.lastIndexOf(File.separator)+1,file.length())));  
     }
 
     /**
      * This callback is used to signal the ServerEndpoint which file from which session was converted.
-     * That info is used by the ServerEndpoint to construct appropriate websocket messages for the client.
+     * That info is used by the ServerEndpoint to construct appropriate Websocket messages for the client.
      * @param id The id of the Callable that was used to convert the file
      */
     @Override
-    public void callableComplete(long id) {
-        System.out.println("*-*-*-*The conversion Callable with id " + id + " has finished its work!!!");
-        System.out.println("Signaling ServerEndpoint"); 
-        Pair<String,String> tmp = threadSessionFile.get(id);        
-        serverEndpoint.conversionComplete(tmp.getLeft(),tmp.getRight());
-        System.out.println("Removing entry from threadSessionFile");
-        threadSessionFile.remove(id);
+    public void callableComplete(long id, int status) {
+        try {
+            System.out.println("*-*-*-*The conversion Callable with id " + id + " has finished !!!");
+            
+                System.out.println("Signaling ServerEndpoint");
+                Pair<String,String> tmp = threadSessionFile.get(id);
+            if(status == 0){
+                serverEndpoint.conversionComplete(tmp.getLeft(),tmp.getRight(), "SUCCESS");
+            }
+            else {
+                serverEndpoint.conversionComplete(tmp.getLeft(), tmp.getRight(), "FAIL");
+            }
+        }
+        finally {
+            System.out.println("Removing entry from threadSessionFile");
+            threadSessionFile.remove(id);
+            System.out.println("Removing entry from threadFinishedStatus");
+            threadFinishedStatus.remove(id);
+        }
+        
     }
 
 }

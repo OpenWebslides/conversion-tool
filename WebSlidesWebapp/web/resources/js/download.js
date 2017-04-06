@@ -4,17 +4,17 @@
  * and open the template in the editor.
  */
 
-function startDownload(){
-    console.log("called startDownload");
+function startDownload(downloadFormNr){
+    console.log("called startDownload voor "+downloadFormNr);
 
-    $("#download-form-param-1").attr({        
+    $("#download-form-"+downloadFormNr+"-param-1").attr({        
         name: "WSSessionToken",
         value: shared_vars.socket.WSSessionToken
     });
-    $("#download-form-param-2").attr({
+    $("#download-form-"+downloadFormNr+"-param-2").attr({
         name: "fileName",
         value: shared_vars.filesReady.shift()
     });    
-    $("#download-form").submit();
+    $("#download-form-"+downloadFormNr).submit();
 
 }
