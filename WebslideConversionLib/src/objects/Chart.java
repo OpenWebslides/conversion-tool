@@ -23,6 +23,7 @@ public class Chart implements PPTObject {
     /**
      * Create a Chart object
      * An empty HashMap of its content will be created
+     * @param id
      */
     public Chart(String id) {
        this.content = new HashMap<>();

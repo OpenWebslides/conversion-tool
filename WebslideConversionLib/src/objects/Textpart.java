@@ -33,8 +33,6 @@ public class Textpart implements PPTObject{
         this.font = font;
     }
 
-    
-
     public int getSize() {
         return size;
     }
