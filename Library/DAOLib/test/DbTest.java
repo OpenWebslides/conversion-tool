@@ -7,8 +7,10 @@
 import database.DbFileManagement;
 import database.DbRow;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 /**
@@ -22,9 +24,10 @@ public class DbTest {
     
 
     @Test
-    public void main() throws InterruptedException {
+    public void main() throws InterruptedException, IOException {
             ArrayList<Multi> t = new ArrayList<>();
-            for(int i = 0; i < 1000; i++){
+            
+            for(int i = 0; i < 1; i++){
                 t.add(new Multi(i));  
                 t.get(i).start();  
             }
@@ -48,7 +51,8 @@ public class DbTest {
         }
         @Override
         public void run(){  
-            dbm.putFile(""+i,new File(""+i));
+            dbm.putFile(""+i,new File("C:\\temp\\test.exe"));
+            System.out.println(dbm.getFile(""+i).toString());
             this.stop();
         }
     } 

@@ -16,20 +16,36 @@ public class DbRow {
     
     private Map<String,Object> row;
 
+    /**
+     * Create a DbRow instance
+     */
     public DbRow(){
         row = new HashMap<>();
     }
     
+    /**
+     * Get the cellvalue with a certain columname
+     * @param name
+     * @return 
+     */
     public Object getCellByName(String name){
         if(row.containsKey(name))
             return row.get(name);
         return null;
     }
 
+    /**
+     * Get the row map, this is an editable map
+     * @return 
+     */
     public Map<String,Object> getRow(){
         return row;
     }
     
+    /**
+     * Returns a string with all the keys and values in the dbrow
+     * @return 
+     */
     public String toString(){
         String toret = "";
         for(String key : row.keySet()){

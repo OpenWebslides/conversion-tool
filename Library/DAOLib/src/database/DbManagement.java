@@ -28,7 +28,7 @@ public class DbManagement {
     private PreparedStatement statement;
     private ResultSet resultSet;
     
-    private Output output;
+    protected Output output;
     
     /**
      * Create a new DbManagement instance. Possible to add output to constructor, default will be stdOutput
@@ -94,17 +94,17 @@ public class DbManagement {
         }
     }
         
-    private void setParameters(List<Map.Entry<String, Object>> parameters) {
+    private void setParameters(Map<String, Object> parameters) {
         if (parameters == null) {
             return;
         }
         try {
             int i = 1;
-            for (Map.Entry<String, Object> pair : parameters) {
-                switch (pair.getKey()) {
+            for (String key : parameters.keySet()) {
+                switch (key) {
                     case "String":
-                        if (pair.getValue() != null) {
-                            String s = (String) pair.getValue();
+                        if (parameters.get(key) != null) {
+                            String s = (String) parameters.get(key);
                             statement.setString(i, s);
                         } else {
                             statement.setNull(i, Types.NULL);
@@ -112,8 +112,8 @@ public class DbManagement {
                         break;
                     case "Integer":
                         Integer nr = 0;
-                        if (pair.getValue() != null) {
-                            nr = (Integer) pair.getValue();
+                        if (parameters.get(key) != null) {
+                            nr = (Integer) parameters.get(key);
                             statement.setInt(i, nr);
                         } else {
                             statement.setNull(i, Types.NULL);
@@ -121,16 +121,16 @@ public class DbManagement {
                         break;
                     case "boolean":
                         boolean b = false;
-                        if (pair.getValue() != null) {
-                            b = (Boolean) pair.getValue();
+                        if (parameters.get(key) != null) {
+                            b = (Boolean) parameters.get(key);
                         }   statement.setBoolean(i, b);
                         i++;
                         break;
                     case "Double":
                         {
                             Double d = 0.0;
-                            if (pair.getValue() != null) {
-                                d = (Double) pair.getValue();
+                            if (parameters.get(key) != null) {
+                                d = (Double) parameters.get(key);
                                 statement.setDouble(i, d);
                             } else {
                                 statement.setNull(i, Types.NULL);
@@ -140,24 +140,24 @@ public class DbManagement {
                     case "double":
                         {
                             double d = 0.0;
-                            if (pair.getValue() != null) {
-                                d = (Double) pair.getValue();
+                            if (parameters.get(key) != null) {
+                                d = (Double) parameters.get(key);
                             }       statement.setDouble(i, d);
                             i++;
                             break;
                         }
                     case "Date":
                         java.sql.Timestamp sqlDate = null;
-                        if (pair.getValue() != null) {
-                            sqlDate = new java.sql.Timestamp(((java.util.Date) pair.getValue()).getTime());
+                        if (parameters.get(key) != null) {
+                            sqlDate = new java.sql.Timestamp(((java.util.Date) parameters.get(key)).getTime());
                             statement.setTimestamp(i, sqlDate);
                         } else {
                             statement.setNull(i, Types.NULL);
                         }   i++;
                         break;
                     case "Blob":
-                        if (pair.getValue() != null) {
-                            byte[] data = ((byte[]) pair.getValue());
+                        if (parameters.get(key) != null) {
+                            byte[] data = ((byte[]) parameters.get(key));
                             statement.setObject(i, data);
                         } else {
                             statement.setNull(i, Types.NULL);
@@ -171,8 +171,8 @@ public class DbManagement {
             try{
                 String error = "There was an error adding the statement parameters: \n";
                 
-                for (Map.Entry<String, Object> pair : parameters) {
-                    error += pair.getKey() + " -> " + pair.getValue() + "\n";
+                for (String key : parameters.keySet()) {
+                    error += key+ " -> " + parameters.get(key) + "\n";
                 }
                 output.println(Logger.error(error, e));
             }
@@ -181,7 +181,6 @@ public class DbManagement {
             }
         }
     }
-
    
     private void close() {
         try {
@@ -209,7 +208,7 @@ public class DbManagement {
      * @param parameters
      * @return 
      */
-    public boolean executeUpdate(String query, List<Map.Entry<String,Object>> parameters) { 
+    public boolean executeUpdate(String query, Map<String, Object> parameters) { 
         boolean success;
         try {
             setConnection();
@@ -229,10 +228,11 @@ public class DbManagement {
     /**
      * Execute an update, return the auto generated ID
      * @param query
+     * @param <error>
      * @param parameters
      * @return 
      */
-    public Integer executeUpdateReturnNewId(String query, List<Map.Entry<String,Object>> parameters) {  
+    public Integer executeUpdateReturnNewId(String query, Map<String, Object> parameters) {  
         Integer id = null;
         try {            
             setConnection();
@@ -251,7 +251,7 @@ public class DbManagement {
         return id;
     }
 
-    public ArrayList<DbRow> executeQueryDbRowList(String query, List<Map.Entry<String,Object>> parameters) {
+    public ArrayList<DbRow> executeQueryDbRowList(String query, Map<String, Object> parameters) {
        ArrayList<DbRow> table = new ArrayList<>();
         try { 
             ResultSet result;        
@@ -276,7 +276,7 @@ public class DbManagement {
         return table;
     }  
     
-    public DbRow executeQueryDbRow(String query, List<Map.Entry<String,Object>> parameters) {
+    public DbRow executeQueryDbRow(String query, Map<String, Object> parameters) {
         DbRow row = new DbRow();
         try {
             ResultSet result;

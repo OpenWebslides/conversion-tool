@@ -23,4 +23,16 @@ public class DbConstants {
     //Query variables
     public static Integer LIMIT_DB = 100; // for crash prevention
 
+    //Files table + columns
+    public static final String FILES_TABLE = "uploads";
+    public static final String FILES_TABLE_FILE = "file";
+    public static final String FILES_TABLE_SERVERID = "serverId";
+    public static final String FILES_TABLE_UPLOADDATE = "uploadDate";
+    public static final String FILES_TABLE_OWNER = "owner";
+    public static final String FILES_TABLE_FILENAME = "fileName";
+    
+    //File save location
+    
+    public static final String FILE_SAVE_LOCATION = "c:\\temp\\files\\";
+    
 }

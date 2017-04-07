@@ -6,11 +6,17 @@
 package database;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import logger.Logger;
+import org.apache.commons.io.FileUtils;
 
 
 /**
@@ -26,29 +32,70 @@ public class DbFileManagement extends DbManagement implements IDao{
     
     @Override
     public File getFile(String serverId) {
-        List<Map.Entry<String, Object>> parameters = new ArrayList<>();
-        parameters.add(new AbstractMap.SimpleEntry<>("String", serverId));
-        File file = new File((String)super.executeQueryDbRow("select file from uploads where serverId like ?", parameters).getCellByName("file"));        
-        return file;
+        try{
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("String", serverId);
+            DbRow row = super.executeQueryDbRow("select " + 
+                                                DbConstants.FILES_TABLE_FILE +  
+                                                "," + 
+                                                DbConstants.FILES_TABLE_FILENAME +                                                          
+                                                " from "+ DbConstants.FILES_TABLE + 
+                                                " where " + DbConstants.FILES_TABLE_SERVERID +
+                                                " like ?", parameters);
+            byte[] file = (byte[])row.getCellByName(DbConstants.FILES_TABLE_FILE);    
+            String name = (String)row.getCellByName(DbConstants.FILES_TABLE_FILENAME);
+            System.out.println(row.toString());
+            FileUtils.writeByteArrayToFile(new File(DbConstants.FILE_SAVE_LOCATION + name), file);
+            return new File(DbConstants.FILE_SAVE_LOCATION + name);
+        }
+        catch(Exception e){
+            output.println(Logger.error("There was an error while getting the file from DB", e));
+        }
+        return null;
     }
     
     @Override
     public void putFile(String serverId, File file) {
-        List<Map.Entry<String, Object>> parameters = new ArrayList<>();
-        parameters.add(new AbstractMap.SimpleEntry<>("String", serverId));
-        parameters.add(new AbstractMap.SimpleEntry<>("String", file.getName()));
-        parameters.add(new AbstractMap.SimpleEntry<>("String", "none"));
-        parameters.add(new AbstractMap.SimpleEntry<>("Date", new Date()));
-        super.executeUpdate("insert into uploads (file, serverId, owner, uploadDate) values (?,?,?,?)", parameters);
+        try{
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("Blob", Files.readAllBytes(Paths.get(file.getPath())));
+            parameters.put("String", serverId);
+            parameters.put("String", "none");
+            parameters.put("Date", new Date());
+            parameters.put("String", file.getName());
+            super.executeUpdate("insert into " + DbConstants.FILES_TABLE + " (" +
+                                                 DbConstants.FILES_TABLE_FILE + "," +
+                                                 DbConstants.FILES_TABLE_SERVERID +"," + 
+                                                 DbConstants.FILES_TABLE_OWNER +"," + 
+                                                 DbConstants.FILES_TABLE_UPLOADDATE +"," + 
+                                                 DbConstants.FILES_TABLE_FILENAME +
+                                                 ") values (?,?,?,?,?)", parameters);
+        }
+        catch(Exception e){
+            output.println(Logger.error("There was an error while putting the file in DB", e));
+        }
         
     }
     
-    public DbFile getFile(String serverId, int nullvalue) {
-        List<Map.Entry<String, Object>> parameters = new ArrayList<>();
-        parameters.add(new AbstractMap.SimpleEntry<>("String", serverId));
-        DbRow row = super.executeQueryDbRow("select * from uploads where serverId like ?", parameters);
-        DbFile file = new DbFile((String)row.getCellByName("file"),(String)row.getCellByName("serverId"),(java.util.Date)row.getCellByName("uploadDate"),(String)row.getCellByName("owner"));
-        return file;
+    
+    @Override
+    public DbFile getDbFile(String serverId) {
+        try{
+            Map<String, Object> parameters = new HashMap<>();
+            parameters.put("String", serverId);
+            DbRow row = super.executeQueryDbRow("select * from " + DbConstants.FILES_TABLE + " where " + DbConstants.FILES_TABLE_SERVERID +" like ?", parameters);
+            DbFile file = new DbFile((byte[])row.getCellByName(DbConstants.FILES_TABLE_FILE),
+                                    (String)row.getCellByName(DbConstants.FILES_TABLE_SERVERID),
+                                    (java.util.Date)row.getCellByName(DbConstants.FILES_TABLE_UPLOADDATE),
+                                    (String)row.getCellByName(DbConstants.FILES_TABLE_OWNER),
+                                    (String)row.getCellByName(DbConstants.FILES_TABLE_FILENAME)
+                                );
+            return file;
+        }
+        catch (Exception e){
+            output.println(Logger.error("There was an error while getting the dbfile from DB", e));
+        }
+        return null;
     }
     
     

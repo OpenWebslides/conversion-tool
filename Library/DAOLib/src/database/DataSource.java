@@ -20,7 +20,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 public class DataSource {
 
     private static DataSource datasource;
-    private BasicDataSource ds;
+    private final BasicDataSource ds;
 
     private DataSource() throws IOException, SQLException, PropertyVetoException {
         ds = new BasicDataSource();
