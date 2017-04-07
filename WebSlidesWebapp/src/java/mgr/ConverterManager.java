@@ -157,8 +157,7 @@ public class ConverterManager implements CallableCallback {
     @Override
     public void callableComplete(long id, int status) {
         try {
-            System.out.println("*-*-*-*The conversion Callable with id " + id + " has finished !!!");
-            
+            System.out.println("*-*-*-*The conversion Callable with id " + id + " has finished !!!");            
                 System.out.println("Signaling ServerEndpoint");
                 Pair<String,String> tmp = threadSessionFile.get(id);
             if(status == 0){

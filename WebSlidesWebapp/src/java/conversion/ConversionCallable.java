@@ -105,6 +105,7 @@ public class ConversionCallable implements Callable<Integer> {
             normalfinish = true;
             
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            System.err.println("THREAD_INSIDE error!");
             logToQueue("THREAD_INSIDE error:" + ex.getMessage());
         } finally {
             logQueue.offer(queue);
