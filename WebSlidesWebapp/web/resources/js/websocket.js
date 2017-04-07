@@ -8,7 +8,7 @@
 /* global shared_vars */
 
 shared_vars.socket.onopen = function (event) {
-    shared_vars.socket.send("This is a client registering");    
+    shared_vars.socket.send("This is a client registering");
 };
 
 shared_vars.socket.onmessage = function (event) {
@@ -17,22 +17,30 @@ shared_vars.socket.onmessage = function (event) {
     console.log(msg);
     // dynamically add property to socket
     shared_vars.socket.WSSessionToken = msg.WSSessionToken;
-    console.log("message action = "+msg.action);
+    console.log("message action = " + msg.action);
     var targetId; // = btnFormDownloadToShow
-    console.log("looping looking for "+msg.fileName);
-    $.each(shared_vars.filesInProgress, function(k,v){
-        console.log(k,v);
-        if(v === shared_vars.filesInProgress[k]) targetId=k;}
+    console.log("looping looking for " + msg.fileName);
+    $.each(shared_vars.filesInProgress, function (k, v) {
+        console.log("**************");
+        console.log(k, v);
+        console.log(msg.fileName,shared_vars.filesInProgress[k]);
+        console.log("--------------");
+        if (msg.fileName === shared_vars.filesInProgress[k]) {
+            targetId = k;
+            console.log("loading to remove " + targetId);
+            $("#download-loading-anim-" + targetId).hide(500, function () {
+                $("#download-form-" + targetId + "-btn").show(1000);
+            });
+        }
+    }
     );
-    console.log("loading to remove "+targetId);
-    $("#download-loading-anim-"+targetId).hide(500,function(){
-        $("#download-form-"+targetId+"-btn").show(1000);
-    });
-    if (msg.action === "download-ready") {       
-        shared_vars.filesReady.push(msg.fileName);
-        console.log(shared_vars.filesReady);
-                //.css({opacity: 1.0, visibility: "visible"});
-                //.animate({opacity: 1.0}, 200);
+
+
+    if (msg.action === "download-ready") {
+        //shared_vars.filesReady.push(msg.fileName);
+        //console.log(shared_vars.filesReady);
+        //.css({opacity: 1.0, visibility: "visible"});
+        //.animate({opacity: 1.0}, 200);
     }
 };
 
@@ -46,14 +54,3 @@ $("#btn-convert").click(function () {
     console.log("file-upload started");
     console.log(shared_vars.socket);
 });
-
-$("form[id^='download-form-']").submit(function () {    
-    shared_vars.socket.send("file-download started");
-    console.log("file-download started");
-});
-
-
-
-
-
-

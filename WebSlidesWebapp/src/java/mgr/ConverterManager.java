@@ -16,7 +16,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.ExecutionException;
 import openwebslideslogger.Logger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -153,6 +152,7 @@ public class ConverterManager implements CallableCallback {
      * This callback is used to signal the ServerEndpoint which file from which session was converted.
      * That info is used by the ServerEndpoint to construct appropriate Websocket messages for the client.
      * @param id The id of the Callable that was used to convert the file
+     * @param status
      */
     @Override
     public void callableComplete(long id, int status) {

@@ -93,7 +93,7 @@ public class ConversionCallable implements Callable<Integer>{
             logToQueue("error:" + ex.getMessage());
         } finally{
             logQueue.offer(queue);
-            callback.callableComplete(this.id,normalfinish?0:1);
+            callback.callableComplete(this.id,normalfinish?0:-1);
         }
         if(normalfinish){
             return 0;

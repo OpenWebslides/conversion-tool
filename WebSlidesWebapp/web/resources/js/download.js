@@ -11,9 +11,10 @@ function startDownload(downloadFormNr){
         name: "WSSessionToken",
         value: shared_vars.socket.WSSessionToken
     });
+    console.log($("#download-form-"+downloadFormNr+"-btn").text());
     $("#download-form-"+downloadFormNr+"-param-2").attr({
         name: "fileName",
-        value: shared_vars.filesReady.shift()
+        value: $("#download-form-"+downloadFormNr+"-btn").text()+".pptx"                
     });    
     $("#download-form-"+downloadFormNr).submit();
 
