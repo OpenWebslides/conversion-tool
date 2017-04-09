@@ -7,10 +7,5 @@
     <servlet-mapping>
         <servlet-name>LanguageServlet</servlet-name>
         <url-pattern>/LanguageServlet</url-pattern>
-    </servlet-mapping>
-    <session-config>
-        <session-timeout>
-            30
-        </session-timeout>
-    </session-config>
+    </servlet-mapping>    
 </web-app>

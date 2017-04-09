@@ -35,6 +35,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
             Dropzone.removeAllFiles(true);
         });
         Dropzone.on("sending", function (file, xhr, formData) {
+            //console.log(xhr);
             formData.append("output-type", $('input[name="output_type"]:checked').val());
             //console.log("Sending");
         });
@@ -48,6 +49,25 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
                 $("#alert").fadeOut(700);
             }, 3000);
         });
+        
+        Dropzone.on("success",function(file){
+           shared_vars.socket.send("File successfully uploaded"+file.toString());           
+           shared_vars.socket.send(JSON.stringify({"msgType":"FILE","name":file.name,"timestamp":file.lastModified,"fileType":file.type}));
+           
+           
+           $("#field-download").append(
+                $("<form></form>", {action: "download",id: "download-form-"+shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3")
+                .append($("<img />").attr({src:"resources/images/loading_blue.gif",alt:"loading animation", id:"download-loading-anim-"+shared_vars.filesInProgress.length}))
+                .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-1"}))
+                .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-2"}))
+                .append($("<button >"+file.name.split('.')[0]+"</button>").attr({type:"button",onclick:"startDownload("+shared_vars.filesInProgress.length+")",id:"download-form-"+shared_vars.filesInProgress.length+"-btn"}).addClass("btn btn-primary btn-block").hide())           
+           );          
+   
+           shared_vars.filesInProgress.push(file.name);
+           console.log(file);
+           console.log("success");
+        });
+    
     }
 };
 
@@ -101,3 +121,4 @@ function setLanguage() {
         }
     });
 }
+

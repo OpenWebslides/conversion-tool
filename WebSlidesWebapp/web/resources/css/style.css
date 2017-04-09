@@ -20,6 +20,10 @@ and open the template in the editor.
     padding-left: 10px;
 }
 
+#field-download{    
+    margin-top: 10px;
+}
+
 .btn, .btn:active, .btn:focus{
     color: #1E64C8;
     background-color: #E9F0FA;

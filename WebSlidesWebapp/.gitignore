@@ -16,3 +16,7 @@ nb-configuration.xml
 # *.jar
 *.war
 *.ear
+
+#ignore jquery file but use when testing locally with burpsuite
+web/resources/js/jquery-3.2.0.min.js
+
