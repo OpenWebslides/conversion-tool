@@ -29,7 +29,7 @@ shared_vars.socket.onmessage = function (event) {
             targetId = k;
             console.log("loading to remove " + targetId);
             $("#download-loading-anim-" + targetId).hide(500, function () {
-                $("#download-form-" + targetId + "-btn").show(1000);
+                if(msg.action === "download-ready") $("#download-form-" + targetId + "-btn").show(1000);
             });
         }
     }
