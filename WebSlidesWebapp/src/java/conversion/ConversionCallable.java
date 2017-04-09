@@ -104,7 +104,7 @@ public class ConversionCallable implements Callable<Integer> {
             logToQueue("end of thread");
             normalfinish = true;
             
-        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IllegalStateException ex) {
             System.err.println("THREAD_INSIDE error!"+ex.getClass());
             logToQueue("THREAD_INSIDE error:" + ex.getMessage());
             normalfinish = false;
