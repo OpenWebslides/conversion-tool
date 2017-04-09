@@ -99,7 +99,7 @@ public class ConverterManager implements CallableCallback {
         for (InboundMsgDefinition t : p) {
             System.out.println(t);
         }
-        convertFile(System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"upload" +File.separator+ value.getFileName(),key);
+        convertFile(System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"upload" +File.separator+ value.getFileName(),key,value.getOutputType());
     }
     
     public void removeEntry(String key){
@@ -128,16 +128,17 @@ public class ConverterManager implements CallableCallback {
      * Finally an internal data structure is used to save which converter is handling which file
      * @param file the absolute path of the file that requires conversion
      * @param sessionKey the Websocket session token associated with the user who submitted the file
+     * @param outputType the desired format for the output, either raw html5 or shower: bundled output with css and the Shower javascript presentation engine
      */   
     
-    public void convertFile(String file,String sessionKey) {
+    public void convertFile(String file,String sessionKey,String outputType) {
         System.out.println("file to convert (should be FULL PATH) " + file);
         String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+file.substring(file.lastIndexOf(File.separator)+1);        
         System.out.println("targetDir = " + targetDir);
         File directory = new File(String.valueOf(targetDir));
         if(! directory.exists())directory.mkdirs();
         // arguments to be passed to the converter
-        String[] args = new String[]{"-i", file, "-o", targetDir};
+        String[] args = new String[]{"-i", file, "-o", targetDir, "-t", outputType};
         ++lastid;
         logger.println(Logger.log(lastMessage.getFileName()));
         logger.println(new Timestamp(new Date().getTime()) + "*** " + lastid);

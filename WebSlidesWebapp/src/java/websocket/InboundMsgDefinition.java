@@ -14,14 +14,16 @@ public class InboundMsgDefinition {
     private final String fileName;
     private final String fileType;
     private final long timestamp;
+    private final String outputType;
     //private final InboundMsgDefinition.MSGTYPE msgType;
     
     //public static enum MSGTYPE {INFO,FILE};
     
-    public InboundMsgDefinition(String n,long tm, String t){
+    public InboundMsgDefinition(String n,long tm, String t,String o){
     this.fileName=n;
     this.timestamp=tm;
     this.fileType=t;    
+    this.outputType=o;
     }
 
     public String getFileName() {
@@ -34,6 +36,10 @@ public class InboundMsgDefinition {
 
     public long getTimestamp() {
         return timestamp;
+    }
+    
+    public String getOutputType(){
+        return outputType;
     }
 
     @Override

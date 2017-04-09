@@ -72,7 +72,8 @@ public class ServerEndpoint implements ConversionCompleteCallback{
             String filename = msg.getString("name");
             long timestamp = msg.getLong("timestamp");
             String filetype = msg.getString("fileType");
-            mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype));
+            String outputType = msg.getString("outputType");
+            mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype, outputType));
         }
     }
 
@@ -94,6 +95,4 @@ public class ServerEndpoint implements ConversionCompleteCallback{
             Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   
-
 }
