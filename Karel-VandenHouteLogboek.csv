@@ -30,3 +30,7 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijfing,Issue #,Opmerkingen
 28/03/17, 08:15,10:30,extern,Projectwerk, samenkomst,,
 28/03/17, 08:15,10:30,extern,Projectwerk, presentatie,,
 30/03/17, 13:30,18:00,extern,Projectwerk, samenkomst,,
+06/04/17, 09;00,12:00,intern,Projectwerk, db setup +opzoeken libraries + ...,,
+06/04/17, 14;00,22:00,intern,Projectwerk, initial version db dao,,
+07/04/17, 17;00,20:00,intern,Projectwerk, blob upgrade + documenteren,,
+07/04/17, 21;30,23:00,intern,Projectwerk, uml + code verbeteren,,

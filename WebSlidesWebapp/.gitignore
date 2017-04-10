@@ -1,0 +1,22 @@
+# NetBeans specific #
+nbproject/*
+!nbproject/project.xml
+!nbproject/project.properties
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# Class Files #
+*.class
+
+# Package Files #
+# *.jar
+*.war
+*.ear
+
+#ignore jquery file but use when testing locally with burpsuite
+web/resources/js/jquery-3.2.0.min.js
+
