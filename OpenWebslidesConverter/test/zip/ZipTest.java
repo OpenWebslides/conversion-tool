@@ -51,6 +51,9 @@ public class ZipTest {
     // @Test
     // public void hello() {}
     
+    /*
+     * Test is afhankelijk van filesystem
+    
     @Test
     public void test1() throws FileNotFoundException, ZipException, IOException{
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(new File("C:\\temp\\ziptest\\result.zip")));
@@ -58,4 +61,5 @@ public class ZipTest {
         Zipper.addFolder(zos, folder);
         zos.close();
     }
+    */
 }

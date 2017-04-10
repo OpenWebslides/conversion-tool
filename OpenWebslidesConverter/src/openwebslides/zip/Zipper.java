@@ -8,6 +8,7 @@ package openwebslides.zip;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -20,6 +21,23 @@ import java.util.zip.ZipOutputStream;
  * @author Jonas
  */
 public class Zipper {
+    
+    public static void add(ZipOutputStream zos, InputStream is, String zipEntry) throws ZipException{
+        try {
+            ZipEntry zipEnt = new ZipEntry(zipEntry);
+            zos.putNextEntry(zipEnt);
+
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = is.read(bytes)) >= 0) {
+                zos.write(bytes, 0, length);
+            }
+
+            zos.closeEntry();
+        } catch (Exception e) {
+            throw new ZipException(e.getMessage());
+        }
+    }
 
     public static void addFile(ZipOutputStream zos, File file, String zipEntry) throws ZipException {
         if (!file.isFile()) {
@@ -27,18 +45,9 @@ public class Zipper {
         }
 
         try {
-            FileInputStream fis = new FileInputStream(file);
-            ZipEntry zipEnt = new ZipEntry(zipEntry);
-            zos.putNextEntry(zipEnt);
-
-            byte[] bytes = new byte[1024];
-            int length;
-            while ((length = fis.read(bytes)) >= 0) {
-                zos.write(bytes, 0, length);
+            try (FileInputStream fis = new FileInputStream(file)) {
+                add(zos, fis, zipEntry);
             }
-
-            zos.closeEntry();
-            fis.close();
         } catch (Exception e) {
             throw new ZipException(e.getMessage());
         }
