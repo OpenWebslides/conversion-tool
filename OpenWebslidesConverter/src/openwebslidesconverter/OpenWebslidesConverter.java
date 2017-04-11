@@ -5,6 +5,7 @@
  */
 package openwebslidesconverter;
 
+import java.io.OutputStream;
 import java.security.InvalidParameterException;
 import java.util.Queue;
 import output.*;
@@ -33,10 +34,11 @@ public class OpenWebslidesConverter {
     /**
      * Entrypoint with a queue for output
      * @param args equal to the command line arguments
+     * @param outputStream
      * @param queue the queue where the GuardOutput writes to
      * @param id the id of the process or thread
      */
-    public static void queueEntry(String[] args, Queue<String> queue, long id){
+    public static void queueEntry(String[] args, OutputStream outputStream, Queue<String> queue, long id){
         Output output = new GuardOutput(queue, id);
         startConverter(args, output);
     }
@@ -71,6 +73,8 @@ public class OpenWebslidesConverter {
         options.addOption("t", true, "webslide output type");
         options.addOption("fl", "enable file logging");
         options.addOption("cl", "enable console logging");
+        options.addOption("zip", "output in .zip");
+        // TODO vlag voor chapter en course
         
         CommandLineParser parser = new DefaultParser();
         

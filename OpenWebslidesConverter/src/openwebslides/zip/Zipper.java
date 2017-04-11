@@ -8,6 +8,7 @@ package openwebslides.zip;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,15 @@ public class Zipper {
         } catch (Exception e) {
             throw new ZipException(e.getMessage());
         }
+    }
+    
+    public static void newEntry(ZipOutputStream zos, String ent) throws IOException{
+        ZipEntry zipEnt = new ZipEntry(ent);
+        zos.putNextEntry(zipEnt);
+    }
+    
+    public static void closeEntry(ZipOutputStream zos) throws IOException{
+        zos.closeEntry();
     }
 
     public static void addFile(ZipOutputStream zos, File file, String zipEntry) throws ZipException {

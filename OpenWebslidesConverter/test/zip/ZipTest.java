@@ -5,11 +5,14 @@
  */
 package zip;
 
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.zip.ZipOutputStream;
 import openwebslides.zip.ZipException;
 import openwebslides.zip.Zipper;
@@ -52,7 +55,7 @@ public class ZipTest {
     // public void hello() {}
     
     /*
-     * Test is afhankelijk van filesystem
+     * Tests is afhankelijk van filesystem
     
     @Test
     public void test1() throws FileNotFoundException, ZipException, IOException{
@@ -62,4 +65,26 @@ public class ZipTest {
         zos.close();
     }
     */
+    @Test
+    public void test2() throws FileNotFoundException, ZipException, IOException{
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(new File("C:\\temp\\ziptest\\result.zip")));
+        File folder = new File("C:\\temp\\ziptest\\source");
+        Zipper.addFolder(zos, folder);
+        
+        
+        
+        Zipper.newEntry(zos, "test.txt");
+        
+        OutputStreamWriter writer = new OutputStreamWriter(zos);
+        writer.write("Lorem ipsum dolor sit amet.");
+        writer.flush();
+        
+        Zipper.closeEntry(zos);
+        
+        
+        
+        zos.close();
+    }
+    
+    
 }
