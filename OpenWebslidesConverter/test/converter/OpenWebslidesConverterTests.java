@@ -1,0 +1,127 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package converter;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import openwebslidesconverter.OpenWebslidesConverter;
+import org.apache.commons.io.IOUtils;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+/**
+ *
+ * @author Jonas
+ */
+public class OpenWebslidesConverterTests {
+    
+    public OpenWebslidesConverterTests() {
+    }
+    
+    @BeforeClass
+    public static void setUpClass() {
+    }
+    
+    @AfterClass
+    public static void tearDownClass() {
+    }
+    
+    @Before
+    public void setUp() {
+    }
+    
+    @After
+    public void tearDown() {
+    }
+
+    // TODO add test methods here.
+    // The methods must be annotated with annotation @Test. For example:
+    //
+    // @Test
+    // public void hello() {}
+    
+    @Test
+    public void imageFolderTest1() {
+        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1\\input.pptx",
+                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1"};
+        OpenWebslidesConverter.mainNew(args);
+    }
+    
+    @Test
+    public void imageFolderTest2() {
+        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2\\input.pptx",
+                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2",
+                                      "-zip"};
+        OpenWebslidesConverter.mainNew(args);
+    }
+    
+    @Test
+    public void imageFolderTest3() {
+        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3\\input.pptx",
+                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3",
+                                      "-t","shower"};
+        OpenWebslidesConverter.mainNew(args);
+    }
+    
+    @Test
+    public void imageFolderTest4() {
+        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test4\\input.pptx",
+                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test4",
+                                      "-t","shower",
+                                      "-zip"};
+        OpenWebslidesConverter.mainNew(args);
+    }
+    
+    @Test
+    public void imageFolderTest5() throws IOException {
+        String zipLocation = "C:\\temp\\tests\\OpenWebslidesConverterTests\\test5";
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        
+        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test5\\input.pptx"};
+        Queue<String> queue = new ConcurrentLinkedDeque<>();
+        long id = 1;
+        
+        OpenWebslidesConverter.queueEntryNew(args, os, queue, id);
+        os.close();
+        
+        DAOSimulation(new ByteArrayInputStream(os.toByteArray()), zipLocation);
+    }
+    
+    @Test
+    public void imageFolderTest6() throws IOException {
+        String zipLocation = "C:\\temp\\tests\\OpenWebslidesConverterTests\\test6";
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        
+        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test6\\input.pptx",
+                                      "-t","shower"};
+        Queue<String> queue = new ConcurrentLinkedDeque<>();
+        long id = 1;
+        
+        OpenWebslidesConverter.queueEntryNew(args, os, queue, id);
+        os.close();
+        
+        DAOSimulation(new ByteArrayInputStream(os.toByteArray()), zipLocation);
+    }
+    
+    private void DAOSimulation(InputStream is, String zipLocation) throws FileNotFoundException, IOException {
+        try (OutputStream os = new FileOutputStream(zipLocation+File.separator+"webslides.zip")) {
+            IOUtils.copy(is, os);
+        }
+    }
+    
+}

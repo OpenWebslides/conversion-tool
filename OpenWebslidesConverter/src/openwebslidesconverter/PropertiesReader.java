@@ -16,7 +16,7 @@ public class PropertiesReader {
     public static String PROPERTIES_FILE = "converter.properties";
     
     public static String DEFAULT_LOG_FILE = "c:\\temp\\";
-    public static String DEFAULT_OUTPUT_TYPE = "raw";
+    public static String DEFAULT_OUTPUT_TYPE = "RAW";
     public static String DEFAULT_OUTPUT_DIR = "output";
     
     public static final int LOG_FILE = 0;
