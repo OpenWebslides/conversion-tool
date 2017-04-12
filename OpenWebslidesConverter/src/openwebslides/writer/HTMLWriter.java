@@ -5,8 +5,10 @@
  */
 package openwebslides.writer;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 import objects.*;
 import output.Output;
 
@@ -17,6 +19,8 @@ public class HTMLWriter extends Writer implements Indentation{
     private final static String SLIDE_TITLE = "title slide";
     
     private final Output output;
+    
+    private String imagesFolder = "images";
     
     private String TABS = "";
     private int indentation = 0;
@@ -103,6 +107,14 @@ public class HTMLWriter extends Writer implements Indentation{
         }
     }
 
+    public String getImagesFolder() {
+        return imagesFolder;
+    }
+
+    public void setImagesFolder(String imagesFolder) {
+        this.imagesFolder = imagesFolder;
+    }
+
     private String addSimpleTag(String tag, String content){
         return "<"+tag+">"+content+"</"+tag+">";
     }
@@ -131,13 +143,20 @@ public class HTMLWriter extends Writer implements Indentation{
      **************************************************************************/
     
     private String toHtml(Title title){
-        //return "<h2>" + title.getContent() + "</h2>";
         return addSimpleTag("h2", title.getContent());
     }
-    
+    /*
+    private String toHtml(Title title){
+        return addSimpleTag("h2", printTextparts(title.getTextparts()));
+    }
+    */
     private String toHtml(Text text){
+        return addSimpleTag("p", printTextparts(text.getTextparts()));
+    }
+    
+    private String printTextparts(List<Textpart> parts){
         String res = "";
-        for(Textpart textpart : text.getTextparts()){
+        for(Textpart textpart : parts){
             String part = textpart.getContent();
             
             if(textpart.getType().contains(FontDecoration.BOLD))
@@ -151,7 +170,7 @@ public class HTMLWriter extends Writer implements Indentation{
             
             res += part;
         }
-        return addSimpleTag("p", res);
+        return res;
     }
     
     private String toHtml(PPTList list){
@@ -170,4 +189,31 @@ public class HTMLWriter extends Writer implements Indentation{
         else
             return addSimpleTag("ul", res);
     }
+    
+    private String toHtml(Image image){
+        setTABS(++indentation);
+        String res = TABS + "<img src=\"" + imagesFolder + File.separator + image.getFilename() + "\">";
+        setTABS(--indentation);
+        
+        if(false){ //full height    // TODO check
+            res = "<figure class=\"cover height\">\n" + res;
+        }
+        else if(false){ //full width    // TODO check
+            res = "<figure class=\"cover width\">\n" + res;
+        }
+        else{ //normal image
+            res = "<figure>\n" + res;
+        }
+        res += "\n" + TABS + "</figure>";
+        
+        return res;
+    }
+    
+    private String toHtml(Chart chart){
+        String res = "";
+        
+        return res;
+    }
+    
+    // TODO toHtml(Table table)
 }

@@ -370,6 +370,34 @@ public class HTMLWriterTests {
     }
     
     @Test
+    //1 slide with 1 image
+    public void writePPTTest7() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Image img = new Image();
+            img.setFilename("image1.jpg");
+            
+            slide.getPptObjects().add(img);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        String expected_result = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"images\\image1.jpg\">\n\t</figure>\n</div>";
+        
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        Assert.assertEquals(result, expected_result);
+    }
+    
+    @Test
     public void dataTest() {
         Title t = new Title("lorem");
         //System.out.println(t);
