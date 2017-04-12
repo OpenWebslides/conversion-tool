@@ -6,13 +6,11 @@
 package openwebslidesconverter;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.security.InvalidParameterException;
 import java.util.Queue;
-import java.util.logging.Level;
 import java.util.zip.ZipOutputStream;
 import output.*;
 import logger.Logger;
@@ -41,6 +39,10 @@ public class OpenWebslidesConverter {
     private static final String FLAG_COURSE = "co";
     private static final String FLAG_CHAPTER = "ch";
     
+    /**
+     * Starts the converter with the given arguments.
+     * @param args The arguments for the converter.
+     */
     public static void main(String[] args) {
         Output output = new StdOutput();
         try {
@@ -75,6 +77,14 @@ public class OpenWebslidesConverter {
         }
     }
     
+    /**
+     * Starts the converter with the given arguments. The result is written as a zip file to the outputStream. Logging is done to queue with the id.
+     * @param args The arguments for the converter.
+     * @param outputStream The OutputStream the zip file is written to.
+     * @param queue The Queue of String where the log messages are collected.
+     * @param id The id used in the logging to identify the converter.
+     * @throws WebslidesConverterException If something went wrong while converting.
+     */
     public static void queueEntry(String[] args, OutputStream outputStream, Queue<String> queue, long id) throws WebslidesConverterException{
         Output output = new GuardOutput(queue, id);
         try {
@@ -99,6 +109,12 @@ public class OpenWebslidesConverter {
         }
     }
     
+    /**
+     * Parses the arguments args and returns a CommandLine object which holds the info.
+     * @param args The arguments to be parsed.
+     * @return a CommandLine object that holds the info from the args.
+     * @throws ParseException If the args could not be parsed.
+     */
     private static CommandLine parseArgs(String[] args) throws ParseException{
         Options options = new Options();
         options.addOption(FLAG_INPUT_FILE, true, "input file");
@@ -118,6 +134,11 @@ public class OpenWebslidesConverter {
         return parser.parse(options, args);
     }
     
+    /**
+     * Gets the Output object specified in cmd. If none is specified a StdOutput object is returned.
+     * @param cmd The CommandLine object that holds the wanted output info.
+     * @return The Output object specified in cmd.
+     */
     private static Output getOutput(CommandLine cmd) {
         Output output = new StdOutput();
         
@@ -144,6 +165,11 @@ public class OpenWebslidesConverter {
         return output;
     }
     
+    /**
+     * Reads the CommandLine and sets the course and chapter of the converter if available.
+     * @param converter The converter on which the course and chapter will be set.
+     * @param cmd The CommandLine which may contain the course and chapter.
+     */
     private static void setCourseAndChapter(Converter converter, CommandLine cmd) {
         if(cmd.hasOption(FLAG_COURSE))
             converter.setCourse(cmd.getOptionValue(FLAG_COURSE));
@@ -151,6 +177,12 @@ public class OpenWebslidesConverter {
             converter.setChapter(cmd.getOptionValue(FLAG_CHAPTER));
     }
     
+    /**
+     * Returns the input file specified in cmd.
+     * @param cmd The CommandLine that must hold the input file.
+     * @return Returns the input file specified in cmd.
+     * @throws InvalidParameterException If the input file is not specified in cmd.
+     */
     private static File getInputFile(CommandLine cmd) throws InvalidParameterException{
         if(!cmd.hasOption("i")) // no input file given
             throw new InvalidParameterException("No file provided to convert");
@@ -158,6 +190,13 @@ public class OpenWebslidesConverter {
             return new File(cmd.getOptionValue("i"));
     }
     
+    /**
+     * Returns the output directory in which the converted file should be saved. If not specified in cmd the directory set in the converter.properties file is used.
+     * If none of both is set the default is used.
+     * @param cmd The CommandLine that could hold the output directory.
+     * @return Returns the output folder in which the converted file should be saved.
+     * @throws IOException If the output directory does not exist or could not be created.
+     */
     private static File getOutputFolder(CommandLine cmd) throws IOException {
         //default dir or dir set in properties file
         String path = PropertiesReader.getValue(PropertiesReader.OUTPUT_DIR);
@@ -173,6 +212,12 @@ public class OpenWebslidesConverter {
         return outputFolder;
     }
     
+    /**
+     * Returns the output type specified in cmd. If not specified in cmd the directory set in the converter.properties file is used.
+     * If none of both is set the default is used.
+     * @param cmd The CommandLine object that could hold the output type.
+     * @return The output type that should be used.
+     */
     private static outputType getOutputType(CommandLine cmd) {
         try{    
             outputType type = outputType.valueOf(PropertiesReader.getValue(PropertiesReader.OUTPUT_TYPE).toUpperCase());
