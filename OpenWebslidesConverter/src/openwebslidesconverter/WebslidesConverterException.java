@@ -14,4 +14,8 @@ public class WebslidesConverterException extends Exception {
     WebslidesConverterException(String msg) {
         super(msg);
     }
+    
+    WebslidesConverterException(Exception ex) {
+        super(ex.getMessage());
+    }
 }

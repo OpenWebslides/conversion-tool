@@ -42,9 +42,10 @@ public class OpenWebslidesConverter {
     private static final String FLAG_CHAPTER = "ch";
     
     public static void main(String[] args) {
+        Output output = new StdOutput();
         try {
             CommandLine cmd = parseArgs(args);
-            Output output = getOutput(cmd);
+            output = getOutput(cmd);
             
             Converter converter = new Converter(output);
             setCourseAndChapter(converter, cmd);
@@ -66,19 +67,18 @@ public class OpenWebslidesConverter {
             
             output.println("Conversion done");
             
-        } catch (ParseException ex) { // TODO error message wegschrijven naar output
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) { // exception in parseArgs method
+            // output is not initialized yet, print to console
+            System.err.println("cannot start the converter because of false argument(s): " + ex.getMessage());
+        } catch (IOException | InvalidParameterException | WebslidesConverterException ex) {
+            output.error("error while converting: "+ex.getMessage(), ex.getMessage());
         }
     }
     
-    public static void queueEntry(String[] args, OutputStream outputStream, Queue<String> queue, long id){
+    public static void queueEntry(String[] args, OutputStream outputStream, Queue<String> queue, long id) throws WebslidesConverterException{
+        Output output = new GuardOutput(queue, id);
         try {
             CommandLine cmd = parseArgs(args);
-            Output output = new GuardOutput(queue, id);
             
             Converter converter = new Converter(output);
             setCourseAndChapter(converter, cmd);
@@ -91,9 +91,11 @@ public class OpenWebslidesConverter {
             }
             
         } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
+            output.error("cannot start the converter because of false argument(s): " + ex.getMessage(), ex.getMessage());
+            throw new WebslidesConverterException(ex);
+        } catch (IOException | InvalidParameterException | WebslidesConverterException ex) {
+            output.error(ex.getMessage(), ex.getMessage());
+            throw new WebslidesConverterException(ex);
         }
     }
     

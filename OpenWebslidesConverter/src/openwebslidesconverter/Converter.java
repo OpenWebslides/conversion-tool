@@ -16,15 +16,11 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.InvalidParameterException;
 import java.sql.Timestamp;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipOutputStream;
 import objects.PPT;
 import output.Output;
 import openwebslides.writer.HTMLWriter;
-import openwebslides.writer.Indentation;
 import openwebslides.writer.TemplateWriter;
 import openwebslides.writer.Writer;
 import openwebslides.zip.ZipException;
@@ -32,32 +28,68 @@ import openwebslides.zip.Zipper;
 import org.apache.commons.io.FileUtils;
 
 /**
- * Converts a .pptx file.
+ * Converts a file that represents a presentation (pptx and pdf). By calling a convert method the PPT object of the Converter is filled.
+ * The content of the PPT object can be written to the filesystem, a zip file or a OutputStream as html code.
  *
  * @author Jonas
  */
 public class Converter {
 
     private final Output output;
+    
+    /**
+     * The PPT object that is filled in a convert method and is used as data in the SaveToStream method.
+     */
     private PPT readPpt;
 
+    private static final String OUTPUT_FILE_HTML = "index.html";
+    private String course, chapter;
+    
+    /**
+     * The name of the charset used in the saveToStream(OutputStream, outputType, outputFormat) method.
+     */
+    private String charsetName = "UTF-8";
+    
+    public enum outputType {RAW, SHOWER};
+    public enum outputFormat {HTML};
+    
+    /**
+     * Constructor for a Converter object.
+     * @param log The output that is logged to.
+     */
     public Converter(Output log){
         this.output = log;
     }
     
-    public void convert(File file, String imageSaveLocation) throws FileNotFoundException{
-        output.println("Start conversion");
-        
-        checkIfValidFile(file); //throws FileNotFoundException if invalid file
-        IConverter converter = getConverter(file);
-        
-        readPpt = new PPT();
-        converter.parse(readPpt, imageSaveLocation);
-        
-        output.println("Input file successfully read");
+    /**
+     * Converts the file and fills the PPT object of the Converter. The images are saved into the imageSaveLocation.
+     * @param file The file to be converted.
+     * @param imageSaveLocation To location the images are saved.
+     * @throws openwebslidesconverter.WebslidesConverterException If the conversion has failed.
+     */
+    public void convert(File file, String imageSaveLocation) throws WebslidesConverterException {
+        try {
+            output.println("Start conversion");
+            
+            checkIfValidFile(file); //throws FileNotFoundException if invalid file
+            IConverter converter = getConverter(file);
+            
+            readPpt = new PPT();
+            converter.parse(readPpt, imageSaveLocation);
+            
+            output.println("Input file successfully read");
+        } catch (FileNotFoundException ex) {
+            throw new WebslidesConverterException(ex);
+        }
     }
     
-    public void convert(File file, ZipOutputStream zos) throws FileNotFoundException{
+    /**
+     * Converts the file and fills the PPT object of the Converter. The images are saved into the ZipOutputStream.
+     * @param file The file to be converted.
+     * @param zos To ZipOutputStream the images are saved to.
+     * @throws openwebslidesconverter.WebslidesConverterException If the conversion has failed.
+     */
+    public void convert(File file, ZipOutputStream zos) throws WebslidesConverterException  {
         try {
             output.println("Start conversion");
             
@@ -79,41 +111,45 @@ public class Converter {
             
             output.println("Input file successfully read");
         } catch (IOException ex) {
-            System.err.println("Fout in convert(File, ZipOutputStream) met de temp direcory");
-            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("dummy code: fout met de temp direcory");
+            System.err.println(ex.getMessage());
+            throw new WebslidesConverterException("dummy code: fout met de temp direcory\n" + ex.getMessage());
         } catch (ZipException ex) {
-            System.err.println("Fout in convert(File, ZipOutputStream) bij het kopieren van de temp direcory naar de zip");
-            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebslidesConverterException(ex);
         }
     }
     
+    /**
+     * Checks if the file is a valid input file. It is valid if it does exist and is not a directory.
+     * @param file The file to be checked.
+     * @throws FileNotFoundException If the file does not exist or is a directory.
+     */
     private void checkIfValidFile(File file) throws FileNotFoundException{
-        String errorMsg1 = "Conversion ended with error";
-        if (!file.exists()){
-            String errorMsg2 = "File does not exist";
-            output.error(errorMsg1, errorMsg2);
-            throw new FileNotFoundException(errorMsg2);
-        }
-        if (file.isDirectory()){
-            String errorMsg2 = "Directory can not be converted";
-            output.error(errorMsg1, errorMsg2);
-            throw new FileNotFoundException(errorMsg2);
-        }
+        if (!file.exists())
+            throw new FileNotFoundException("File \""+ file.getAbsolutePath() +"\" does not exist");
+        if (file.isDirectory())
+            throw new FileNotFoundException("Directory \""+ file.getAbsolutePath() +"\" can not be converted");
     }
     
+    /**
+     * Returns the IConverter for the file type. The Output object of the IConverter is set to the Output of the Converter class.
+     * @param file The file the IConverter is created for.
+     * @return The IConverter for the file type.
+     */
     private IConverter getConverter(File file){
         IConverter converter = ConverterFactory.getConverter(file);
         converter.setOutput(output);
         return converter;
     }
     
-    private static final String OUTPUT_FILE_HTML = "index.html";
-    private String course, chapter;
-    
-    public enum outputType {RAW, SHOWER};
-    public enum outputFormat {HTML};
-    
-    public void saveToZip(ZipOutputStream zos, outputType type, outputFormat format){
+    /**
+     * Saves the content of the PPT object of the class object to the zip. 
+     * @param zos The ZipOutputStream that represents the zip file to be saved to.
+     * @param type The outputType used to save.
+     * @param format The outputFormat used to save.
+     * @throws WebslidesConverterException If the output file could not be saved or the template folder could not be copied if the type equals SHOWER.
+     */
+    public void saveToZip(ZipOutputStream zos, outputType type, outputFormat format) throws WebslidesConverterException{
         output.println("start saving to .zip");
         try {
             //write PPT object to zip
@@ -129,17 +165,24 @@ public class Converter {
             }
             
         } catch (IOException ex) {
-            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebslidesConverterException("something went wrong while adding " + OUTPUT_FILE_HTML + " to the zip");
         } catch (ZipException ex) {
-            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebslidesConverterException(ex);
         }
         output.println("saving to .zip done");
     }
     
-    public void saveToDirectory(File dir, outputType type, outputFormat format) throws Exception{
+    /**
+     * Saves the content of the PPT object of the class object to the directory dir.
+     * @param dir The File that represents the directory to be saved to.
+     * @param type The outputType used to save.
+     * @param format The outputFormat used to save.
+     * @throws WebslidesConverterException WebslidesConverterException If the output file could not be saved or the template folder could not be copied if the type equals SHOWER.
+     */
+    public void saveToDirectory(File dir, outputType type, outputFormat format) throws WebslidesConverterException  {
         output.println("start saving to "+dir.getAbsolutePath());
         if(!dir.isDirectory())
-            throw new Exception("dir is not a directory"); // TODO vervangen door converterException
+            throw new WebslidesConverterException("dir \"" + dir.getAbsolutePath() + "\" is not a directory");
         
         try {
             //Write PPT object to the file in the os
@@ -156,14 +199,23 @@ public class Converter {
             // TODO copySharedFolder-methode in TemplateWriter verwijderen
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+            throw new WebslidesConverterException(dir.getAbsolutePath() + File.separator + OUTPUT_FILE_HTML + " could not be created (" + ex.getMessage() + ")");
+        } catch (IOException ex) {
+            throw new WebslidesConverterException("the template folder could not be copied");
         }
         output.println("successfully saved to " + dir.getAbsolutePath());
     }
     
-    public void saveToStream(OutputStream os, outputType type, outputFormat format){
+    /**
+     * Saves the content of the PPT object of the class object to the OutputStream os.
+     * @param os The OutputStream to be saved to.
+     * @param type The outputType used to save.
+     * @param format The outputFormat used to save.
+     * @throws WebslidesConverterException If the charset is not valid or an exception is thrown by the write method of the Writer used to write out the PPT object.
+     */
+    public void saveToStream(OutputStream os, outputType type, outputFormat format) throws WebslidesConverterException{
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, charsetName));
             
             if(format == outputFormat.HTML){
                 output.println("creating .html file");
@@ -171,23 +223,23 @@ public class Converter {
                 
                 if(type == outputType.RAW){
                     writer = new HTMLWriter(); 
-                    // TODO htmlWriter (output meegeven EN) exceptie opwerpen bij fout
+                    // TODO htmlWriter output meegeven
                 }
                 else { // outputType.SHOWER
                     HTMLWriter htmlWriter = new HTMLWriter();
-                    // TODO htmlWriter (output meegeven EN) exceptie opwerpen bij fout
+                    // TODO htmlWriter output meegeven
                     writer = new TemplateWriter(htmlWriter, course, chapter);
                 }
                 
                 writer.write(bufferedWriter, readPpt);
             }
             else {
-                // TODO throw converterException
+                throw new WebslidesConverterException("outputFormat " + format + "is not supported");
             }
             
             bufferedWriter.flush();
-        } catch (IOException ex) {
-            Logger.getLogger(Converter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) { // UnsupportedEncodingException is subclass of IOException
+            throw new WebslidesConverterException(ex);
         }
     }
     
@@ -205,6 +257,14 @@ public class Converter {
 
     public void setPPT(PPT Ppt) {
         this.readPpt = Ppt;
+    }
+
+    public String getCharsetName() {
+        return charsetName;
+    }
+
+    public void setCharsetName(String charsetName) {
+        this.charsetName = charsetName;
     }
     
 }

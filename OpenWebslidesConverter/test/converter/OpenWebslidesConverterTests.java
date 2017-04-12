@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import openwebslidesconverter.OpenWebslidesConverter;
+import openwebslidesconverter.WebslidesConverterException;
 import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -56,14 +57,14 @@ public class OpenWebslidesConverterTests {
     // public void hello() {}
     
     @Test
-    public void imageFolderTest1() {
+    public void test1() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1"};
         OpenWebslidesConverter.main(args);
     }
     
     @Test
-    public void imageFolderTest2() {
+    public void test2() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2",
                                       "-zip"};
@@ -71,7 +72,7 @@ public class OpenWebslidesConverterTests {
     }
     
     @Test
-    public void imageFolderTest3() {
+    public void test3() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3",
                                       "-t","shower"};
@@ -79,7 +80,7 @@ public class OpenWebslidesConverterTests {
     }
     
     @Test
-    public void imageFolderTest4() {
+    public void test4() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test4\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test4",
                                       "-t","shower",
@@ -88,7 +89,7 @@ public class OpenWebslidesConverterTests {
     }
     
     @Test
-    public void imageFolderTest5() throws IOException {
+    public void test5() throws IOException, WebslidesConverterException {
         String zipLocation = "C:\\temp\\tests\\OpenWebslidesConverterTests\\test5";
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         
@@ -103,7 +104,7 @@ public class OpenWebslidesConverterTests {
     }
     
     @Test
-    public void imageFolderTest6() throws IOException {
+    public void test6() throws IOException, WebslidesConverterException {
         String zipLocation = "C:\\temp\\tests\\OpenWebslidesConverterTests\\test6";
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         

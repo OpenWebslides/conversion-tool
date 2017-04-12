@@ -69,7 +69,7 @@ public class Zipper {
 
     public static void addFolder(ZipOutputStream zos, File node) throws ZipException {
         if(!node.isDirectory()){
-            throw new ZipException("file is not a correct directory");
+            throw new ZipException("file \"" + node.getAbsolutePath() + "\" is not a directory");
         }
         String source_folder = node.getAbsoluteFile().toString();
         List<File> files = generateFileList(node);
