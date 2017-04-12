@@ -6,11 +6,9 @@
 package openwebslides.writer;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import objects.PPT;
 import objects.Slide;
-import org.apache.commons.io.FileUtils;
 
 
 public class TemplateWriter extends Writer {
@@ -84,18 +82,6 @@ public class TemplateWriter extends Writer {
     @Override
     public String writeSlide(Slide slide) {
         return writer.writeSlide(slide, 1);
-    }
-    
-    
-    /**
-     * Creates a copy of the needed files to use the template into the targetDir.
-     * @param targetDir The directory where the files should be copied to.
-     * @throws IOException 
-     */
-    public void copySharedFolder(String targetDir) throws IOException{
-        File source = new File("Template/_shared");
-        File target = new File(targetDir+"/_shared");
-        FileUtils.copyDirectory(source, target);
     }
 
     public String getCourse() {

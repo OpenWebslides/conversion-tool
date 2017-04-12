@@ -196,7 +196,6 @@ public class Converter {
                 FileUtils.copyDirectory(source, target);
                 output.println("template files copied");
             }
-            // TODO copySharedFolder-methode in TemplateWriter verwijderen
             
         } catch (FileNotFoundException ex) {
             throw new WebslidesConverterException(dir.getAbsolutePath() + File.separator + OUTPUT_FILE_HTML + " could not be created (" + ex.getMessage() + ")");
