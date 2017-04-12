@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import output.StdOutput;
 
 /**
  *
@@ -63,7 +64,7 @@ public class HTMLWriterTests {
                 ppt.getSlides().add(slides[i]);
             }
             
-            Writer writer = new HTMLWriter();
+            Writer writer = new HTMLWriter(new StdOutput());
             writer.write(out, ppt);
             
             out.flush();
@@ -96,7 +97,7 @@ public class HTMLWriterTests {
                 ppt.getSlides().add(s);
             }
             
-            Writer writer = new HTMLWriter();
+            Writer writer = new HTMLWriter(new StdOutput());
             writer.write(out, ppt);
             
             out.flush();
@@ -147,7 +148,7 @@ public class HTMLWriterTests {
                 ppt.getSlides().add(s);
             }
             
-            Writer writer = new HTMLWriter();
+            Writer writer = new HTMLWriter(new StdOutput());
             writer.write(out, ppt);
             
             out.flush();
@@ -236,7 +237,7 @@ public class HTMLWriterTests {
                 ppt.getSlides().add(s);
             }
             
-            Writer writer = new HTMLWriter();
+            Writer writer = new HTMLWriter(new StdOutput());
             writer.write(out, ppt);
             
             out.flush();
@@ -274,7 +275,7 @@ public class HTMLWriterTests {
             slide.getPptObjects().add(list);
             ppt.getSlides().add(slide);
             
-            Writer writer = new HTMLWriter();
+            Writer writer = new HTMLWriter(new StdOutput());
             writer.write(out, ppt);
             
             out.flush();
@@ -312,7 +313,7 @@ public class HTMLWriterTests {
             slide.getPptObjects().add(list);
             ppt.getSlides().add(slide);
             
-            Writer writer = new HTMLWriter();
+            Writer writer = new HTMLWriter(new StdOutput());
             writer.write(out, ppt);
             
             out.flush();
@@ -354,7 +355,7 @@ public class HTMLWriterTests {
             slide.getPptObjects().add(outerList);
             ppt.getSlides().add(slide);
             
-            Writer writer = new HTMLWriter();
+            Writer writer = new HTMLWriter(new StdOutput());
             writer.write(out, ppt);
             
             out.flush();

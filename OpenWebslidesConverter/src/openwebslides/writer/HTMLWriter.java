@@ -7,8 +7,8 @@ package openwebslides.writer;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.List;
 import objects.*;
+import output.Output;
 
 
 public class HTMLWriter extends Writer implements Indentation{
@@ -16,10 +16,17 @@ public class HTMLWriter extends Writer implements Indentation{
     private final static String SLIDE_NORMAL = "slide";
     private final static String SLIDE_TITLE = "title slide";
     
+    private final Output output;
+    
     private String TABS = "";
     private int indentation = 0;
     
     private int slideIndex = 0;
+    
+    public HTMLWriter(Output output) {
+        this.output = output;
+    }
+    
     /**
      * 
      * @param slide
@@ -113,7 +120,8 @@ public class HTMLWriter extends Writer implements Indentation{
         }
         //error
         catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            //TODO handle output
+            //TODO throw exception of default method?
+            output.error("cannot convert PPTObject \""+pptObj.getClass()+"\" to html", ex.getMessage());
         }
         return res;
     }

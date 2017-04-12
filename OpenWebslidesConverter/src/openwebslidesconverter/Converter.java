@@ -221,12 +221,10 @@ public class Converter {
                 Writer writer;
                 
                 if(type == outputType.RAW){
-                    writer = new HTMLWriter(); 
-                    // TODO htmlWriter output meegeven
+                    writer = new HTMLWriter(output);
                 }
                 else { // outputType.SHOWER
-                    HTMLWriter htmlWriter = new HTMLWriter();
-                    // TODO htmlWriter output meegeven
+                    HTMLWriter htmlWriter = new HTMLWriter(output);
                     writer = new TemplateWriter(htmlWriter, course, chapter);
                 }
                 

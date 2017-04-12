@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import output.StdOutput;
 
 /**
  *
@@ -61,7 +62,7 @@ public class TemplateWriterTests {
             Slide slide = new Slide();
             ppt.getSlides().add(slide);
             
-            TemplateWriter tw = new TemplateWriter(new HTMLWriter(), null, null);
+            TemplateWriter tw = new TemplateWriter(new HTMLWriter(new StdOutput()), null, null);
             tw.write(out, ppt);
             
             out.flush();
@@ -82,7 +83,7 @@ public class TemplateWriterTests {
         try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
             PPT ppt = new PPT();
             
-            TemplateWriter tw = new TemplateWriter(new HTMLWriter(), "vak 0123456789", "deel 987");
+            TemplateWriter tw = new TemplateWriter(new HTMLWriter(new StdOutput()), "vak 0123456789", "deel 987");
             tw.write(out, ppt);
             
             out.flush();
