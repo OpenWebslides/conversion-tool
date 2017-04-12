@@ -6,10 +6,13 @@
 package writer;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import objects.*;
 import openwebslides.writer.*;
+import openwebslidesconverter.Converter;
+import openwebslidesconverter.WebslidesConverterException;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -91,7 +94,13 @@ public class HTMLWriterTests {
             PPT ppt = new PPT();
             Slide[] slides = new Slide[1];
             slides[0] = new Slide();
-            slides[0].getPptObjects().add(new Title("Lorem ipsum dolor"));
+            
+            Title title1 = new Title();
+            Textpart part1 = new Textpart();
+            part1.setContent("Lorem ipsum dolor");
+            title1.getTextparts().add(part1);
+            
+            slides[0].getPptObjects().add(title1);
             
             for(Slide s : slides){
                 ppt.getSlides().add(s);
@@ -118,10 +127,19 @@ public class HTMLWriterTests {
             PPT ppt = new PPT();
             Slide[] slides = new Slide[2];
             
+            Title title1 = new Title();
+            Textpart part1 = new Textpart();
+            part1.setContent("Lorem ipsum dolor sit amet");
+            title1.getTextparts().add(part1);
+            Title title2 = new Title();
+            Textpart part2 = new Textpart();
+            part2.setContent("Vivamus posuere neque");
+            title2.getTextparts().add(part2);
+            
             slides[0] = new Slide();
-            slides[0].getPptObjects().add(new Title("Lorem ipsum dolor sit amet"));
+            slides[0].getPptObjects().add(title1);
             slides[1] = new Slide();
-            slides[1].getPptObjects().add(new Title("Vivamus posuere neque"));
+            slides[1].getPptObjects().add(title2);
             
             Textpart[] parts = new Textpart[4];
             parts[0] = new Textpart();
@@ -389,7 +407,7 @@ public class HTMLWriterTests {
             out.flush();
             result = sw.toString();
         }
-        String expected_result = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"images\\image1.jpg\">\n\t</figure>\n</div>";
+        String expected_result = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
         
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
@@ -398,9 +416,46 @@ public class HTMLWriterTests {
     }
     
     @Test
-    public void dataTest() {
-        Title t = new Title("lorem");
-        //System.out.println(t);
-        //System.out.println(t.getContent());
+    //1 slide with a title with decoration
+    public void writePPTTest8() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide[] slides = new Slide[1];
+            slides[0] = new Slide();
+            
+            Title title = new Title();
+            Textpart part1 = new Textpart();
+            part1.setContent("Lorem ");
+            title.getTextparts().add(part1);
+            Textpart part2 = new Textpart();
+            part2.setContent("ipsum");
+            part2.getType().add(FontDecoration.BOLD);
+            title.getTextparts().add(part2);
+            Textpart part3 = new Textpart();
+            part3.setContent(" dolor");
+            title.getTextparts().add(part3);
+            
+            slides[0].getPptObjects().add(title);
+            
+            for(Slide s : slides){
+                ppt.getSlides().add(s);
+            }
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<h2>Lorem <strong>ipsum</strong> dolor</h2>\n</div>";
+        
+        Assert.assertEquals(result, expected);
     }
+    
+    
+    
 }

@@ -125,4 +125,25 @@ public class OpenWebslidesConverterTests {
         }
     }
     
+    
+    
+    @Test
+    public void allElementsTest(){
+        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\allElementsTest\\input.pptx",
+                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\allElementsTest",
+                                      "-t","shower"};
+        OpenWebslidesConverter.main(args);
+    }
+    
+    @Test
+    public void imagesSizes() throws WebslidesConverterException{
+        String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\imagesSizes";
+        String input = "C:\\temp\\tests\\OpenWebslidesConverterTests\\imagesSizes\\input.pptx";
+        
+        String[] args = new String[] {"-i",input,
+                                      "-o",dir,
+                                      "-t","shower"};
+        OpenWebslidesConverter.main(args);
+    }
+    
 }

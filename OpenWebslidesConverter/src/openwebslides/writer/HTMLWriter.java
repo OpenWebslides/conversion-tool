@@ -143,13 +143,9 @@ public class HTMLWriter extends Writer implements Indentation{
      **************************************************************************/
     
     private String toHtml(Title title){
-        return addSimpleTag("h2", title.getContent());
-    }
-    /*
-    private String toHtml(Title title){
         return addSimpleTag("h2", printTextparts(title.getTextparts()));
     }
-    */
+    
     private String toHtml(Text text){
         return addSimpleTag("p", printTextparts(text.getTextparts()));
     }
@@ -192,14 +188,18 @@ public class HTMLWriter extends Writer implements Indentation{
     
     private String toHtml(Image image){
         setTABS(++indentation);
-        String res = TABS + "<img src=\"" + imagesFolder + File.separator + image.getFilename() + "\">";
+        //String res = TABS + "<img src=\"" + imagesFolder + File.separator + image.getFilename() + "\">";
+        String res = TABS + "<img src=\"" + image.getFilename() + "\">"; // TODO getFilename zonder pad
         setTABS(--indentation);
         
-        if(false){ //full height    // TODO check
-            res = "<figure class=\"cover height\">\n" + res;
-        }
-        else if(false){ //full width    // TODO check
+        double W = image.getDimension().getWidth()/33;
+        double H = image.getDimension().getHeight()/19;
+        
+        if(W>0.9 && (H>1.1 || H<=0.9)){ //full width
             res = "<figure class=\"cover width\">\n" + res;
+        }
+        else if(H>0.9){ //full height
+            res = "<figure class=\"cover height\">\n" + res;
         }
         else{ //normal image
             res = "<figure>\n" + res;
