@@ -59,7 +59,7 @@ public class OpenWebslidesConverterTests {
     public void imageFolderTest1() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1"};
-        OpenWebslidesConverter.mainNew(args);
+        OpenWebslidesConverter.main(args);
     }
     
     @Test
@@ -67,7 +67,7 @@ public class OpenWebslidesConverterTests {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2",
                                       "-zip"};
-        OpenWebslidesConverter.mainNew(args);
+        OpenWebslidesConverter.main(args);
     }
     
     @Test
@@ -75,7 +75,7 @@ public class OpenWebslidesConverterTests {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3",
                                       "-t","shower"};
-        OpenWebslidesConverter.mainNew(args);
+        OpenWebslidesConverter.main(args);
     }
     
     @Test
@@ -84,7 +84,7 @@ public class OpenWebslidesConverterTests {
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test4",
                                       "-t","shower",
                                       "-zip"};
-        OpenWebslidesConverter.mainNew(args);
+        OpenWebslidesConverter.main(args);
     }
     
     @Test
@@ -96,7 +96,7 @@ public class OpenWebslidesConverterTests {
         Queue<String> queue = new ConcurrentLinkedDeque<>();
         long id = 1;
         
-        OpenWebslidesConverter.queueEntryNew(args, os, queue, id);
+        OpenWebslidesConverter.queueEntry(args, os, queue, id);
         os.close();
         
         DAOSimulation(new ByteArrayInputStream(os.toByteArray()), zipLocation);
@@ -112,7 +112,7 @@ public class OpenWebslidesConverterTests {
         Queue<String> queue = new ConcurrentLinkedDeque<>();
         long id = 1;
         
-        OpenWebslidesConverter.queueEntryNew(args, os, queue, id);
+        OpenWebslidesConverter.queueEntry(args, os, queue, id);
         os.close();
         
         DAOSimulation(new ByteArrayInputStream(os.toByteArray()), zipLocation);
