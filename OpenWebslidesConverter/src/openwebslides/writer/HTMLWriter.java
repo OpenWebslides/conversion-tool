@@ -5,7 +5,6 @@
  */
 package openwebslides.writer;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -211,9 +210,16 @@ public class HTMLWriter extends Writer implements Indentation{
     
     private String toHtml(Chart chart){
         String res = "";
-        
+        // TODO implementeren
         return res;
     }
     
+    /*
+    private String toHtml(Hyperlink link){
+        return "<a href=\""+ link.getUrl() + "\">" + link.getText() + "</a>";
+    }*/
+    
     // TODO toHtml(Table table)
+    
+    // TODO toHtml(Placeholder placeholder)
 }
