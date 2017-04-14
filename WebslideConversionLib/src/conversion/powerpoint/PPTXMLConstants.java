@@ -13,6 +13,8 @@ public class PPTXMLConstants {
 
     //Global elements
     public static final String FRAGMENT = "xml-fragment";
+    public static final String IDELEMENT = "p:cNvPr";
+    public static final String GFRAME = "p:graphicFrame";
 
     //Global values
     public static final String VALUE = "val";
@@ -54,7 +56,9 @@ public class PPTXMLConstants {
     public static final String IMAGELOCY = "y";
 
     //Chart elements
-    public static final String CHARTBODY = "p:graphicFrame";
-    public static final String CHARTDETAILS = "p:cNvPr";
+    public static final String CHARTBODY = "p:xfrm";
+    
+    //Table elements
+    public static final String TABLE = "a:tbl";
 
 }

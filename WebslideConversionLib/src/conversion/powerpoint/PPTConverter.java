@@ -58,7 +58,7 @@ public class PPTConverter implements IConverter {
                     Slide webslide = new Slide();
 
                     //for testing
-                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -66,12 +66,14 @@ public class PPTConverter implements IConverter {
                     //parse
                     sp.parse(new InputSource(new StringReader(slide.getXmlObject().getCSld().getSpTree().toString())), handler);
 
-                    //remove null values from list that got there thanks to irregularities in xml
-                    GarbageHandler.handle(webslide.getPptObjects(), output);
-
+                   
                     //copy the images
                     MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output);
 
+                     //remove null values from list that got there thanks to irregularities in xml
+                    GarbageHandler.handle(webslide.getPptObjects(), output);
+
+                    
                     //print the slide for testing
                     output.println(webslide.toString());
 

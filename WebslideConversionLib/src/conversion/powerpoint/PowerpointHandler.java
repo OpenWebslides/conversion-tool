@@ -31,7 +31,7 @@ public class PowerpointHandler extends DefaultHandler {
     //Variables optimalization of if statements in startelement
     private boolean textbody = false;
     private boolean imagebody = false;
-    private boolean chartbody = false;
+    private boolean gframe;
 
     //Variables list
     private PPTList list;
@@ -46,6 +46,9 @@ public class PowerpointHandler extends DefaultHandler {
     //Variables chart
     private Chart chart;
 
+    //
+    private String lastId;
+
     PowerpointHandler(List<PPTObject> pptobjects, Output output) {
         this.pptobjects = pptobjects;
         this.output = output;
@@ -58,20 +61,22 @@ public class PowerpointHandler extends DefaultHandler {
      */
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         try {
-            if (qName.equals(PPTXMLConstants.TEXTBODY)) {
+            if (qName.equals(PPTXMLConstants.IDELEMENT)) {
+                lastId = attributes.getValue(PPTXMLConstants.ID);
+            } else if (qName.equals(PPTXMLConstants.TEXTBODY)) {
                 textbody = true;
                 imagebody = false;
             } else if (qName.equals(PPTXMLConstants.IMAGEBODY)) {
                 imagebody = true;
                 textbody = false;
-            } else if (qName.equals(PPTXMLConstants.CHARTBODY)) {
-                chartbody = true;
+            } else if (qName.equals(PPTXMLConstants.GFRAME)) {
+                gframe = true;
             }
             if (textbody) {
                 startText(qName, attributes);
             } else if (imagebody) {
                 startImage(qName, attributes);
-            } else if (chartbody) {
+            } else if (gframe) {
                 startChart(qName, attributes);
             }
         } catch (Exception e) {
@@ -89,8 +94,8 @@ public class PowerpointHandler extends DefaultHandler {
             endText(qName);
         } else if (imagebody) {
             endImage(qName);
-        } else if (chartbody) {
-            endChart(qName);
+        } else {
+            endRest(qName);
         }
 
     }
@@ -304,18 +309,20 @@ public class PowerpointHandler extends DefaultHandler {
 
     private void startChart(String qName, Attributes attributes) {
         try {
-            if (qName.equals(PPTXMLConstants.CHARTDETAILS)) {
-                chart = new Chart(attributes.getValue(PPTXMLConstants.ID));
+            if (qName.equals(PPTXMLConstants.CHARTBODY)) {
+                chart = new Chart(lastId);
+                pptobjects.add(chart);
             }
+
         } catch (Exception e) {
             output.println(Logger.error("Error while reading slide chart tags (DefaultHandler startElement)", e));
         }
     }
 
-    private void endChart(String qName) {
+    private void endRest(String qName) {
         try {
-            if (qName.equals(PPTXMLConstants.CHARTDETAILS)) {
-                pptobjects.add(chart);
+            if (qName.equals(PPTXMLConstants.TABLE)) {
+                pptobjects.add(new Table());
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide chart tags (DefaultHandler endElement)", e));

@@ -8,9 +8,6 @@ package conversion.powerpoint;
 import java.util.List;
 import objects.Image;
 import objects.PPTObject;
-import org.apache.poi.xslf.usermodel.XSLFPictureShape;
-import org.apache.poi.xslf.usermodel.XSLFShape;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,12 +20,14 @@ import javax.xml.namespace.QName;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import logger.Logger;
+import objects.Cell;
 import objects.Chart;
 import objects.ChartType;
+import objects.Row;
+import objects.Table;
 import org.apache.poi.POIXMLDocumentPart;
-import org.apache.poi.xslf.usermodel.XSLFChart;
-import org.apache.poi.xslf.usermodel.XSLFGraphicFrame;
-import org.apache.poi.xssf.usermodel.XSSFRelation;
+import org.apache.poi.xslf.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 import org.apache.xmlbeans.XmlObject;
 import org.openxmlformats.schemas.drawingml.x2006.chart.*;
 import org.openxmlformats.schemas.presentationml.x2006.main.CTGraphicalObjectFrame;
@@ -62,6 +61,28 @@ class MediaHandler {
                             if (((Image) po).getId().equals("" + sh.getShapeId())) {
                                 ((Image) po).setFilename(saveLocation + "\\" + ((XSLFPictureShape) sh).getPictureData().getFileName());
                                 copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output);
+                            }
+                        }
+                    }
+                }
+                if(sh.getClass().equals(XSLFTable.class)){
+                    output.println("found table");
+                    for (PPTObject po : pptObjects) {
+                        if (po.getClass().equals(Table.class)) {
+                            if (((Table)po).getRows().isEmpty()){
+                                output.println("empty table");
+                                Table t = (Table)po;
+                                List<XSLFTableRow> rows = ((XSLFTable)sh).getRows();
+                                for(XSLFTableRow row : rows){
+                                    List<XSLFTableCell> cells = row.getCells();
+                                    Row newRow = new Row();
+                                    t.getRows().add(newRow);
+                                    for(XSLFTableCell cell : cells){
+                                        newRow.getCells().add(new Cell(cell.getText(),cell.getGridSpan(),cell.getRowSpan()));
+                                       // output.println(cell.toString());
+                                    }
+                                        
+                                }
                             }
                         }
                     }
@@ -132,6 +153,7 @@ class MediaHandler {
             //Read type and title (Easier like this, kind of shitty in SAX)
             chartObj.setChartType(getChartType(ctChart, output));
             chartObj.setTitle(getChartTitle(ctChart, output));
+            
             //SAX for data
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser sp = factory.newSAXParser();
