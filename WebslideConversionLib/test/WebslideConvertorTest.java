@@ -19,26 +19,25 @@ import output.StdLogOutput;
  * @author Karel
  */
 public class WebslideConvertorTest {
-    
+
     public WebslideConvertorTest() {
     }
-    
-    
+
     @Test
     public void testRun() {
-        File file = new File("C:\\temp\\pres.pptx");
-        
+        File file = new File("C:\\temp\\temp.pptx");
+
         IConverter converter = ConverterFactory.getConverter(file);
-        converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log","logging","karel")));
-        
+        converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "karel")));
+
         PPT ppt = new PPT();
-        
+
         converter.parse(ppt, "C:\\temp\\images");
-        
-	FileWriter fw = null;
+
+        FileWriter fw = null;
 
         try {
-                fw = new FileWriter("C:\\temp\\test.html");
+            fw = new FileWriter("C:\\temp\\test.html");
         } catch (Exception e) {
         } finally {
             try {
@@ -47,6 +46,5 @@ public class WebslideConvertorTest {
             }
         }
 
-        
     }
 }

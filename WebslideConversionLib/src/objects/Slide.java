@@ -33,7 +33,7 @@ public class Slide implements PPTObject {
      */
     public String toString(){
         String toret = "";
-        toret = pptObjects.stream().filter((po) -> (po!=null)).map((po) -> /*po.getClass() + " : " + */po.toString() + "\n").reduce(toret, String::concat);
+        toret = pptObjects.stream().filter((po) -> (po!=null)).map((po) -> po.getClass().toString().replace("class objects.", "") + " : " + po.toString() + "\n").reduce(toret, String::concat);
         return toret;
     }
 }

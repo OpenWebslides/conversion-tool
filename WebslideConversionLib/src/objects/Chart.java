@@ -16,7 +16,7 @@ public class Chart implements PPTObject {
 
     private String title;
     private final HashMap<String, HashMap<String, ArrayList<Double>>> content;
-    private String chartType;
+    private ChartType chartType;
     private String id;
     
 
@@ -51,7 +51,7 @@ public class Chart implements PPTObject {
      * Return the Chart type
      * @return 
      */
-    public String getChartType() {
+    public ChartType getChartType() {
         return chartType;
     }
 
@@ -67,7 +67,7 @@ public class Chart implements PPTObject {
      * Set the Chart type
      * @param chartType 
      */
-    public void setChartType(String chartType) {
+    public void setChartType(ChartType chartType) {
         this.chartType = chartType;
     }
     

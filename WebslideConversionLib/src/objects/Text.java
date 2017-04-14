@@ -43,10 +43,10 @@ public class Text implements PPTObject {
     public String toString(){
         String toret = "";
         if(textparts.size()>0){
-        for(Textpart td : textparts){
-            toret += td.toString() + "\t";
-        
-        }}
+            for(Textpart td : textparts){
+                toret += td.toString() + "\t";
+            }
+        }
         return toret + " lvl:" + level;
     }
 

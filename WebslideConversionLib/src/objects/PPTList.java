@@ -12,60 +12,60 @@ import java.util.List;
  *
  * @author Karel
  */
-public class PPTList implements PPTObject{
+public class PPTList implements PPTObject {
 
     private final java.util.List<PPTObject> bullets;
     private boolean ordered;
 
-    
     /**
-     * Create a PPTList object
-     * An empty ArrayList will be created for the bullets
-     * The ordered boolean will be set to false, meaning default implementation 
-     * is an unordered list
+     * Create a PPTList object An empty ArrayList will be created for the
+     * bullets The ordered boolean will be set to false, meaning default
+     * implementation is an unordered list
      */
-    public PPTList(){
+    public PPTList() {
         bullets = new ArrayList<>();
         ordered = false;
     }
-    
+
     /**
-     * Return the bullets of the PPTList
-     * This will be an editable list, any changes made will be saved in the
-     * PPTList object
-     * @return 
+     * Return the bullets of the PPTList This will be an editable list, any
+     * changes made will be saved in the PPTList object
+     *
+     * @return
      */
     public List<PPTObject> getBullets() {
         return bullets;
     }
-    
+
     /**
      * Add a PPTObject to the bullet list
-     * @param obj 
+     *
+     * @param obj
      */
-    public void addPPTObject(PPTObject obj){
+    public void addPPTObject(PPTObject obj) {
         bullets.add(obj);
     }
-    
+
     @Override
     /**
      * Return a string containing:
      * <ul>
-     *      <li>The toString() method of all of the bullets</li>
-     *      <li>The class of each bullet</li>
-     *      <li>If the list is ordered or not</li>
+     * <li>The toString() method of all of the bullets</li>
+     * <li>The class of each bullet</li>
+     * <li>If the list is ordered or not</li>
      */
-    public String toString(){
+    public String toString() {
         String toret = "\n";
-        for(PPTObject po : bullets){
-            toret += "\t" + po.getClass() + " : " +po.toString() + "\n";
+        for (PPTObject po : bullets) {
+            toret += "\t" + po.getClass().toString().replace("class objects.", "") + " : " + po.toString() + "\n";
         }
-        return toret + " " + ordered;
+        return toret;
     }
 
     /**
      * Return if the list is ordered or not
-     * @return 
+     *
+     * @return
      */
     public boolean isOrdered() {
         return ordered;
@@ -73,7 +73,8 @@ public class PPTList implements PPTObject{
 
     /**
      * Set the list to ordered or not
-     * @param ordered 
+     *
+     * @param ordered
      */
     public void setOrdered(boolean ordered) {
         this.ordered = ordered;

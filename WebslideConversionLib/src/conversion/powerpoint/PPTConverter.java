@@ -24,81 +24,71 @@ import org.xml.sax.helpers.DefaultHandler;
  *
  * @author Karel
  */
-public class PPTConverter implements IConverter{
+public class PPTConverter implements IConverter {
 
     private final File file;
     private Output output;
-    
-    public PPTConverter(File file){
-        this.file = file;   
+
+    public PPTConverter(File file) {
+        this.file = file;
         output = new StdOutput();
     }
 
     @Override
-    public void setOutput(Output output){
+    public void setOutput(Output output) {
         this.output = output;
     }
-    
+
     @Override
-    public void parse(PPT ppt, String saveLocation){
-        
+    public void parse(PPT ppt, String saveLocation) {
+
         XMLSlideShow pptSource;
-        
+
         try {
             pptSource = new XMLSlideShow(new FileInputStream(file));
             List<XSLFSlide> slides = pptSource.getSlides();
-            
+
             SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser sp = factory.newSAXParser();        
+            SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
-            
-            for(XSLFSlide slide : slides){
-                    try{
-                        //Webslide object
-                        Slide webslide = new Slide();
-                        
-                        //If the slide has a title
-                        if(slide.getTitle()!=null){
-                            Textpart tp = new Textpart();
-                            tp.setContent(slide.getTitle());
-                            Title t = new Title();
-                            t.addTextpart(tp);
-                            webslide.getPptObjects().add(t);
-                        }
-                        
-                        //for testing
-                        //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
 
-                        //handler that will parse the xml data
-                        handler = new PowerpointHandler(webslide.getPptObjects(),output);
+            for (XSLFSlide slide : slides) {
+                try {
+                    //Webslide object
+                    Slide webslide = new Slide();
 
-                        //parse
-                        sp.parse(new InputSource(new StringReader(slide.getXmlObject().getCSld().getSpTree().toString())), handler);
+                    //for testing
+                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    
+                    //handler that will parse the xml data
+                    handler = new PowerpointHandler(webslide.getPptObjects(), output);
 
-                        //remove null values from list that got there thanks to irregularities in xml
+                    //parse
+                    sp.parse(new InputSource(new StringReader(slide.getXmlObject().getCSld().getSpTree().toString())), handler);
 
-                        GarbageHandler.handle(webslide.getPptObjects(), output);
-                        
-                        //copy the images
-                        MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file,output);
+                    //remove null values from list that got there thanks to irregularities in xml
+                    GarbageHandler.handle(webslide.getPptObjects(), output);
 
-                        //print the slide for testing
-                       output.println(webslide.toString());
-                       
-                       //Add to ppt
-                       ppt.getSlides().add(webslide);
+                    //copy the images
+                    MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output);
 
-                       // output.println("");
-                    }catch(Exception e){
-                        output.println(Logger.error("Error while parsing slide + " + slides.indexOf(slide)+1 + " in the powerpoint", e));
-                    }
+                    //print the slide for testing
+                    output.println(webslide.toString());
+
+                    //Add to ppt
+                    ppt.getSlides().add(webslide);
+
+                    // output.println("");
+                } catch (Exception e) {
+                    output.println(Logger.error("Error while parsing slide + " + slides.indexOf(slide) + 1 + " in the powerpoint", e));
+                }
             }
-            
+
             pptSource.close();
-            
+
         } catch (Exception ex) {
             output.println(Logger.error("Error while parsing the powerpoint", ex));
         }
-    }   
-    
+    }
+
 }
