@@ -66,11 +66,9 @@ class MediaHandler {
                     }
                 }
                 if(sh.getClass().equals(XSLFTable.class)){
-                    output.println("found table");
                     for (PPTObject po : pptObjects) {
                         if (po.getClass().equals(Table.class)) {
                             if (((Table)po).getRows().isEmpty()){
-                                output.println("empty table");
                                 Table t = (Table)po;
                                 List<XSLFTableRow> rows = ((XSLFTable)sh).getRows();
                                 for(XSLFTableRow row : rows){
@@ -78,8 +76,7 @@ class MediaHandler {
                                     Row newRow = new Row();
                                     t.getRows().add(newRow);
                                     for(XSLFTableCell cell : cells){
-                                        newRow.getCells().add(new Cell(cell.getText(),cell.getGridSpan(),cell.getRowSpan()));
-                                       // output.println(cell.toString());
+                                        newRow.getCells().add(new Cell(cell.getText(),cell.getGridSpan(),cell.getRowSpan()));   
                                     }
                                         
                                 }
