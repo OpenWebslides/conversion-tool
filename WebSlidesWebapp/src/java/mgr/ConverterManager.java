@@ -48,7 +48,7 @@ public class ConverterManager implements CallableCallback {
      * It keeps track of the sessionIDs and maps the files that need conversion to them
      * It is responsible for concurrent logging capabilities, both of the inner conversion threads and the outer management of those threads by this class
      * Will notify the ServerEndpoint upon completion of a conversion (in a separate thread) to enable a message-based 2-way communication between the client and the server.
-     * @param ccc 
+     * @param ccc an object to call back to when the conversion is completed
      */
     private ConverterManager(ConversionCompleteCallback ccc) {
         this.sessionFiles = new HashMap<>();
@@ -67,15 +67,20 @@ public class ConverterManager implements CallableCallback {
         return new ConverterManager(ccc);
     }
 
+    /**
+     * A method to start the logging thread
+     */
     public void startLogThread() {
         logthread.start();
+        logger.println("The LogThread has been activated, it is used to log the internal messages generated during conversion by the converter");
     }
 
     public void stopLogThread() {
         try {
             logthread.join(1500);
+            logger.println("The LogThread has been deactivated");
         } catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(ConverterManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.println("The LogThread didn't shut down correctly"+ex.getMessage());
         }
     }
 
@@ -153,7 +158,7 @@ public class ConverterManager implements CallableCallback {
      * This callback is used to signal the ServerEndpoint which file from which session was converted.
      * That info is used by the ServerEndpoint to construct appropriate Websocket messages for the client.
      * @param id The id of the Callable that was used to convert the file
-     * @param status
+     * @param status The status parameter is used to convey if the file was converted successfully or not
      */
     @Override
     public void callableComplete(long id, int status) {

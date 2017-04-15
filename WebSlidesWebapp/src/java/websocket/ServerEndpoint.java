@@ -66,7 +66,7 @@ public class ServerEndpoint implements ConversionCompleteCallback{
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        System.out.println("RECEIVED MESSAGE " + message + " FROM SESSION " + session);
+        System.out.println("RECEIVED MESSAGE " + message + " FROM SESSION " + session.getId());
         if (message.contains("\"msgType\":\"FILE\"")) {
             JSONObject msg = new JSONObject(message);            
             String filename = msg.getString("name");

@@ -7,6 +7,11 @@ package websocket;
 
 /**
  * The InboundMsgDefinition is a template for messages received from the client
+ * An Inbound message contains
+ * the filename of the received file
+ * the file type of the received file
+ * a timestamp to indicate when the file was created
+ * the requested outputType
  * 
  * @author Laurens
  */
@@ -14,10 +19,7 @@ public class InboundMsgDefinition {
     private final String fileName;
     private final String fileType;
     private final long timestamp;
-    private final String outputType;
-    //private final InboundMsgDefinition.MSGTYPE msgType;
-    
-    //public static enum MSGTYPE {INFO,FILE};
+    private final String outputType; 
     
     public InboundMsgDefinition(String n,long tm, String t,String o){
     this.fileName=n;
