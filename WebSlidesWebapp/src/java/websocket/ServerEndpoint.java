@@ -66,14 +66,14 @@ public class ServerEndpoint implements ConversionCompleteCallback{
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        System.out.println("RECEIVED MESSAGE " + message + " FROM SESSION " + session);
+        System.out.println("RECEIVED MESSAGE " + message + " FROM SESSION " + session.getId());
         if (message.contains("\"msgType\":\"FILE\"")) {
-            JSONObject msg = new JSONObject(message);
-            System.out.println("***************" + msg);
+            JSONObject msg = new JSONObject(message);            
             String filename = msg.getString("name");
             long timestamp = msg.getLong("timestamp");
             String filetype = msg.getString("fileType");
-            mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype));
+            String outputType = msg.getString("outputType");
+            mgr.addEntry(session.getId(), new InboundMsgDefinition(filename, timestamp, filetype, outputType));
         }
     }
 
@@ -91,12 +91,8 @@ public class ServerEndpoint implements ConversionCompleteCallback{
         try {
             System.out.println("going to send to session: "+session.getId()+" the following message: "+message);
             session.getBasicRemote().sendObject(message);
-        } catch (IOException ex) {            
-            Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncodeException ex) {
+        } catch (IOException | EncodeException ex) {
             Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-   
-
 }
