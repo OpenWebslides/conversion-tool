@@ -1,4 +1,4 @@
-Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
+﻿Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 14/02/17,08:15,10:15,Campus,Projectwerk,inleiding + SCRUM,,
 14/02/17,10:30,12:30,Campus,Projectwerk,inleiding + SCRUM,,
 14/02/17,13:30,15:30,Extern,Projectwerk,Setup Slack, Sketchboard, Webstorm IDE
@@ -87,3 +87,6 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 09/04/17,10:30,11:30,Extern,Projectwerk,proberen vast te stellen of een bestand volledig verwerkt wordt en op basis daarvan de gebruiker de kans geven om het te downloaden of niet (betere exception handling nodig in converter),75,
 09/04/17,14:00,15:15,Extern,Projectwerk,outputType meegeven via webapplicatie en kleine veranderingen aan o.a. ServerEndpoint om de code op te kuisen,75,
 09/04/17,16:15,18:15,Extern,Projectwerk,Pull requests om hogere branches up-to-date te houden & webapplicatie aanpassen om op de server te kunnen deployen (werken omheen user privileges) -> deployen -> testen (ook simultaan gebruik testen) chrome & firefox,57,
+15/04/17,00:15,01:00,Extern,Projectwerk,File upload vuln verder testen (proberen om vermomde executable uit te laten voeren),72,
+15/04/17,14:00,14:30,Extern,Projectwerk,Kleine verbeteringen aan de code voor de webapplicatie,75,
+15/04/17,14:30,17:30,Extern,Projectwerk,Visual paradigm activity diagram overview voor de webapplicatie,71,
