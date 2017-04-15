@@ -33,15 +33,7 @@ shared_vars.socket.onmessage = function (event) {
             });
         }
     }
-    );
-
-
-    if (msg.action === "download-ready") {
-        //shared_vars.filesReady.push(msg.fileName);
-        //console.log(shared_vars.filesReady);
-        //.css({opacity: 1.0, visibility: "visible"});
-        //.animate({opacity: 1.0}, 200);
-    }
+    ); 
 };
 
 shared_vars.socket.onerror = function (e) {
