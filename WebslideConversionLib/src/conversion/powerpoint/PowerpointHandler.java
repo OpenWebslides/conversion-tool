@@ -5,6 +5,7 @@
  */
 package conversion.powerpoint;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import logger.Logger;
@@ -133,6 +134,10 @@ public class PowerpointHandler extends DefaultHandler {
                 case PPTXMLConstants.TEXT:
                     text = new Text();
                     textAdded = false;
+                    if(defaultsize){
+                        text.setLevel("0");
+                        startList(0);
+                    }
                     break;
                 case PPTXMLConstants.UNORDEREDLIST:
                     if (list != null) {
@@ -243,7 +248,7 @@ public class PowerpointHandler extends DefaultHandler {
                     break;
                 case PPTXMLConstants.TEXT:
                     if (list != null && text.getLevel() == null) {
-                        pptobjects.add(list);
+                        pptobjects.add(lists.get(0));
                         pptobjects.add(text);
                         textAdded = true;
                         list = null;
@@ -253,11 +258,11 @@ public class PowerpointHandler extends DefaultHandler {
                         text = null;
                     }
                     break;
-                case PPTXMLConstants.FRAGMENT:
+                case PPTXMLConstants.FRAGMENT: 
                     if (text != null && !textAdded) {
                         pptobjects.add(text);
                     }
-                    if (list != null) {
+                    if (list != null) {                      
                         pptobjects.add(lists.get(0));
                     }
                     break;
@@ -293,6 +298,7 @@ public class PowerpointHandler extends DefaultHandler {
                 }
             }
             list.addPPTObject(text);
+          //  output.println(Arrays.toString(lists.values().toArray()));
             textAdded = true;
             previousLevel = level;
         } catch (Exception e) {
