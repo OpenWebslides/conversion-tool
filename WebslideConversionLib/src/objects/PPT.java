@@ -19,7 +19,7 @@ public class PPT {
     /**
      * Return the slides, this will be an editable list.
      * Any changes made to this list will be saved in the PPT object
-     * @return 
+     * @return List slides
      */
     public List<Slide> getSlides() {
         return slides;

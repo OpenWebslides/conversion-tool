@@ -21,7 +21,7 @@ public class Slide implements PPTObject {
     }
     /**
      * Return the list with powerpoint objects this slide contains
-     * @return 
+     * @return List pptobjects
      */
     public List<PPTObject> getPptObjects() {
         return pptObjects;

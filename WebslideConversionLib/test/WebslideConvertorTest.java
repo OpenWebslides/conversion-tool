@@ -25,7 +25,7 @@ public class WebslideConvertorTest {
 
     @Test
     public void testRun() {
-        File file = new File("C:\\temp\\temp.pptx");
+        File file = new File("C:\\temp\\temp2.pptx");
 
         IConverter converter = ConverterFactory.getConverter(file);
         converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "karel")));

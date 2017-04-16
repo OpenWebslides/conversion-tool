@@ -63,7 +63,8 @@ public class Textpart implements PPTObject{
         if(size!=0) toret += " sz " + size;
         if(charachterSpacing!=0) toret += " spc " + charachterSpacing;
         if(color!=null&&!color.equals("")) toret += " color " + color;
-        return toret + ")";}return "";*/ return content;
+        return toret + ")";}return "";*/ 
+      return content + " (" + size + ")";
 
     }
 

@@ -31,7 +31,7 @@ public class PPTList implements PPTObject {
      * Return the bullets of the PPTList This will be an editable list, any
      * changes made will be saved in the PPTList object
      *
-     * @return
+     * @return List bullets
      */
     public List<PPTObject> getBullets() {
         return bullets;
@@ -40,7 +40,7 @@ public class PPTList implements PPTObject {
     /**
      * Add a PPTObject to the bullet list
      *
-     * @param obj
+     * @param obj PPTObject
      */
     public void addPPTObject(PPTObject obj) {
         bullets.add(obj);
@@ -65,7 +65,7 @@ public class PPTList implements PPTObject {
     /**
      * Return if the list is ordered or not
      *
-     * @return
+     * @return boolean ordered
      */
     public boolean isOrdered() {
         return ordered;
@@ -74,7 +74,7 @@ public class PPTList implements PPTObject {
     /**
      * Set the list to ordered or not
      *
-     * @param ordered
+     * @param ordered boolean
      */
     public void setOrdered(boolean ordered) {
         this.ordered = ordered;

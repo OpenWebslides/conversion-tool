@@ -29,7 +29,7 @@ public class Image implements PPTObject{
 
     /**
      * Return the filename of the file where the image is saved
-     * @return 
+     * @return String filename
      */
     public String getFilename() {
         return filename;
@@ -37,7 +37,7 @@ public class Image implements PPTObject{
 
     /**
      * Set the filename of the file where the image is saved
-     * @param filename 
+     * @param filename  String
      */
     public void setFilename(String filename) {
         this.filename = filename;
@@ -59,7 +59,7 @@ public class Image implements PPTObject{
     /**
      * Return the dimension (size) of the Image, this will be an editable dimension object
      * Any changes made will be changed in the Image object too
-     * @return 
+     * @return Dimension dimension
      */
     public Dimension getDimension() {
         return dimension;
@@ -68,7 +68,7 @@ public class Image implements PPTObject{
     /**
      * Return the location of the Image, this will be an editable dimension object
      * Any changes made will be changed in the Image object too
-     * @return 
+     * @return Dimension location
      */
     public Dimension getLocation() {
         return location;
@@ -76,7 +76,7 @@ public class Image implements PPTObject{
 
     /**
      * Set the image id
-     * @param id 
+     * @param id String 
      */
     public void setId(String id) {
         this.id = id;
@@ -84,7 +84,7 @@ public class Image implements PPTObject{
 
     /**
      * Return the image id
-     * @return 
+     * @return String id
      */
     public String getId() {
         return id;

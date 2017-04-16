@@ -18,8 +18,8 @@ public class ConverterFactory {
      * Return an IConverter object The correct implementation is decided by the
      * file type
      *
-     * @param file
-     * @return
+     * @param file File
+     * @return IConverter converter
      */
     public static IConverter getConverter(File file) {
         String ext2 = getExtension(file.getName());

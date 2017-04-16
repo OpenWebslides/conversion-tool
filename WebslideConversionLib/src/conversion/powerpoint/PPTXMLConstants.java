@@ -31,6 +31,7 @@ public class PPTXMLConstants {
     public static final String TEXTDETAILS = "a:rPr";
     public static final String TEXTFONT = "a:latin";
     public static final String COLORDETAIL = "a:srgbClr";
+    public static final String TEXTTYPE = "p:ph";
 
     //Text attributes
     public static final String LEVEL = "lvl";
@@ -41,6 +42,19 @@ public class PPTXMLConstants {
     public static final String SIZE = "sz";
     public static final String CHARACTERSPACING = "spc";
     public static final String TYPEFACE = "typeface";
+    public static final String TEXTTYPEATTR = "type";
+    
+    //Text title values
+    public static final String TEXT_TITLE_HEADER = "ctrTitle";
+    public static final String TEXT_SUBTITLE_HEADER = "subTitle";
+    public static final String TEXT_TITLE = "title";
+    
+    //Text default sizes
+    public static final int TEXT_TITLE_HEADER_SIZE = 100000;
+    public static final int TEXT_SUBTITLE_HEADER_SIZE = 50000;
+    public static final int TEXT_TITLE_SIZE = 40000;
+    public static final int TEXT_DEFAULT_LARGE_SIZE = 24000;
+    public static final int TEXT_DEFAULT_SMALL_SIZE = 18000;
 
     //Image elements
     public static final String IMAGEBODY = "p:pic";

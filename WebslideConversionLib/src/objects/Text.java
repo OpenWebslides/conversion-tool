@@ -26,7 +26,7 @@ public class Text implements PPTObject {
     
     /**
      * Method to add a text part 
-     * @param td 
+     * @param td  Textpart
      */
     public void addTextpart(Textpart td){
         textparts.add(td);
@@ -47,13 +47,14 @@ public class Text implements PPTObject {
                 toret += td.toString() + "\t";
             }
         }
-        return toret + " lvl:" + level;
+        if(level != null) return toret + " lvl:" + level;
+        return toret;
     }
 
     /**
      * A Text object has a level if it is part of a list.
      * If the object is not part of a list, the level will be null
-     * @return 
+     * @return String
      */
     public String getLevel() {
         return level;
@@ -62,7 +63,7 @@ public class Text implements PPTObject {
     /**
      * A Text object has a level if it is part of a list.
      * If the object is not part of a list, the level will be null
-     * @param level 
+     * @param level  String
      */
     public void setLevel(String level) {
         this.level = level;
@@ -78,7 +79,7 @@ public class Text implements PPTObject {
             <li>Size</li>
             <li>...</li>
         </ul>
-     * @return 
+     * @return  ArrayList textparts
      */
     public ArrayList<Textpart> getTextparts() {
         return textparts;

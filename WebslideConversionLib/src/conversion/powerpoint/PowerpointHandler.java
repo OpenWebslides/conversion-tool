@@ -27,6 +27,10 @@ public class PowerpointHandler extends DefaultHandler {
     private Text text;
     private Textpart textpart;
     private boolean textpartContent = false;
+    private boolean titleheader = false;
+    private boolean subtitleheader = false;
+    private boolean title = false;
+    private boolean defaultsize = false;
 
     //Variables optimalization of if statements in startelement
     private boolean textbody = false;
@@ -78,6 +82,8 @@ public class PowerpointHandler extends DefaultHandler {
                 startImage(qName, attributes);
             } else if (gframe) {
                 startChart(qName, attributes);
+            } else {
+                startRest(qName, attributes);
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while reading slide data (DefaultHandler startElement)", e));
@@ -184,6 +190,20 @@ public class PowerpointHandler extends DefaultHandler {
                         textpart.setColor(attributes.getValue(PPTXMLConstants.VALUE));
                     }
                     break;
+                case PPTXMLConstants.TEXTTYPE:
+                    if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR) != null) {
+                        if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE_HEADER)) {
+                            titleheader = true;
+                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_SUBTITLE_HEADER)) {
+                            subtitleheader = true;
+                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE)) {
+                            title = true;
+                        }
+
+                    } else {
+                        defaultsize = true;
+                    }
+
                 default:
                     break;
             }
@@ -202,6 +222,23 @@ public class PowerpointHandler extends DefaultHandler {
         try {
             switch (qName) {
                 case PPTXMLConstants.TEXTPART:
+                    if (textpart.getSize() == 0) {
+                        if (titleheader) {
+                            textpart.setSize(PPTXMLConstants.TEXT_TITLE_HEADER_SIZE);
+                            titleheader = false;
+                        } else if (subtitleheader) {
+                            textpart.setSize(PPTXMLConstants.TEXT_SUBTITLE_HEADER_SIZE);
+                            subtitleheader = false;
+                        } else if (title) {
+                            textpart.setSize(PPTXMLConstants.TEXT_TITLE_SIZE);
+                            title = false;
+                        } else if (defaultsize) {
+                            textpart.setSize(PPTXMLConstants.TEXT_DEFAULT_LARGE_SIZE);
+                            defaultsize = false;
+                        } else {
+                            textpart.setSize(PPTXMLConstants.TEXT_DEFAULT_SMALL_SIZE);
+                        }
+                    }
                     text.addTextpart(textpart);
                     break;
                 case PPTXMLConstants.TEXT:
@@ -326,6 +363,27 @@ public class PowerpointHandler extends DefaultHandler {
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide chart tags (DefaultHandler endElement)", e));
+        }
+    }
+
+    private void startRest(String qName, Attributes attributes) {
+        try {
+            switch (qName) {
+                case PPTXMLConstants.TEXTTYPE:
+                    if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR) != null) {
+                        if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE_HEADER)) {
+                            titleheader = true;
+                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_SUBTITLE_HEADER)) {
+                            subtitleheader = true;
+                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE)) {
+                            title = true;
+                        }
+                    } else {
+                        defaultsize = true;
+                    }
+            }
+        } catch (Exception e) {
+            output.println(Logger.error("Error while ending slide tags (DefaultHandler startElement)", e));
         }
     }
 

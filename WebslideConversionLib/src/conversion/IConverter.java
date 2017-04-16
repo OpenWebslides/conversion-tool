@@ -18,8 +18,8 @@ public interface IConverter {
      * Parse the file provided to the ConverterFactory. The content of the file
      * will be inserted in the PPT object
      *
-     * @param ppt
-     * @param saveLocation
+     * @param ppt PPT
+     * @param saveLocation String
      */
     public void parse(PPT ppt, String saveLocation);
 
