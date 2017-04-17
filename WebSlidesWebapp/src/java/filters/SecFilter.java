@@ -32,6 +32,17 @@ public class SecFilter implements Filter {
 
     public SecFilter() {
     }
+    
+    /**
+     * This method is used to set some security headers
+     * X-XSS-Protection to use the browser's builtin protection against reflected XSS
+     * Content-Security-Policy (the newer and further reaching version of X-Frame-Options), to disallow frames and objects from being added to the page
+     * X-Content-Type-Options to disallow MIME sniffing by the browser
+     * @param request the original request, wrapped in a RequestWrapper
+     * @param response the original response, wrapped in a ResponseWrapper
+     * @throws IOException
+     * @throws ServletException 
+     */
 
     private void doBeforeProcessing(RequestWrapper request, ResponseWrapper response)
             throws IOException, ServletException {
@@ -40,7 +51,7 @@ public class SecFilter implements Filter {
         }
 
         response.addHeader("X-XSS-Protection", "1; mode=block");
-        response.addHeader("Content-Security-Policy", "frame-ancestors 'self'");
+        response.addHeader("Content-Security-Policy", "frame-ancestors 'none'");
         response.addHeader("X-Content-Type-Options", "nosniff");
     }
 
