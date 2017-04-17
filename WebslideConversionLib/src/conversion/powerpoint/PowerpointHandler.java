@@ -45,8 +45,9 @@ public class PowerpointHandler extends DefaultHandler {
     private boolean textAdded;
 
     //Variables image
-    private Image image;
+    private Media media;
     private boolean imagesize;
+    
 
     //Variables chart
     private Chart chart;
@@ -71,7 +72,7 @@ public class PowerpointHandler extends DefaultHandler {
             } else if (qName.equals(PPTXMLConstants.TEXTBODY)) {
                 textbody = true;
                 imagebody = false;
-            } else if (qName.equals(PPTXMLConstants.IMAGEBODY)) {
+            } else if (qName.equals(PPTXMLConstants.MEDIABODY)) {
                 imagebody = true;
                 textbody = false;
             } else if (qName.equals(PPTXMLConstants.GFRAME)) {
@@ -314,20 +315,27 @@ public class PowerpointHandler extends DefaultHandler {
      */
     private void startImage(String qName, Attributes attributes) {
         try {
-            if (qName.equals(PPTXMLConstants.IMAGEDETAILS)) {
-                image = new Image();
-                image.setId(attributes.getValue(PPTXMLConstants.ID));
-            } else if (qName.equals(PPTXMLConstants.IMAGEBOX)) {
+            if (qName.equals(PPTXMLConstants.MEDIADETAILS)) {
+                media = new Image();
+                media.setId(attributes.getValue(PPTXMLConstants.ID));
+            } else if(qName.equals(PPTXMLConstants.VIDEOBODY)){
+                Video video = new Video();
+                video.getDimension().setSize(media.getDimension());
+                video.getLocation().setSize(media.getLocation());
+                video.setId(media.getId());
+                video.setFilename(media.getFilename());
+                media = video;
+            } else if (qName.equals(PPTXMLConstants.MEDIABOX)) {
                 imagesize = true;
-            } else if (qName.equals(PPTXMLConstants.IMAGESIZE) && imagesize) {
-                int width = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGEWIDTH)) / 360000;
-                int height = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGEHEIGHT)) / 360000;
-                image.getDimension().setSize(width, height);
+            } else if (qName.equals(PPTXMLConstants.MEDIASIZE) && imagesize) {
+                int width = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIAWIDTH)) / 360000;
+                int height = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIAHEIGHT)) / 360000;
+                media.getDimension().setSize(width, height);
                 imagesize = false;
-            } else if (qName.equals(PPTXMLConstants.IMAGELOCATION) && imagesize) {
-                int offsetX = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGELOCX)) / 360000;
-                int offsetY = Integer.parseInt(attributes.getValue(PPTXMLConstants.IMAGELOCY)) / 360000;
-                image.getLocation().setSize(offsetX, offsetY);
+            } else if (qName.equals(PPTXMLConstants.MEDIALOCATION) && imagesize) {
+                int offsetX = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIALOCX)) / 360000;
+                int offsetY = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIALOCY)) / 360000;
+                media.getLocation().setSize(offsetX, offsetY);
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while reading slide image tags (DefaultHandler startElement)", e));
@@ -341,9 +349,9 @@ public class PowerpointHandler extends DefaultHandler {
      */
     private void endImage(String qName) {
         try {
-            if (qName.equals(PPTXMLConstants.IMAGEBOX)) {
-                pptobjects.add(image);
-                image = null;
+            if (qName.equals(PPTXMLConstants.MEDIABOX)) {
+                pptobjects.add(media);
+                media = null;
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while reading slide image tags (DefaultHandler endElement)", e));

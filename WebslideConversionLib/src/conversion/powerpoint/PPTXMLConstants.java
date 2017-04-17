@@ -56,18 +56,19 @@ public class PPTXMLConstants {
     public static final int TEXT_DEFAULT_LARGE_SIZE = 24000;
     public static final int TEXT_DEFAULT_SMALL_SIZE = 18000;
 
-    //Image elements
-    public static final String IMAGEBODY = "p:pic";
-    public static final String IMAGESIZE = "a:ext";
-    public static final String IMAGELOCATION = "a:off";
-    public static final String IMAGEBOX = "a:xfrm";
-    public static final String IMAGEDETAILS = "p:cNvPr";
+    //Image & Video elements
+    public static final String MEDIABODY = "p:pic";
+    public static final String MEDIASIZE = "a:ext";
+    public static final String MEDIALOCATION = "a:off";
+    public static final String MEDIABOX = "a:xfrm";
+    public static final String MEDIADETAILS = "p:cNvPr";
+    public static final String VIDEOBODY = "a:videoFile";
 
-    //Image attributes
-    public static final String IMAGEWIDTH = "cx";
-    public static final String IMAGEHEIGHT = "cy";
-    public static final String IMAGELOCX = "x";
-    public static final String IMAGELOCY = "y";
+    //Image & Video attributes
+    public static final String MEDIAWIDTH = "cx";
+    public static final String MEDIAHEIGHT = "cy";
+    public static final String MEDIALOCX = "x";
+    public static final String MEDIALOCY = "y";
 
     //Chart elements
     public static final String CHARTBODY = "p:xfrm";

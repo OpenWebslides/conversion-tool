@@ -5,6 +5,7 @@ package conversion;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.util.zip.ZipOutputStream;
 import objects.PPT;
 import output.*;
 
@@ -22,6 +23,10 @@ public interface IConverter {
      * @param saveLocation String
      */
     public void parse(PPT ppt, String saveLocation);
+    
+    
+
+    public void parse(PPT ppt, ZipOutputStream saveLocation);
 
     public void setOutput(Output output);
 

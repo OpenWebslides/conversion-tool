@@ -16,6 +16,7 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 import javax.xml.namespace.QName;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -25,6 +26,8 @@ import objects.Chart;
 import objects.ChartType;
 import objects.Row;
 import objects.Table;
+import objects.Media;
+import objects.Video;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.xslf.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
@@ -57,28 +60,28 @@ class MediaHandler {
             for (XSLFShape sh : slide.getShapes()) {
                 if (sh.getClass().equals(XSLFPictureShape.class)) {
                     for (PPTObject po : pptObjects) {
-                        if (po.getClass().equals(Image.class)) {
-                            if (((Image) po).getId().equals("" + sh.getShapeId())) {
-                                ((Image) po).setFilename(saveLocation + "\\" + ((XSLFPictureShape) sh).getPictureData().getFileName());
-                                copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output);
+                        if (po instanceof Media) {
+                            if (((Media) po).getId().equals("" + sh.getShapeId())) {
+                                ((Media) po).setFilename(saveLocation + "\\" + ((XSLFPictureShape) sh).getPictureData().getFileName());
+                                copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation);
                             }
                         }
                     }
                 }
-                if(sh.getClass().equals(XSLFTable.class)){
+                if (sh.getClass().equals(XSLFTable.class)) {
                     for (PPTObject po : pptObjects) {
                         if (po.getClass().equals(Table.class)) {
-                            if (((Table)po).getRows().isEmpty()){
-                                Table t = (Table)po;
-                                List<XSLFTableRow> rows = ((XSLFTable)sh).getRows();
-                                for(XSLFTableRow row : rows){
+                            if (((Table) po).getRows().isEmpty()) {
+                                Table t = (Table) po;
+                                List<XSLFTableRow> rows = ((XSLFTable) sh).getRows();
+                                for (XSLFTableRow row : rows) {
                                     List<XSLFTableCell> cells = row.getCells();
                                     Row newRow = new Row();
                                     t.getRows().add(newRow);
-                                    for(XSLFTableCell cell : cells){
-                                        newRow.getCells().add(new Cell(cell.getText(),cell.getGridSpan(),cell.getRowSpan()));   
+                                    for (XSLFTableCell cell : cells) {
+                                        newRow.getCells().add(new Cell(cell.getText(), cell.getGridSpan(), cell.getRowSpan()));
                                     }
-                                        
+
                                 }
                             }
                         }
@@ -117,17 +120,121 @@ class MediaHandler {
         }
     }
 
-    private static void copyImage(Image img, String name, File file, Output output) {
+    /**
+     * Handle media, extract images, videos, chartdata from ppt
+     *
+     * @param slide
+     * @param pptObjects
+     * @param saveLocation
+     * @param file
+     * @param output
+     */
+    public static void handle(XSLFSlide slide, List<PPTObject> pptObjects, ZipOutputStream zip, File file, Output output) {
         try {
-            File f = new File(img.getFilename());
-            f.getParentFile().mkdirs();
-            OutputStream out = new FileOutputStream(f);
+            for (XSLFShape sh : slide.getShapes()) {
+                if (sh.getClass().equals(XSLFPictureShape.class)) {
+                    for (PPTObject po : pptObjects) {
+                        if (po.getClass().equals(Image.class)) {
+                            if (((Image) po).getId().equals("" + sh.getShapeId())) {
+                                ((Image) po).setFilename(((XSLFPictureShape) sh).getPictureData().getFileName());
+                                copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, zip);
+                            }
+                        }
+                    }
+                }
+                if (sh.getClass().equals(XSLFTable.class)) {
+                    for (PPTObject po : pptObjects) {
+                        if (po.getClass().equals(Table.class)) {
+                            if (((Table) po).getRows().isEmpty()) {
+                                Table t = (Table) po;
+                                List<XSLFTableRow> rows = ((XSLFTable) sh).getRows();
+                                for (XSLFTableRow row : rows) {
+                                    List<XSLFTableCell> cells = row.getCells();
+                                    Row newRow = new Row();
+                                    t.getRows().add(newRow);
+                                    for (XSLFTableCell cell : cells) {
+                                        newRow.getCells().add(new Cell(cell.getText(), cell.getGridSpan(), cell.getRowSpan()));
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (POIXMLDocumentPart.RelationPart part : slide.getRelationParts()) {
+                if (part.getDocumentPart() instanceof XSLFChart) {
+                    final String relId = part.getRelationship().getId();
+
+                    for (XSLFShape shape : slide.getShapes()) {
+                        if (shape instanceof XSLFGraphicFrame) {
+                            final CTGraphicalObjectFrame frameXML = (CTGraphicalObjectFrame) shape.getXmlObject();
+                            final XmlObject[] children = frameXML.getGraphic().getGraphicData().selectChildren(new QName(XSSFRelation.NS_CHART, "chart"));
+
+                            for (final XmlObject child : children) {
+                                final String imageRel = child.getDomNode().getAttributes().getNamedItemNS(RELATION_NAMESPACE, "id").getNodeValue();
+
+                                if (relId.equals(imageRel)) {
+                                    for (PPTObject po : pptObjects) {
+                                        if (po.getClass().equals(Chart.class)) {
+                                            if (((Chart) po).getId().equals("" + shape.getShapeId())) {
+                                                copyCharts(part.getDocumentPart(), output, (Chart) po);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            output.println(Logger.error("Error while extracting media from powerpoint zip", e));
+        }
+    }
+
+    private static void copyImage(Media img, String name, File file, Output output, ZipOutputStream zip) {
+        try {
             FileInputStream fin = new FileInputStream(file.getAbsoluteFile());
             BufferedInputStream bin = new BufferedInputStream(fin);
             ZipInputStream zin = new ZipInputStream(bin);
             ZipEntry ze = null;
             while ((ze = zin.getNextEntry()) != null) {
-                if (ze.getName().equals("ppt/media/" + name)) {
+                String na = "ppt/media/" + name;
+                if (ze.getName().equals(na)) {
+                    byte[] buffer = new byte[8192];
+                    int len;
+                    while ((len = zin.read(buffer)) != -1) {
+                        zip.write(buffer, 0, len);
+                    }
+                    zip.close();
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
+        }
+    }
+
+    private static void copyImage(Media img, String name, File file, Output output, String saveLoc) {
+        try {
+            FileInputStream fin = new FileInputStream(file.getAbsoluteFile());
+            BufferedInputStream bin = new BufferedInputStream(fin);
+            ZipInputStream zin = new ZipInputStream(bin);
+            ZipEntry ze = null;
+            while ((ze = zin.getNextEntry()) != null) {
+                String na = "ppt/media/" + name;
+                if (img instanceof Video) {
+                    na = na.replace("image", "media");
+                    na = na.substring(0, na.lastIndexOf('.'));
+                }
+                if (ze.getName().contains(na)) {
+                    String n = saveLoc + "\\" + ze.getName().split("/")[ze.getName().split("/").length - 1];
+                    File f = new File(n);
+                    img.setFilename(n);
+                    f.getParentFile().mkdirs();
+                    OutputStream out = new FileOutputStream(f);
                     byte[] buffer = new byte[8192];
                     int len;
                     while ((len = zin.read(buffer)) != -1) {
@@ -150,7 +257,7 @@ class MediaHandler {
             //Read type and title (Easier like this, kind of shitty in SAX)
             chartObj.setChartType(getChartType(ctChart, output));
             chartObj.setTitle(getChartTitle(ctChart, output));
-            
+
             //SAX for data
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser sp = factory.newSAXParser();
