@@ -11,7 +11,7 @@ import conversion.pdf.util.PDFImageExtractor;
 import conversion.pdf.util.getImageLocations;
 import java.io.File;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
@@ -179,6 +179,13 @@ public class PDFConverter implements IConverter {
 
     }
 
+    /*public void testPPT(PPT ppt){
+        System.out.println("PPT CONTROLE");
+        for(PPTObject obj : ppt.getSlides()){
+            System.out.println(obj.toString());
+        }
+    }*/
+    
     @Override
     public void setOutput(Output output) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

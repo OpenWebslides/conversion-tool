@@ -52,7 +52,7 @@ public class PDFImageExtractor extends PDFStreamEngine {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
 
-                    FileOutputStream output = new FileOutputStream(new File(s + "img" + totalImages + ".jpg"));
+                    FileOutputStream output = new FileOutputStream(new File(s + File.separator +  "img" + totalImages + ".jpg"));
                     pdxObjectImage.write2OutputStream(output);
                     totalImages++;
                 }
