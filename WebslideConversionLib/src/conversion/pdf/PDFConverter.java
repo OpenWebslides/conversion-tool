@@ -35,6 +35,7 @@ public class PDFConverter implements IConverter {
 
     private final File file;
     private PDDocument document;
+    private Output output;
 
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further use.
@@ -49,11 +50,13 @@ public class PDFConverter implements IConverter {
             }
         }
         catch (CryptographyException ex) {
-            System.out.println("er ging iets mis bij de decryptie....");
+            //System.out.println("er ging iets mis bij de decryptie....");
+            output.println("er ging iets mis bij de decryptie....");
              
         }
         catch(Exception ex){
-            System.out.println("Er ging iets mis met de file... ");
+            //System.out.println("Er ging iets mis met de file... ");
+            output.println("Er ging iets mis met de file... ");
         }  
     }
 
@@ -188,7 +191,7 @@ public class PDFConverter implements IConverter {
     
     @Override
     public void setOutput(Output output) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.output = output;
     }
 
 }
