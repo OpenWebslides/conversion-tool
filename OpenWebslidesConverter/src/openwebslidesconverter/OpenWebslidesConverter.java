@@ -5,14 +5,16 @@
  */
 package openwebslidesconverter;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.security.InvalidParameterException;
 import java.util.Queue;
-import openwebslides.output.GuardOutput;
-import openwebslides.output.LogOutput;
-import openwebslides.output.Output;
-import openwebslides.output.StdLogOutput;
-import openwebslides.output.StdOutput;
-import openwebslideslogger.Logger;
+import java.util.zip.ZipOutputStream;
+import output.*;
+import logger.Logger;
+import openwebslidesconverter.Converter.outputType;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -25,101 +27,124 @@ import org.apache.commons.cli.ParseException;
  */
 public class OpenWebslidesConverter {
     
-
+    private static final String FLAG_INPUT_FILE = "i";
+    private static final String FLAG_OUTPUT_FOLDER = "o";
+    private static final String FLAG_OUTPUT_TYPE = "t";
+    
+    private static final String FLAG_LOGGING_FILE = "fl";
+    private static final String FLAG_LOGGING_CONSOLE = "cl";
+    
+    private static final String FLAG_ZIP = "zip";
+    
+    private static final String FLAG_COURSE = "co";
+    private static final String FLAG_CHAPTER = "ch";
+    
     /**
-     * @param args the command line arguments
+     * Starts the converter with the given arguments.
+     * @param args The arguments for the converter.
      */
     public static void main(String[] args) {
         Output output = new StdOutput();
-        startConverter(args, output);
+        try {
+            CommandLine cmd = parseArgs(args);
+            output = getOutput(cmd);
+            
+            Converter converter = new Converter(output);
+            setCourseAndChapter(converter, cmd);
+            
+            File outputFolder = getOutputFolder(cmd);
+            outputType outputType = getOutputType(cmd);
+            
+            if(cmd.hasOption(FLAG_ZIP)){
+                try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputFolder.getAbsolutePath() + File.separator + "webslides.zip"))) {
+                    converter.convert(getInputFile(cmd), zos);
+                    converter.saveToZip(zos, outputType, Converter.outputFormat.HTML);
+                }
+            }
+            else {
+                String imageDir = outputFolder.getAbsolutePath() + File.separator + "images";
+                converter.convert(getInputFile(cmd), imageDir);
+                converter.saveToDirectory(outputFolder, outputType, Converter.outputFormat.HTML);
+            }
+            
+            output.println("Conversion done");
+            
+        } catch (ParseException ex) { // exception in parseArgs method
+            // output is not initialized yet, print to console
+            System.err.println("cannot start the converter because of false argument(s): " + ex.getMessage());
+        } catch (IOException | InvalidParameterException | WebslidesConverterException ex) {
+            output.error("error while converting: "+ex.getMessage(), ex.getMessage());
+        }
     }
     
     /**
-     * Entrypoint with a queue for output
-     * @param args equal to the command line arguments
-     * @param queue the queue where the GuardOutput writes to
-     * @param id the id of the process or thread
+     * Starts the converter with the given arguments. The result is written as a zip file to the outputStream. Logging is done to queue with the id.
+     * @param args The arguments for the converter.
+     * @param outputStream The OutputStream the zip file is written to.
+     * @param queue The Queue of String where the log messages are collected.
+     * @param id The id used in the logging to identify the converter.
+     * @throws WebslidesConverterException If something went wrong while converting.
      */
-    public static void queueEntry(String[] args, Queue<String> queue, long id){
+    public static void queueEntry(String[] args, OutputStream outputStream, Queue<String> queue, long id) throws WebslidesConverterException{
         Output output = new GuardOutput(queue, id);
-        startConverter(args, output);
+        try {
+            CommandLine cmd = parseArgs(args);
+            
+            Converter converter = new Converter(output);
+            setCourseAndChapter(converter, cmd);
+            
+            outputType outputType = getOutputType(cmd);
+            
+            try (ZipOutputStream zos = new ZipOutputStream(outputStream)) {
+                converter.convert(getInputFile(cmd), zos);
+                converter.saveToZip(zos, outputType, Converter.outputFormat.HTML);
+            }
+            
+        } catch (ParseException ex) {
+            output.error("cannot start the converter because of false argument(s): " + ex.getMessage(), ex.getMessage());
+            throw new WebslidesConverterException(ex);
+        } catch (IOException | InvalidParameterException | WebslidesConverterException ex) {
+            output.error(ex.getMessage(), ex.getMessage());
+            throw new WebslidesConverterException(ex);
+        }
     }
     
     /**
-     * Creates a Converter object and starts the conversion.
-     * @param args The arguments for the converter.
-     * @param output The output channel of the converter.
+     * Parses the arguments args and returns a CommandLine object which holds the info.
+     * @param args The arguments to be parsed.
+     * @return a CommandLine object that holds the info from the args.
+     * @throws ParseException If the args could not be parsed.
      */
-    private static void startConverter(String[] args, Output output){
-        try{
-            Converter converter = resolveParams(args, output);
-            converter.convert();
-        }
-        catch(ParseException | InvalidParameterException e){
-            output.error("Error: " + e.getMessage(), null);
-        }
-    }
-    
-    /**
-     * Resolves the arguments to create the matching Converter.
-     * @param args The arguments for the converter.
-     * @param output The output channel for the converter.
-     * @return
-     * @throws ParseException
-     * @throws InvalidParameterException 
-     */
-    private static Converter resolveParams(String[] args, Output output) throws ParseException,InvalidParameterException {
+    private static CommandLine parseArgs(String[] args) throws ParseException{
         Options options = new Options();
-        options.addOption("i", true, "input file");
-        options.addOption("o", true, "output folder");
-        options.addOption("t", true, "webslide output type");
-        options.addOption("fl", "enable file logging");
-        options.addOption("cl", "enable console logging");
+        options.addOption(FLAG_INPUT_FILE, true, "input file");
+        options.addOption(FLAG_OUTPUT_FOLDER, true, "output folder");
+        options.addOption(FLAG_OUTPUT_TYPE, true, "webslide output type");
+        
+        options.addOption(FLAG_LOGGING_FILE, "enable file logging");
+        options.addOption(FLAG_LOGGING_CONSOLE, "enable console logging");
+        
+        options.addOption(FLAG_ZIP, "output in .zip");
+        
+        options.addOption(FLAG_COURSE, true, "course");
+        options.addOption(FLAG_CHAPTER, true, "chapter");
         
         CommandLineParser parser = new DefaultParser();
         
-        //try {
-            CommandLine cmd = parser.parse(options, args);
-            return createConverter(cmd, output);
-        /*} catch (ParseException | InvalidParameterException ex) {
-            
-        }*/
+        return parser.parse(options, args);
     }
     
     /**
-     * Creates a Converter object that matches the CommandLine options.
-     * @param cmd The CommandLine with the arguments for the Converter.
-     * @param out The output channel for the converter.
-     * @return
-     * @throws InvalidParameterException 
+     * Gets the Output object specified in cmd. If none is specified a StdOutput object is returned.
+     * @param cmd The CommandLine object that holds the wanted output info.
+     * @return The Output object specified in cmd.
      */
-    private static Converter createConverter(CommandLine cmd, Output out) throws InvalidParameterException{
-        String inputFile;
-        String outputType = PropertiesReader.getValue(PropertiesReader.OUTPUT_TYPE);
-        String outputDir = null;
-        
-        //default output
-        Output output = out;
-        
-        boolean consolelog, filelog;
-        
-        // no input file
-        if(!cmd.hasOption("i"))
-            throw new InvalidParameterException("No file provided to convert");
-        else
-            inputFile = cmd.getOptionValue("i");
-        
-        // output directory
-        if(cmd.hasOption("o"))
-            outputDir = cmd.getOptionValue("o");
-        
-        // output type
-        if(cmd.hasOption("t"))
-            outputType = cmd.getOptionValue("t");
+    private static Output getOutput(CommandLine cmd) {
+        Output output = new StdOutput();
         
         // console or file log wanted
-        consolelog = cmd.hasOption("cl");
-        filelog = cmd.hasOption("fl");
+        boolean consolelog = cmd.hasOption(FLAG_LOGGING_CONSOLE);
+        boolean filelog = cmd.hasOption(FLAG_LOGGING_FILE);
         
         // file log -> create logger
         Logger logger = null;
@@ -137,7 +162,74 @@ public class OpenWebslidesConverter {
             output = new LogOutput(logger);
         //else.. use default
         
-        return new Converter(outputType, inputFile, outputDir, output);
+        return output;
+    }
+    
+    /**
+     * Reads the CommandLine and sets the course and chapter of the converter if available.
+     * @param converter The converter on which the course and chapter will be set.
+     * @param cmd The CommandLine which may contain the course and chapter.
+     */
+    private static void setCourseAndChapter(Converter converter, CommandLine cmd) {
+        if(cmd.hasOption(FLAG_COURSE))
+            converter.setCourse(cmd.getOptionValue(FLAG_COURSE));
+        if(cmd.hasOption(FLAG_CHAPTER))
+            converter.setChapter(cmd.getOptionValue(FLAG_CHAPTER));
+    }
+    
+    /**
+     * Returns the input file specified in cmd.
+     * @param cmd The CommandLine that must hold the input file.
+     * @return Returns the input file specified in cmd.
+     * @throws InvalidParameterException If the input file is not specified in cmd.
+     */
+    private static File getInputFile(CommandLine cmd) throws InvalidParameterException{
+        if(!cmd.hasOption("i")) // no input file given
+            throw new InvalidParameterException("No file provided to convert");
+        else
+            return new File(cmd.getOptionValue("i"));
+    }
+    
+    /**
+     * Returns the output directory in which the converted file should be saved. If not specified in cmd the directory set in the converter.properties file is used.
+     * If none of both is set the default is used.
+     * @param cmd The CommandLine that could hold the output directory.
+     * @return Returns the output folder in which the converted file should be saved.
+     * @throws IOException If the output directory does not exist or could not be created.
+     */
+    private static File getOutputFolder(CommandLine cmd) throws IOException {
+        //default dir or dir set in properties file
+        String path = PropertiesReader.getValue(PropertiesReader.OUTPUT_DIR);
+        
+        //if other value is given
+        if(cmd.hasOption(FLAG_OUTPUT_FOLDER))
+            path = cmd.getOptionValue(FLAG_OUTPUT_FOLDER);
+        
+        File outputFolder = new File(path);
+        if(!outputFolder.exists() && !outputFolder.mkdirs())
+            throw new IOException("directory "+outputFolder.getAbsolutePath()+" does not exist or could not be created");
+        
+        return outputFolder;
+    }
+    
+    /**
+     * Returns the output type specified in cmd. If not specified in cmd the directory set in the converter.properties file is used.
+     * If none of both is set the default is used.
+     * @param cmd The CommandLine object that could hold the output type.
+     * @return The output type that should be used.
+     */
+    private static outputType getOutputType(CommandLine cmd) {
+        try{    
+            outputType type = outputType.valueOf(PropertiesReader.getValue(PropertiesReader.OUTPUT_TYPE).toUpperCase());
+        
+            if(cmd.hasOption(FLAG_OUTPUT_TYPE))
+                type = outputType.valueOf(cmd.getOptionValue(FLAG_OUTPUT_TYPE).toUpperCase());
+            
+            return type;
+        }
+        catch (IllegalArgumentException e){
+            return outputType.valueOf(PropertiesReader.returnDefault(PropertiesReader.OUTPUT_TYPE));
+        }
     }
     
 }
