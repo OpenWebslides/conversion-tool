@@ -222,7 +222,7 @@ public class Converter {
                 
                 if(type == outputType.RAW){
                     bufferedWriter.write("<!DOCTYPE html>\n" +
-                                         "<html lang=\"en\">");
+                                         "<html>");
                     HTMLWriter writer = new HTMLWriter(output);
                     writer.write(bufferedWriter, readPpt);
                     bufferedWriter.write("\n</html>");
