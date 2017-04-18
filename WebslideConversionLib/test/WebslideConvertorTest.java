@@ -47,4 +47,27 @@ public class WebslideConvertorTest {
         }
 
     }
+    
+    public static void main(String[] args) {
+        // TODO code application logic here
+        File file = new File("C:\\temp\\slides.pdf");
+        IConverter converter = ConverterFactory.getConverter(file);
+        PPT ppt = new PPT();
+        
+        converter.parse(ppt,"C:\\temp\\");
+        
+        
+	FileWriter fw = null;
+        //uitschrijfstuk nog niet van toepassing...
+        try {
+                fw = new FileWriter("C:\\temp\\test.html");
+               // fw.write(ppt.toHTML());
+        } catch (Exception e) {
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+            }
+        }
+    }
 }
