@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +34,8 @@ public class DbFileManagement extends DbManagement implements IDao{
     @Override
     public File getFile(String serverId) {
         try{
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("String", serverId);
+            List<Map.Entry<String, Object>> parameters = new ArrayList<>();
+            parameters.add(new AbstractMap.SimpleEntry<>("String", serverId));
             DbRow row = super.executeQueryDbRow("select " + 
                                                 DbConstants.FILES_TABLE_FILE +  
                                                 "," + 
@@ -57,12 +58,12 @@ public class DbFileManagement extends DbManagement implements IDao{
     @Override
     public void putFile(String serverId, File file) {
         try{
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("Blob", Files.readAllBytes(Paths.get(file.getPath())));
-            parameters.put("String", serverId);
-            parameters.put("String", "none");
-            parameters.put("Date", new Date());
-            parameters.put("String", file.getName());
+            List<Map.Entry<String, Object>> parameters = new ArrayList<>();
+            parameters.add(new AbstractMap.SimpleEntry<>("Blob", Files.readAllBytes(Paths.get(file.getPath()))));
+            parameters.add(new AbstractMap.SimpleEntry<>("String", serverId));
+            parameters.add(new AbstractMap.SimpleEntry<>("String", "none"));
+            parameters.add(new AbstractMap.SimpleEntry<>("Date", new Date()));
+            parameters.add(new AbstractMap.SimpleEntry<>("String", file.getName()));
             super.executeUpdate("insert into " + DbConstants.FILES_TABLE + " (" +
                                                  DbConstants.FILES_TABLE_FILE + "," +
                                                  DbConstants.FILES_TABLE_SERVERID +"," + 
@@ -81,8 +82,8 @@ public class DbFileManagement extends DbManagement implements IDao{
     @Override
     public DbFile getDbFile(String serverId) {
         try{
-            Map<String, Object> parameters = new HashMap<>();
-            parameters.put("String", serverId);
+            List<Map.Entry<String, Object>> parameters = new ArrayList<>();
+            parameters.add(new AbstractMap.SimpleEntry<>("String", serverId));
             DbRow row = super.executeQueryDbRow("select * from " + DbConstants.FILES_TABLE + " where " + DbConstants.FILES_TABLE_SERVERID +" like ?", parameters);
             DbFile file = new DbFile((byte[])row.getCellByName(DbConstants.FILES_TABLE_FILE),
                                     (String)row.getCellByName(DbConstants.FILES_TABLE_SERVERID),

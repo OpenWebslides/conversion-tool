@@ -5,6 +5,7 @@
  */
 package database;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,8 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import logger.Logger;
 import output.Output;
 import output.StdOutput;
@@ -94,85 +97,81 @@ public class DbManagement {
         }
     }
         
-    private void setParameters(Map<String, Object> parameters) {
+    private void setParameters(List<Entry<String, Object>> parameters) {
         if (parameters == null) {
             return;
         }
-        try {
-            int i = 1;
-            for (String key : parameters.keySet()) {
-                switch (key) {
-                    case "String":
-                        if (parameters.get(key) != null) {
-                            String s = (String) parameters.get(key);
-                            statement.setString(i, s);
-                        } else {
-                            statement.setNull(i, Types.NULL);
-                        }   i++;
-                        break;
-                    case "Integer":
-                        Integer nr = 0;
-                        if (parameters.get(key) != null) {
-                            nr = (Integer) parameters.get(key);
-                            statement.setInt(i, nr);
-                        } else {
-                            statement.setNull(i, Types.NULL);
-                        }   i++;
-                        break;
-                    case "boolean":
-                        boolean b = false;
-                        if (parameters.get(key) != null) {
-                            b = (Boolean) parameters.get(key);
-                        }   statement.setBoolean(i, b);
-                        i++;
-                        break;
-                    case "Double":
-                        {
-                            Double d = 0.0;
-                            if (parameters.get(key) != null) {
-                                d = (Double) parameters.get(key);
-                                statement.setDouble(i, d);
-                            } else {
-                                statement.setNull(i, Types.NULL);
-                            }       i++;
-                            break;
-                        }
-                    case "double":
-                        {
-                            double d = 0.0;
-                            if (parameters.get(key) != null) {
-                                d = (Double) parameters.get(key);
-                            }       statement.setDouble(i, d);
-                            i++;
-                            break;
-                        }
-                    case "Date":
-                        java.sql.Timestamp sqlDate = null;
-                        if (parameters.get(key) != null) {
-                            sqlDate = new java.sql.Timestamp(((java.util.Date) parameters.get(key)).getTime());
-                            statement.setTimestamp(i, sqlDate);
-                        } else {
-                            statement.setNull(i, Types.NULL);
-                        }   i++;
-                        break;
-                    case "Blob":
-                        if (parameters.get(key) != null) {
-                            byte[] data = ((byte[]) parameters.get(key));
-                            statement.setObject(i, data);
-                        } else {
-                            statement.setNull(i, Types.NULL);
-                        }   i++;
-                        break;
-                    default:
-                        throw new SQLException();
+        try {int i = 1;
+            for (Entry<String, Object> pair : parameters) {
+                if (pair.getKey().equals("String")) {
+                    if (pair.getValue() != null) {
+                        String s = (String) pair.getValue();
+                        statement.setString(i, s);
+                    } else {
+                        statement.setNull(i, Types.NULL);
+                    }
+                    i++;
+                } else if (pair.getKey().equals("Integer")) {
+                    Integer nr = 0;
+                    if (pair.getValue() != null) {
+                        nr = (Integer) pair.getValue();
+                        statement.setInt(i, nr);
+                    } else {
+                        statement.setNull(i, Types.NULL);
+                    }
+                    i++;
+                } else if (pair.getKey().equals("boolean")) {
+                    boolean b = false;
+                    if (pair.getValue() != null) {
+                        b = (Boolean) pair.getValue();
+                    }
+                    statement.setBoolean(i, b);
+                    i++;
+                } else if (pair.getKey().equals("Double")) {
+                    Double d = 0.0;
+                    if (pair.getValue() != null) {
+                        d = (Double) pair.getValue();
+                        statement.setDouble(i, d);
+                    } else {
+                        statement.setNull(i, Types.NULL);
+                    }
+                    i++;
+                } else if (pair.getKey().equals("double")) {
+                    double d = 0.0;
+                    if (pair.getValue() != null) {
+                        d = (Double) pair.getValue();
+                    }
+                    statement.setDouble(i, d);
+                    i++;
+                } else if (pair.getKey().equals("Date")) {
+                    java.sql.Date sqlDate = null;
+                    if (pair.getValue() != null) {
+                        sqlDate = new java.sql.Date(((java.util.Date) pair.getValue()).getTime());
+                        statement.setDate(i, sqlDate);
+                    } else {
+                        statement.setNull(i, Types.NULL);
+                    }
+                    i++;
+                } else if (pair.getKey().equals("Blob")) {
+                    if (pair.getValue() != null) {
+                        byte[] data = ((byte[]) pair.getValue());
+                        //byte[] data = ((ByteArrayOutputStream) pair.getValue()).toByteArray();
+                        statement.setObject(i, data);
+                    } else {
+                        statement.setNull(i, Types.NULL);
+                    }
+                    i++;
+                } else {
+                    throw new SQLException();
                 }
             }
+       
         } catch (Exception e) {
             try{
                 String error = "There was an error adding the statement parameters: \n";
                 
-                for (String key : parameters.keySet()) {
-                    error += key+ " -> " + parameters.get(key) + "\n";
+                for (Entry<String, Object> pair : parameters) {
+                    error += pair.getKey()+ " -> " + pair.getValue() + "\n";
                 }
                 output.println(Logger.error(error, e));
             }
@@ -208,7 +207,7 @@ public class DbManagement {
      * @param parameters
      * @return 
      */
-    public boolean executeUpdate(String query, Map<String, Object> parameters) { 
+    public boolean executeUpdate(String query, List<Entry<String, Object>> parameters) { 
         boolean success;
         try {
             setConnection();
@@ -232,7 +231,7 @@ public class DbManagement {
      * @param parameters
      * @return 
      */
-    public Integer executeUpdateReturnNewId(String query, Map<String, Object> parameters) {  
+    public Integer executeUpdateReturnNewId(String query, List<Entry<String, Object>> parameters) {  
         Integer id = null;
         try {            
             setConnection();
@@ -251,7 +250,7 @@ public class DbManagement {
         return id;
     }
 
-    public ArrayList<DbRow> executeQueryDbRowList(String query, Map<String, Object> parameters) {
+    public ArrayList<DbRow> executeQueryDbRowList(String query, List<Entry<String, Object>> parameters) {
        ArrayList<DbRow> table = new ArrayList<>();
         try { 
             ResultSet result;        
@@ -276,7 +275,7 @@ public class DbManagement {
         return table;
     }  
     
-    public DbRow executeQueryDbRow(String query, Map<String, Object> parameters) {
+    public DbRow executeQueryDbRow(String query, List<Entry<String, Object>> parameters) {
         DbRow row = new DbRow();
         try {
             ResultSet result;

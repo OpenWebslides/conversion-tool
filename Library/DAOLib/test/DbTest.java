@@ -5,12 +5,10 @@
  */
 
 import database.DbFileManagement;
-import database.DbRow;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
 /**
@@ -24,7 +22,7 @@ public class DbTest {
     
 
     @Test
-    public void main() throws InterruptedException, IOException {
+    public void testMeth() throws InterruptedException, IOException {
             ArrayList<Multi> t = new ArrayList<>();
             
             for(int i = 0; i < 1; i++){
@@ -32,10 +30,9 @@ public class DbTest {
                 t.get(i).start();  
             }
             
-            
-            while(true){
-            TimeUnit.SECONDS.sleep(1);
-            System.out.println("READY");}
+            for(int i = 0; i < 1; i++){ 
+                t.get(i).join();  
+            }
     }
     
     class Multi extends Thread{  
