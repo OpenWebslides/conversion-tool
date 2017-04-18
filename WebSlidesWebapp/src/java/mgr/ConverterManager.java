@@ -9,7 +9,6 @@ import conversion.ConversionCallable;
 import conversion.LogThread;
 import datastructures.Pair;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import websocket.InboundMsgDefinition;
