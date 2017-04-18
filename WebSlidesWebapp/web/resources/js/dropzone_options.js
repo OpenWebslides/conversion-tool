@@ -60,7 +60,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
                 .append($("<img />").attr({src:"resources/images/loading_blue.gif",alt:"loading animation", id:"download-loading-anim-"+shared_vars.filesInProgress.length}))
                 .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-1"}))
                 .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-2"}))
-                .append($("<button >"+file.name.split('.')[0]+"</button>").attr({type:"button",onclick:"startDownload("+shared_vars.filesInProgress.length+")",id:"download-form-"+shared_vars.filesInProgress.length+"-btn"}).addClass("btn btn-primary btn-block").hide())           
+                .append($("<button >"+file.name.split('.')[0]+"</button>").attr({type:"button",onclick:"startDownload("+shared_vars.filesInProgress.length+")",id:"download-form-"+shared_vars.filesInProgress.length+"-btn"}).addClass("btn btn-primary").hide())           
            );          
    
            shared_vars.filesInProgress.push(file.name);
