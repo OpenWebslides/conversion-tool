@@ -11,7 +11,7 @@ import conversion.pdf.util.PDFImageExtractor;
 import conversion.pdf.util.getImageLocations;
 import java.io.File;
 import java.io.IOException;
-import static java.lang.Thread.sleep;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
@@ -35,6 +35,7 @@ public class PDFConverter implements IConverter {
 
     private final File file;
     private PDDocument document;
+    private Output output;
 
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further use.
@@ -49,11 +50,13 @@ public class PDFConverter implements IConverter {
             }
         }
         catch (CryptographyException ex) {
-            System.out.println("er ging iets mis bij de decryptie....");
+            //System.out.println("er ging iets mis bij de decryptie....");
+            output.println("er ging iets mis bij de decryptie....");
              
         }
         catch(Exception ex){
-            System.out.println("Er ging iets mis met de file... ");
+            //System.out.println("Er ging iets mis met de file... ");
+            output.println("Er ging iets mis met de file... ");
         }  
     }
 
@@ -179,9 +182,16 @@ public class PDFConverter implements IConverter {
 
     }
 
+    /*public void testPPT(PPT ppt){
+        System.out.println("PPT CONTROLE");
+        for(PPTObject obj : ppt.getSlides()){
+            System.out.println(obj.toString());
+        }
+    }*/
+    
     @Override
     public void setOutput(Output output) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.output = output;
     }
 
 }

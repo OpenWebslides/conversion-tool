@@ -27,7 +27,7 @@ public class PDFTest {
         IConverter converter = ConverterFactory.getConverter(file);
         PPT ppt = new PPT();
         
-        converter.parse(ppt,"C:\\temp\\");
+        converter.parse(ppt,"C:\\temp");
         
         
 	FileWriter fw = null;
