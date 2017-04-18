@@ -9,12 +9,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.Callable;
@@ -116,7 +118,11 @@ public class ConversionCallable implements Callable<Integer> {
 
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IllegalStateException ex) {
             System.err.println("THREAD_INSIDE error!" + ex.getClass());
+            System.err.println("THREAD_INSIDE stacktrace: ");
             logToQueue("THREAD_INSIDE error:" + ex.getMessage());
+            logToQueue("THREAD_INSIDE stacktrace: "+ex.getStackTrace());
+            ex.printStackTrace();
+           
             normalfinish = false;
         } catch (Exception ex) {
             System.err.println("THREAD_INSIDE error! " + ex.getClass());
