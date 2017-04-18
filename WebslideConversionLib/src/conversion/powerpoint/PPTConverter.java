@@ -53,13 +53,14 @@ public class PPTConverter implements IConverter {
             SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
 
-            for (XSLFSlide slide : slides) {
+           // for (XSLFSlide slide : slides) {
+           XSLFSlide slide = slides.get(23);
                 try {
                     //Webslide object
                     Slide webslide = new Slide();
 
                     //for testing
-                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -85,7 +86,7 @@ public class PPTConverter implements IConverter {
                 } catch (Exception e) {
                     output.println(Logger.error("Error while parsing slide + " + slides.indexOf(slide) + 1 + " in the powerpoint", e));
                 }
-            }
+           // }
 
             pptSource.close();
 
@@ -94,7 +95,7 @@ public class PPTConverter implements IConverter {
         }
     }
 
-    @Override
+   
     public void parse(PPT ppt, ZipOutputStream saveLocation) {
         XMLSlideShow pptSource;
 
@@ -145,6 +146,11 @@ public class PPTConverter implements IConverter {
         } catch (Exception ex) {
             output.println(Logger.error("Error while parsing the powerpoint", ex));
         }
+    }
+
+    @Override
+    public void parse(PPT ppt, ZipOutputStream outputStream, String saveLocation) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -45,6 +45,7 @@ import output.Output;
 class MediaHandler {
 
     private static final String RELATION_NAMESPACE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
+    private static int mediaCount = 1;
 
     /**
      * Handle media, extract images, videos, chartdata from ppt
@@ -202,13 +203,19 @@ class MediaHandler {
             ZipEntry ze = null;
             while ((ze = zin.getNextEntry()) != null) {
                 String na = "ppt/media/" + name;
-                if (ze.getName().equals(na)) {
+                if (img instanceof Video) {
+                    na = "ppt/media/media" + mediaCount;
+                }
+                if (ze.getName().contains(na)) {
                     byte[] buffer = new byte[8192];
                     int len;
                     while ((len = zin.read(buffer)) != -1) {
                         zip.write(buffer, 0, len);
                     }
                     zip.close();
+                    if (img instanceof Video) {
+                        mediaCount++;
+                    }
                     break;
                 }
             }
@@ -226,21 +233,23 @@ class MediaHandler {
             while ((ze = zin.getNextEntry()) != null) {
                 String na = "ppt/media/" + name;
                 if (img instanceof Video) {
-                    na = na.replace("image", "media");
-                    na = na.substring(0, na.lastIndexOf('.'));
+                    na = "ppt/media/media" + mediaCount;
                 }
                 if (ze.getName().contains(na)) {
-                    String n = saveLoc + "\\" + ze.getName().split("/")[ze.getName().split("/").length - 1];
-                    File f = new File(n);
+                    String n = ze.getName().split("/")[ze.getName().split("/").length - 1];
+                    File f = new File(saveLoc + "\\" + n);
                     img.setFilename(n);
                     f.getParentFile().mkdirs();
-                    OutputStream out = new FileOutputStream(f);
-                    byte[] buffer = new byte[8192];
-                    int len;
-                    while ((len = zin.read(buffer)) != -1) {
-                        out.write(buffer, 0, len);
+                    try (OutputStream out = new FileOutputStream(f)) {
+                        byte[] buffer = new byte[8192];
+                        int len;
+                        while ((len = zin.read(buffer)) != -1) {
+                            out.write(buffer, 0, len);
+                        }
+                        if (img instanceof Video) {
+                            mediaCount++;
+                        }
                     }
-                    out.close();
                     break;
                 }
             }
