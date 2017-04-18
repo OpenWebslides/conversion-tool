@@ -38,7 +38,7 @@ public class HTMLWriter extends Writer implements Indentation{
      */
     @Override
     public String writeSlide(Slide slide){
-        return writeSlide(slide, 0);
+        return writeSlide(slide, 1);
     }
     
     /**

@@ -21,6 +21,7 @@ import java.util.zip.ZipOutputStream;
 import objects.PPT;
 import output.Output;
 import openwebslides.writer.HTMLWriter;
+import openwebslides.writer.Indentation;
 import openwebslides.writer.TemplateWriter;
 import openwebslides.writer.Writer;
 import openwebslides.zip.ZipException;
@@ -218,17 +219,19 @@ public class Converter {
             
             if(format == outputFormat.HTML){
                 output.println("creating .html file");
-                Writer writer;
                 
                 if(type == outputType.RAW){
-                    writer = new HTMLWriter(output);
+                    bufferedWriter.write("<!DOCTYPE html>\n" +
+                                         "<html lang=\"en\">");
+                    HTMLWriter writer = new HTMLWriter(output);
+                    writer.write(bufferedWriter, readPpt);
+                    bufferedWriter.write("\n</html>");
                 }
                 else { // outputType.SHOWER
-                    HTMLWriter htmlWriter = new HTMLWriter(output);
-                    writer = new TemplateWriter(htmlWriter, course, chapter);
+                    Indentation writer = new HTMLWriter(output);
+                    TemplateWriter templateWriter = new TemplateWriter(writer, course, chapter);
+                    templateWriter.write(bufferedWriter, readPpt);
                 }
-                
-                writer.write(bufferedWriter, readPpt);
             }
             else {
                 throw new WebslidesConverterException("outputFormat " + format + "is not supported");
