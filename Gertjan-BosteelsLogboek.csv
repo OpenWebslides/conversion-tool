@@ -47,3 +47,8 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijfing,Issue #,Opmerkingen
 12/04/17,12:30,17:30,extern,Projectwerk,pdf convertor - info bij afbeeldingen + hun positie uitzoeken,,
 13/04/17,09:00,12:00,extern,Projectwerk,pdf convertor - code opkuisen + efficientie/uitbreidbaarheid,,
 13/04/17,13:00,17:30,extern,Projectwerk,pdf convertor - teruggeven model + extra intelligentie,,
+14/04/17,14:00,18:00,extern,Projectwerk,pdf convertor - voorzien zip output stream + aanpassen info verwerking,,
+15/04/17,09:00,12:30,extern,Projectwerk,pdf convertor - major bugfix verkeerde pagina + volledig juiste afbeelding extractie!,,
+15/04/17,13:15,17:30,extern,Projectwerk,pdf convertor - overschrijven stream methode + uitzoeken zipstream,,
+17/04/17,09:30,12:00,extern,Projectwerk,pdf convertor - toevoegen javadoc info + bugfix voor groot bestand,,
+17/04/17,13:00,16:30,extern,Projectwerk,pdf convertor - opkuisen code + bugfix voor groot bestand,,
