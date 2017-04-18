@@ -98,13 +98,16 @@ public class PowerpointHandler extends DefaultHandler {
      * it endText, endImage,..
      */
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if (textbody) {
-            endText(qName);
-        } else if (imagebody) {
-            endImage(qName);
-        } else {
-            endRest(qName);
+        try{
+            if (textbody) {
+                endText(qName);
+            } else if (imagebody) {
+                endImage(qName);
+            } else {
+                endRest(qName);
+            }
         }
+    catch (Exception e){}
 
     }
 

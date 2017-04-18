@@ -26,7 +26,7 @@ public interface IConverter {
     
     
 
-    public void parse(PPT ppt, ZipOutputStream saveLocation);
+    public void parse(PPT ppt, ZipOutputStream outputStream, String saveLocation);
 
     public void setOutput(Output output);
 

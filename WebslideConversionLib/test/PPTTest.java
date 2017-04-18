@@ -27,8 +27,8 @@ public class PPTTest {
     
     
     @Test
-    public void testRun() {
-        File file = new File("C:\\temp\\pres1.pptx");
+    public void main() {
+        File file = new File("C:\\temp\\temp.pptx");
 
         IConverter converter = ConverterFactory.getConverter(file);
         converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "karel")));
@@ -42,10 +42,11 @@ public class PPTTest {
         try {
             fw = new FileWriter("C:\\temp\\test.html");
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             try {
                 fw.close();
-            } catch (IOException ex) {
+            } catch (IOException ex) {ex.printStackTrace();
             }
         }
 
