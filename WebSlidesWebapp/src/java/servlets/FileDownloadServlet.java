@@ -36,7 +36,7 @@ public class FileDownloadServlet extends HttpServlet {
             throws ServletException, IOException {
             String WSSessionToken = request.getParameter("WSSessionToken");
             String fileName= request.getParameter("fileName");
-            String path = System.getProperty("user.home")+File.separator+"tiwi"+File.separator+"download"+File.separator+WSSessionToken+File.separator+fileName+File.separator+"index.html";
+            String path = System.getProperty("user.home")+File.separator+"tiwi"+File.separator+"download"+File.separator+WSSessionToken+File.separator+fileName+File.separator+fileName.substring(0, fileName.indexOf('.'))+".zip";
             System.out.println("Looking for the right file to download, should be here:\n"+path);
             File toDownload = new File(path);
             FileInputStream iStream = new FileInputStream(toDownload);
@@ -50,7 +50,7 @@ public class FileDownloadServlet extends HttpServlet {
             
             response.setContentType(mimeType);
             response.setContentLength((int) toDownload.length());
-            response.setHeader("Content-Disposition",String.format("attachment; filename=\"%s\"", fileName.substring(0,fileName.lastIndexOf('.'))+".html"));
+            response.setHeader("Content-Disposition",String.format("attachment; filename=\"%s\"", fileName.substring(0,fileName.lastIndexOf('.'))+".zip"));
             
             OutputStream oStream = response.getOutputStream();
             

@@ -6,6 +6,9 @@
 package conversion;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -83,17 +86,31 @@ public class ConversionCallable implements Callable<Integer> {
             Class<?> OpenWebslidesConverter = urlClassLoader.loadClass(CONVERTER_MAIN_CLASS);
 
             // Getting a method from the loaded class and invoke it
-            Method method = OpenWebslidesConverter.getMethod("queueEntry", String[].class, Queue.class, long.class);
-
-            final Object[] param = new Object[3];
+            Method method = OpenWebslidesConverter.getMethod("queueEntry", String[].class, OutputStream.class, Queue.class, long.class);
+                       
+            try{
+            System.out.println("ARGS[3]"+args[3]);
+            String s = args[3].substring(args[3].lastIndexOf(File.separator)+1,args[3].length());
+            s = s.substring(0, s.lastIndexOf('.'));
+            System.out.println(s);
+            OutputStream fos = new FileOutputStream(new File(args[3])+File.separator+s+".zip");           
+            
+            
+            final Object[] param = new Object[4];
             param[0] = args;
-            param[1] = queue;
-            param[2] = id;
-
+            param[1] = fos;          
+            param[2] = queue;
+            param[3] = id;
+            
             logToQueue("invoke converter via queueEntry");
             
             method.invoke(null, param);
-
+            fos.close();
+            }
+            catch(FileNotFoundException exe){ 
+                System.err.println("I COULD NOT FIND the FileOutputStream");
+            }
+            
             logToQueue("end of thread");
             normalfinish = true;
 
@@ -106,7 +123,7 @@ public class ConversionCallable implements Callable<Integer> {
             logToQueue("THREAD_INSIDE error:" + ex.getMessage());
             normalfinish = false;
         } finally {
-            logQueue.offer(queue);
+            logQueue.offer(queue);            
             callback.callableComplete(this.id, normalfinish ? 0 : -1);
         }
         if (normalfinish) {
