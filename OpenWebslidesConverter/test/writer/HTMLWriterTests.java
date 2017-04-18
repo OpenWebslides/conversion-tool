@@ -264,7 +264,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<p>This is text with a <strong>important</strong> word, <span style=\"text-decoration: underline;\">underlined</span> word and <em>italic</em> word.</p>\n\t<p>You could be using <strike>deprecated</strike> code.</p>\n\t<p>Some <strike><em><span style=\"text-decoration: underline;\"><strong>nested</strong></span></em></strike> tags.</p>\n</div>";
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<p>This is text with a <strong>important</strong> word, <strong class=\"underline\">underlined</strong> word and <em>italic</em> word.</p>\n\t<p>You could be using <strike>deprecated</strike> code.</p>\n\t<p>Some <strike><em><strong class=\"underline\"><strong>nested</strong></strong></em></strike> tags.</p>\n</div>";
         
         Assert.assertEquals(result, expected);
     }
@@ -397,7 +397,6 @@ public class HTMLWriterTests {
             
             Image img = new Image();
             img.setFilename("image1.jpg");
-            
             slide.getPptObjects().add(img);
             ppt.getSlides().add(slide);
             
@@ -456,6 +455,413 @@ public class HTMLWriterTests {
         Assert.assertEquals(result, expected);
     }
     
+    @Test
+    //1 slide with a placeholder
+    public void writePPTTest9() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Placeholder ph = new Placeholder();
+            ph.setContent("This graph could not be converted.");
+            
+            slide.getPptObjects().add(ph);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<div class=\"placeholder\">This graph could not be converted.</div>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
     
+    @Test
+    //1 slide with an empty placeholder
+    public void writePPTTest10() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Placeholder ph = new Placeholder();
+            
+            slide.getPptObjects().add(ph);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<div class=\"placeholder\" />\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a table with 2 rows
+    public void writePPTTest11() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Cell[] cells = new Cell[4];
+            cells[0] = new Cell("cel 1",0,0);
+            cells[1] = new Cell("cel 2",0,0);
+            cells[2] = new Cell("cel 3",0,0);
+            cells[3] = new Cell("cel 4",0,0);
+            
+            Row[] rows = new Row[2];
+            rows[0] = new Row();
+            rows[0].getCells().add(cells[0]);
+            rows[0].getCells().add(cells[1]);
+            rows[1] = new Row();
+            rows[1].getCells().add(cells[2]);
+            rows[1].getCells().add(cells[3]);
+            
+            Table table = new Table();
+            table.getRows().add(rows[0]);
+            table.getRows().add(rows[1]);
+            
+            slide.getPptObjects().add(table);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<table>\n\t\t<tr>\n\t\t\t<td>cel 1</td>\n\t\t\t<td>cel 2</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>cel 3</td>\n\t\t\t<td>cel 4</td>\n\t\t</tr>\n\t</table>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a table with 2 rows, first row has only 1 cell
+    public void writePPTTest12() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Cell[] cells = new Cell[4];
+            cells[0] = new Cell("cel 1",2,0);
+            cells[2] = new Cell("cel 3",0,0);
+            cells[3] = new Cell("cel 4",0,0);
+            
+            Row[] rows = new Row[2];
+            rows[0] = new Row();
+            rows[0].getCells().add(cells[0]);
+            rows[1] = new Row();
+            rows[1].getCells().add(cells[2]);
+            rows[1].getCells().add(cells[3]);
+            
+            Table table = new Table();
+            table.getRows().add(rows[0]);
+            table.getRows().add(rows[1]);
+            
+            slide.getPptObjects().add(table);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<table>\n\t\t<tr>\n\t\t\t<td colspan=\"2\">cel 1</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>cel 3</td>\n\t\t\t<td>cel 4</td>\n\t\t</tr>\n\t</table>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a table with 2 rows, first column has only one cell
+    public void writePPTTest13() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Cell[] cells = new Cell[4];
+            cells[0] = new Cell("cel 1",0,2);
+            cells[1] = new Cell("cel 2",0,0);
+            cells[3] = new Cell("cel 4",0,0);
+            
+            Row[] rows = new Row[2];
+            rows[0] = new Row();
+            rows[0].getCells().add(cells[0]);
+            rows[0].getCells().add(cells[1]);
+            rows[1] = new Row();
+            rows[1].getCells().add(cells[3]);
+            
+            Table table = new Table();
+            table.getRows().add(rows[0]);
+            table.getRows().add(rows[1]);
+            
+            slide.getPptObjects().add(table);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<table>\n\t\t<tr>\n\t\t\t<td rowspan=\"2\">cel 1</td>\n\t\t\t<td>cel 2</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>cel 4</td>\n\t\t</tr>\n\t</table>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a table with many colspans and rowspans
+    public void writePPTTest14() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Cell[][] cells = new Cell[5][];
+            
+            cells[0] = new Cell[4];
+            cells[0][0] = new Cell("5x1",0,5);
+            cells[0][1] = new Cell("2x1",0,2);
+            cells[0][2] = new Cell("1x2",2,0);
+            cells[0][3] = new Cell("1x2",2,0);
+                    
+            cells[1] = new Cell[3];
+            cells[1][0] = new Cell("1x1",0,0);
+            cells[1][1] = new Cell("1x1",0,0);
+            cells[1][2] = new Cell("2x2",2,2);
+            
+            cells[2] = new Cell[3];
+            cells[2][0] = new Cell("1x1",0,0);
+            cells[2][1] = new Cell("1x1",0,0);
+            cells[2][2] = new Cell("1x1",0,0);
+            
+            cells[3] = new Cell[1];
+            cells[3][0] = new Cell("1x5",5,0);
+            
+            cells[4] = new Cell[5];
+            cells[4][0] = new Cell("1x1",0,0);
+            cells[4][1] = new Cell("1x1",0,0);
+            cells[4][2] = new Cell("1x1",0,0);
+            cells[4][3] = new Cell("1x1",0,0);
+            cells[4][4] = new Cell("1x1",0,0);
+            
+            Table table = new Table();
+            Row[] rows = new Row[5];
+            for(int i=0; i<5; i++){
+                rows[i] = new Row();
+                for(Cell cell : cells[i]){
+                    rows[i].getCells().add(cell);
+                }
+                table.getRows().add(rows[i]);
+            }
+            
+            slide.getPptObjects().add(table);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<table>\n\t\t<tr>\n\t\t\t<td rowspan=\"5\">5x1</td>\n\t\t\t<td rowspan=\"2\">2x1</td>\n\t\t\t<td colspan=\"2\">1x2</td>\n\t\t\t<td colspan=\"2\">1x2</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>1x1</td>\n\t\t\t<td>1x1</td>\n\t\t\t<td colspan=\"2\" rowspan=\"2\">2x2</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>1x1</td>\n\t\t\t<td>1x1</td>\n\t\t\t<td>1x1</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td colspan=\"5\">1x5</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>1x1</td>\n\t\t\t<td>1x1</td>\n\t\t\t<td>1x1</td>\n\t\t\t<td>1x1</td>\n\t\t\t<td>1x1</td>\n\t\t</tr>\n\t</table>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a video
+    public void writePPTTest15() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<div class=\"placeholder\">video</div>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a video
+    public void writePPTTest16() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            video.setFilename("source.mp4");
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<video controls>\n\t\t<source src=\"source.mp4\" type=\"video/mp4\">\n\t</video>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a video
+    public void writePPTTest17() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            video.setFilename("source.ogg");
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<video controls>\n\t\t<source src=\"source.ogg\" type=\"video/ogg\">\n\t</video>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a video
+    public void writePPTTest18() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            video.setFilename("source.webm");
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<video controls>\n\t\t<source src=\"source.webm\" type=\"video/webm\">\n\t</video>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a video
+    public void writePPTTest19() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            video.setFilename("source.avi");
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<div class=\"placeholder\">video</div>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    //1 slide with a chart
+    public void writePPTTest20() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Chart chart = new Chart("");
+            
+            slide.getPptObjects().add(chart);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<div class=\"placeholder\">chart</div>\n</div>";
+        
+        Assert.assertEquals(result, expected);
+    }
     
 }

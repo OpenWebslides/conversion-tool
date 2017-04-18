@@ -154,9 +154,62 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"image1.jpg\" width=\"81%\">\n\t</figure>\n</div>";
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    public void zeroByZero() throws IOException{
+        PPT ppt = createPPT(0, 0);
+        String result = result(ppt);
+        
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
         String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
         Assert.assertEquals(result, expected);
     }
+    
+    @Test
+    public void noSize() throws IOException{
+        Image image = new Image();
+        image.setFilename("image1.jpg");
+        
+        Slide slide = new Slide();
+        slide.getPptObjects().add(image);
+        
+        PPT ppt = new PPT();
+        ppt.getSlides().add(slide);
+        
+        String result = result(ppt);
+        
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        Assert.assertEquals(result, expected);
+    }
+    
+    @Test
+    public void noFilename() throws IOException{
+        Image image = new Image();
+        
+        Slide slide = new Slide();
+        slide.getPptObjects().add(image);
+        
+        PPT ppt = new PPT();
+        ppt.getSlides().add(slide);
+        
+        String result = result(ppt);
+        
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<div class=\"placeholder\">image</div>\n</div>";
+        Assert.assertEquals(result, expected);
+    }
+    
+    
     
     PPT createPPT(double w, double h){
         Image image = new Image();
