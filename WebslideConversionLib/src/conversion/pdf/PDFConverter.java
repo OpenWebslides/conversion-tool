@@ -8,6 +8,7 @@ package conversion.pdf;
 import conversion.IConverter;
 import conversion.pdf.util.PDFTextExtractor;
 import conversion.pdf.util.PDFImageExtractor;
+import conversion.pdf.util.TextIntelligence;
 import conversion.pdf.util.getImageLocations;
 import conversion.pdf.util.getImageLocations2;
 import java.io.File;
@@ -118,7 +119,7 @@ public class PDFConverter implements IConverter {
         File directory = new File(Location);
         if (!directory.exists()) {
             directory.mkdirs();
-        
+
         }
         try {
             retrieveImagesToFile(Location);
@@ -175,7 +176,9 @@ public class PDFConverter implements IConverter {
                 Slide slide = new Slide();
                 slide.getPptObjects().addAll(paginaobjects);
                 ppt.getSlides().add(slide);
-
+                TextIntelligence tI = new TextIntelligence();
+                tI.makeText(ppt);
+                testPPT(ppt);
             }
 
             System.out.println("er zijn " + imLocParser.getImageNumber() + " afbeeldingen gevonden.");
@@ -189,12 +192,13 @@ public class PDFConverter implements IConverter {
 
     }
 
-    /*public void testPPT(PPT ppt){
-     System.out.println("PPT CONTROLE");
-     for(PPTObject obj : ppt.getSlides()){
-     System.out.println(obj.toString());
-     }
-     }*/
+    public void testPPT(PPT ppt) {
+        System.out.println("PPT CONTROLE");
+        for (PPTObject obj : ppt.getSlides()) {
+            System.out.println(obj.toString());
+        }
+    }
+
     @Override
     public void setOutput(Output output) {
         this.output = output;
