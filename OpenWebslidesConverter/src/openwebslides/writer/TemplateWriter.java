@@ -10,17 +10,20 @@ import java.io.IOException;
 import objects.PPT;
 import objects.Slide;
 
-
+/**
+ * A Writer that puts a HTML5 template around the Slides. 
+ * @author Jonas
+ */
 public class TemplateWriter extends Writer {
     private final Indentation writer;
     private String course;
     private String chapter;
     
     /**
-     *
-     * @param writer
-     * @param course
-     * @param chapter
+     * Constructor of the object.
+     * @param writer The writer that implements the Indentation interface that creates the code in the body of the HTML page.
+     * @param course The name of the course the presentation is part of.
+     * @param chapter The name of the chapter the presentation is part of.
      */
     public TemplateWriter(Indentation writer, String course, String chapter){
         this.writer = writer;
@@ -29,7 +32,7 @@ public class TemplateWriter extends Writer {
     }
     
     /**
-     *
+     * Overrides the default implementation of the Writer class.
      * @param out
      * @param ppt
      * @throws IOException
@@ -75,7 +78,7 @@ public class TemplateWriter extends Writer {
     }
     
     /**
-     *
+     * Implementation of the Writer class.
      * @param slide
      * @return
      */

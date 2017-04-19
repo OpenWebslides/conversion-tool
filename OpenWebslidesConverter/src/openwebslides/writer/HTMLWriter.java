@@ -12,7 +12,10 @@ import objects.*;
 import org.apache.commons.io.FilenameUtils;
 import output.Output;
 
-
+/**
+ * A Writer that prints the content of the slides as HTML5 code.
+ * @author Jonas
+ */
 public class HTMLWriter extends Writer implements Indentation{
 
     private final static String SLIDE_NORMAL = "slide";
@@ -27,14 +30,18 @@ public class HTMLWriter extends Writer implements Indentation{
     
     private int slideIndex = 0;
     
+    /**
+     * Constructor of the class.
+     * @param output The Output to where messages are logged.
+     */
     public HTMLWriter(Output output) {
         this.output = output;
     }
     
     /**
-     * 
+     * Turns a Slide into HTML5 code.
      * @param slide
-     * @return 
+     * @return The representation of the Slide in HTML5 code. It uses the writeSlide(Slide slide, int indentation) method with 1 al value for the indentation.
      */
     @Override
     public String writeSlide(Slide slide){
@@ -42,10 +49,10 @@ public class HTMLWriter extends Writer implements Indentation{
     }
     
     /**
-     * 
-     * @param slide
-     * @param indentation
-     * @return 
+     * Implementation of the Indentation interface.
+     * @param slide The slide that holds the content.
+     * @param indentation The amount of tabs used for the indentation.
+     * @return The representation of the Slide in HTML5 code.
      */
     @Override
     public String writeSlide(Slide slide, int indentation) {
@@ -68,9 +75,9 @@ public class HTMLWriter extends Writer implements Indentation{
     }
     
     /**
-     * Returns the toHtml method with pptObject as attribute. If such method does not exist a toHtml method with a super class of the pptObject is returned. 
-     * @param pptObject
-     * @return
+     * Returns the toHtml method with pptObject as attribute. If such method does not exist a toHtml method with a super class of the pptObject as attribute is returned. 
+     * @param pptObject The PPTObject that represents the object.
+     * @return The toHtml method with pptObject as attribute. If such method does not exist a toHtml method with a super class of the pptObject as attribute is returned.
      * @throws NoSuchMethodException if none method could be found.
      */
     private Method getMethod(PPTObject pptObject) throws NoSuchMethodException{
@@ -98,7 +105,7 @@ public class HTMLWriter extends Writer implements Indentation{
 
     /**
      * Fills the String TABS with n times a tab.
-     * @param n 
+     * @param n The amount of tabs.
      */
     public void setTABS(int n) {
         if(n>-1){
@@ -107,18 +114,37 @@ public class HTMLWriter extends Writer implements Indentation{
         }
     }
 
+    /**
+     * Gets the images folder. This folder is used as path for the images in the HTML output.
+     * @return The images folder.
+     */
     public String getImagesFolder() {
         return imagesFolder;
     }
 
+    /**
+     * Sets the images folder. This folder is used as path for the images in the HTML output.
+     * @param imagesFolder The images folder that represents the path of the images.
+     */
     public void setImagesFolder(String imagesFolder) {
         this.imagesFolder = imagesFolder;
     }
 
+    /**
+     * Adds a tag without attributes.
+     * @param tag The name of the tag.
+     * @param content The content of the tag.
+     * @return The content embedded in the tag.
+     */
     private String addSimpleTag(String tag, String content){
         return "<"+tag+">"+content+"</"+tag+">";
     }
     
+    /**
+     * Returns the HTML5 code for the PPTObject.
+     * @param pptObj The PPTObject that holds the content.
+     * @return The HTML5 code for the PPTObject
+     */
     private String objectToHtml(PPTObject pptObj){
         String res = "";
         //if a method exists for the object
