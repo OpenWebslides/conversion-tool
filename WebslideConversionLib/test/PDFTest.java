@@ -10,10 +10,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import objects.PPT;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 
 /**
  *
@@ -27,7 +23,7 @@ public class PDFTest {
         IConverter converter = ConverterFactory.getConverter(file);
         PPT ppt = new PPT();
         
-        converter.parse(ppt,"C:\\temp");
+        converter.parse(ppt,"C:\\temp\\output");
         
         
 	FileWriter fw = null;

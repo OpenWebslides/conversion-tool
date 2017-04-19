@@ -34,10 +34,10 @@ public class PDFImageExtractor extends PDFStreamEngine {
      * This method extracts all images from a pdf file and creates jpg files on the location given by s.
      *
      * @param document
-     * @param s
+     * @param location
      * @throws IOException
      */
-    public void extractImage(PDDocument document, String s) throws IOException {
+    public void extractImage(PDDocument document, String location) throws IOException {
         List<PDPage> list = document.getDocumentCatalog().getAllPages();
 
         int totalImages = 1;
@@ -51,8 +51,8 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-
-                    FileOutputStream output = new FileOutputStream(new File(s + File.separator +  "img" + totalImages + ".jpg"));
+                    System.out.println("saving: "+ location + File.separator +  "img" + totalImages + ".jpg");
+                    FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + totalImages + ".jpg"));
                     pdxObjectImage.write2OutputStream(output);
                     totalImages++;
                 }
