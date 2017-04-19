@@ -18,6 +18,26 @@ public class TekenPlus implements Serializable{
     private String teken;
     
     private double posX,posY,fontsize,xscale,heigt,space,width;
+    private boolean bold = false;
+    private boolean italic = false;
+    
+    
+    public void setBold(boolean b) {
+        bold = b;
+    }
+
+    public void setItalic(boolean b) {
+        italic = b;
+    }
+    
+    public boolean isBold(){
+        return bold;
+    }
+    
+    public boolean isItalic(){
+        return italic;
+    }
+    
     public enum type{LETTER,CIJFER,SPLITTING, NONSPLITTING}
     private type type;
 

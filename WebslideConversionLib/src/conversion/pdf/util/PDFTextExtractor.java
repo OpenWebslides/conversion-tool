@@ -75,7 +75,16 @@ public class PDFTextExtractor extends PDFTextStripper {
         teken.setPosY(text.getYDirAdj());
         teken.setSpace(text.getWidthOfSpace());
         teken.setXscale(text.getXScale());
-
+        
+        //System.out.println(text.getFont().getFontDescriptor());
+         if (text.getFont().getBaseFont().toLowerCase().contains("bold")){
+            teken.setBold(true);
+            // System.out.println("made bold!");
+         }
+        if (text.getFont().getBaseFont().toLowerCase().contains("italic")){
+            teken.setItalic(true);
+           // System.out.println("made italic!");
+        }
         /*enum bepalen -> kijken watvoor letter het is gebeurt hier al!!!*/
         if (text.getCharacter().matches("[A-Za-z]")) {
             //System.out.println("letter gevonden!!!" + text.getCharacter());

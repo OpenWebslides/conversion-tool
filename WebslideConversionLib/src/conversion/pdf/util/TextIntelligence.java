@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package conversion.powerpoint;
+package conversion.pdf.util;
+
+import objects.PPT;
 
 /**
  *
  * @author Gertjan
  */
 public class TextIntelligence {
-    
+    public void makeText(PPT ppt){
+        
+    }
 }
