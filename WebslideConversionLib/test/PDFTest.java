@@ -9,7 +9,10 @@ import conversion.IConverter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import logger.Logger;
 import objects.PPT;
+import org.junit.Test;
+import output.StdLogOutput;
 
 /**
  *
@@ -17,7 +20,7 @@ import objects.PPT;
  */
 public class PDFTest {
     
-     public static void main(String[] args) {
+    /* public static void main(String[] args) {
         // TODO code application logic here
         File file = new File("C:\\temp\\slides.pdf");
         IConverter converter = ConverterFactory.getConverter(file);
@@ -38,5 +41,10 @@ public class PDFTest {
             } catch (IOException ex) {
             }
         }
+    }*/
+     
+     @Test
+    public void main1() {
+        
     }
 }

@@ -28,7 +28,7 @@ public class PPTTest {
     
     @Test
     public void main() {
-        File file = new File("C:\\temp\\temp.pptx");
+        File file = new File("C:\\temp\\Esolangs.pptx");
 
         IConverter converter = ConverterFactory.getConverter(file);
         converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "karel")));

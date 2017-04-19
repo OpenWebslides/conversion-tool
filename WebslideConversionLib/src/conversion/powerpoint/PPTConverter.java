@@ -53,8 +53,8 @@ public class PPTConverter implements IConverter {
             SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
 
-           // for (XSLFSlide slide : slides) {
-           XSLFSlide slide = slides.get(23);
+            for (XSLFSlide slide : slides) {
+               // XSLFSlide slide = slides.get(4);
                 try {
                     //Webslide object
                     Slide webslide = new Slide();
@@ -86,7 +86,7 @@ public class PPTConverter implements IConverter {
                 } catch (Exception e) {
                     output.println(Logger.error("Error while parsing slide + " + slides.indexOf(slide) + 1 + " in the powerpoint", e));
                 }
-           // }
+            }
 
             pptSource.close();
 

@@ -44,7 +44,7 @@ public class Text implements PPTObject {
         String toret = "";
         if(textparts.size()>0){
             for(Textpart td : textparts){
-                toret += td.toString() + "\t";
+                toret += td.toString();
             }
         }
         if(level != null) return toret + " lvl:" + level;

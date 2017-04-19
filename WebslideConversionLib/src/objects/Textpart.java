@@ -17,7 +17,7 @@ public class Textpart implements PPTObject{
     private String font;
     private HashSet<FontDecoration> type;
     private int size;
-    private String content;
+    private String content = "";
     private int charachterSpacing;
     private String color;
 
@@ -64,7 +64,7 @@ public class Textpart implements PPTObject{
         if(charachterSpacing!=0) toret += " spc " + charachterSpacing;
         if(color!=null&&!color.equals("")) toret += " color " + color;
         return toret + ")";}return "";*/ 
-      return content + " (" + size + ")";
+      return content /*+ " (" + size + ")"*/;
 
     }
 

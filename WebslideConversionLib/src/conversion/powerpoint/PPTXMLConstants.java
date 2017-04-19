@@ -43,6 +43,7 @@ public class PPTXMLConstants {
     public static final String CHARACTERSPACING = "spc";
     public static final String TYPEFACE = "typeface";
     public static final String TEXTTYPEATTR = "type";
+    public static final String SOLOWORD = "err";
     
     //Text title values
     public static final String TEXT_TITLE_HEADER = "ctrTitle";
