@@ -24,12 +24,13 @@ public class TextIntelligence {
         */
         for(Slide slide : slides){
             ArrayList<PPTObject> objects = (ArrayList<PPTObject>) slide.getPptObjects();
-            for(PPTObject object : objects){
-                if(object.getClass().getName().equals("Textpart")){
+            
+            for(int i = 0; i<objects.size(); i++){
+                if(objects.get(i).getClass().getName().equals("Textpart")){
                     Text text = new Text();
-                    text.addTextpart((Textpart) object);
-                    objects.remove(object);
-                    objects.add(text);
+                    text.addTextpart((Textpart) objects.get(i));
+                    objects.remove(i);
+                    objects.add(i, text);
                 }
             }
         }
