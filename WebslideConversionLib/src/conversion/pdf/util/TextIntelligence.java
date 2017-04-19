@@ -6,33 +6,34 @@
 package conversion.pdf.util;
 
 import java.util.ArrayList;
+import java.util.List;
 import objects.PPT;
 import objects.PPTObject;
 import objects.Slide;
 import objects.Text;
 import objects.Textpart;
+import objects.Title;
 
 /**
  *
  * @author Gertjan
  */
 public class TextIntelligence {
-    public void makeText(PPT ppt){
-        ArrayList<Slide> slides = (ArrayList<Slide>) ppt.getSlides();
+
+    public void makeText(PPT ppt) {
         /*
             voorlopig
-        */
-        for(Slide slide : slides){
-            ArrayList<PPTObject> objects = (ArrayList<PPTObject>) slide.getPptObjects();
-            
-            for(int i = 0; i<objects.size(); i++){
-                if(objects.get(i).getClass().getName().equals("Textpart")){
+         */
+
+        for (Slide slide : ppt.getSlides()) {
+            for (int i = 0; i < slide.getPptObjects().size(); i++) {
+                if (slide.getPptObjects().get(i) instanceof Textpart) {
                     Text text = new Text();
-                    text.addTextpart((Textpart) objects.get(i));
-                    objects.remove(i);
-                    objects.add(i, text);
+                    text.addTextpart((Textpart) slide.getPptObjects().get(i));
+                    slide.getPptObjects().set(i, text);
                 }
             }
         }
+
     }
 }

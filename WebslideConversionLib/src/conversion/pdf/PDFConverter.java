@@ -175,10 +175,12 @@ public class PDFConverter implements IConverter {
                 Slide slide = new Slide();
                 slide.getPptObjects().addAll(paginaobjects);
                 ppt.getSlides().add(slide);
-                TextIntelligence tI = new TextIntelligence();
-                tI.makeText(ppt);
-                testPPT(ppt);
+
+                //testPPT(ppt);
             }
+            TextIntelligence tI = new TextIntelligence();
+            tI.makeText(ppt);
+            testPPT(ppt);
 
             System.out.println("er zijn " + imLocParser.getImageNumber() + " afbeeldingen gevonden.");
 
