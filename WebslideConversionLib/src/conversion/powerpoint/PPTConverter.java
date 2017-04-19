@@ -96,7 +96,7 @@ public class PPTConverter implements IConverter {
     }
 
    
-    public void parse(PPT ppt, ZipOutputStream saveLocation) {
+    public void parse(PPT ppt, ZipOutputStream zip,  String saveLocation) {
         XMLSlideShow pptSource;
 
         try {
@@ -113,7 +113,7 @@ public class PPTConverter implements IConverter {
                     Slide webslide = new Slide();
 
                     //for testing
-                    output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -123,14 +123,14 @@ public class PPTConverter implements IConverter {
 
                    
                     //copy the images
-                    MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output);
+                    MediaHandler.handle(slide, webslide.getPptObjects(), zip, saveLocation, file, output);
 
                      //remove null values from list that got there thanks to irregularities in xml
                     GarbageHandler.handle(webslide.getPptObjects(), output);
 
                     
                     //print the slide for testing
-                    //output.println(webslide.toString());
+                    output.println(webslide.toString());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
@@ -147,10 +147,4 @@ public class PPTConverter implements IConverter {
             output.println(Logger.error("Error while parsing the powerpoint", ex));
         }
     }
-
-    @Override
-    public void parse(PPT ppt, ZipOutputStream outputStream, String saveLocation) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

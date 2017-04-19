@@ -12,6 +12,7 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.zip.ZipEntry;
@@ -130,7 +131,7 @@ class MediaHandler {
      * @param file
      * @param output
      */
-    public static void handle(XSLFSlide slide, List<PPTObject> pptObjects, ZipOutputStream zip, File file, Output output) {
+    public static void handle(XSLFSlide slide, List<PPTObject> pptObjects, ZipOutputStream zip, String saveLocation, File file, Output output) {
         try {
             for (XSLFShape sh : slide.getShapes()) {
                 if (sh.getClass().equals(XSLFPictureShape.class)) {
@@ -138,7 +139,7 @@ class MediaHandler {
                         if (po.getClass().equals(Image.class)) {
                             if (((Image) po).getId().equals("" + sh.getShapeId())) {
                                 ((Image) po).setFilename(((XSLFPictureShape) sh).getPictureData().getFileName());
-                                copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, zip);
+                                copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, zip, saveLocation);
                             }
                         }
                     }
@@ -195,36 +196,39 @@ class MediaHandler {
         }
     }
 
-    private static void copyImage(Media img, String name, File file, Output output, ZipOutputStream zip) {
+    private static void copyImage(Media img, String name, File file, Output output, ZipOutputStream zip, String saveLoc) {
         try {
-            FileInputStream fin = new FileInputStream(file.getAbsoluteFile());
-            BufferedInputStream bin = new BufferedInputStream(fin);
-            ZipInputStream zin = new ZipInputStream(bin);
-            ZipEntry ze = null;
-            while ((ze = zin.getNextEntry()) != null) {
-                String na = "ppt/media/" + name;
-                if (img instanceof Video) {
-                    na = "ppt/media/media" + mediaCount;
+            try {
+                
+                output.println("gonna copy");
+                File f = copyImage(img, name, file, output, saveLoc);
+                FileInputStream fis = new FileInputStream(f);
+                output.println(saveLoc + "\\" + f.getName());
+                ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + f.getName());
+                zip.putNextEntry(zipEntry);
+                byte[] bytes = new byte[1024];
+                int length;
+                while ((length = fis.read(bytes)) >= 0) {
+                        zip.write(bytes, 0, length);
                 }
-                if (ze.getName().contains(na)) {
-                    byte[] buffer = new byte[8192];
-                    int len;
-                    while ((len = zin.read(buffer)) != -1) {
-                        zip.write(buffer, 0, len);
-                    }
-                    zip.close();
-                    if (img instanceof Video) {
-                        mediaCount++;
-                    }
-                    break;
-                }
+
+                zip.closeEntry();
+                fis.close();
+                
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+            
+            
         } catch (Exception e) {
             output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
         }
     }
-
-    private static void copyImage(Media img, String name, File file, Output output, String saveLoc) {
+  
+ 
+    private static File copyImage(Media img, String name, File file, Output output, String saveLoc) {
+        File f = null;
         try {
             FileInputStream fin = new FileInputStream(file.getAbsoluteFile());
             BufferedInputStream bin = new BufferedInputStream(fin);
@@ -237,7 +241,7 @@ class MediaHandler {
                 }
                 if (ze.getName().contains(na)) {
                     String n = ze.getName().split("/")[ze.getName().split("/").length - 1];
-                    File f = new File(saveLoc + "\\" + n);
+                    f = new File(saveLoc + "\\" + n);
                     img.setFilename(n);
                     f.getParentFile().mkdirs();
                     try (OutputStream out = new FileOutputStream(f)) {
@@ -256,6 +260,7 @@ class MediaHandler {
         } catch (Exception e) {
             output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
         }
+        return f;
     }
 
     private static void copyCharts(XSLFChart chart, Output output, Chart chartObj) {
