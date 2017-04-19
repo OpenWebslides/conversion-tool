@@ -5,7 +5,9 @@
  */
 package conversion.pdf.util;
 
+import java.util.ArrayList;
 import objects.PPT;
+import objects.Slide;
 
 /**
  *
@@ -13,6 +15,6 @@ import objects.PPT;
  */
 public class TextIntelligence {
     public void makeText(PPT ppt){
-        
+        ArrayList<Slide> slides = (ArrayList<Slide>) ppt.getSlides();
     }
 }
