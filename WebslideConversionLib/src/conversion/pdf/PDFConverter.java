@@ -9,6 +9,7 @@ import conversion.IConverter;
 import conversion.pdf.util.PDFTextExtractor;
 import conversion.pdf.util.PDFImageExtractor;
 import conversion.pdf.util.getImageLocations;
+import conversion.pdf.util.getImageLocations2;
 import java.io.File;
 import java.io.IOException;
 
@@ -142,7 +143,7 @@ public class PDFConverter implements IConverter {
         try {
 
             getImageLocations imLocParser = new getImageLocations();
-
+            getImageLocations2 imLocParser2 = new getImageLocations2();
             PDFTextExtractor parser = new PDFTextExtractor();
 
             List allPages = document.getDocumentCatalog().getAllPages();
@@ -157,6 +158,7 @@ public class PDFConverter implements IConverter {
                     parser.processStream(page, page.findResources(), page.getContents().getStream());
                     //voor afbeelding posities (hopelijk)
                     imLocParser.processStream(page, page.findResources(), page.getContents().getStream());
+                    imLocParser2.processStream(page, page.findResources(), page.getContents().getStream());
                 }
                 //na het parsen halen we de objecten op... van 1 pagina!!!
 
