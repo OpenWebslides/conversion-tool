@@ -108,7 +108,6 @@ public class PDFConverter implements IConverter {
      *
      * @param ppt
      * @param Location
-     * @param s
      */
     @Override
     public void parse(PPT ppt, String Location) {
