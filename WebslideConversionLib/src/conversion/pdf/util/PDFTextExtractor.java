@@ -83,7 +83,7 @@ public class PDFTextExtractor extends PDFTextStripper {
          }
         if (text.getFont().getBaseFont().toLowerCase().contains("italic")){
             teken.setItalic(true);
-           // System.out.println("made italic!");
+            //System.out.println("made italic!");
         }
         /*enum bepalen -> kijken watvoor letter het is gebeurt hier al!!!*/
         if (text.getCharacter().matches("[A-Za-z]")) {

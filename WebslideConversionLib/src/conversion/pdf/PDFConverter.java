@@ -81,14 +81,7 @@ public class PDFConverter implements IConverter {
         }
     }
 
-    /**
-     * fill the ppt object with content - if any additional images will be given
-     * to the zip output stream... next the normal parse function for retrieving
-     * text will be invoked.
-     *
-     * @param ppt
-     * @param zOS
-     */
+    /*
     public void parse(PPT ppt, ZipOutputStream zOS) {
         //deze methode kan meteen naar een zip mee wegschrijven...
         ZipOutputStream outputStream = zOS;
@@ -99,7 +92,7 @@ public class PDFConverter implements IConverter {
             System.out.println("IO exception... ");
         }
         parse(ppt);
-    }
+    }*/
 
     /**
      * this function will fill the ppt object with content - if any the param s
@@ -129,9 +122,9 @@ public class PDFConverter implements IConverter {
 
     }
 
-    private void retrieveImagesToZOS(ZipOutputStream ZOS) throws IOException {
+    private void retrieveImagesToZOS(ZipOutputStream ZOS, String saveLocation) throws IOException {
         PDFImageExtractor imEx = new PDFImageExtractor();
-        imEx.extractImage(document, ZOS);
+        imEx.extractImage(document, ZOS, saveLocation);
     }
 
     private void retrieveImagesToFile(String Location) throws IOException {
@@ -167,10 +160,15 @@ public class PDFConverter implements IConverter {
                 //na het parsen halen we ook de imLocacties voor die pagina op...
                 paginaobjects.addAll(imLocParser.getObjecten());
                 //even testen wat er in zit in die objecten:
-                for (PPTObject obj : paginaobjects) {
-                    //System.out.println("object: " + obj.toString() + "\tType: "+obj.getClass().getName());
+               
+                
+                
+               /* for (PPTObject obj : paginaobjects) {
+                   // System.out.println("object: " + obj.toString() + "\tType: "+obj.getClass().getName());
                     System.out.printf("object: %-30.30s  type: %-30.30s%n", obj.toString(), obj.getClass().getName());
                 }
+                */
+                
                 System.out.println("page-end=========================");
                 Slide slide = new Slide();
                 slide.getPptObjects().addAll(paginaobjects);
@@ -180,15 +178,17 @@ public class PDFConverter implements IConverter {
             }
             TextIntelligence tI = new TextIntelligence();
             tI.makeText(ppt);
-            testPPT(ppt);
+           // testPPT(ppt);
 
-            System.out.println("er zijn " + imLocParser.getImageNumber() + " afbeeldingen gevonden.");
+            System.out.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
 
         } catch (IOException ex) {
             System.out.println("er ging iets mis in de conversie.... ");
             //hier moet nog logging in gestoken worden!!
         } catch (Exception e) {
-            System.out.println("onherkende fout, wss de schult van apache...");
+            System.out.println("onherkende fout, wss de schult van apache..."
+                    + e.getMessage());
+            e.printStackTrace();
         }
 
     }
@@ -206,8 +206,17 @@ public class PDFConverter implements IConverter {
     }
 
     @Override
-    public void parse(PPT ppt, ZipOutputStream outputStream, String saveLocation) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) {
+        
+    ZipOutputStream outputStream = zOS;
+        System.out.println("laat het parsen beginnen!");
+        try {
+            retrieveImagesToZOS(zOS, saveLocation);
+        } catch (IOException ex) {
+            System.out.println("IO exception... ");
+        }
+        parse(ppt);
+    
     }
 
 }

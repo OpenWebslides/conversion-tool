@@ -7,13 +7,12 @@ package objects;
 
 import java.util.HashSet;
 
-
 /**
  *
  * @author Karel
  */
-public class Textpart implements PPTObject{
-    
+public class Textpart implements PPTObject {
+
     private String font;
     private HashSet<FontDecoration> type;
     private int size;
@@ -21,10 +20,10 @@ public class Textpart implements PPTObject{
     private int charachterSpacing;
     private String color;
 
-    public Textpart(){
+    public Textpart() {
         type = new HashSet<>();
-    }    
-        
+    }
+
     public String getFont() {
         return font;
     }
@@ -48,23 +47,23 @@ public class Textpart implements PPTObject{
     public void setContent(String content) {
         this.content = content;
     }
-    
-    public void addType(FontDecoration f){
+
+    public void addType(FontDecoration f) {
         type.add(f);
     }
-    
+
     @Override
-    public String toString(){
-      /*  if(!content.equals("")){
-        String toret = "["+content+"]" + " (";
-        for(FontDecoration fd : type){
-            toret += fd.name() + " ";
+    public String toString() {
+
+        try {
+            if (content != null || content.equals("")) {
+                return content;
+            } else {
+                return "";
+            }
+        } catch (Exception e) {
+            return "";
         }
-        if(size!=0) toret += " sz " + size;
-        if(charachterSpacing!=0) toret += " spc " + charachterSpacing;
-        if(color!=null&&!color.equals("")) toret += " color " + color;
-        return toret + ")";}return "";*/ 
-      return content /*+ " (" + size + ")"*/;
 
     }
 
@@ -92,5 +91,3 @@ public class Textpart implements PPTObject{
         this.color = color;
     }
 }
-
-
