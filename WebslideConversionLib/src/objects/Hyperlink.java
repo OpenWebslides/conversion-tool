@@ -16,7 +16,17 @@ public class Hyperlink extends Textpart{
     
     private ArrayList<Textpart> parts;
     private String url;
-
+    private String rid;
+    
+    public Hyperlink(Textpart textpart) {
+        super.setFont(textpart.getFont());
+        super.setType(textpart.getType());
+        super.setSize(textpart.getSize());
+        super.setContent(textpart.getContent());
+        super.setCharachterSpacing(textpart.getCharachterSpacing());
+        super.setColor(textpart.getColor());
+        parts = new ArrayList<>();
+    }
 
     public ArrayList<Textpart> getParts() {
         return parts;
@@ -36,12 +46,25 @@ public class Hyperlink extends Textpart{
     
     @Override
     public String getContent(){
-        String toret = "";
+        return super.getContent();
+    } 
+    
+    @Override
+    public String toString(){
+        String toret = this.getContent();
         for(Textpart par : parts){
             toret += par.getContent();
         }
-        return toret;
-    } 
+        return toret + " url" + url;
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
 
     
     

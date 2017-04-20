@@ -6,6 +6,7 @@
 package conversion.powerpoint;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import logger.Logger;
 import objects.*;
@@ -32,12 +33,15 @@ public class PowerpointHandler extends DefaultHandler {
     private boolean title = false;
     private boolean defaultsize = false;
     private boolean isList = false;
+    private boolean textpartadded;
 
     //Variables optimalization of if statements in startelement
     private boolean textbody = false;
     private boolean imagebody = false;
     private boolean gframe = false;
     private boolean canRead = true;
+
+    private HashMap<String, Hyperlink> hyperlinks;
 
     //Variables list
     private PPTList list;
@@ -48,7 +52,6 @@ public class PowerpointHandler extends DefaultHandler {
     //Variables image
     private Media media;
     private boolean imagesize;
-    
 
     //Variables chart
     private Chart chart;
@@ -68,7 +71,7 @@ public class PowerpointHandler extends DefaultHandler {
      */
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         try {
-            if(canRead){
+            if (canRead) {
                 switch (qName) {
                     case PPTXMLConstants.IDELEMENT:
                         lastId = attributes.getValue(PPTXMLConstants.ID);
@@ -112,7 +115,7 @@ public class PowerpointHandler extends DefaultHandler {
      * it endText, endImage,..
      */
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        try{
+        try {
             if (textbody) {
                 endText(qName);
             } else if (imagebody) {
@@ -120,10 +123,9 @@ public class PowerpointHandler extends DefaultHandler {
             } else {
                 endRest(qName);
             }
+        } catch (Exception e) {
+            output.println(Logger.error("Error while ending xml tags data (DefaultHandler endElement)", e));
         }
-    catch (Exception e){
-        output.println(Logger.error("Error while ending xml tags data (DefaultHandler endElement)", e));
-    }
 
     }
 
@@ -134,11 +136,10 @@ public class PowerpointHandler extends DefaultHandler {
     public void characters(char ch[], int start, int length) throws SAXException {
         try {
             if (textpartContent) {
-                if(textpart!=null){
-                    textpart.setContent( textpart.getContent() + new String(ch, start, length));
-                }
-                else{
-                    textpart.setContent( new String(ch, start, length));
+                if (textpart != null) {
+                    textpart.setContent(textpart.getContent() + new String(ch, start, length));
+                } else {
+                    textpart.setContent(new String(ch, start, length));
                 }
                 textpartContent = false;
             }
@@ -159,7 +160,9 @@ public class PowerpointHandler extends DefaultHandler {
                 case PPTXMLConstants.TEXT:
                     text = new Text();
                     textAdded = false;
-                    if(defaultsize) isList = true;
+                    if (defaultsize) {
+                        isList = true;
+                    }
                     break;
                 case PPTXMLConstants.NOLIST:
                     isList = false;
@@ -175,20 +178,30 @@ public class PowerpointHandler extends DefaultHandler {
                     }
                     break;
                 case PPTXMLConstants.TEXTLEVEL:
-                        if (attributes.getValue(PPTXMLConstants.LEVEL) != null) {
-                            int level = Integer.parseInt(attributes.getValue(PPTXMLConstants.LEVEL));
-                            text.setLevel(attributes.getValue(PPTXMLConstants.LEVEL));
-                            startList(level);
-                        } else {
-                            text.setLevel("0");
-                            startList(0);
-                        }
+                    if (attributes.getValue(PPTXMLConstants.LEVEL) != null) {
+                        int level = Integer.parseInt(attributes.getValue(PPTXMLConstants.LEVEL));
+                        text.setLevel(attributes.getValue(PPTXMLConstants.LEVEL));
+                        startList(level);
+                    } else {
+                        text.setLevel("0");
+                        startList(0);
+                    }
                     break;
                 case PPTXMLConstants.TEXTLINK:
-                    if(attributes.getValue(PPTXMLConstants.RID)!=null){
-                        textpart = new Hyperlinktemp(textpart);
-                        ((Hyperlinktemp)textpart).setRid(attributes.getValue(PPTXMLConstants.RID));
+                    if (hyperlinks == null) {
+                        hyperlinks = new HashMap<>();
                     }
+                    if (attributes.getValue(PPTXMLConstants.RID) != null) {
+                        if (hyperlinks.containsKey(attributes.getValue(PPTXMLConstants.RID))) {
+                            hyperlinks.get(attributes.getValue(PPTXMLConstants.RID)).getParts().add(textpart);
+                            textpartadded = true;
+                        } else {
+                            textpart = new Hyperlink(textpart);
+                            ((Hyperlink) textpart).setRid(attributes.getValue(PPTXMLConstants.RID));
+                            hyperlinks.put(((Hyperlink) textpart).getRid(), (Hyperlink) textpart);
+                        }
+                    }
+                    break;
                 case PPTXMLConstants.TEXTPART:
                     textpart = new Textpart();
                     break;
@@ -214,11 +227,11 @@ public class PowerpointHandler extends DefaultHandler {
                     if (attributes.getValue(PPTXMLConstants.SOLOWORD) == null) {
                         textpart.setContent(" ");
                     }
-                    if(isList){
-                        if(defaultsize){
-                            if(text.getLevel()==null){
-                            text.setLevel("0");
-                            startList(0);
+                    if (isList) {
+                        if (defaultsize) {
+                            if (text.getLevel() == null) {
+                                text.setLevel("0");
+                                startList(0);
                             }
                         }
                     }
@@ -281,11 +294,13 @@ public class PowerpointHandler extends DefaultHandler {
                         }
                     }
                     //if(textpart.getContent()!=null && !textpart.getContent().equals("")&& !textpart.getContent().equals(" "))
-                        text.addTextpart(textpart);
+                    if (!textpartadded) {
+                        text.getTextparts().add(textpart);
+                    }
                     break;
                 case PPTXMLConstants.TEXT:
                     if (list != null) {
-                        if(text.getLevel() == null){
+                        if (text.getLevel() == null) {
                             pptobjects.add(lists.get(0));
                             pptobjects.add(text);
                             textAdded = true;
@@ -307,7 +322,7 @@ public class PowerpointHandler extends DefaultHandler {
                     if (text != null && !textAdded) {
                         pptobjects.add(text);
                     }
-                    if (list != null) {             
+                    if (list != null) {
                         pptobjects.add(lists.get(0));
                         lists = null;
                         list = null;
@@ -344,7 +359,7 @@ public class PowerpointHandler extends DefaultHandler {
                 }
             }
             list.addPPTObject(text);
-          //  output.println(Arrays.toString(lists.values().toArray()));
+            //  output.println(Arrays.toString(lists.values().toArray()));
             textAdded = true;
             previousLevel = level;
         } catch (Exception e) {
@@ -363,7 +378,7 @@ public class PowerpointHandler extends DefaultHandler {
             if (qName.equals(PPTXMLConstants.MEDIADETAILS)) {
                 media = (Media) new Image();
                 media.setId(attributes.getValue(PPTXMLConstants.ID));
-            } else if(qName.equals(PPTXMLConstants.VIDEOBODY)){
+            } else if (qName.equals(PPTXMLConstants.VIDEOBODY)) {
                 Video video = new Video();
                 video.getDimension().setSize(media.getDimension());
                 video.getLocation().setSize(media.getLocation());
@@ -422,11 +437,10 @@ public class PowerpointHandler extends DefaultHandler {
             if (qName.equals(PPTXMLConstants.TABLE)) {
                 pptobjects.add(new Table());
                 canRead = true;
-            }
-            else if (qName.equals(PPTXMLConstants.FRAGMENT)){ 
-            }else if (qName.equals(PPTXMLConstants.GFRAME)){ 
-                    gframe = false;
-                    canRead = true;
+            } else if (qName.equals(PPTXMLConstants.FRAGMENT)) {
+            } else if (qName.equals(PPTXMLConstants.GFRAME)) {
+                gframe = false;
+                canRead = true;
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide chart tags (DefaultHandler endElement)", e));
