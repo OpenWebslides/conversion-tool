@@ -5,7 +5,6 @@
  */
 package conversion.powerpoint;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import logger.Logger;
@@ -36,7 +35,7 @@ public class PowerpointHandler extends DefaultHandler {
     //Variables optimalization of if statements in startelement
     private boolean textbody = false;
     private boolean imagebody = false;
-    private boolean gframe;
+    private boolean gframe = false;
     private boolean canRead = true;
 
     //Variables list
@@ -76,13 +75,17 @@ public class PowerpointHandler extends DefaultHandler {
                     case PPTXMLConstants.TEXTBODY:
                         textbody = true;
                         imagebody = false;
+                        gframe = false;
                         break;
                     case PPTXMLConstants.MEDIABODY:
                         imagebody = true;
                         textbody = false;
+                        gframe = false;
                         break;
                     case PPTXMLConstants.GFRAME:
                         gframe = true;
+                        imagebody = false;
+                        textbody = false;
                         break;
                     default:
                         break;
@@ -130,10 +133,12 @@ public class PowerpointHandler extends DefaultHandler {
     public void characters(char ch[], int start, int length) throws SAXException {
         try {
             if (textpartContent) {
-                if(textpart!=null)
+                if(textpart!=null){
                     textpart.setContent( textpart.getContent() + new String(ch, start, length));
-                else
+                }
+                else{
                     textpart.setContent( new String(ch, start, length));
+                }
                 textpartContent = false;
             }
         } catch (Exception e) {
@@ -226,7 +231,6 @@ public class PowerpointHandler extends DefaultHandler {
                         } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE)) {
                             title = true;
                         }
-
                     } else {
                         defaultsize = true;
                     }
@@ -252,21 +256,18 @@ public class PowerpointHandler extends DefaultHandler {
                     if (textpart.getSize() == 0) {
                         if (titleheader) {
                             textpart.setSize(PPTXMLConstants.TEXT_TITLE_HEADER_SIZE);
-                            titleheader = false;
                         } else if (subtitleheader) {
                             textpart.setSize(PPTXMLConstants.TEXT_SUBTITLE_HEADER_SIZE);
-                            subtitleheader = false;
                         } else if (title) {
                             textpart.setSize(PPTXMLConstants.TEXT_TITLE_SIZE);
-                            title = false;
                         } else if (defaultsize) {
                             textpart.setSize(PPTXMLConstants.TEXT_DEFAULT_LARGE_SIZE);
-                            defaultsize = false;
                         } else {
                             textpart.setSize(PPTXMLConstants.TEXT_DEFAULT_SMALL_SIZE);
                         }
                     }
-                    text.addTextpart(textpart);
+                    //if(textpart.getContent()!=null && !textpart.getContent().equals("")&& !textpart.getContent().equals(" "))
+                        text.addTextpart(textpart);
                     break;
                 case PPTXMLConstants.TEXT:
                     if (list != null) {
@@ -280,9 +281,14 @@ public class PowerpointHandler extends DefaultHandler {
                         pptobjects.add(text);
                         textAdded = true;
                         text = null;
+                        titleheader = false;
                     }
-                    textbody = false;
                     break;
+                case PPTXMLConstants.TEXTBODY:
+                    textbody = false;
+                    defaultsize = false;
+                    title = false;
+                    subtitleheader = false;
                 default:
                     break;
             }
@@ -380,6 +386,7 @@ public class PowerpointHandler extends DefaultHandler {
             if (qName.equals(PPTXMLConstants.CHARTBODY)) {
                 chart = new Chart(lastId);
                 pptobjects.add(chart);
+                canRead = false;
             }
 
         } catch (Exception e) {
@@ -400,6 +407,9 @@ public class PowerpointHandler extends DefaultHandler {
                     if (list != null) {             
                         pptobjects.add(lists.get(0));
                     }
+            }else if (qName.equals(PPTXMLConstants.GFRAME)){ 
+                    gframe = false;
+                    canRead = true;
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide chart tags (DefaultHandler endElement)", e));
@@ -424,6 +434,9 @@ public class PowerpointHandler extends DefaultHandler {
                     break;
                 case PPTXMLConstants.TABLE:
                     canRead = false;
+                    textbody = false;
+                    imagebody = false;
+                    break;
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide tags (DefaultHandler startElement)", e));
