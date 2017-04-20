@@ -15,11 +15,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Timestamp;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import objects.PPT;
@@ -29,7 +24,6 @@ import openwebslides.writer.Indentation;
 import openwebslides.writer.TemplateWriter;
 import openwebslides.zip.ZipException;
 import openwebslides.zip.Zipper;
-import org.apache.commons.io.FileUtils;
 
 /**
  * Converts a file that represents a presentation (pptx and pdf). By calling a convert method the PPT object of the Converter is filled.
@@ -192,8 +186,6 @@ public class Converter {
             
         } catch (FileNotFoundException ex) {
             throw new WebslidesConverterException(dir.getAbsolutePath() + File.separator + OUTPUT_FILE_HTML + " could not be created (" + ex.getMessage() + ")");
-        } catch (IOException ex) {
-            throw new WebslidesConverterException("the template folder could not be copied");
         } catch (ZipException ex) {
             throw new WebslidesConverterException(ex);
         }
