@@ -52,15 +52,15 @@ public class PPTConverter implements IConverter {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
-
             for (XSLFSlide slide : slides) {
+                
               // XSLFSlide slide = slides.get(4);
                 try {
                     //Webslide object
                     Slide webslide = new Slide();
 
                     //for testing
-                    output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -114,7 +114,7 @@ public class PPTConverter implements IConverter {
                     Slide webslide = new Slide();
 
                     //for testing
-                    output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);

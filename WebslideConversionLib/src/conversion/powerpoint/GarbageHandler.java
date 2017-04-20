@@ -43,17 +43,20 @@ public class GarbageHandler {
                         remove++;
                     }
                     if (((PPTList) po).getBullets().get(j) instanceof Text) {
-                        if(!textEmpty((Text)((PPTList) po).getBullets().get(j) )) remove++;
-                        else
+                        if (!textEmpty((Text) ((PPTList) po).getBullets().get(j))) {
+                            remove++;
+                        } else {
                             ((PPTList) po).getBullets().remove(((PPTList) po).getBullets().get(j));
+                        }
                     }
+                    j++;
                 }
             }
             if (po.getClass().equals(Text.class)) {
                 remove = 0;
                 int i = 0;
-                while (remove == 0 && i < ((Text)po).getTextparts().size()) {
-                    if (!((Text)po).getTextparts().get(i).getContent().equals("") || ((Text)po).getTextparts().get(i).getContent() != null) {
+                while (remove == 0 && i < ((Text) po).getTextparts().size()) {
+                    if (!((Text) po).getTextparts().get(i).getContent().equals("") || ((Text) po).getTextparts().get(i).getContent() != null) {
                         remove++;
                         i++;
                     }
@@ -65,8 +68,8 @@ public class GarbageHandler {
         }
         pptObjects.removeAll(toRemove);
     }
-    
-    private static boolean textEmpty(Text text){
+
+    private static boolean textEmpty(Text text) {
         int i = 0;
         int remove = 0;
         while (remove == 0 && i < text.getTextparts().size()) {

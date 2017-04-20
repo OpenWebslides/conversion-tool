@@ -1,4 +1,4 @@
-/*
+    /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -53,11 +53,11 @@ public class PPTXMLConstants {
     public static final String TEXT_TITLE = "title";
     
     //Text default sizes
-    public static final int TEXT_TITLE_HEADER_SIZE = 100000;
-    public static final int TEXT_SUBTITLE_HEADER_SIZE = 50000;
-    public static final int TEXT_TITLE_SIZE = 40000;
-    public static final int TEXT_DEFAULT_LARGE_SIZE = 24000;
-    public static final int TEXT_DEFAULT_SMALL_SIZE = 18000;
+    public static final int TEXT_TITLE_HEADER_SIZE = 6000; //60 font size
+    public static final int TEXT_SUBTITLE_HEADER_SIZE = 2400; //24
+    public static final int TEXT_TITLE_SIZE = 4400; //44
+    public static final int TEXT_DEFAULT_LARGE_SIZE = 2800; //28
+    public static final int TEXT_DEFAULT_SMALL_SIZE = 1800; //18
 
     //Image & Video elements
     public static final String MEDIABODY = "p:pic";

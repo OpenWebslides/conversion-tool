@@ -175,7 +175,6 @@ public class PowerpointHandler extends DefaultHandler {
                     }
                     break;
                 case PPTXMLConstants.TEXTLEVEL:
-                    if(isList){
                         if (attributes.getValue(PPTXMLConstants.LEVEL) != null) {
                             int level = Integer.parseInt(attributes.getValue(PPTXMLConstants.LEVEL));
                             text.setLevel(attributes.getValue(PPTXMLConstants.LEVEL));
@@ -184,7 +183,6 @@ public class PowerpointHandler extends DefaultHandler {
                             text.setLevel("0");
                             startList(0);
                         }
-                    }
                     break;
                 case PPTXMLConstants.TEXTPART:
                     textpart = new Textpart();
@@ -213,8 +211,10 @@ public class PowerpointHandler extends DefaultHandler {
                     }
                     if(isList){
                         if(defaultsize){
+                            if(text.getLevel()==null){
                             text.setLevel("0");
                             startList(0);
+                            }
                         }
                     }
                     break;
@@ -284,6 +284,7 @@ public class PowerpointHandler extends DefaultHandler {
                             pptobjects.add(lists.get(0));
                             pptobjects.add(text);
                             textAdded = true;
+                            lists = null;
                             list = null;
                         }
                     } else if (list == null && text.getLevel() == null) {
@@ -298,6 +299,14 @@ public class PowerpointHandler extends DefaultHandler {
                     defaultsize = false;
                     title = false;
                     subtitleheader = false;
+                    if (text != null && !textAdded) {
+                        pptobjects.add(text);
+                    }
+                    if (list != null) {             
+                        pptobjects.add(lists.get(0));
+                        lists = null;
+                        list = null;
+                    }
                 default:
                     break;
             }
@@ -347,7 +356,7 @@ public class PowerpointHandler extends DefaultHandler {
     private void startImage(String qName, Attributes attributes) {
         try {
             if (qName.equals(PPTXMLConstants.MEDIADETAILS)) {
-                media = new Image();
+                media = (Media) new Image();
                 media.setId(attributes.getValue(PPTXMLConstants.ID));
             } else if(qName.equals(PPTXMLConstants.VIDEOBODY)){
                 Video video = new Video();
@@ -410,12 +419,6 @@ public class PowerpointHandler extends DefaultHandler {
                 canRead = true;
             }
             else if (qName.equals(PPTXMLConstants.FRAGMENT)){ 
-                    if (text != null && !textAdded) {
-                        pptobjects.add(text);
-                    }
-                    if (list != null) {             
-                        pptobjects.add(lists.get(0));
-                    }
             }else if (qName.equals(PPTXMLConstants.GFRAME)){ 
                     gframe = false;
                     canRead = true;
