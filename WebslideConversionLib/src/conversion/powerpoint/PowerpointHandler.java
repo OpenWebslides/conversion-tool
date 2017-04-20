@@ -257,23 +257,17 @@ public class PowerpointHandler extends DefaultHandler {
                     text.addTextpart(textpart);
                     break;
                 case PPTXMLConstants.TEXT:
-                    if (list != null && text.getLevel() == null) {
-                        pptobjects.add(lists.get(0));
-                        pptobjects.add(text);
-                        textAdded = true;
-                        list = null;
+                    if (list != null) {
+                        if(text.getLevel() == null){
+                            pptobjects.add(lists.get(0));
+                            pptobjects.add(text);
+                            textAdded = true;
+                            list = null;
+                        }
                     } else if (list == null && text.getLevel() == null) {
                         pptobjects.add(text);
                         textAdded = true;
                         text = null;
-                    }
-                    break;
-                case PPTXMLConstants.FRAGMENT: 
-                    if (text != null && !textAdded) {
-                        pptobjects.add(text);
-                    }
-                    if (list != null) {                      
-                        pptobjects.add(lists.get(0));
                     }
                     break;
                 default:
@@ -361,6 +355,7 @@ public class PowerpointHandler extends DefaultHandler {
             if (qName.equals(PPTXMLConstants.MEDIABOX)) {
                 pptobjects.add(media);
                 media = null;
+                imagebody = false;
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while reading slide image tags (DefaultHandler endElement)", e));
@@ -383,6 +378,14 @@ public class PowerpointHandler extends DefaultHandler {
         try {
             if (qName.equals(PPTXMLConstants.TABLE)) {
                 pptobjects.add(new Table());
+            }
+            else if (qName.equals(PPTXMLConstants.FRAGMENT)){ 
+                    if (text != null && !textAdded) {
+                        pptobjects.add(text);
+                    }
+                    if (list != null) {             
+                        pptobjects.add(lists.get(0));
+                    }
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide chart tags (DefaultHandler endElement)", e));
