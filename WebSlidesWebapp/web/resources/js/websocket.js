@@ -38,7 +38,7 @@ shared_vars.socket.onmessage = function (event) {
 };
 
 shared_vars.socket.onerror = function (e) {
-    alert("An error occured while connecting... " + e.data);
+    alert("An error occured while opening the websocket  ");
 };
 
 
