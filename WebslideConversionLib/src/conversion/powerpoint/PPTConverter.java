@@ -52,8 +52,8 @@ public class PPTConverter implements IConverter {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
-
             for (XSLFSlide slide : slides) {
+                
               // XSLFSlide slide = slides.get(4);
                 try {
                     //Webslide object
