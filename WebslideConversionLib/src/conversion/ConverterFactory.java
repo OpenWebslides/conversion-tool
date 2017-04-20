@@ -29,8 +29,8 @@ public class ConverterFactory {
         switch(ext2){
             case "pptx" : return new PPTConverter(file);
             case "pdf" : return new PDFConverter(file);
+            default: throw new IllegalArgumentException("This is not a supported file");
         }
-        return null;
     }
     
     private static String getExtension(String fileName){

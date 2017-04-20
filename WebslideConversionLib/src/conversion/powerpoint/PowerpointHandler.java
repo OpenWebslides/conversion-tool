@@ -204,6 +204,7 @@ public class PowerpointHandler extends DefaultHandler {
                     }
                     if (attributes.getValue(PPTXMLConstants.SIZE) != null) {
                         textpart.setSize(Integer.parseInt(attributes.getValue(PPTXMLConstants.SIZE)));
+                        output.println(textpart.getSize()+"");
                     }
                     if (attributes.getValue(PPTXMLConstants.CHARACTERSPACING) != null) {
                         textpart.setSize(Integer.parseInt(attributes.getValue(PPTXMLConstants.CHARACTERSPACING)));
