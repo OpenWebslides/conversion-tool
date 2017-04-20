@@ -56,7 +56,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
            
            
            $("#field-download").append(
-                $("<form></form>", {action: "download",id: "download-form-"+shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3")
+                $("<form></form>", {action: "download",id: "download-form-"+shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3").prop({'target':'_blank'})
                 .append($("<img />").attr({src:"resources/images/loading_blue.gif",alt:"loading animation", id:"download-loading-anim-"+shared_vars.filesInProgress.length}))
                 .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-1"}))
                 .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-2"}))
