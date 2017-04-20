@@ -37,6 +37,7 @@ public class PowerpointHandler extends DefaultHandler {
     private boolean textbody = false;
     private boolean imagebody = false;
     private boolean gframe;
+    private boolean canRead = true;
 
     //Variables list
     private PPTList list;
@@ -67,25 +68,34 @@ public class PowerpointHandler extends DefaultHandler {
      */
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         try {
-            if (qName.equals(PPTXMLConstants.IDELEMENT)) {
-                lastId = attributes.getValue(PPTXMLConstants.ID);
-            } else if (qName.equals(PPTXMLConstants.TEXTBODY)) {
-                textbody = true;
-                imagebody = false;
-            } else if (qName.equals(PPTXMLConstants.MEDIABODY)) {
-                imagebody = true;
-                textbody = false;
-            } else if (qName.equals(PPTXMLConstants.GFRAME)) {
-                gframe = true;
-            }
-            if (textbody) {
-                startText(qName, attributes);
-            } else if (imagebody) {
-                startImage(qName, attributes);
-            } else if (gframe) {
-                startChart(qName, attributes);
-            } else {
-                startRest(qName, attributes);
+            if(canRead){
+                switch (qName) {
+                    case PPTXMLConstants.IDELEMENT:
+                        lastId = attributes.getValue(PPTXMLConstants.ID);
+                        break;
+                    case PPTXMLConstants.TEXTBODY:
+                        textbody = true;
+                        imagebody = false;
+                        break;
+                    case PPTXMLConstants.MEDIABODY:
+                        imagebody = true;
+                        textbody = false;
+                        break;
+                    case PPTXMLConstants.GFRAME:
+                        gframe = true;
+                        break;
+                    default:
+                        break;
+                }
+                if (textbody) {
+                    startText(qName, attributes);
+                } else if (imagebody) {
+                    startImage(qName, attributes);
+                } else if (gframe) {
+                    startChart(qName, attributes);
+                } else {
+                    startRest(qName, attributes);
+                }
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while reading slide data (DefaultHandler startElement)", e));
@@ -107,7 +117,9 @@ public class PowerpointHandler extends DefaultHandler {
                 endRest(qName);
             }
         }
-    catch (Exception e){}
+    catch (Exception e){
+        output.println(Logger.error("Error while ending xml tags data (DefaultHandler endElement)", e));
+    }
 
     }
 
@@ -269,6 +281,7 @@ public class PowerpointHandler extends DefaultHandler {
                         textAdded = true;
                         text = null;
                     }
+                    textbody = false;
                     break;
                 default:
                     break;
@@ -378,6 +391,7 @@ public class PowerpointHandler extends DefaultHandler {
         try {
             if (qName.equals(PPTXMLConstants.TABLE)) {
                 pptobjects.add(new Table());
+                canRead = true;
             }
             else if (qName.equals(PPTXMLConstants.FRAGMENT)){ 
                     if (text != null && !textAdded) {
@@ -407,6 +421,9 @@ public class PowerpointHandler extends DefaultHandler {
                     } else {
                         defaultsize = true;
                     }
+                    break;
+                case PPTXMLConstants.TABLE:
+                    canRead = false;
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide tags (DefaultHandler startElement)", e));

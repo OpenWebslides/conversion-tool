@@ -200,10 +200,8 @@ class MediaHandler {
         try {
             try {
                 
-                output.println("gonna copy");
                 File f = copyImage(img, name, file, output, saveLoc);
                 FileInputStream fis = new FileInputStream(f);
-                output.println(saveLoc + "\\" + f.getName());
                 ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + f.getName());
                 zip.putNextEntry(zipEntry);
                 byte[] bytes = new byte[1024];
