@@ -31,4 +31,8 @@
     <error-page>
         <location>/GenericError.html</location>
     </error-page>
+    <mime-mapping>
+        <extension>zip</extension>
+        <mime-type>application/zip</mime-type>
+    </mime-mapping>
 </web-app>
