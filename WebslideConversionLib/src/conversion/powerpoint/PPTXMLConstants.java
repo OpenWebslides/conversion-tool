@@ -32,6 +32,7 @@ public class PPTXMLConstants {
     public static final String TEXTFONT = "a:latin";
     public static final String COLORDETAIL = "a:srgbClr";
     public static final String TEXTTYPE = "p:ph";
+    public static final String NOLIST = "a:buNone";
 
     //Text attributes
     public static final String LEVEL = "lvl";
@@ -44,6 +45,7 @@ public class PPTXMLConstants {
     public static final String TYPEFACE = "typeface";
     public static final String TEXTTYPEATTR = "type";
     public static final String SOLOWORD = "err";
+    
     
     //Text title values
     public static final String TEXT_TITLE_HEADER = "ctrTitle";

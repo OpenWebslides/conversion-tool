@@ -90,8 +90,8 @@
     </zip>
     <delete file="${store.dir}/temp_final.jar"/>
 </target>
-   <!-- <target name="-post-jar" description="bundle sources and javadoc in a jar" depends="javadoc">
+   <target name="-post-jar" description="bundle sources and javadoc in a jar" depends="javadoc">
     <jar compress="${jar.compress}" basedir="${src.dir}" jarfile="${dist.dir}/${application.title}-sources.jar"/>
     <jar compress="${jar.compress}" basedir="${dist.javadoc.dir}" jarfile="${dist.dir}/${application.title}-javadoc.jar"/>
-</target>-->
+</target>
 </project>

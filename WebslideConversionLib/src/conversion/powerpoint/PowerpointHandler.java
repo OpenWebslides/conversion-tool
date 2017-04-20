@@ -31,6 +31,7 @@ public class PowerpointHandler extends DefaultHandler {
     private boolean subtitleheader = false;
     private boolean title = false;
     private boolean defaultsize = false;
+    private boolean isList = false;
 
     //Variables optimalization of if statements in startelement
     private boolean textbody = false;
@@ -158,10 +159,10 @@ public class PowerpointHandler extends DefaultHandler {
                 case PPTXMLConstants.TEXT:
                     text = new Text();
                     textAdded = false;
-                    if(defaultsize){
-                        text.setLevel("0");
-                        startList(0);
-                    }
+                    if(defaultsize) isList = true;
+                    break;
+                case PPTXMLConstants.NOLIST:
+                    isList = false;
                     break;
                 case PPTXMLConstants.UNORDEREDLIST:
                     if (list != null) {
@@ -174,13 +175,15 @@ public class PowerpointHandler extends DefaultHandler {
                     }
                     break;
                 case PPTXMLConstants.TEXTLEVEL:
-                    if (attributes.getValue(PPTXMLConstants.LEVEL) != null) {
-                        int level = Integer.parseInt(attributes.getValue(PPTXMLConstants.LEVEL));
-                        text.setLevel(attributes.getValue(PPTXMLConstants.LEVEL));
-                        startList(level);
-                    } else {
-                        text.setLevel("0");
-                        startList(0);
+                    if(isList){
+                        if (attributes.getValue(PPTXMLConstants.LEVEL) != null) {
+                            int level = Integer.parseInt(attributes.getValue(PPTXMLConstants.LEVEL));
+                            text.setLevel(attributes.getValue(PPTXMLConstants.LEVEL));
+                            startList(level);
+                        } else {
+                            text.setLevel("0");
+                            startList(0);
+                        }
                     }
                     break;
                 case PPTXMLConstants.TEXTPART:
@@ -207,6 +210,12 @@ public class PowerpointHandler extends DefaultHandler {
                     }
                     if (attributes.getValue(PPTXMLConstants.SOLOWORD) == null) {
                         textpart.setContent(" ");
+                    }
+                    if(isList){
+                        if(defaultsize){
+                            text.setLevel("0");
+                            startList(0);
+                        }
                     }
                     break;
                 case PPTXMLConstants.TEXTCONTENT:
