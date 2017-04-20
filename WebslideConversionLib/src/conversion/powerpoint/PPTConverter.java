@@ -56,11 +56,12 @@ public class PPTConverter implements IConverter {
                 
               // XSLFSlide slide = slides.get(4);
                 try {
+                    output.println(slides.indexOf(slide) + "start -------------------");
                     //Webslide object
                     Slide webslide = new Slide();
 
                     //for testing
-                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                   // output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -71,7 +72,7 @@ public class PPTConverter implements IConverter {
                    
                     //copy the images
                     MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output);
-
+                   
                      //remove null values from list that got there thanks to irregularities in xml
                     GarbageHandler.handle(webslide.getPptObjects(), output);
 
@@ -81,6 +82,7 @@ public class PPTConverter implements IConverter {
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
+                    output.println(slides.indexOf(slide) + " end-------------------");
 
                     // output.println("");
                 } catch (Exception e) {
@@ -91,7 +93,7 @@ public class PPTConverter implements IConverter {
             pptSource.close();
 
         } catch (Exception ex) {
-            output.println(Logger.error("Error while parsing the powerpoint", ex));
+            throw new IllegalArgumentException("This is probably not a valid powerpoint file");
         }
     }
 
@@ -114,7 +116,7 @@ public class PPTConverter implements IConverter {
                     Slide webslide = new Slide();
 
                     //for testing
-                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);

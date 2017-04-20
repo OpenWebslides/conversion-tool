@@ -80,4 +80,23 @@ public class PPTList implements PPTObject {
         this.ordered = ordered;
     }
 
+    public List<PPTObject> getAllObjects() {
+        List<PPTObject> list = new ArrayList<>();
+        for (PPTObject po : bullets) {
+            if (po instanceof PPTList) {
+                list.addAll(((PPTList) po).getAllObjects());
+            } else {
+                list.add(po);
+            }
+        }
+        return list;
+    }
+
+    public void replace(PPTObject pp, PPTObject obj) {
+        if(bullets.contains(obj)){
+            bullets.set(bullets.indexOf(pp), obj);
+        }
+        
+    }
+
 }

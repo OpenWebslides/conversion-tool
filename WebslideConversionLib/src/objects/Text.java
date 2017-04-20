@@ -51,6 +51,15 @@ public class Text implements PPTObject {
         return toret;
     }
 
+    public String getContent(){ 
+        String toret = "";
+        if(textparts.size()>0){
+            for(Textpart td : textparts){
+                toret += td.getContent();
+            }
+        }
+        return toret;
+    }
     /**
      * A Text object has a level if it is part of a list.
      * If the object is not part of a list, the level will be null

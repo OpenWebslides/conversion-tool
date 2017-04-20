@@ -47,6 +47,7 @@ public class GarbageHandler {
                         else
                             ((PPTList) po).getBullets().remove(((PPTList) po).getBullets().get(j));
                     }
+                    j++;
                 }
             }
             if (po.getClass().equals(Text.class)) {
@@ -62,6 +63,7 @@ public class GarbageHandler {
             if (remove == 0) {
                 toRemove.add(po);
             }
+            
         }
         pptObjects.removeAll(toRemove);
     }

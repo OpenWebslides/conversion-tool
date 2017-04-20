@@ -12,7 +12,6 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.zip.ZipEntry;
@@ -28,6 +27,8 @@ import objects.ChartType;
 import objects.Row;
 import objects.Table;
 import objects.Media;
+import objects.PPTList;
+import objects.Text;
 import objects.Video;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.xslf.usermodel.*;
@@ -60,6 +61,27 @@ class MediaHandler {
     public static void handle(XSLFSlide slide, List<PPTObject> pptObjects, String saveLocation, File file, Output output) {
         try {
             for (XSLFShape sh : slide.getShapes()) {
+                if(sh.getClass().equals(XSLFAutoShape.class)){
+                    for(XSLFTextParagraph p : ((XSLFAutoShape)sh).getTextParagraphs()){
+                        for(XSLFTextRun r : p.getTextRuns()){
+                          //   output.println(r.getRawText());
+                            for(PPTObject po : pptObjects){
+                                if(po instanceof PPTList){
+                                    for(PPTObject pp : ((PPTList)po).getAllObjects()){
+                               //         output.println(r.getRawText() + " " + ((Text)pp).getContent());
+                                        if(((Text)pp).getContent().trim().equals(r.getRawText().trim())){
+                                        }
+                                    }
+                                }
+                                if(po instanceof Text){
+                                    if(((Text)po).getContent().trim().equals(r.getRawText().trim())){
+                                    }
+                                }
+                            }
+                        }
+                }
+                    
+                }
                 if (sh.getClass().equals(XSLFPictureShape.class)) {
                     for (PPTObject po : pptObjects) {
                         if (po instanceof Media) {
@@ -70,7 +92,7 @@ class MediaHandler {
                         }
                     }
                 }
-                if (sh.getClass().equals(XSLFTable.class)) {
+                else if (sh.getClass().equals(XSLFTable.class)) {
                     for (PPTObject po : pptObjects) {
                         if (po.getClass().equals(Table.class)) {
                             if (((Table) po).getRows().isEmpty()) {
@@ -90,7 +112,6 @@ class MediaHandler {
                     }
                 }
             }
-
             for (POIXMLDocumentPart.RelationPart part : slide.getRelationParts()) {
                 if (part.getDocumentPart() instanceof XSLFChart) {
                     final String relId = part.getRelationship().getId();

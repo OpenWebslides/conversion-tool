@@ -184,6 +184,11 @@ public class PowerpointHandler extends DefaultHandler {
                             startList(0);
                         }
                     break;
+                case PPTXMLConstants.TEXTLINK:
+                    if(attributes.getValue(PPTXMLConstants.RID)!=null){
+                        textpart = new Hyperlinktemp(textpart);
+                        ((Hyperlinktemp)textpart).setRid(attributes.getValue(PPTXMLConstants.RID));
+                    }
                 case PPTXMLConstants.TEXTPART:
                     textpart = new Textpart();
                     break;

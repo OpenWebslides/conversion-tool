@@ -70,7 +70,7 @@
     nbproject/build-impl.xml file. 
 
     -->
-<!--<target name="package-for-store" depends="jar">
+<target name="package-for-store" depends="jar">
     <property name="store.jar.name" value="WebslideConversionLib"/>
     <property name="store.dir" value="store"/>
     <property name="store.jar" value="${store.dir}/${store.jar.name}.jar"/>
@@ -93,5 +93,5 @@
    <target name="-post-jar" description="bundle sources and javadoc in a jar" depends="javadoc">
     <jar compress="${jar.compress}" basedir="${src.dir}" jarfile="${dist.dir}/${application.title}-sources.jar"/>
     <jar compress="${jar.compress}" basedir="${dist.javadoc.dir}" jarfile="${dist.dir}/${application.title}-javadoc.jar"/>
-</target>-->
+</target>
 </project>

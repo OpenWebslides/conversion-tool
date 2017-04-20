@@ -33,6 +33,7 @@ public class PPTXMLConstants {
     public static final String COLORDETAIL = "a:srgbClr";
     public static final String TEXTTYPE = "p:ph";
     public static final String NOLIST = "a:buNone";
+    public static final String TEXTLINK = "a:hlinkClick";
 
     //Text attributes
     public static final String LEVEL = "lvl";
@@ -45,6 +46,7 @@ public class PPTXMLConstants {
     public static final String TYPEFACE = "typeface";
     public static final String TEXTTYPEATTR = "type";
     public static final String SOLOWORD = "err";
+    public static final String RID = "r:id";
     
     
     //Text title values
