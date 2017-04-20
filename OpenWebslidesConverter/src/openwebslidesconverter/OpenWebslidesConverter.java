@@ -39,6 +39,8 @@ public class OpenWebslidesConverter {
     private static final String FLAG_COURSE = "co";
     private static final String FLAG_CHAPTER = "ch";
     
+    private static final String IMAGE_FOLDER = "images";
+    
     /**
      * Starts the converter with the given arguments.
      * @param args The arguments for the converter.
@@ -57,12 +59,12 @@ public class OpenWebslidesConverter {
             
             if(cmd.hasOption(FLAG_ZIP)){
                 try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(outputFolder.getAbsolutePath() + File.separator + "webslides.zip"))) {
-                    converter.convert(getInputFile(cmd), zos);
+                    converter.convert(getInputFile(cmd), zos, IMAGE_FOLDER);
                     converter.saveToZip(zos, outputType, Converter.outputFormat.HTML);
                 }
             }
             else {
-                String imageDir = outputFolder.getAbsolutePath() + File.separator + "images";
+                String imageDir = outputFolder.getAbsolutePath() + File.separator + IMAGE_FOLDER;
                 converter.convert(getInputFile(cmd), imageDir);
                 converter.saveToDirectory(outputFolder, outputType, Converter.outputFormat.HTML);
             }
@@ -96,7 +98,7 @@ public class OpenWebslidesConverter {
             outputType outputType = getOutputType(cmd);
             
             try (ZipOutputStream zos = new ZipOutputStream(outputStream)) {
-                converter.convert(getInputFile(cmd), zos);
+                converter.convert(getInputFile(cmd), zos, IMAGE_FOLDER);
                 converter.saveToZip(zos, outputType, Converter.outputFormat.HTML);
             }
             

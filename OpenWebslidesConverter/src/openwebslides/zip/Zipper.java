@@ -5,6 +5,7 @@
  */
 package openwebslides.zip;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,7 +16,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
+import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -120,6 +123,44 @@ public class Zipper {
                 Logger.getLogger(Zipper.class.getName()).log(Level.SEVERE, null, e);
                 //Logger.error("Could not close outputstreams, perhaps they were never open", ex);
             }
+        }
+    }
+    
+    public static void copyZip(ZipInputStream zis, File outputFolder) throws ZipException{
+        if(!outputFolder.exists() || !outputFolder.isDirectory())
+                throw new ZipException("the file "+outputFolder.getAbsolutePath()+" is not a folder or does not exist");
+        
+        try {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                File file = new File(outputFolder.getAbsolutePath() + File.separator + entry.getName());
+                file.getParentFile().mkdirs();
+                
+                if(!entry.isDirectory()){
+                    try(FileOutputStream fos = new FileOutputStream(file)){
+                        IOUtils.copy(zis, fos);
+                    }
+                }
+            }
+
+        } catch(IOException ex) {
+            throw new ZipException("Template folder cannot be copied "+ex.getMessage());
+        }
+    }
+    
+    public static void copyZip(ZipInputStream zis, ZipOutputStream zos) throws ZipException {
+        try {
+            ZipEntry entry;
+            while ((entry = zis.getNextEntry()) != null) {
+                if(!entry.isDirectory()){
+                    zos.putNextEntry(new ZipEntry(entry.getName()));
+                    IOUtils.copy(zis, zos);
+                    zos.closeEntry();
+                }
+            }
+
+        } catch(IOException ex) {
+            throw new ZipException("Template folder cannot be copied "+ex.getMessage());
         }
     }
 }

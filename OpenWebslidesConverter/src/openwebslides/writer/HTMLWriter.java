@@ -248,8 +248,7 @@ public class HTMLWriter extends Writer implements Indentation{
     }
     
     private String getImageSource(Image image){
-        return image.getFilename();
-        //return imagesFolder + "/" + image.getFilename();  // TODO getFilename zonder pad + aanpassen in converter
+        return imagesFolder + "/" + image.getFilename();
     }
     
     private String toHtml(Chart chart){

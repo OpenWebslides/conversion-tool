@@ -7,6 +7,7 @@ package openwebslidesconverter;
 
 import conversion.ConverterFactory;
 import conversion.IConverter;
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,13 +18,15 @@ import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Timestamp;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import objects.PPT;
 import output.Output;
 import openwebslides.writer.HTMLWriter;
 import openwebslides.writer.Indentation;
 import openwebslides.writer.TemplateWriter;
-import openwebslides.writer.Writer;
 import openwebslides.zip.ZipException;
 import openwebslides.zip.Zipper;
 import org.apache.commons.io.FileUtils;
@@ -45,6 +48,7 @@ public class Converter {
 
     private static final String OUTPUT_FILE_HTML = "index.html";
     private String course, chapter;
+    private String imageFolder = "images";
     
     /**
      * The name of the charset used in the saveToStream(OutputStream, outputType, outputFormat) method.
@@ -65,7 +69,7 @@ public class Converter {
     /**
      * Converts the file and fills the PPT object of the Converter. The images are saved into the imageSaveLocation.
      * @param file The file to be converted.
-     * @param imageSaveLocation To location the images are saved.
+     * @param imageSaveLocation The location the images are saved.
      * @throws openwebslidesconverter.WebslidesConverterException If the conversion has failed.
      */
     public void convert(File file, String imageSaveLocation) throws WebslidesConverterException {
@@ -88,9 +92,10 @@ public class Converter {
      * Converts the file and fills the PPT object of the Converter. The images are saved into the ZipOutputStream.
      * @param file The file to be converted.
      * @param zos To ZipOutputStream the images are saved to.
+     * @param imageSaveLocation The location the images are saved.
      * @throws openwebslidesconverter.WebslidesConverterException If the conversion has failed.
      */
-    public void convert(File file, ZipOutputStream zos) throws WebslidesConverterException  {
+    public void convert(File file, ZipOutputStream zos, String imageSaveLocation) throws WebslidesConverterException  {
         try {
             output.println("Start conversion");
             
@@ -99,23 +104,10 @@ public class Converter {
             
             readPpt = new PPT();
             
-            //temp dir for temp storage
-            Path tempDir = Files.createTempDirectory("images"+new Timestamp(System.currentTimeMillis()).getTime());
-            String imagesPath = tempDir.toAbsolutePath().toString() + File.separator + "images";
-            
-            converter.parse(readPpt, imagesPath);
-
-            Zipper.addFolder(zos, tempDir.toFile());
-            
-            //delete temp dir with content
-            FileUtils.deleteDirectory(tempDir.toFile());
+            converter.parse(readPpt, zos, imageSaveLocation);
             
             output.println("Input file successfully read");
-        } catch (IOException ex) {
-            System.err.println("dummy code: fout met de temp direcory");
-            System.err.println(ex.getMessage());
-            throw new WebslidesConverterException("dummy code: fout met de temp direcory\n" + ex.getMessage());
-        } catch (ZipException ex) {
+        } catch (FileNotFoundException ex) {
             throw new WebslidesConverterException(ex);
         }
     }
@@ -160,8 +152,8 @@ public class Converter {
             output.println(OUTPUT_FILE_HTML + " successfully created");
             
             if(type == outputType.SHOWER){
-                File source = new File("Template");
-                Zipper.addFolder(zos, source);
+                ZipInputStream zis = new ZipInputStream(new BufferedInputStream(Converter.class.getResourceAsStream("/openwebslides/template.zip")));
+                Zipper.copyZip(zis, zos);
                 output.println("template files copied into .zip");
             }
             
@@ -192,9 +184,9 @@ public class Converter {
             output.println(OUTPUT_FILE_HTML + " successfully created");
             
             if(type == outputType.SHOWER){
-                File source = new File("Template/_shared");
-                File target = new File(dir.getAbsolutePath() + File.separator + "_shared");
-                FileUtils.copyDirectory(source, target);
+                ZipInputStream zis = new ZipInputStream(new BufferedInputStream(Converter.class.getResourceAsStream("/openwebslides/template.zip")));
+                File target = new File(dir.getAbsolutePath());
+                Zipper.copyZip(zis, target);
                 output.println("template files copied");
             }
             
@@ -202,6 +194,8 @@ public class Converter {
             throw new WebslidesConverterException(dir.getAbsolutePath() + File.separator + OUTPUT_FILE_HTML + " could not be created (" + ex.getMessage() + ")");
         } catch (IOException ex) {
             throw new WebslidesConverterException("the template folder could not be copied");
+        } catch (ZipException ex) {
+            throw new WebslidesConverterException(ex);
         }
         output.println("successfully saved to " + dir.getAbsolutePath());
     }
@@ -265,6 +259,14 @@ public class Converter {
 
     public void setCharsetName(String charsetName) {
         this.charsetName = charsetName;
+    }
+
+    public String getImageFolder() {
+        return imageFolder;
+    }
+
+    public void setImageFolder(String imageFolder) {
+        this.imageFolder = imageFolder;
     }
     
 }

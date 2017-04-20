@@ -55,7 +55,7 @@ public class OpenWebslidesConverterTests {
     //
     // @Test
     // public void hello() {}
-    
+    /*
     @Test
     public void test1() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1\\input.pptx",
@@ -143,6 +143,30 @@ public class OpenWebslidesConverterTests {
         String[] args = new String[] {"-i",input,
                                       "-o",dir,
                                       "-t","shower"};
+        OpenWebslidesConverter.main(args);
+    }
+    */
+    
+    @Test
+    public void pdf1() throws WebslidesConverterException{
+        String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf1";
+        String input = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf1\\input.pdf";
+        
+        String[] args = new String[] {"-i",input,
+                                      "-o",dir,
+                                      "-t","shower"};
+        OpenWebslidesConverter.main(args);
+    }
+    
+    @Test
+    public void pdf2() throws WebslidesConverterException{
+        String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf2";
+        String input = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf2\\input.pdf";
+        
+        String[] args = new String[] {"-i",input,
+                                      "-o",dir,
+                                      "-t","shower",
+                                      "-zip"};
         OpenWebslidesConverter.main(args);
     }
     
