@@ -49,7 +49,7 @@ public class getImageLocations extends PDFTextStripper {
     public getImageLocations() throws IOException {
         
         super();
-        imageNumber = 0;
+        imageNumber = 1;
     }
     public int getImageNumber(){
         return imageNumber;

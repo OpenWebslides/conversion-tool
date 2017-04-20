@@ -51,7 +51,7 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    System.out.println("saving: "+ location + File.separator +  "img" + totalImages + ".jpg");
+                    //System.out.println("saving: "+ location + File.separator +  "img" + totalImages + ".jpg");
                     FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + totalImages + ".jpg"));
                     pdxObjectImage.write2OutputStream(output);
                     totalImages++;
@@ -66,11 +66,11 @@ public class PDFImageExtractor extends PDFStreamEngine {
      * @param document
      * @param ZOS 
      */
-    public void extractImage(PDDocument document, ZipOutputStream ZOS) throws IOException {
+    public void extractImage(PDDocument document, ZipOutputStream ZOS, String saveLocation) throws IOException {
         List<PDPage> list = document.getDocumentCatalog().getAllPages();
 
         int totalImages = 1;
-        ZOS.putNextEntry(new ZipEntry("images" + "/"));
+        
         for (PDPage page : list) {
             PDResources pdResources = page.getResources();
 
@@ -81,13 +81,14 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    
+                    ZOS.putNextEntry(new ZipEntry(saveLocation + File.separator + "img" + totalImages + ".jpg"));
                     pdxObjectImage.write2OutputStream(ZOS);
+                    ZOS.closeEntry();
                     totalImages++;
                 }
             }
             
         }
-        ZOS.closeEntry();
+        
     }
 }
