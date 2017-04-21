@@ -23,7 +23,7 @@ function setLanguage() {
             var dict = JSON.parse(result);
 
             $(".header-title").html(dict["header-title"]);
-            $("#header-subtext").html(dict["header-subtext"]);
+            $(".header-subtext").html(dict["header-subtext"]);
             $("#logo-ugent").attr("alt", dict["logo-alt"]);
             $("#logo-ugent").attr("src", dict["logo-src"]);
 
