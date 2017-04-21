@@ -39,7 +39,7 @@ public class ConversionCallable implements Callable<Integer> {
      * will be filled with the log output from the logger.
      * @param id A unique identification for the thread. Used in the log to keep
      * the different converters apart.
-     * @param cb
+     * @param cb an object to call back to when the conversion is finished
      */
     public ConversionCallable(String[] args, Queue<Queue<String>> logQueue, long id, CallableCallback cb) {
         this.args = args;
@@ -52,7 +52,7 @@ public class ConversionCallable implements Callable<Integer> {
      * Private help method to write a message to the log queue. The id of the
      * thread and a timestamp will be added before the message.
      *
-     * @param msg
+     * @param msg the message to log
      */
     private void logToQueue(String msg) {
         queue.offer(id + " " + new Timestamp(new Date().getTime()) + " " + msg);
@@ -62,10 +62,10 @@ public class ConversionCallable implements Callable<Integer> {
      * The call method of the callable. Contains all the logic of the class. It
      * passes the arguments from the constructor to the converter via
      * reflection. At the end the queue of strings with the logs from the
-     * converter will be pushed into logQueue.    
+     * converter will be pushed into logQueue.
      */
     @Override
-    public Integer call(){
+    public Integer call() {
         try {
             this.queue = new ConcurrentLinkedDeque<>();
 
@@ -91,22 +91,20 @@ public class ConversionCallable implements Callable<Integer> {
             param[2] = id;
 
             logToQueue("invoke converter via queueEntry");
-
-            //try {
-                method.invoke(null, param);
-                
-//            } catch (Exception reflectOpEx) // single exception!
-//            {
-//                System.err.println("Reflection error trying to invoke " + reflectOpEx);
-//                logToQueue("Reflection error trying to invoke " + reflectOpEx);
-//            }
+            
+            method.invoke(null, param);
 
             logToQueue("end of thread");
             normalfinish = true;
-            
-        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            System.err.println("THREAD_INSIDE error!");
+
+        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IllegalStateException ex) {
+            System.err.println("THREAD_INSIDE error!" + ex.getClass());
             logToQueue("THREAD_INSIDE error:" + ex.getMessage());
+            normalfinish = false;
+        } catch (Exception ex) {
+            System.err.println("THREAD_INSIDE error! " + ex.getClass());
+            logToQueue("THREAD_INSIDE error:" + ex.getMessage());
+            normalfinish = false;
         } finally {
             logQueue.offer(queue);
             callback.callableComplete(this.id, normalfinish ? 0 : -1);
