@@ -47,8 +47,6 @@ public class LanguageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String path = request.getRequestURI();
-
         language = request.getParameter("language");
         if (language == null) {
             Locale.setDefault(new Locale("en"));
@@ -69,13 +67,6 @@ public class LanguageServlet extends HttpServlet {
                 String value = "\"" + (String) bundle.getString(key) + "\"";
                 out.print(value);
             }
-
-            out.print(",");
-            String k = "test";
-            out.print("\"" + k + "\"");
-            out.print(":");
-            String v = "\"" + path + "\"";
-            out.print(v);
 
             while (bundleKeys.hasMoreElements()) {
                 out.print(",");
