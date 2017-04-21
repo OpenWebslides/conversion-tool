@@ -23,12 +23,23 @@ public class Table implements PPTObject {
         return rows;
     }
     
+    @Override
     public String toString(){
         String toret = "";
         for(Row row : rows){
             toret += row.toString() + "\n";
         }
         return toret;
+    }
+
+    @Override
+    public String getContent() {
+        String toret = "";
+        for(Row row : rows){
+            toret += row.getContent()+ "\n";
+        }
+        return toret;
+        
     }
     
     

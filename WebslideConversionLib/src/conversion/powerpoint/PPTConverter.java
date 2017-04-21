@@ -30,21 +30,47 @@ public class PPTConverter implements IConverter {
     private final File file;
     private Output output;
 
+    /**
+     * Create a PPTConverter instance
+     *
+     * @param file File
+     */
     public PPTConverter(File file) {
         this.file = file;
         output = new StdOutput();
     }
 
+    /**
+     * Set the output of the saveLocation
+     *
+     * @param output Output
+     */
     @Override
     public void setOutput(Output output) {
         this.output = output;
     }
 
+    /**
+     * Parse the file to PPT, save media to savelocation
+     *
+     * @param ppt PPT
+     * @param saveLocation String
+     */
     @Override
     public void parse(PPT ppt, String saveLocation) {
+        parse(ppt,null,saveLocation);
+    }
 
+    /**
+     * Parse the file to PPT, save media to savelocation in zipoutputstream
+     *
+     * @param ppt PPT
+     * @param zip ZipOutputStream
+     * @param saveLocation String
+     */
+    @Override
+    public void parse(PPT ppt, ZipOutputStream zip, String saveLocation) {
         XMLSlideShow pptSource;
-
         try {
             pptSource = new XMLSlideShow(new FileInputStream(file));
             List<XSLFSlide> slides = pptSource.getSlides();
@@ -52,16 +78,15 @@ public class PPTConverter implements IConverter {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
+
             for (XSLFSlide slide : slides) {
-                
-              // XSLFSlide slide = slides.get(4);
                 try {
-                    output.println(slides.indexOf(slide) + "start -------------------");
+                    output.println("+++++++++++++ Slide " + slides.indexOf(slide) + "+++++++++++++");
                     //Webslide object
                     Slide webslide = new Slide();
 
                     //for testing
-                   // output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -69,20 +94,22 @@ public class PPTConverter implements IConverter {
                     //parse
                     sp.parse(new InputSource(new StringReader(slide.getXmlObject().getCSld().getSpTree().toString())), handler);
 
-                   
-                    //copy the images
-                    MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output);
-                   
-                     //remove null values from list that got there thanks to irregularities in xml
+                    //Handle media: video, image, hyperlink, chart
+                    MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output, zip);
+
+                    //remove null values from list that got there thanks to irregularities in xml
                     GarbageHandler.handle(webslide.getPptObjects(), output);
 
-                    
-                    //print the slide for testing
+                    //print the slide for testing toString details
+                    output.println("------------ toString -------------");
                     output.println(webslide.toString());
+                    
+                    //print the slide for testing getContent
+                    output.println("------------ getContent -------------");
+                    output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
-                    output.println(slides.indexOf(slide) + " end-------------------");
 
                     // output.println("");
                 } catch (Exception e) {
@@ -94,60 +121,6 @@ public class PPTConverter implements IConverter {
 
         } catch (Exception ex) {
             throw new IllegalArgumentException("This is probably not a valid powerpoint file");
-        }
-    }
-
-   
-    public void parse(PPT ppt, ZipOutputStream zip,  String saveLocation) {
-        XMLSlideShow pptSource;
-
-        try {
-            pptSource = new XMLSlideShow(new FileInputStream(file));
-            List<XSLFSlide> slides = pptSource.getSlides();
-
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser sp = factory.newSAXParser();
-            DefaultHandler handler;
-
-            for (XSLFSlide slide : slides) {
-//               XSLFSlide slide = slides.get(2);
-                try {
-                    //Webslide object
-                    Slide webslide = new Slide();
-
-                    //for testing
-                 //   output.println(slide.getXmlObject().getCSld().getSpTree().toString());
-                    
-                    //handler that will parse the xml data
-                    handler = new PowerpointHandler(webslide.getPptObjects(), output);
-
-                    //parse
-                    sp.parse(new InputSource(new StringReader(slide.getXmlObject().getCSld().getSpTree().toString())), handler);
-
-                   
-                    //copy the images
-                    MediaHandler.handle(slide, webslide.getPptObjects(), zip, saveLocation, file, output);
-
-                     //remove null values from list that got there thanks to irregularities in xml
-                    GarbageHandler.handle(webslide.getPptObjects(), output);
-
-                    
-                    //print the slide for testing
-                    output.println(webslide.toString());
-
-                    //Add to ppt
-                    ppt.getSlides().add(webslide);
-
-                    // output.println("");
-                } catch (Exception e) {
-                    output.println(Logger.error("Error while parsing slide + " + slides.indexOf(slide) + 1 + " in the powerpoint", e));
-                }
-            }
-
-            pptSource.close();
-
-        } catch (Exception ex) {
-            output.println(Logger.error("Error while parsing the powerpoint", ex));
         }
     }
 }

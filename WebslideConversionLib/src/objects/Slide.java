@@ -36,4 +36,13 @@ public class Slide implements PPTObject {
         toret = pptObjects.stream().filter((po) -> (po!=null)).map((po) -> po.getClass().toString().replace("class objects.", "") + " : " + po.toString() + "\n").reduce(toret, String::concat);
         return toret;
     }
+
+    @Override
+    public String getContent() {
+        String toret = "";
+        for(PPTObject po : pptObjects){
+            toret += po.getContent();
+        }
+        return toret;
+    }
 }

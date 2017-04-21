@@ -51,6 +51,10 @@ public class Text implements PPTObject {
         return toret;
     }
 
+   /* public boolean compare(Textpart tp1, Textpart tp2){
+        
+    }
+    */
     public String getContent(){ 
         String toret = "";
         if(textparts.size()>0){

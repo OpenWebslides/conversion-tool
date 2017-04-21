@@ -49,7 +49,7 @@ public class ChartHandler extends DefaultHandler {
         numdata = false;
 
         categories = new ArrayList<>();
-        content = chart.getContent();
+        content = chart.getContents();
     }
 
     @Override

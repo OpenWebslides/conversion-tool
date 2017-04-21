@@ -5,6 +5,7 @@
  */
 package objects;
 
+import java.util.Arrays;
 import java.util.HashSet;
 
 /**
@@ -22,6 +23,16 @@ public class Textpart implements PPTObject {
 
     public Textpart() {
         type = new HashSet<>();
+        this.font = "Calibri";
+    }
+
+    public Textpart(Textpart tp) {
+        this.font = tp.getFont();
+        this.type = tp.getType();
+        this.size = tp.getSize();
+        this.content = tp.getContent();
+        this.charachterSpacing = tp.getCharachterSpacing();
+        this.color = tp.getColor();
     }
 
     public String getFont() {
@@ -55,7 +66,9 @@ public class Textpart implements PPTObject {
     @Override
     public String toString() {
 
-        try {
+        return this.getClass() + ": " + content + "  |font: " + font +  "  |size: " + size + "  |type: " + Arrays.toString(type.toArray())+ "  |charachterSpacing: " + charachterSpacing;
+        
+       /* try {
             if (content != null || content.equals("")) {
                 return content;
             } else {
@@ -63,7 +76,7 @@ public class Textpart implements PPTObject {
             }
         } catch (Exception e) {
             return "";
-        }
+        }*/
 
     }
 

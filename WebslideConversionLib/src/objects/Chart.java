@@ -43,7 +43,7 @@ public class Chart implements PPTObject {
      * Changes to this HashMap will be changed in the Chart object
      * @return HashMap content
      */
-    public HashMap<String, HashMap<String, ArrayList<Double>>> getContent() {
+    public HashMap<String, HashMap<String, ArrayList<Double>>> getContents() {
         return content;
     }
 
@@ -101,6 +101,11 @@ public class Chart implements PPTObject {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    @Override
+    public String getContent() {
+        return toString();
     }
     
 }

@@ -27,4 +27,6 @@ public interface PPTObject {
      */
     @Override
     public String toString();
+    
+    public String getContent();
 }

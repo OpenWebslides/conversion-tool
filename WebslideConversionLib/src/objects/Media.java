@@ -89,4 +89,9 @@ public abstract class Media implements PPTObject{
     public String getId() {
         return id;
     }
+    
+    @Override
+    public String getContent(){
+        return filename;
+    }
 }

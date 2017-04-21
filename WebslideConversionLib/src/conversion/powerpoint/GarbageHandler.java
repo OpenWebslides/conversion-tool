@@ -21,10 +21,19 @@ import output.Output;
  */
 public class GarbageHandler {
 
+    /**
+     * Remove the Null values, empty elements in lists, empty lists, empty charts, from pptobject
+     * @param pptObjects List
+     * @param output Output
+     */
     public static void handle(List<PPTObject> pptObjects, Output output) {
         removeNullValues(pptObjects);
     }
 
+    /**
+     * Remove the Null values, empty elements in lists, empty lists, empty charts,...
+     * @param pptObjects 
+     */
     private static void removeNullValues(List<PPTObject> pptObjects) {
         pptObjects.removeAll(Collections.singleton(null));
         ArrayList<PPTObject> toRemove = new ArrayList<>();
@@ -65,7 +74,7 @@ public class GarbageHandler {
             if (remove == 0) {
                 toRemove.add(po);
             }
-            
+
         }
         pptObjects.removeAll(toRemove);
     }

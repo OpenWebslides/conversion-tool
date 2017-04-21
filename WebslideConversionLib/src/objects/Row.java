@@ -31,4 +31,13 @@ public class Row implements PPTObject {
         return toret;
     }
 
+    @Override
+    public String getContent() {
+        String toret = "";
+        for(Cell cell : cells){
+                toret += cell.getContent()+ "\t";
+        }
+        return toret;
+    }
+
 }

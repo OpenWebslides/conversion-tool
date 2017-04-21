@@ -61,6 +61,14 @@ public class PPTList implements PPTObject {
         }
         return toret;
     }
+    
+    public String getContent(){
+        String toret = "\n";
+        for (PPTObject po : bullets) {
+            toret += "\t" + po.getContent()+ "\n";
+        }
+        return toret;
+    }
 
     /**
      * Return if the list is ordered or not

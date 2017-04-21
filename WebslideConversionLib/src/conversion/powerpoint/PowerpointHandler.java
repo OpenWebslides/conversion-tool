@@ -222,7 +222,7 @@ public class PowerpointHandler extends DefaultHandler {
                         textpart.setSize(Integer.parseInt(attributes.getValue(PPTXMLConstants.SIZE)));
                     }
                     if (attributes.getValue(PPTXMLConstants.CHARACTERSPACING) != null) {
-                        textpart.setSize(Integer.parseInt(attributes.getValue(PPTXMLConstants.CHARACTERSPACING)));
+                        textpart.setCharachterSpacing(Integer.parseInt(attributes.getValue(PPTXMLConstants.CHARACTERSPACING)));
                     }
                     if (attributes.getValue(PPTXMLConstants.SOLOWORD) == null) {
                         textpart.setContent(" ");

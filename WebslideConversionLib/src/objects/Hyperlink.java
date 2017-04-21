@@ -51,11 +51,12 @@ public class Hyperlink extends Textpart{
     
     @Override
     public String toString(){
-        String toret = this.getContent();
+        String toret = this.getClass().toString()+ ": ";
         for(Textpart par : parts){
-            toret += par.getContent();
+            toret += par.toString();
+;
         }
-        return toret + " url" + url;
+        return toret + "("+ url +")";
     }
 
     public String getRid() {
