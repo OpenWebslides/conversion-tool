@@ -17,6 +17,8 @@ public abstract class Media implements PPTObject{
     private final Dimension dimension;
     private final Dimension location;
     private String id;
+    private boolean copied;
+
     
     /**
      * Create an Image object
@@ -25,6 +27,7 @@ public abstract class Media implements PPTObject{
     public Media(){
         this.dimension = new Dimension();
         this.location = new Dimension();
+        copied = false;
     }
 
     /**
@@ -93,5 +96,13 @@ public abstract class Media implements PPTObject{
     @Override
     public String getContent(){
         return filename;
+    }
+
+    public boolean isCopied() {
+        return copied;
+    }
+
+    public void setCopied(boolean copied) {
+        this.copied = copied;
     }
 }

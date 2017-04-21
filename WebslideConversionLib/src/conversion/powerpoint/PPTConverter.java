@@ -81,12 +81,12 @@ public class PPTConverter implements IConverter {
 
             for (XSLFSlide slide : slides) {
                 try {
-                    output.println("+++++++++++++ Slide " + slides.indexOf(slide) + "+++++++++++++");
+                    output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
                     //Webslide object
                     Slide webslide = new Slide();
 
                     //for testing
-                   // output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                   //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -100,15 +100,18 @@ public class PPTConverter implements IConverter {
                     //remove null values from list that got there thanks to irregularities in xml
                     GarbageHandler.handle(webslide.getPptObjects(), output);
                     
-                    TextHandler.handle(webslide.getAllPptObjects());
+                    //Add spaces when necessary between textparts, change list structure
+                    TextHandler.handle(webslide.getPptObjects());
+                    
+                    InsightHandler.handle(ppt.getInsight(),webslide.getPptObjects());
 
                     //print the slide for testing toString details
-                    //output.println("------------ toString -------------");
-                    //output.println(webslide.toString());
+                    output.println("------------ toString -------------");
+                    output.println(webslide.toString());
                     
                     //print the slide for testing getContent
-                   // output.println("------------ getContent -------------");
-                    //output.println(webslide.getContent());
+                    output.println("------------ getContent -------------");
+                    output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
@@ -124,5 +127,25 @@ public class PPTConverter implements IConverter {
         } catch (Exception ex) {
             throw new IllegalArgumentException("This is probably not a valid powerpoint file");
         }
+        
+        printInsights(ppt);
     }
+
+    private void printInsights(PPT ppt) {
+        output.println("***** Insights ******");
+        output.println("Objectcount");
+        for(String key : ppt.getInsight().getObjectCount().keySet()){
+            output.println(key + " : " + ppt.getInsight().getObjectCount().get(key));
+        }
+        output.println("");
+        output.println("Wordcount");
+        output.println("Number of different words: " + ppt.getInsight().getWordCount().keySet().size());
+        output.print("Number of words: ");
+        int total = 0;
+        for(String key : ppt.getInsight().getWordCount().keySet()){
+            total += ppt.getInsight().getWordCount().get(key);
+        }
+        output.println(""+total);
+    }
+
 }

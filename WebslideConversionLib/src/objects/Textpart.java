@@ -21,6 +21,7 @@ public class Textpart implements PPTObject {
     private int charachterSpacing;
     private String color;
     private boolean dirty = false;
+    private boolean err = false;
 
     public Textpart() {
         type = new HashSet<>();
@@ -112,5 +113,13 @@ public class Textpart implements PPTObject {
 
     public void setDirty(boolean dirty) {
         this.dirty = dirty;
+    }
+
+    public boolean isErr() {
+        return err;
+    }
+
+    public void setErr(boolean err) {
+        this.err = err;
     }
 }

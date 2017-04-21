@@ -46,6 +46,7 @@ public class PPTXMLConstants {
     public static final String TYPEFACE = "typeface";
     public static final String TEXTTYPEATTR = "type";
     public static final String DIRTY = "dirty";
+    public static final String ERR = "err";
     public static final String RID = "r:id";
     
     

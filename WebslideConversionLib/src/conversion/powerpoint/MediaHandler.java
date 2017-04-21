@@ -234,6 +234,7 @@ class MediaHandler {
                     String n = ze.getName().split("/")[ze.getName().split("/").length - 1];
                     f = new File(saveLoc + "\\" + n);
                     img.setFilename(n);
+                    img.setCopied(true);
                     if (save) {
                         f.getParentFile().mkdirs();
                     }
@@ -255,6 +256,7 @@ class MediaHandler {
                             mediaCount++;
                         }
                     } catch (Exception e) {
+                        img.setCopied(false);
                     } finally {
                         out.close();
                     }
@@ -263,6 +265,7 @@ class MediaHandler {
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
+            img.setCopied(false);
         }
         return bytes;
     }

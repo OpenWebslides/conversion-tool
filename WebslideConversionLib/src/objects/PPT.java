@@ -8,12 +8,14 @@ public class PPT {
 
     //metadata
     private final List<Slide> slides;
+    private PPTInsight insight;
 
     /**
      * Create a PPT object
      */
     public PPT() {
         slides = new ArrayList<>();
+        insight = new PPTInsight();
     }
 
     /**
@@ -23,6 +25,14 @@ public class PPT {
      */
     public List<Slide> getSlides() {
         return slides;
+    }
+
+    public PPTInsight getInsight() {
+        return insight;
+    }
+
+    public void setInsight(PPTInsight insight) {
+        this.insight = insight;
     }
     
 }

@@ -223,6 +223,9 @@ public class PowerpointHandler extends DefaultHandler {
                     if (attributes.getValue(PPTXMLConstants.DIRTY) != null) {
                         textpart.setDirty(true);
                     }
+                    if (attributes.getValue(PPTXMLConstants.ERR) != null) {
+                        textpart.setErr(true);
+                    }
                     if (isList) {
                         if (defaultsize) {
                             if (text.getLevel() == null) {
