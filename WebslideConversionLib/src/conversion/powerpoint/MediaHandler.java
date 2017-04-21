@@ -15,7 +15,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -54,6 +53,7 @@ class MediaHandler {
     private static int mediaCount = 1;
     private static int linkCount = 0;
     private static ArrayList<String> links;
+    private static String currentFilename = "";
 
     /**
      * Handle media, extract images, videos, chartdata from ppt
@@ -77,8 +77,7 @@ class MediaHandler {
                         }
                     }
 
-                }
-                else if (sh.getClass().equals(XSLFTextBox.class)) {
+                } else if (sh.getClass().equals(XSLFTextBox.class)) {
                     for (XSLFTextParagraph p : ((XSLFTextBox) sh).getTextParagraphs()) {
                         for (XSLFTextRun r : p.getTextRuns()) {
                             if (r.getHyperlink().getAddress() != null) {
@@ -87,8 +86,7 @@ class MediaHandler {
                         }
                     }
 
-                }
-                else if (sh.getClass().equals(XSLFPictureShape.class)) {
+                } else if (sh.getClass().equals(XSLFPictureShape.class)) {
                     for (PPTObject po : pptObjects) {
                         if (po instanceof Media) {
                             if (((Media) po).getId().equals("" + sh.getShapeId())) {
@@ -182,8 +180,7 @@ class MediaHandler {
                         }
                     }
 
-                }
-                else if (sh.getClass().equals(XSLFTextBox.class)) {
+                } else if (sh.getClass().equals(XSLFTextBox.class)) {
                     for (XSLFTextParagraph p : ((XSLFTextBox) sh).getTextParagraphs()) {
                         for (XSLFTextRun r : p.getTextRuns()) {
                             if (r.getHyperlink().getAddress() != null) {
@@ -192,8 +189,7 @@ class MediaHandler {
                         }
                     }
 
-                }
-                else if (sh.getClass().equals(XSLFPictureShape.class)) {
+                } else if (sh.getClass().equals(XSLFPictureShape.class)) {
                     for (PPTObject po : pptObjects) {
                         if (po.getClass().equals(Image.class)) {
                             if (((Image) po).getId().equals("" + sh.getShapeId())) {
@@ -202,8 +198,7 @@ class MediaHandler {
                             }
                         }
                     }
-                }
-                else if (sh.getClass().equals(XSLFTable.class)) {
+                } else if (sh.getClass().equals(XSLFTable.class)) {
                     for (PPTObject po : pptObjects) {
                         if (po.getClass().equals(Table.class)) {
                             if (((Table) po).getRows().isEmpty()) {
@@ -271,37 +266,27 @@ class MediaHandler {
 
     private static void copyImage(Media img, String name, File file, Output output, ZipOutputStream zip, String saveLoc) {
         try {
-            try {
-
-                File f = copyImage(img, name, file, output, saveLoc);
-                FileInputStream fis = new FileInputStream(f);
-                ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + f.getName());
-                zip.putNextEntry(zipEntry);
-                byte[] bytes = new byte[1024];
-                int length;
-                while ((length = fis.read(bytes)) >= 0) {
-                    zip.write(bytes, 0, length);
-                }
-
-                zip.closeEntry();
-                fis.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
+            ArrayList<byte[]> f = copyImage(img, name, file, output, saveLoc);
+            ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + currentFilename);
+            zip.putNextEntry(zipEntry);
+            for (byte[] buffer : f) {
+                zip.write(buffer, 0, buffer.length);
             }
+            zip.closeEntry();
 
         } catch (Exception e) {
             output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
         }
     }
 
-    private static File copyImage(Media img, String name, File file, Output output, String saveLoc) {
-        File f = null;
+    private static ArrayList<byte[]> copyImage(Media img, String name, File file, Output output, String saveLoc) {
+        File f;
+        ArrayList<byte[]> bytes = new ArrayList<>();
         try {
             FileInputStream fin = new FileInputStream(file.getAbsoluteFile());
             BufferedInputStream bin = new BufferedInputStream(fin);
             ZipInputStream zin = new ZipInputStream(bin);
-            ZipEntry ze = null;
+            ZipEntry ze;
             while ((ze = zin.getNextEntry()) != null) {
                 String na = "ppt/media/" + name;
                 if (img instanceof Video) {
@@ -312,11 +297,13 @@ class MediaHandler {
                     f = new File(saveLoc + "\\" + n);
                     img.setFilename(n);
                     f.getParentFile().mkdirs();
+                    currentFilename = n;
                     try (OutputStream out = new FileOutputStream(f)) {
                         byte[] buffer = new byte[8192];
                         int len;
                         while ((len = zin.read(buffer)) != -1) {
                             out.write(buffer, 0, len);
+                            bytes.add(buffer);
                         }
                         if (img instanceof Video) {
                             mediaCount++;
@@ -328,7 +315,7 @@ class MediaHandler {
         } catch (Exception e) {
             output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
         }
-        return f;
+        return bytes;
     }
 
     private static void copyCharts(XSLFChart chart, Output output, Chart chartObj) {
