@@ -62,12 +62,21 @@ and open the template in the editor.
     margin-bottom: 15px;
 }
 
+.language {
+    font-size: 1.5em;
+}
+
+.language:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
 .language-choice {
     float: right;
 }
 
 .language-selected{
-    font-size: 140%;
+    font-weight: bolder;
 }
 
 @media screen {

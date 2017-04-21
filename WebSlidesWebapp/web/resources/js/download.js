@@ -14,7 +14,7 @@ function startDownload(downloadFormNr){
     console.log($("#download-form-"+downloadFormNr+"-btn").text());
     $("#download-form-"+downloadFormNr+"-param-2").attr({
         name: "fileName",
-        value: $("#download-form-"+downloadFormNr+"-btn").text()+".pptx"                
+        value: $("#download-form-"+downloadFormNr+"-btn").text()                
     });    
     $("#download-form-"+downloadFormNr).submit();
 

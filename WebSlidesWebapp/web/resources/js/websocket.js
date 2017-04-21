@@ -30,6 +30,7 @@ shared_vars.socket.onmessage = function (event) {
             console.log("loading to remove " + targetId);
             $("#download-loading-anim-" + targetId).hide(500, function () {
                 if(msg.action === "download-ready") $("#download-form-" + targetId + "-btn").show(1000);
+                else if(msg.action ==="download-not-ready") $("#download-form-"+targetId+"-btn").removeClass('btn-primary').addClass('btn-danger').prop('disabled',true).show(1000);
             });
         }
     }
@@ -37,7 +38,7 @@ shared_vars.socket.onmessage = function (event) {
 };
 
 shared_vars.socket.onerror = function (e) {
-    alert("An error occured while connecting... " + e.data);
+    alert("An error occured while opening the websocket  ");
 };
 
 

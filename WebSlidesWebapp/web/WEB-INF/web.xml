@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
+    <filter>
+        <filter-name>SecFilter</filter-name>
+        <filter-class>filters.SecFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SecFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <servlet>
         <servlet-name>LanguageServlet</servlet-name>
         <servlet-class>servlets.LanguageServlet</servlet-class>
@@ -7,7 +15,7 @@
     <servlet-mapping>
         <servlet-name>LanguageServlet</servlet-name>
         <url-pattern>/LanguageServlet</url-pattern>
-    </servlet-mapping>    
+    </servlet-mapping>
     <error-page>
         <error-code>404</error-code>
         <location>/404.html</location>
@@ -23,5 +31,8 @@
     <error-page>
         <location>/GenericError.html</location>
     </error-page>
-          
+    <mime-mapping>
+        <extension>zip</extension>
+        <mime-type>application/zip</mime-type>
+    </mime-mapping>
 </web-app>

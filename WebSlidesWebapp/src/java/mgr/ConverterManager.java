@@ -137,7 +137,7 @@ public class ConverterManager implements CallableCallback {
     
     public void convertFile(String file,String sessionKey,String outputType) {
         System.out.println("file to convert (should be FULL PATH) " + file);
-        String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+file.substring(file.lastIndexOf(File.separator)+1);        
+        String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+lastMessage.getFileName();        
         System.out.println("targetDir = " + targetDir);
         File directory = new File(String.valueOf(targetDir));
         if(! directory.exists())directory.mkdirs();
