@@ -55,7 +55,7 @@ public class OpenWebslidesConverterTests {
     //
     // @Test
     // public void hello() {}
-    /*
+    
     @Test
     public void test1() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1\\input.pptx",
@@ -145,7 +145,7 @@ public class OpenWebslidesConverterTests {
                                       "-t","shower"};
         OpenWebslidesConverter.main(args);
     }
-    */
+    
     
     @Test
     public void pdf1() throws WebslidesConverterException{

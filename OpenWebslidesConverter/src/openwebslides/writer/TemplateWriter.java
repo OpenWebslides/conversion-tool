@@ -71,8 +71,6 @@ public class TemplateWriter extends Writer {
             "\t</footer>\n" +
             "\t<script src=\"_shared/scripts/shower.min.js\"></script>\n" +
             "\t<script src=\"_shared/scripts/enhancements.js\"></script>\n" +
-            "\t<script>ga=function(){ga.q.push(arguments)};ga.q=[['create','UA-6142365-12','auto'],['require','autotrack'],['send','pageview']];ga.l=1*new Date</script>\n" +
-            "\t<script async src=\"_shared/scripts/autotrack.js\"></script>\n" +
             "</body>\n" +
             "</html>");
     }
