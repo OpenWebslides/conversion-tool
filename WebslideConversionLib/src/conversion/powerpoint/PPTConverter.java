@@ -86,7 +86,7 @@ public class PPTConverter implements IConverter {
                     Slide webslide = new Slide();
 
                     //for testing
-                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                   // output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -99,14 +99,16 @@ public class PPTConverter implements IConverter {
 
                     //remove null values from list that got there thanks to irregularities in xml
                     GarbageHandler.handle(webslide.getPptObjects(), output);
+                    
+                    TextHandler.handle(webslide.getAllPptObjects());
 
                     //print the slide for testing toString details
-                    output.println("------------ toString -------------");
-                    output.println(webslide.toString());
+                    //output.println("------------ toString -------------");
+                    //output.println(webslide.toString());
                     
                     //print the slide for testing getContent
-                    output.println("------------ getContent -------------");
-                    output.println(webslide.getContent());
+                   // output.println("------------ getContent -------------");
+                    //output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);

@@ -20,6 +20,7 @@ public class Textpart implements PPTObject {
     private String content = "";
     private int charachterSpacing;
     private String color;
+    private boolean dirty = false;
 
     public Textpart() {
         type = new HashSet<>();
@@ -33,6 +34,7 @@ public class Textpart implements PPTObject {
         this.content = tp.getContent();
         this.charachterSpacing = tp.getCharachterSpacing();
         this.color = tp.getColor();
+        this.dirty = tp.isDirty();
     }
 
     public String getFont() {
@@ -102,5 +104,13 @@ public class Textpart implements PPTObject {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public boolean isDirty() {
+        return dirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        this.dirty = dirty;
     }
 }

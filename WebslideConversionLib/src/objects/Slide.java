@@ -45,4 +45,16 @@ public class Slide implements PPTObject {
         }
         return toret;
     }
+
+    public List<PPTObject> getAllPptObjects() {
+        List<PPTObject> list = new ArrayList<>();
+        for (PPTObject po : pptObjects) {
+            if (po instanceof PPTList) {
+                list.addAll(((PPTList) po).getAllObjects());
+            } else {
+                list.add(po);
+            }
+        }
+        return list;
+    }
 }

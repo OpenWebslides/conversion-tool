@@ -136,11 +136,7 @@ public class PowerpointHandler extends DefaultHandler {
     public void characters(char ch[], int start, int length) throws SAXException {
         try {
             if (textpartContent) {
-                if (textpart != null) {
-                    textpart.setContent(textpart.getContent() + new String(ch, start, length));
-                } else {
-                    textpart.setContent(new String(ch, start, length));
-                }
+                textpart.setContent(new String(ch, start, length).trim());
                 textpartContent = false;
             }
         } catch (Exception e) {
@@ -224,8 +220,8 @@ public class PowerpointHandler extends DefaultHandler {
                     if (attributes.getValue(PPTXMLConstants.CHARACTERSPACING) != null) {
                         textpart.setCharachterSpacing(Integer.parseInt(attributes.getValue(PPTXMLConstants.CHARACTERSPACING)));
                     }
-                    if (attributes.getValue(PPTXMLConstants.SOLOWORD) == null) {
-                        textpart.setContent(" ");
+                    if (attributes.getValue(PPTXMLConstants.DIRTY) != null) {
+                        textpart.setDirty(true);
                     }
                     if (isList) {
                         if (defaultsize) {
