@@ -29,15 +29,17 @@ and open the template in the editor.
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <h3 class="header-subtext">The file you requested could not be retrieved.</h3>
-                    <p>
+                    <h3 class="header-subtext" id="message">The file you requested could not be retrieved.</h3>
+                    <p id="message-info">
                         The server encountered a problem in processing your file and was unable to generate a valid output.
                         <br/>
                         Our apologies for the inconvenience
                     </p>
-                    <a href="index.html" >Please return to the front page.</a>
+                    <a href="index.html" id="redirect">Please return to the front page.</a>
                 </div>               
             </div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="resources/js/500.js"></script>
     </body>
 </html>

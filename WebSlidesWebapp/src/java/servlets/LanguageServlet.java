@@ -32,7 +32,7 @@ public class LanguageServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    String language;    
+    String language;
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -46,7 +46,8 @@ public class LanguageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
+
+        String path = request.getRequestURI();
 
         language = request.getParameter("language");
         if (language == null) {
@@ -54,7 +55,7 @@ public class LanguageServlet extends HttpServlet {
             language = request.getLocale().getLanguage();
         }
 
-        ResourceBundle bundle = ResourceBundle.getBundle("I18n.ResourceBundle", new Locale(language));
+        ResourceBundle bundle = ResourceBundle.getBundle("I18n.HeaderBundle", new Locale(language));
         Enumeration bundleKeys = bundle.getKeys();
 
         response.setContentType("text/html;charset=UTF-8");
@@ -69,6 +70,13 @@ public class LanguageServlet extends HttpServlet {
                 out.print(value);
             }
 
+            out.print(",");
+            String k = "test";
+            out.print("\"" + k + "\"");
+            out.print(":");
+            String v = "\"" + path + "\"";
+            out.print(v);
+
             while (bundleKeys.hasMoreElements()) {
                 out.print(",");
                 String key = (String) bundleKeys.nextElement();
@@ -77,12 +85,27 @@ public class LanguageServlet extends HttpServlet {
                 String value = "\"" + bundle.getString(key) + "\"";
                 out.print(value);
             }
+
+            try {
+                bundle = ResourceBundle.getBundle("I18n." + request.getParameter("bundle") + "Bundle", new Locale(language));
+                bundleKeys = bundle.getKeys();
+
+                while (bundleKeys.hasMoreElements()) {
+                    out.print(",");
+                    String key = (String) bundleKeys.nextElement();
+                    out.print("\"" + key + "\"");
+                    out.print(":");
+                    String value = "\"" + bundle.getString(key) + "\"";
+                    out.print(value);
+                }
+            } catch (Exception e) {
+            }
+
             out.print("}");
         }
 
     }
 
-   
     /**
      * Returns a short description of the servlet.
      *
