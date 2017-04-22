@@ -9,6 +9,7 @@ import conversion.IConverter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
+import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 import objects.*;
@@ -29,6 +30,8 @@ public class PPTConverter implements IConverter {
 
     private final File file;
     private Output output;
+    
+    private long startTime;
 
     /**
      * Create a PPTConverter instance
@@ -58,7 +61,7 @@ public class PPTConverter implements IConverter {
      */
     @Override
     public void parse(PPT ppt, String saveLocation) {
-        parse(ppt,null,saveLocation);
+        parse(ppt, null, saveLocation);
     }
 
     /**
@@ -71,6 +74,7 @@ public class PPTConverter implements IConverter {
     @Override
     public void parse(PPT ppt, ZipOutputStream zip, String saveLocation) {
         XMLSlideShow pptSource;
+        startTime = new Date().getTime();
         try {
             pptSource = new XMLSlideShow(new FileInputStream(file));
             List<XSLFSlide> slides = pptSource.getSlides();
@@ -81,12 +85,12 @@ public class PPTConverter implements IConverter {
 
             for (XSLFSlide slide : slides) {
                 try {
-                    output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
+                    //output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
                     //Webslide object
                     Slide webslide = new Slide();
 
                     //for testing
-                   //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
@@ -99,19 +103,22 @@ public class PPTConverter implements IConverter {
 
                     //remove null values from list that got there thanks to irregularities in xml
                     GarbageHandler.handle(webslide.getPptObjects(), output);
-                    
+
                     //Add spaces when necessary between textparts, change list structure
                     TextHandler.handle(webslide.getPptObjects());
-                    
-                    InsightHandler.handle(ppt.getInsight(),webslide.getPptObjects());
+
+                    //Generate insights for the ppt, amount of (different/non-different) words, amount of objects,...
+                    //OPTIONAL
+                    //Adds 0-0.3s (the bigger the ppt the longer, 0.3s for 200mb ppt) to conversion proces
+                    InsightHandler.handle(ppt.getInsight(), webslide.getPptObjects());
 
                     //print the slide for testing toString details
-                    output.println("------------ toString -------------");
-                    output.println(webslide.toString());
-                    
+                    //output.println("------------ toString -------------");
+                    //output.println(webslide.toString());
+
                     //print the slide for testing getContent
-                    output.println("------------ getContent -------------");
-                    output.println(webslide.getContent());
+                    //output.println("------------ getContent -------------");
+                    //output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
@@ -127,25 +134,22 @@ public class PPTConverter implements IConverter {
         } catch (Exception ex) {
             throw new IllegalArgumentException("This is probably not a valid powerpoint file");
         }
-        
+        ppt.getInsight().setConvertTime(new Date().getTime() - startTime);
         printInsights(ppt);
     }
 
     private void printInsights(PPT ppt) {
         output.println("***** Insights ******");
+        output.println("Convert time");
+        output.println("" + (double) ((double)ppt.getInsight().getConvertTime()/1000));
+        output.println("");
         output.println("Objectcount");
-        for(String key : ppt.getInsight().getObjectCount().keySet()){
-            output.println(key + " : " + ppt.getInsight().getObjectCount().get(key));
-        }
+        output.println(ppt.getInsight().generateDifferentObjectsString());
         output.println("");
         output.println("Wordcount");
-        output.println("Number of different words: " + ppt.getInsight().getWordCount().keySet().size());
+        output.println("Number of different words: " + ppt.getInsight().generateDifferentWordsString());
         output.print("Number of words: ");
-        int total = 0;
-        for(String key : ppt.getInsight().getWordCount().keySet()){
-            total += ppt.getInsight().getWordCount().get(key);
-        }
-        output.println(""+total);
+        output.println("" + ppt.getInsight().generateWordString());
     }
 
 }
