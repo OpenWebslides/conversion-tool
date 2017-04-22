@@ -13,8 +13,8 @@ import java.util.HashMap;
  */
 public class PPTInsight {
 
-    private HashMap<String, Integer> objectCount;
-    private HashMap<String, Integer> wordCount;
+    private final HashMap<String, Integer> objectCount;
+    private final HashMap<String, Integer> wordCount;
     private long convertTime;
 
     public PPTInsight() {

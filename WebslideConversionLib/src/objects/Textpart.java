@@ -54,6 +54,7 @@ public class Textpart implements PPTObject {
         this.size = size;
     }
 
+    @Override
     public String getContent() {
         return content;
     }

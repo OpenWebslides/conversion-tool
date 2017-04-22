@@ -55,6 +55,7 @@ public class Text implements PPTObject {
         
     }
     */
+    @Override
     public String getContent(){ 
         String toret = "";
         if(textparts.size()>0){

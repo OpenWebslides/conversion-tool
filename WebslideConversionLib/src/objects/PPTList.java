@@ -62,6 +62,7 @@ public class PPTList implements PPTObject {
         return toret;
     }
     
+    @Override
     public String getContent(){
         String toret = "\n";
         for (PPTObject po : bullets) {

@@ -6,7 +6,6 @@
 package objects;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 /**
  *
@@ -54,7 +53,7 @@ public class Hyperlink extends Textpart{
         String toret = this.getClass().toString()+ ": ";
         for(Textpart par : parts){
             toret += par.toString();
-;
+
         }
         return toret + "("+ url +")";
     }

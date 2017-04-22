@@ -28,7 +28,7 @@ class TextHandler {
             }
 
             if (po instanceof PPTList) {
-                handleList((PPTList) po);
+              //  handleList((PPTList) po);
                 for (PPTObject pp : ((PPTList) po).getAllObjects()) {
                     if (pp instanceof Text) {
                         handleText((Text) pp);

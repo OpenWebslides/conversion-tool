@@ -5,7 +5,6 @@
  */
 package objects;
 
-import java.awt.Dimension;
 
 /**
  *

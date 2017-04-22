@@ -23,6 +23,7 @@ public class Row implements PPTObject {
         return cells;
     }
     
+    @Override
     public String toString(){
         String toret = "";
         for(Cell cell : cells){

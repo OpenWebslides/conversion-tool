@@ -16,6 +16,7 @@ public class Placeholder implements PPTObject{
     public Placeholder() {
     }
 
+    @Override
     public String getContent() {
         return content;
     }
