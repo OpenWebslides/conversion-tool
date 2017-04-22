@@ -10,7 +10,7 @@ import java.util.HashSet;
 
 /**
  *
- * @author Karel
+ * @author Karel + Gertjan
  */
 public class Textpart implements PPTObject {
 
@@ -22,6 +22,23 @@ public class Textpart implements PPTObject {
     private String color;
     private boolean dirty = false;
     private boolean err = false;
+    private double XPosition, YPosition;
+
+    public double getYPosition() {
+        return YPosition;
+    }
+
+    public void setYPosition(double YPosition) {
+        this.YPosition = YPosition;
+    }
+
+    public double getXPosition() {
+        return XPosition;
+    }
+
+    public void setXPosition(double XPosition) {
+        this.XPosition = XPosition;
+    }
 
     public Textpart() {
         type = new HashSet<>();

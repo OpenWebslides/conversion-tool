@@ -5,14 +5,11 @@
  */
 package conversion.pdf.util;
 
-import java.util.ArrayList;
-import java.util.List;
+
 import objects.PPT;
-import objects.PPTObject;
 import objects.Slide;
 import objects.Text;
 import objects.Textpart;
-import objects.Title;
 
 /**
  *
@@ -31,6 +28,7 @@ public class TextIntelligence {
                 if (slide.getPptObjects().get(i) != null && slide.getPptObjects().get(i) instanceof Textpart) {
                     Text text = new Text();
                     Textpart tp = (Textpart) slide.getPptObjects().get(i);
+                    //System.out.println("Tekstpart behandeld: " + tp.getXPosition()+","+tp.getYPosition());
                     text.addTextpart(tp);
                     slide.getPptObjects().set(i, text);
                 }}

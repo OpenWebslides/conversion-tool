@@ -1,9 +1,11 @@
 
 import conversion.ConverterFactory;
 import conversion.IConverter;
+import conversion.pdf.util.PDFException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
 import logger.Logger;
 import objects.PPT;
 import static org.junit.Assert.*;
@@ -25,13 +27,20 @@ public class PPTTest {
     public void main() {
         File file = new File("C:\\temp\\testPpts\\13.pptx");
 
-        IConverter converter = ConverterFactory.getConverter(file);
+        IConverter converter;
+        try {
+            converter = ConverterFactory.getConverter(file);
+        
         converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "karel")));
 
         PPT ppt = new PPT();
 
         converter.parse(ppt, "C:\\temp\\images");
-
+        } catch (PDFException ex) {
+            java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
    // @Test

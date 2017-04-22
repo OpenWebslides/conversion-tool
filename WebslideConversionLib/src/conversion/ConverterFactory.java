@@ -9,6 +9,7 @@ package conversion;
 
 
 import conversion.pdf.PDFConverter;
+import conversion.pdf.util.PDFException;
 import conversion.powerpoint.PPTConverter;
 import java.io.File;
 
@@ -23,8 +24,13 @@ public class ConverterFactory {
      * The correct implementation is decided by the file type
      * @param file File
      * @return 
+     * @throws conversion.pdf.util.PDFException 
      */
-    public static IConverter getConverter(File file) throws IllegalArgumentException{
+
+    
+
+    public static IConverter getConverter(File file) throws IllegalArgumentException, PDFException{
+
         String ext2 = getExtension(file.getName());
         switch(ext2){
             case "pptx" : return new PPTConverter(file);

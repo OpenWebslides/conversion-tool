@@ -79,7 +79,7 @@ public class PDFTextExtractor extends PDFTextStripper {
         //System.out.println(text.getFont().getFontDescriptor());
          if (text.getFont().getBaseFont().toLowerCase().contains("bold")){
             teken.setBold(true);
-            // System.out.println("made bold!");
+            //System.out.println("made bold!");
          }
         if (text.getFont().getBaseFont().toLowerCase().contains("italic")){
             teken.setItalic(true);
