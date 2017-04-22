@@ -34,21 +34,6 @@ public class LanguageServlet extends HttpServlet {
      */
     String language;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LanguageServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LanguageServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -61,7 +46,6 @@ public class LanguageServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //processRequest(request, response);
 
         language = request.getParameter("language");
         if (language == null) {
@@ -69,7 +53,7 @@ public class LanguageServlet extends HttpServlet {
             language = request.getLocale().getLanguage();
         }
 
-        ResourceBundle bundle = ResourceBundle.getBundle("I18n.ResourceBundle", new Locale(language));
+        ResourceBundle bundle = ResourceBundle.getBundle("I18n.HeaderBundle", new Locale(language));
         Enumeration bundleKeys = bundle.getKeys();
 
         response.setContentType("text/html;charset=UTF-8");
@@ -92,23 +76,25 @@ public class LanguageServlet extends HttpServlet {
                 String value = "\"" + bundle.getString(key) + "\"";
                 out.print(value);
             }
+
+            try {
+                bundle = ResourceBundle.getBundle("I18n." + request.getParameter("bundle") + "Bundle", new Locale(language));
+                bundleKeys = bundle.getKeys();
+
+                while (bundleKeys.hasMoreElements()) {
+                    out.print(",");
+                    String key = (String) bundleKeys.nextElement();
+                    out.print("\"" + key + "\"");
+                    out.print(":");
+                    String value = "\"" + bundle.getString(key) + "\"";
+                    out.print(value);
+                }
+            } catch (Exception e) {
+            }
+
             out.print("}");
         }
 
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
     }
 
     /**

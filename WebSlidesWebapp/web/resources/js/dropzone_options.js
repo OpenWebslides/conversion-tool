@@ -5,11 +5,10 @@
  */
 
 
-
 var dropzone = Dropzone.options.myAwesomeDropzone = {
     paramName: "file", // The name that will be used to transfer the file
     maxFilesize: 10000, // MB
-    acceptedFiles: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    acceptedFiles: "application/vnd.openxmlformats-officedocument.presentationml.presentation,application/pdf",
     addRemoveLinks: true,
     autoProcessQueue: false,
     parallelUploads: 8,
@@ -21,25 +20,28 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
     },
     init: function () {
 
-        setLanguage();
 
-        var Dropzone = this;
+        dropzone = this;
+        if (localStorage["language"] !== "en" || localStorage["language"] === null) {
+            setLanguage();
+        }
+
         $("#btn-convert").click(function () {
             //console.log("Clicked btn convert");
             $('.dz-progress').show();
-            Dropzone.processQueue();
+            dropzone.processQueue();
             //console.log("Process Queue started");
         });
         $("#btn-cancel").click(function () {
             //console.log("Clicked btn cancel");
-            Dropzone.removeAllFiles(true);
+            dropzone.removeAllFiles(true);
         });
-        Dropzone.on("sending", function (file, xhr, formData) {
+        dropzone.on("sending", function (file, xhr, formData) {
             //console.log(xhr);
             formData.append("output-type", $('input[name="output_type"]:checked').val());
             //console.log("Sending");
         });
-        Dropzone.on("error", function (file, message) {
+        dropzone.on("error", function (file, message) {
             //console.log("Error");
             if (!file.accepted)
                 this.removeFile(file);
@@ -49,25 +51,25 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
                 $("#alert").fadeOut(700);
             }, 3000);
         });
-        
-        Dropzone.on("success",function(file){
-           shared_vars.socket.send("File successfully uploaded"+file.toString());           
-           shared_vars.socket.send(JSON.stringify({"msgType":"FILE","name":file.name,"timestamp":file.lastModified,"fileType":file.type}));
-           
-           
-           $("#field-download").append(
-                $("<form></form>", {action: "download",id: "download-form-"+shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3")
-                .append($("<img />").attr({src:"resources/images/loading_blue.gif",alt:"loading animation", id:"download-loading-anim-"+shared_vars.filesInProgress.length}))
-                .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-1"}))
-                .append($("<input />").attr({type:"hidden", id:"download-form-"+shared_vars.filesInProgress.length+"-param-2"}))
-                .append($("<button >"+file.name.split('.')[0]+"</button>").attr({type:"button",onclick:"startDownload("+shared_vars.filesInProgress.length+")",id:"download-form-"+shared_vars.filesInProgress.length+"-btn"}).addClass("btn btn-primary btn-block").hide())           
-           );          
-   
-           shared_vars.filesInProgress.push(file.name);
-           console.log(file);
-           console.log("success");
+
+        dropzone.on("success", function (file) {
+            shared_vars.socket.send("File successfully uploaded" + file.toString());
+            shared_vars.socket.send(JSON.stringify({"msgType": "FILE", "name": file.name, "timestamp": file.lastModified, "fileType": file.type, "outputType": $("input[name='outputType']:checked").val()}));
+
+
+            $("#field-download").append(
+                    $("<form></form>", {action: "download", id: "download-form-" + shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3").prop({'target': '_blank'})
+                    .append($("<img />").attr({src: "resources/images/loading_blue.gif", alt: "loading animation", id: "download-loading-anim-" + shared_vars.filesInProgress.length}))
+                    .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-1"}))
+                    .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-2"}))
+                    .append($("<button >" + file.name + "</button>").attr({type: "button", onclick: "startDownload(" + shared_vars.filesInProgress.length + ")", id: "download-form-" + shared_vars.filesInProgress.length + "-btn"}).addClass("btn btn-primary").hide())
+                    );
+
+            shared_vars.filesInProgress.push(file.name);
+            console.log(file);
+            console.log("success");
         });
-    
+
     }
 };
 
@@ -75,33 +77,37 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
 $(document).ready(function () {
     $('.language').click(function (e) {
         //console.log($(e.target).html());
-        localStorage["language"] = $(e.target).html();
-        setLanguage();
+        if (localStorage["language"] !== $(e.target).html()) {
+            setLanguage($(e.target).html());
+        }
     });
 });
 
 
-function setLanguage() {
+function setLanguage(language) {
     $.ajax({
         method: "GET",
         url: "LanguageServlet",
         contentType: 'json',
         dataType: "text",
-        data: {language: localStorage["language"]},
+        data: {language: language, bundle: "Index"},
         success: function (result, status, xhr) {
             //console.log(result);
             var dict = JSON.parse(result);
             $(".dz-default, .dz-message").html(dict["dictDefaultMessage"]);
-            Dropzone.options.dictDefaultMessage = dict["dictDefaultMessage"];
-            Dropzone.options.dictFallbackMessage = dict["dictFallbackMessage"];
-            Dropzone.options.dictFallbackText = dict["dictFallbackText"];
-            Dropzone.options.dictFileTooBig = dict["dictFileTooBig"];
-            Dropzone.options.dictInvalidFileType = dict["dictInvalidFileType"];
-            Dropzone.options.dictResponseError = dict["dictResponseError"];
-            Dropzone.options.dictCancelUpload = dict["dictCancelUpload"];
-            Dropzone.options.dictCancelUploadConfirmation = dict["dictCancelUploadConfirmation"];
-            Dropzone.options.dictRemoveFile = dict["dictRemoveFile"];
-            Dropzone.options.dictMaxFilesExceeded = dict["dictMaxFilesExceeded"];
+            $(".dz-remove").html(dict["dictRemoveFile"]);
+            $(".dz-processing > .dz-remove").not($(".dz-complete > .dz-remove")).html(dict["dictCancelUpload"]);
+            $("#alert").hide();
+            dropzone.options.dictDefaultMessage = dict["dictDefaultMessage"];
+            dropzone.options.dictFallbackMessage = dict["dictFallbackMessage"];
+            dropzone.options.dictFallbackText = dict["dictFallbackText"];
+            dropzone.options.dictFileTooBig = dict["dictFileTooBig"];
+            dropzone.options.dictInvalidFileType = dict["dictInvalidFileType"];
+            dropzone.options.dictResponseError = dict["dictResponseError"];
+            dropzone.options.dictCancelUpload = dict["dictCancelUpload"];
+            dropzone.options.dictCancelUploadConfirmation = dict["dictCancelUploadConfirmation"];
+            dropzone.options.dictRemoveFile = dict["dictRemoveFile"];
+            dropzone.options.dictMaxFilesExceeded = dict["dictMaxFilesExceeded"];
 
             $(".header-title").html(dict["header-title"]);
             $(".header-subtext").html(dict["header-subtext"]);
@@ -115,6 +121,8 @@ function setLanguage() {
 
             $(".language").removeClass("language-selected");
             $("#lang-" + dict["lang"]).addClass("language-selected");
+            localStorage["language"] = dict["lang"];
+
         },
         error: function (xhr, status, error) {
             console.log(error);

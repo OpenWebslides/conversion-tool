@@ -20,7 +20,6 @@ import openwebslideslogger.Logger;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.logging.Level;
 import websocket.ConversionCompleteCallback;
 
 /**
@@ -48,7 +47,7 @@ public class ConverterManager implements CallableCallback {
      * It keeps track of the sessionIDs and maps the files that need conversion to them
      * It is responsible for concurrent logging capabilities, both of the inner conversion threads and the outer management of those threads by this class
      * Will notify the ServerEndpoint upon completion of a conversion (in a separate thread) to enable a message-based 2-way communication between the client and the server.
-     * @param ccc 
+     * @param ccc an object to call back to when the conversion is completed
      */
     private ConverterManager(ConversionCompleteCallback ccc) {
         this.sessionFiles = new HashMap<>();
@@ -67,15 +66,20 @@ public class ConverterManager implements CallableCallback {
         return new ConverterManager(ccc);
     }
 
+    /**
+     * A method to start the logging thread
+     */
     public void startLogThread() {
         logthread.start();
+        logger.println("The LogThread has been activated, it is used to log the internal messages generated during conversion by the converter");
     }
 
     public void stopLogThread() {
         try {
             logthread.join(1500);
+            logger.println("The LogThread has been deactivated");
         } catch (InterruptedException ex) {
-            java.util.logging.Logger.getLogger(ConverterManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.println("The LogThread didn't shut down correctly"+ex.getMessage());
         }
     }
 
@@ -99,7 +103,7 @@ public class ConverterManager implements CallableCallback {
         for (InboundMsgDefinition t : p) {
             System.out.println(t);
         }
-        convertFile(System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"upload" +File.separator+ value.getFileName(),key);
+        convertFile(System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"upload" +File.separator+ value.getFileName(),key,value.getOutputType());
     }
     
     public void removeEntry(String key){
@@ -128,16 +132,17 @@ public class ConverterManager implements CallableCallback {
      * Finally an internal data structure is used to save which converter is handling which file
      * @param file the absolute path of the file that requires conversion
      * @param sessionKey the Websocket session token associated with the user who submitted the file
+     * @param outputType the desired format for the output, either raw html5 or shower: bundled output with css and the Shower javascript presentation engine
      */   
     
-    public void convertFile(String file,String sessionKey) {
+    public void convertFile(String file,String sessionKey,String outputType) {
         System.out.println("file to convert (should be FULL PATH) " + file);
-        String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+file.substring(file.lastIndexOf(File.separator)+1);        
+        String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+lastMessage.getFileName();        
         System.out.println("targetDir = " + targetDir);
         File directory = new File(String.valueOf(targetDir));
         if(! directory.exists())directory.mkdirs();
         // arguments to be passed to the converter
-        String[] args = new String[]{"-i", file, "-o", targetDir};
+        String[] args = new String[]{"-i", file, "-o", targetDir, "-t", outputType};
         ++lastid;
         logger.println(Logger.log(lastMessage.getFileName()));
         logger.println(new Timestamp(new Date().getTime()) + "*** " + lastid);
@@ -152,7 +157,7 @@ public class ConverterManager implements CallableCallback {
      * This callback is used to signal the ServerEndpoint which file from which session was converted.
      * That info is used by the ServerEndpoint to construct appropriate Websocket messages for the client.
      * @param id The id of the Callable that was used to convert the file
-     * @param status
+     * @param status The status parameter is used to convey if the file was converted successfully or not
      */
     @Override
     public void callableComplete(long id, int status) {

@@ -6,6 +6,9 @@
 package conversion;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -39,7 +42,7 @@ public class ConversionCallable implements Callable<Integer> {
      * will be filled with the log output from the logger.
      * @param id A unique identification for the thread. Used in the log to keep
      * the different converters apart.
-     * @param cb
+     * @param cb an object to call back to when the conversion is finished
      */
     public ConversionCallable(String[] args, Queue<Queue<String>> logQueue, long id, CallableCallback cb) {
         this.args = args;
@@ -52,7 +55,7 @@ public class ConversionCallable implements Callable<Integer> {
      * Private help method to write a message to the log queue. The id of the
      * thread and a timestamp will be added before the message.
      *
-     * @param msg
+     * @param msg the message to log
      */
     private void logToQueue(String msg) {
         queue.offer(id + " " + new Timestamp(new Date().getTime()) + " " + msg);
@@ -62,10 +65,10 @@ public class ConversionCallable implements Callable<Integer> {
      * The call method of the callable. Contains all the logic of the class. It
      * passes the arguments from the constructor to the converter via
      * reflection. At the end the queue of strings with the logs from the
-     * converter will be pushed into logQueue.    
+     * converter will be pushed into logQueue.
      */
     @Override
-    public Integer call(){
+    public Integer call() {
         try {
             this.queue = new ConcurrentLinkedDeque<>();
 
@@ -83,32 +86,48 @@ public class ConversionCallable implements Callable<Integer> {
             Class<?> OpenWebslidesConverter = urlClassLoader.loadClass(CONVERTER_MAIN_CLASS);
 
             // Getting a method from the loaded class and invoke it
-            Method method = OpenWebslidesConverter.getMethod("queueEntry", String[].class, Queue.class, long.class);
-
-            final Object[] param = new Object[3];
+            Method method = OpenWebslidesConverter.getMethod("queueEntry", String[].class, OutputStream.class, Queue.class, long.class);
+                       
+            try{
+            System.out.println("ARGS[3]"+args[3]);
+            String s = args[3].substring(args[3].lastIndexOf(File.separator)+1,args[3].length());
+            s = s.substring(0, s.lastIndexOf('.'));
+            System.out.println(s);
+            OutputStream fos = new FileOutputStream(new File(args[3])+File.separator+s+".zip");           
+            
+            
+            final Object[] param = new Object[4];
             param[0] = args;
-            param[1] = queue;
-            param[2] = id;
-
+            param[1] = fos;          
+            param[2] = queue;
+            param[3] = id;
+            
             logToQueue("invoke converter via queueEntry");
-
-            //try {
-                method.invoke(null, param);
-                
-//            } catch (Exception reflectOpEx) // single exception!
-//            {
-//                System.err.println("Reflection error trying to invoke " + reflectOpEx);
-//                logToQueue("Reflection error trying to invoke " + reflectOpEx);
-//            }
-
+            
+            method.invoke(null, param);
+            fos.close();
+            }
+            catch(FileNotFoundException exe){ 
+                System.err.println("I COULD NOT FIND the FileOutputStream");
+            }
+            
             logToQueue("end of thread");
             normalfinish = true;
-            
-        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            System.err.println("THREAD_INSIDE error!");
+
+        } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IllegalStateException ex) {
+            System.err.println("THREAD_INSIDE error!" + ex.getClass());
+            System.err.println("THREAD_INSIDE stacktrace: ");
             logToQueue("THREAD_INSIDE error:" + ex.getMessage());
+            logToQueue("THREAD_INSIDE stacktrace: "+ex.getStackTrace());
+            ex.printStackTrace();
+           
+            normalfinish = false;
+        } catch (Exception ex) {
+            System.err.println("THREAD_INSIDE error! " + ex.getClass());
+            logToQueue("THREAD_INSIDE error:" + ex.getMessage());
+            normalfinish = false;
         } finally {
-            logQueue.offer(queue);
+            logQueue.offer(queue);            
             callback.callableComplete(this.id, normalfinish ? 0 : -1);
         }
         if (normalfinish) {

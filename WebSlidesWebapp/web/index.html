@@ -27,7 +27,7 @@ and open the template in the editor.
                 </div>
                 <div class="col-xs-1">
                     <div class="row">
-                        <span class="language" id="lang-en">en</span>
+                        <span class="language language-selected" id="lang-en">en</span>
                         <span> | </span>
                         <span class="language" id="lang-nl">nl</span>
                     </div>
@@ -70,8 +70,8 @@ and open the template in the editor.
                 <div class="collapse" id="collapseOptions">
                     <div class="radio-type ">
                         <span class="col-md-2" id="output-type">Output type: </span>
-                        <label class="radio-inline"><input type="radio" name="output_type" value="raw" checked>Raw</label>
-                        <label class="radio-inline"><input type="radio" name="output_type" value="shower">Shower</label>
+                        <label class="radio-inline"><input type="radio" name="outputType" value="raw" checked>Raw</label>
+                        <label class="radio-inline"><input type="radio" name="outputType" value="shower">Shower</label>
                     </div>
                 </div> 
             </div>
@@ -82,9 +82,7 @@ and open the template in the editor.
             </div>
         </div>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-        <!-- remove the local jquery later on, needed for now when testing with Burpsuite -->
-        <script src="resources/js/jquery-3.2.0.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="resources/js/bootstrap.min.js"></script>
         <script type="text/javascript">var shared_vars = {
             socket:new WebSocket("ws://localhost:8080/WebSlidesWebapp/pipe"),

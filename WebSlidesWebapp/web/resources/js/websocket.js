@@ -17,7 +17,7 @@ shared_vars.socket.onmessage = function (event) {
     console.log(msg);
     // dynamically add property to socket
     shared_vars.socket.WSSessionToken = msg.WSSessionToken;
-    console.log("message action = " + msg.action);
+    console.log("message action = " + msg.status);
     var targetId; // = btnFormDownloadToShow
     console.log("looping looking for " + msg.fileName);
     $.each(shared_vars.filesInProgress, function (k, v) {
@@ -29,23 +29,16 @@ shared_vars.socket.onmessage = function (event) {
             targetId = k;
             console.log("loading to remove " + targetId);
             $("#download-loading-anim-" + targetId).hide(500, function () {
-                $("#download-form-" + targetId + "-btn").show(1000);
+                if(msg.action === "download-ready") $("#download-form-" + targetId + "-btn").show(1000);
+                else if(msg.action ==="download-not-ready") $("#download-form-"+targetId+"-btn").removeClass('btn-primary').addClass('btn-danger').prop('disabled',true).show(1000);
             });
         }
     }
-    );
-
-
-    if (msg.action === "download-ready") {
-        //shared_vars.filesReady.push(msg.fileName);
-        //console.log(shared_vars.filesReady);
-        //.css({opacity: 1.0, visibility: "visible"});
-        //.animate({opacity: 1.0}, 200);
-    }
+    ); 
 };
 
 shared_vars.socket.onerror = function (e) {
-    alert("An error occured while connecting... " + e.data);
+    alert("An error occured while opening the websocket  ");
 };
 
 
