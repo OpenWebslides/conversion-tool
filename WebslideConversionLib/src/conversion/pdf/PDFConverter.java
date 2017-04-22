@@ -77,15 +77,14 @@ public class PDFConverter implements IConverter {
     public void finalize() {
         try {
             document.close();
-        } catch (Exception e){ } 
-        finally {
+        } catch (Exception e) {
+        } finally {
             try {
                 super.finalize();
             } catch (Throwable ex) {
             }
         }
     }
-
 
     /**
      * this function will fill the ppt object with content - if any the param s
@@ -94,9 +93,10 @@ public class PDFConverter implements IConverter {
      *
      * @param ppt
      * @param Location
+     * @throws conversion.pdf.util.PDFException
      */
     @Override
-    public void parse(PPT ppt, String Location) {
+    public void parse(PPT ppt, String Location) throws PDFException {
 
         System.out.println("laat het parsen beginnen!");
         //controleren of plaats bestaat of niet...
@@ -115,6 +115,20 @@ public class PDFConverter implements IConverter {
 
     }
 
+    @Override
+    public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) throws PDFException{
+
+        ZipOutputStream outputStream = zOS;
+        System.out.println("laat het parsen beginnen!");
+        try {
+            retrieveImagesToZOS(zOS, saveLocation);
+        } catch (IOException ex) {
+            System.out.println("IO exception... ");
+        }
+        parse(ppt);
+
+    }
+
     private void retrieveImagesToZOS(ZipOutputStream ZOS, String saveLocation) throws IOException {
         PDFImageExtractor imEx = new PDFImageExtractor();
         imEx.extractImage(document, ZOS, saveLocation);
@@ -125,9 +139,8 @@ public class PDFConverter implements IConverter {
         imEx.extractImage(document, Location);
     }
 
-    private void parse(PPT ppt) {
+    private void parse(PPT ppt) throws PDFException {
         try {
-
             getImageLocations imLocParser = new getImageLocations();
             getImageLocations2 imLocParser2 = new getImageLocations2();
             PDFTextExtractor parser = new PDFTextExtractor();
@@ -153,15 +166,11 @@ public class PDFConverter implements IConverter {
                 //na het parsen halen we ook de imLocacties voor die pagina op...
                 paginaobjects.addAll(imLocParser.getObjecten());
                 //even testen wat er in zit in die objecten:
-               
-                
-                
                /* for (PPTObject obj : paginaobjects) {
-                   // System.out.println("object: " + obj.toString() + "\tType: "+obj.getClass().getName());
-                    System.out.printf("object: %-30.30s  type: %-30.30s%n", obj.toString(), obj.getClass().getName());
-                }
-                */
-                
+                 // System.out.println("object: " + obj.toString() + "\tType: "+obj.getClass().getName());
+                 System.out.printf("object: %-30.30s  type: %-30.30s%n", obj.toString(), obj.getClass().getName());
+                 }
+                 */
                 System.out.println("page-end=========================");
                 Slide slide = new Slide();
                 slide.getPptObjects().addAll(paginaobjects);
@@ -171,22 +180,23 @@ public class PDFConverter implements IConverter {
             }
             TextIntelligence tI = new TextIntelligence();
             tI.makeText(ppt);
-           // testPPT(ppt);
+            // testPPT(ppt);
 
             System.out.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
 
         } catch (IOException ex) {
             System.out.println("er ging iets mis in de conversie.... ");
-            //hier moet nog logging in gestoken worden!!
+            throw new PDFException("Parsing aborded to soon");
         } catch (Exception e) {
             System.out.println("onherkende fout, wss de schult van apache..."
                     + e.getMessage());
-            e.printStackTrace();
+            //e.printStackTrace();
+            throw new PDFException("Parsing aborded to soon");
         }
 
     }
 
-    public void testPPT(PPT ppt) {
+    private void testPPT(PPT ppt) {
         System.out.println("PPT CONTROLE");
         for (PPTObject obj : ppt.getSlides()) {
             System.out.println(obj.toString());
@@ -196,20 +206,6 @@ public class PDFConverter implements IConverter {
     @Override
     public void setOutput(Output output) {
         this.output = output;
-    }
-
-    @Override
-    public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) {
-        
-    ZipOutputStream outputStream = zOS;
-        System.out.println("laat het parsen beginnen!");
-        try {
-            retrieveImagesToZOS(zOS, saveLocation);
-        } catch (IOException ex) {
-            System.out.println("IO exception... ");
-        }
-        parse(ppt);
-    
     }
 
 }
