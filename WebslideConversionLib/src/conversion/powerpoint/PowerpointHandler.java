@@ -136,7 +136,8 @@ public class PowerpointHandler extends DefaultHandler {
     public void characters(char ch[], int start, int length) throws SAXException {
         try {
             if (textpartContent) {
-                textpart.setContent(new String(ch, start, length).trim());
+                if(textpart!=null)
+                    textpart.setContent(new String(ch, start, length).trim());
                 textpartContent = false;
             }
         } catch (Exception e) {

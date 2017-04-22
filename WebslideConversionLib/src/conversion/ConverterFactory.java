@@ -21,10 +21,10 @@ public class ConverterFactory {
     /**
      * Return an IConverter object
      * The correct implementation is decided by the file type
-     * @param file
+     * @param file File
      * @return 
      */
-    public static IConverter getConverter(File file){
+    public static IConverter getConverter(File file) throws IllegalArgumentException{
         String ext2 = getExtension(file.getName());
         switch(ext2){
             case "pptx" : return new PPTConverter(file);

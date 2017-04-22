@@ -106,7 +106,7 @@ class MediaHandler {
                 else if (sh.getClass().equals(XSLFTable.class)) {
                     //Check our object for a Table object
                     for (PPTObject po : pptObjects) {
-                        if (po.getClass().equals(Table.class)) {
+                        if (po!=null && po.getClass().equals(Table.class)) {
                             //If we find the first table object to check if it is empty, this way we'll know if we already provided data for this one
                             if (((Table) po).getRows().isEmpty()) {
                                 //Fill the table                                
@@ -352,14 +352,20 @@ class MediaHandler {
     private static void updateHyperlink(PPTObject p) {
         String rid = "";
         for (Textpart tp : ((Text) p).getTextparts()) {
-            if (tp.getClass().equals(Hyperlink.class)) {
-                if (!rid.equals(((Hyperlink) tp).getRid())) {
-                    //If we linked the hyperlink with the according link, update the hyperlink url and finish the object
-                    ((Hyperlink) tp).setUrl(links.get(linkCount++));
-                    ((Hyperlink) tp).getParts().add(0, new Textpart(tp));
-                    ((Hyperlink) tp).setContent("");
+                if (tp.getClass().equals(Hyperlink.class)) {
+                    if (!rid.equals(((Hyperlink) tp).getRid())) {
+                        //If we linked the hyperlink with the according link, update the hyperlink url and finish the object
+                        if(links.size()<=linkCount){
+                            ((Hyperlink) tp).setUrl(tp.getContent());
+                            ((Hyperlink) tp).getParts().add(0, new Textpart(tp));
+                            ((Hyperlink) tp).setContent("");
+                        }else{
+                            ((Hyperlink) tp).setUrl(links.get(linkCount++));
+                            ((Hyperlink) tp).getParts().add(0, new Textpart(tp));
+                            ((Hyperlink) tp).setContent("");
+                        }
+                    }
                 }
-            }
         }
     }
 
