@@ -55,7 +55,7 @@ public class OpenWebslidesConverterTests {
     //
     // @Test
     // public void hello() {}
-    
+    /*
     @Test
     public void test1() {
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1\\input.pptx",
@@ -125,7 +125,7 @@ public class OpenWebslidesConverterTests {
         }
     }
     
-    
+    */
     
     @Test
     public void allElementsTest(){
@@ -134,7 +134,7 @@ public class OpenWebslidesConverterTests {
                                       "-t","shower"};
         OpenWebslidesConverter.main(args);
     }
-    
+    /*
     @Test
     public void imagesSizes() throws WebslidesConverterException{
         String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\imagesSizes";
@@ -169,5 +169,5 @@ public class OpenWebslidesConverterTests {
                                       "-zip"};
         OpenWebslidesConverter.main(args);
     }
-    
+    */
 }

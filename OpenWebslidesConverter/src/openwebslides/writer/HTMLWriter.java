@@ -180,17 +180,28 @@ public class HTMLWriter extends Writer implements Indentation{
     private String printTextparts(List<Textpart> parts){
         String res = "";
         for(Textpart textpart : parts){
-            String part = textpart.getContent();
-            
-            if(textpart.getType().contains(FontDecoration.BOLD))
-                part = addSimpleTag("strong", part);
-            if(textpart.getType().contains(FontDecoration.UNDERLINE))
-                part = "<strong class=\"underline\">" + part + "</strong>";
-            if(textpart.getType().contains(FontDecoration.ITALIC))
-                part = addSimpleTag("em", part);
-            if(textpart.getType().contains(FontDecoration.STRIKETHROUH))
-                part = addSimpleTag("strike", part);
-            
+            String part = "";
+            if(textpart instanceof Hyperlink){
+                Hyperlink link = (Hyperlink)textpart;
+                part = " <a href=\"" + link.getUrl() + "\">";
+                
+                for(Textpart linkpart: link.getParts()){
+                    part += linkpart.getContent();
+                }
+                part += "</a> ";
+            }
+            else {
+                part = textpart.getContent();
+
+                if(textpart.getType().contains(FontDecoration.BOLD))
+                    part = addSimpleTag("strong", part);
+                if(textpart.getType().contains(FontDecoration.UNDERLINE))
+                    part = "<strong class=\"underline\">" + part + "</strong>";
+                if(textpart.getType().contains(FontDecoration.ITALIC))
+                    part = addSimpleTag("em", part);
+                if(textpart.getType().contains(FontDecoration.STRIKETHROUH))
+                    part = addSimpleTag("strike", part);
+            }
             res += part;
         }
         return res;
