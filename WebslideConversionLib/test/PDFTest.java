@@ -51,12 +51,14 @@ public class PDFTest {
         IConverter converter;
          try {
              converter = ConverterFactory.getConverter(file);
-         
+         converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "Gertjan")));
         PPT ppt = new PPT();
         
         converter.parse(ppt,"C:\\temp\\output");
         
         } catch (PDFException ex) {
+             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
+         } catch (Exception ex) {
              java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
          }
 	FileWriter fw = null;

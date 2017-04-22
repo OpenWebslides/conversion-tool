@@ -38,6 +38,8 @@ public class PPTTest {
         converter.parse(ppt, "C:\\temp\\images");
         } catch (PDFException ex) {
             java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

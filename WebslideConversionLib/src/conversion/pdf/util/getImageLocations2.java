@@ -41,6 +41,7 @@ public class getImageLocations2 extends PDFStreamEngine{
     
     
     @Override
+   
     protected void processOperator( PDFOperator operator, List arguments ) throws IOException
     {
         String operation = operator.getOperation();

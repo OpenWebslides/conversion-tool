@@ -35,6 +35,7 @@ import output.Output;
  *
  * @author Gertjan
  */
+ 
 public class PDFConverter implements IConverter {
 
     private final File file;
@@ -48,6 +49,7 @@ public class PDFConverter implements IConverter {
      * @param file
      * @throws conversion.pdf.util.PDFException
      */
+     
     public PDFConverter(File file) throws PDFException {
         this.file = file;
         try {
@@ -98,7 +100,7 @@ public class PDFConverter implements IConverter {
     @Override
     public void parse(PPT ppt, String Location) throws PDFException {
 
-        System.out.println("laat het parsen beginnen!");
+        output.println("laat het parsen beginnen!");
         //controleren of plaats bestaat of niet...
         //indien niet proberen aanmaken... (wat?)
         File directory = new File(Location);
@@ -109,7 +111,7 @@ public class PDFConverter implements IConverter {
         try {
             retrieveImagesToFile(Location);
         } catch (IOException ex) {
-            System.out.println("io exception bij ophalen afbeeldingen...");
+            output.println("io exception bij ophalen afbeeldingen...");
         }
         parse(ppt);
 
@@ -123,7 +125,7 @@ public class PDFConverter implements IConverter {
         try {
             retrieveImagesToZOS(zOS, saveLocation);
         } catch (IOException ex) {
-            System.out.println("IO exception... ");
+            output.println("IO exception... ");
         }
         parse(ppt);
 
@@ -148,7 +150,7 @@ public class PDFConverter implements IConverter {
             List allPages = document.getDocumentCatalog().getAllPages();
 
             for (int i = 0; i < allPages.size(); i++) {
-                System.out.println("page-start=============================");
+                //System.out.println("page-start=============================");
                 PDPage page = (PDPage) allPages.get(i);
                 System.out.println("Processing page: " + i);
                 //elke pagina is 1 slide!!! -> als slide af is moet je die hier dus aanmaken en de objecten uit extractor halen
@@ -171,7 +173,7 @@ public class PDFConverter implements IConverter {
                  System.out.printf("object: %-30.30s  type: %-30.30s%n", obj.toString(), obj.getClass().getName());
                  }
                  */
-                System.out.println("page-end=========================");
+                //System.out.println("page-end=========================");
                 Slide slide = new Slide();
                 slide.getPptObjects().addAll(paginaobjects);
                 ppt.getSlides().add(slide);
@@ -182,13 +184,13 @@ public class PDFConverter implements IConverter {
             tI.makeText(ppt);
             // testPPT(ppt);
 
-            System.out.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
+            output.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
 
         } catch (IOException ex) {
-            System.out.println("er ging iets mis in de conversie.... ");
+            output.println("er ging iets mis in de conversie.... ");
             throw new PDFException("Parsing aborded to soon");
         } catch (Exception e) {
-            System.out.println("onherkende fout, wss de schult van apache..."
+            output.println("onherkende fout, wss de schult van apache..."
                     + e.getMessage());
             //e.printStackTrace();
             throw new PDFException("Parsing aborded to soon");
