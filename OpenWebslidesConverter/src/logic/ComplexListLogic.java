@@ -30,7 +30,7 @@ public class ComplexListLogic extends AListLogic {
         ArrayList<String> nextLevels = new ArrayList<>(Arrays.asList("1."));
         //Read all text objects in slide and puts the line number and level number in a map
         for (PPTObject object : slide.getPptObjects()) {
-            if (object instanceof Text && !((Text) object).getTextparts().isEmpty() && !(((Text) object).getTextparts().get(0).getContent() == null)) {
+            if (object instanceof Text && !((Text) object).getTextparts().isEmpty() && ((Text) object).getTextparts().get(0).getContent() != null && !((Text) object).getTextparts().get(0).getContent().equals("")) {
                 Text text = (Text) object;
                 Pattern pattern = Pattern.compile("(\\d+\\.(\\d+\\.)*(?!\\d))");
                 Matcher matcher = pattern.matcher(text.getTextparts().get(0).getContent());

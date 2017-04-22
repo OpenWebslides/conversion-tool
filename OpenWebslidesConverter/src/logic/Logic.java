@@ -25,7 +25,7 @@ public class Logic implements ILogic {
         UnorderedListLogic ull = new UnorderedListLogic();
         ull.formatList(ppt, "([^a-zA-z0-9]+)\\s+", false);*/
         //TODO: ordered lists with a,b,c
-        formatTitle(ppt);
+        //formatTitle(ppt);
     }
 
     private void formatTitle(PPT ppt) {
