@@ -1,7 +1,7 @@
 ##Korte Github manual
 
 ###1 Hoofdbranch: Master
-###3 Projectbranches: open_webslides_webapp, directory_guard, converter
+###2 Projectbranches: webslides_webapp, open_webslides_converter
 ###X Gepushte issue-branches
 
 ###---Klonen & Setup---
@@ -14,11 +14,9 @@ Schema: git checkout --track -b [branchname] origin/[branchname]
 
 VB: voor de 3 hoofdbranches
 
-`git checkout --track -b converter origin/converter`
+`git checkout --track -b open_webslides_converter origin/open_webslides_converter`
 
-`git checkout --track -b directory_guard origin/directory_guard`
-
-`git checkout --track -b open_webslides_webapp origin/open_webslides_webapp`
+`git checkout --track -b webslides_webapp origin/webslides_webapp`
 
 ###---Setup checken---###
 
