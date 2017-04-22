@@ -7,6 +7,7 @@ package openwebslidesconverter;
 
 import conversion.ConverterFactory;
 import conversion.IConverter;
+import conversion.pdf.util.PDFException;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -91,9 +92,10 @@ public class Converter {
             readPpt = new PPT();
             converter.parse(readPpt, imageSaveLocation);
             logic.format(readPpt);
-            
+
             output.println("Input file successfully read");
-        } catch (FileNotFoundException ex) {
+            //} catch (FileNotFoundException ex) {
+        } catch (Exception ex) {
             throw new WebslidesConverterException(ex);
         }
     }
@@ -121,7 +123,8 @@ public class Converter {
             logic.format(readPpt);
 
             output.println("Input file successfully read");
-        } catch (FileNotFoundException ex) {
+            //} catch (FileNotFoundException ex) {
+        } catch (Exception ex) {
             throw new WebslidesConverterException(ex);
         }
     }
@@ -150,7 +153,7 @@ public class Converter {
      * @param file The file the IConverter is created for.
      * @return The IConverter for the file type.
      */
-    private IConverter getConverter(File file) {
+    private IConverter getConverter(File file) throws IllegalArgumentException, PDFException {
         IConverter converter = ConverterFactory.getConverter(file);
         converter.setOutput(output);
         return converter;

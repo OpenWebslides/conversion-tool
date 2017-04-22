@@ -30,6 +30,8 @@ public abstract class AListLogic {
         for (Slide slide : ppt.getSlides()) {
             List<PPTObject> pptobjects = slide.getPptObjects();
             Map<Integer, Integer> numbers = getLevelsPerText(slide);
+            //Map<Integer, Double> numbers = getLevelsPerText(slide);
+
             if ((multiLevels && numbers.size() > 1 && new HashSet<>(numbers.values()).size() > 1) || (!multiLevels && numbers.size() > 1)) {
                 List<PPTList> lists = new ArrayList<>();
                 lists.add(new PPTList());
@@ -92,7 +94,7 @@ public abstract class AListLogic {
         return text;
     }
 
-    protected int getLevel(Text text) {
+    /*protected int getLevel(Text text) {
         int lastLevel = 0;
         Pattern pattern = Pattern.compile("Lijst level (\\d+) -(\\d+)");
         if (text.getLevel() != null) {
@@ -102,8 +104,19 @@ public abstract class AListLogic {
             }
         }
         return lastLevel;
-    }
-
+    }*/
+ /*protected int getLevel(Text text) {
+        int lastLevel = 0;
+        Pattern pattern = Pattern.compile("Lijst level (\\d+) -(\\d+)");
+        if (text.getLevel() != null) {
+            Matcher matcher = pattern.matcher(text.getLevel());
+            if (matcher.find()) {
+                lastLevel = Integer.parseInt(matcher.group(1));
+            }
+        }
+        return lastLevel;
+    }*/
     abstract Map<Integer, Integer> getLevelsPerText(Slide slide);
+    //abstract Map<Integer, Double> getLevelsPerText(Slide slide);
 
 }

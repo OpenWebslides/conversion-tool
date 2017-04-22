@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import objects.PPTObject;
 import objects.Slide;
 import objects.Text;
+import objects.Textpart;
 
 /**
  *
@@ -15,7 +16,7 @@ import objects.Text;
  */
 public class UnorderedListLogic extends AListLogic {
 
-    /*@Override
+    @Override
     protected Map<Integer, Integer> getLevelsPerText(Slide slide) {
         Map<Integer, Integer> numbers = new LinkedHashMap<>();  //Index, level
         Map<Integer, Character> charPerLevel = new HashMap<>();  //Saves used symbol/character per level
@@ -23,24 +24,26 @@ public class UnorderedListLogic extends AListLogic {
         //Read all text objects in slide and puts the line number and level number in a map
         int lastLevel = -1;
         for (PPTObject object : slide.getPptObjects()) {
-            if (object instanceof Text && !((Text) object).getTextparts().isEmpty()) {
+            if (object instanceof Text && !((Text) object).getTextparts().isEmpty() && ((Text) object).getTextparts().get(0).getContent() != null && !((Text) object).getTextparts().get(0).getContent().equals("")) {
                 Text text = (Text) object;
+                Textpart tp = text.getTextparts().get(0);
+                int x = (int) tp.getXPosition();
                 char symbol = text.getTextparts().get(0).getContent().charAt(0);
                 if (!((symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z') || (symbol >= '0' && symbol <= '9'))) {
-                    if (charPerLevel.containsKey(text.getLevel()) && symbol == charPerLevel.get(text.getLevel())) {
-                        numbers.put(index_line, text.getLevel());
-                        lastLevel = text.getLevel();
-                    } else if (text.getLevel() > lastLevel) {
-                        charPerLevel.put(text.getLevel(), symbol);
-                        numbers.put(index_line, text.getLevel());
-                        lastLevel = text.getLevel();
+                    if (charPerLevel.containsKey(x) && symbol == charPerLevel.get(x)) {
+                        numbers.put(index_line, x);
+                        lastLevel = x;
+                    } else if (x > lastLevel) {
+                        charPerLevel.put(x, symbol);
+                        numbers.put(index_line, x);
+                        lastLevel = x;
                     }
                 }
             }
             index_line++;
         }
         return numbers;
-    }*/
+    }/*
     @Override
     public Map<Integer, Integer> getLevelsPerText(Slide slide) {
         Map<Integer, Integer> numbers = new LinkedHashMap<>();  //Index, level
@@ -66,8 +69,7 @@ public class UnorderedListLogic extends AListLogic {
             index_line++;
         }
         return numbers;
-    }
+    }*/
 
-    
 
 }
