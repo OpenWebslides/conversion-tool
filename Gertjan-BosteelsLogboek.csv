@@ -52,3 +52,13 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijfing,Issue #,Opmerkingen
 15/04/17,13:15,17:30,extern,Projectwerk,pdf convertor - overschrijven stream methode + uitzoeken zipstream,,
 17/04/17,09:30,12:00,extern,Projectwerk,pdf convertor - toevoegen javadoc info + bugfix voor groot bestand,,
 17/04/17,13:00,16:30,extern,Projectwerk,pdf convertor - opkuisen code + bugfix voor groot bestand,,
+18/04/17,08:15,12:30,intern,Projectwerk,convertoren samenvoegen + uitleg stage / masterproef,,
+18/04/17,14:30,15:30,extern,Projectwerk,urgent bugfixes aan filepaden + manier afdrukken afbeeldingen,,
+19/04/17,13:45,17:30,extern,Projectwerk,textpart naar text + extractie afbeeldinglocaties verbeteren (veel) + opzoekwerk bold of italic (voorlopig onmogelijk),,
+19/04/17,18:30,19:30,extern,Projectwerk,opstart hyperlink extractie,,
+19/04/17,20:30,21:00,extern,Projectwerk,rechtzetten fout textpart to text,,
+20/04/17,13:30,17:45,intern,Projectwerk,samenzetten + bespreken sprint twee + bugs,,
+22/04/17,09:00,12:00,extern,Projectwerk,fouten opzoeken + model uitbreiden met extra info,,
+22/04/17,13:00,14:30,extern,Projectwerk,fouten opzoeken etc + van jonas nieuwe library krijgen...,,
+22/04/17,14:40,18:00,extern,Projectwerk,beginnen werken met nieuwe library + hergebruik eigen werk...,,
+
