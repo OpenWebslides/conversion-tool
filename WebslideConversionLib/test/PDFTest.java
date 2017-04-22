@@ -6,9 +6,11 @@
 
 import conversion.ConverterFactory;
 import conversion.IConverter;
+import conversion.pdf.util.PDFException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
 import logger.Logger;
 import objects.PPT;
 import org.junit.Test;
@@ -45,13 +47,18 @@ public class PDFTest {
      
      @Test
     public void main1() {
-        File file = new File("C:\\temp\\slidesJoann.pdf");
-        IConverter converter = ConverterFactory.getConverter(file);
+        File file = new File("C:\\temp\\bigslides.pdf");
+        IConverter converter;
+         try {
+             converter = ConverterFactory.getConverter(file);
+         
         PPT ppt = new PPT();
         
         converter.parse(ppt,"C:\\temp\\output");
         
-        
+        } catch (PDFException ex) {
+             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
+         }
 	FileWriter fw = null;
         //uitschrijfstuk nog niet van toepassing...
         try {

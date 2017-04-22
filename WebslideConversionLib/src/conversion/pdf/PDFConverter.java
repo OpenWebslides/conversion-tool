@@ -6,6 +6,7 @@
 package conversion.pdf;
 
 import conversion.IConverter;
+import conversion.pdf.util.PDFException;
 import conversion.pdf.util.PDFTextExtractor;
 import conversion.pdf.util.PDFImageExtractor;
 import conversion.pdf.util.TextIntelligence;
@@ -45,8 +46,9 @@ public class PDFConverter implements IConverter {
      * use.
      *
      * @param file
+     * @throws conversion.pdf.util.PDFException
      */
-    public PDFConverter(File file) {
+    public PDFConverter(File file) throws PDFException {
         this.file = file;
         try {
             document = PDDocument.load(file);
@@ -56,10 +58,13 @@ public class PDFConverter implements IConverter {
         } catch (CryptographyException ex) {
             //System.out.println("er ging iets mis bij de decryptie....");
             output.println("er ging iets mis bij de decryptie....");
+            throw new PDFException("Decription failed");
 
         } catch (Exception ex) {
             //System.out.println("Er ging iets mis met de file... ");
             output.println("Er ging iets mis met de file... ");
+            throw new PDFException("Unrecognized error, check if file fits pdf standard."
+                    + "--TIP: try 'printing to pdf' instead of 'saving as'");
         }
     }
 
@@ -72,8 +77,8 @@ public class PDFConverter implements IConverter {
     public void finalize() {
         try {
             document.close();
-        } catch (Exception e) {
-        } finally {
+        } catch (Exception e){ } 
+        finally {
             try {
                 super.finalize();
             } catch (Throwable ex) {
@@ -81,18 +86,6 @@ public class PDFConverter implements IConverter {
         }
     }
 
-    /*
-    public void parse(PPT ppt, ZipOutputStream zOS) {
-        //deze methode kan meteen naar een zip mee wegschrijven...
-        ZipOutputStream outputStream = zOS;
-        System.out.println("laat het parsen beginnen!");
-        try {
-            retrieveImagesToZOS(zOS);
-        } catch (IOException ex) {
-            System.out.println("IO exception... ");
-        }
-        parse(ppt);
-    }*/
 
     /**
      * this function will fill the ppt object with content - if any the param s
