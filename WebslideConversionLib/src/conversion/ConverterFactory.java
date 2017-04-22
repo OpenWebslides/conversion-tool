@@ -26,11 +26,11 @@ public class ConverterFactory {
      * @return 
      * @throws conversion.pdf.util.PDFException 
      */
-<<<<<<< HEAD
-    public static IConverter getConverter(File file) throws PDFException{
-=======
-    public static IConverter getConverter(File file) throws IllegalArgumentException{
->>>>>>> 4e1e1a4397ce6634a0a0f915313d2c9d730354dd
+
+    
+
+    public static IConverter getConverter(File file) throws IllegalArgumentException, PDFException{
+
         String ext2 = getExtension(file.getName());
         switch(ext2){
             case "pptx" : return new PPTConverter(file);
