@@ -77,8 +77,11 @@ public class OpenWebslidesConverter {
             // output is not initialized yet, print to console
             System.err.println("cannot start the converter because of false argument(s): " + ex.getMessage());
         } catch (IOException | InvalidParameterException | WebslidesConverterException ex) {
-            output.error("error while converting: " + ex.getMessage() + ex.getStackTrace().toString(), ex.getMessage());
+            output.error("error while converting: " + ex.getMessage(), ex.getMessage());
             java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            //***//
+            output.error("error while converting: " + ex.getMessage(), ex.getMessage());
         }
     }
 

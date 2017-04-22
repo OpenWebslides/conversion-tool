@@ -23,25 +23,28 @@ public abstract class AListLogic {
      * @param ppt
      * @param regex
      * @param multiLevels
+     * @param ordered
      *
      *
      */
-    public void formatList(PPT ppt, String regex, boolean multiLevels) {
+    public void formatList(PPT ppt, String regex, boolean multiLevels, boolean ordered) {
         for (Slide slide : ppt.getSlides()) {
             List<PPTObject> pptobjects = slide.getPptObjects();
-            Map<Integer, Integer> numbers = getLevelsPerText(slide);
-            //Map<Integer, Double> numbers = getLevelsPerText(slide);
+            Map<Integer, Integer> numbers = getLevelsPerText(slide); //Index in pptObjects, level
 
             if ((multiLevels && numbers.size() > 1 && new HashSet<>(numbers.values()).size() > 1) || (!multiLevels && numbers.size() > 1)) {
                 List<PPTList> lists = new ArrayList<>();
-                lists.add(new PPTList());
+                PPTList pptList = new PPTList();
+                pptList.setOrdered(ordered);
+                lists.add(pptList);
                 Object[] keys = numbers.keySet().toArray();
                 int currentLevel = numbers.get((int) keys[0]);
                 for (int i = 0; i < keys.length; i++) {
                     Text text = removeBulletSign((Text) pptobjects.get((int) keys[i]), regex);
-                    fillList(numbers.get((int) keys[i]) - currentLevel, text, lists);
+                    fillList(numbers.get((int) keys[i]) - currentLevel, text, lists, ordered);
                     consecutiveText(pptobjects, text, i, keys);
                     currentLevel = numbers.get((int) keys[i]);
+                    //System.out.println("currentLevel: " + currentLevel + "(" + numbers.size() + ")");
                 }
                 //Remove ppt textobjects that are being used in list
                 for (int i = pptobjects.size() - 1; i > (int) keys[0]; i--) {
@@ -53,16 +56,17 @@ public abstract class AListLogic {
     }
 
     //Adds the Text object to the corresponding PPTList object
-    private void fillList(int levelDifference, Text text, List<PPTList> lists) {
+    private void fillList(int levelDifference, Text text, List<PPTList> lists, boolean ordered) {
         switch (levelDifference) {
             case 0:
                 lists.get(lists.size() - 1).addPPTObject(text);
                 break;
             case 1:
                 PPTList list = new PPTList();
+                list.setOrdered(ordered);
                 list.addPPTObject(text);
+                lists.get(lists.size() - 1).addPPTObject(list);
                 lists.add(list);
-                lists.get(lists.size() - 2).addPPTObject(list);
                 break;
             default:
                 while (levelDifference != 0) {
@@ -89,34 +93,11 @@ public abstract class AListLogic {
     //Removes regex from the beginning of the text object and returns the text object
     private Text removeBulletSign(Text text, String regex) {
         String tekst = text.getTextparts().get(0).getContent();
-        tekst = tekst.replaceAll(regex, "");
+        tekst = tekst.replaceAll(regex + "\\s*", "");
         text.getTextparts().get(0).setContent(tekst);
         return text;
     }
 
-    /*protected int getLevel(Text text) {
-        int lastLevel = 0;
-        Pattern pattern = Pattern.compile("Lijst level (\\d+) -(\\d+)");
-        if (text.getLevel() != null) {
-            Matcher matcher = pattern.matcher(text.getLevel());
-            if (matcher.find()) {
-                lastLevel = Integer.parseInt(matcher.group(1));
-            }
-        }
-        return lastLevel;
-    }*/
- /*protected int getLevel(Text text) {
-        int lastLevel = 0;
-        Pattern pattern = Pattern.compile("Lijst level (\\d+) -(\\d+)");
-        if (text.getLevel() != null) {
-            Matcher matcher = pattern.matcher(text.getLevel());
-            if (matcher.find()) {
-                lastLevel = Integer.parseInt(matcher.group(1));
-            }
-        }
-        return lastLevel;
-    }*/
     abstract Map<Integer, Integer> getLevelsPerText(Slide slide);
-    //abstract Map<Integer, Double> getLevelsPerText(Slide slide);
 
 }
