@@ -22,6 +22,7 @@ public class Cell implements PPTObject {
         
     }
 
+    @Override
     public String getContent() {
         return content;
     }
@@ -46,6 +47,7 @@ public class Cell implements PPTObject {
         this.rowspan = rowspan;
     }
     
+    @Override
     public String toString(){
         return "cell:" + content + "(" + colspan + "," + rowspan + ")";
     }

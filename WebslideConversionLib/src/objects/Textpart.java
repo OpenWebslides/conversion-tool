@@ -53,6 +53,8 @@ public class Textpart implements PPTObject {
         this.charachterSpacing = tp.getCharachterSpacing();
         this.color = tp.getColor();
         this.dirty = tp.isDirty();
+        this.XPosition = tp.getXPosition();
+        this.YPosition = tp.getYPosition();
     }
 
     public String getFont() {
@@ -71,6 +73,7 @@ public class Textpart implements PPTObject {
         this.size = size;
     }
 
+    @Override
     public String getContent() {
         return content;
     }
@@ -86,9 +89,9 @@ public class Textpart implements PPTObject {
     @Override
     public String toString() {
 
-        return this.getClass() + ": " + content + "  |font: " + font +  "  |size: " + size + "  |type: " + Arrays.toString(type.toArray())+ "  |charachterSpacing: " + charachterSpacing;
-        
-       /* try {
+        return this.getClass() + ": " + content + "  |font: " + font + "  |size: " + size + "  |type: " + Arrays.toString(type.toArray()) + "  |charachterSpacing: " + charachterSpacing;
+
+        /* try {
             if (content != null || content.equals("")) {
                 return content;
             } else {
@@ -97,7 +100,6 @@ public class Textpart implements PPTObject {
         } catch (Exception e) {
             return "";
         }*/
-
     }
 
     public HashSet<FontDecoration> getType() {
