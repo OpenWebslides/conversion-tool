@@ -58,7 +58,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover width\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover width\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -70,8 +70,8 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover height\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
-        //Assert.assertEquals(result, expected);
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover height\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
+        Assert.assertEquals(result, expected);
     }
     
     @Test
@@ -82,7 +82,7 @@ public class ImagesTests {
         //System.out.println("*****" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover width\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover width\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -94,7 +94,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover width\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover width\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -106,7 +106,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover height\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover height\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -118,7 +118,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover width\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover width\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -130,7 +130,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover height\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover height\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -142,7 +142,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure class=\"cover height\">\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure class=\"cover height\">\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -154,7 +154,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"image1.jpg\" width=\"81%\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure>\n\t\t\t<img src=\"images/image1.jpg\" width=\"81%\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -166,7 +166,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure>\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -186,7 +186,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<figure>\n\t\t<img src=\"image1.jpg\">\n\t</figure>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure>\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -205,7 +205,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n<div class=\"title slide\" id=\"slide0\">\n\t<div class=\"placeholder\">image</div>\n</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<div class=\"placeholder\">image</div>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
