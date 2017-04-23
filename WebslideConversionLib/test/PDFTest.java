@@ -18,54 +18,54 @@ import output.StdLogOutput;
 
 /**
  *
- * @author Karel
+ * @author Gertjan
  */
 public class PDFTest {
     /*
      public static void main(String[] args) {
-        // TODO code application logic here
-        File file = new File("C:\\temp\\slides.pdf");
-        IConverter converter = ConverterFactory.getConverter(file);
-        PPT ppt = new PPT();
+     // TODO code application logic here
+     File file = new File("C:\\temp\\slides.pdf");
+     IConverter converter = ConverterFactory.getConverter(file);
+     PPT ppt = new PPT();
         
-        converter.parse(ppt,"C:\\temp\\output");
+     converter.parse(ppt,"C:\\temp\\output");
         
         
-	FileWriter fw = null;
-        //uitschrijfstuk nog niet van toepassing...
-        try {
-                fw = new FileWriter("C:\\temp\\test.html");
-               // fw.write(ppt.toHTML());
-        } catch (Exception e) {
-        } finally {
-            try {
-                fw.close();
-            } catch (IOException ex) {
-            }
-        }
-    }*/
-     
-     @Test
+     FileWriter fw = null;
+     //uitschrijfstuk nog niet van toepassing...
+     try {
+     fw = new FileWriter("C:\\temp\\test.html");
+     // fw.write(ppt.toHTML());
+     } catch (Exception e) {
+     } finally {
+     try {
+     fw.close();
+     } catch (IOException ex) {
+     }
+     }
+     }*/
+
+    @Test
     public void main1() {
-        File file = new File("C:\\temp\\bigslides.pdf");
+        File file = new File("C:\\temp\\slides.pdf");
         IConverter converter;
-         try {
-             converter = ConverterFactory.getConverter(file);
-         converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "Gertjan")));
-        PPT ppt = new PPT();
-        
-        converter.parse(ppt,"C:\\temp\\output");
-        
+        try {
+            converter = ConverterFactory.getConverter(file);
+            converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "Gertjan")));
+            PPT ppt = new PPT();
+
+            converter.parse(ppt, "C:\\temp\\output");
+
         } catch (PDFException ex) {
-             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (Exception ex) {
-             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
-         }
-	FileWriter fw = null;
+            java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        FileWriter fw = null;
         //uitschrijfstuk nog niet van toepassing...
         try {
-                fw = new FileWriter("C:\\temp\\test.html");
-               // fw.write(ppt.toHTML());
+            fw = new FileWriter("C:\\temp\\test.html");
+            // fw.write(ppt.toHTML());
         } catch (Exception e) {
         } finally {
             try {

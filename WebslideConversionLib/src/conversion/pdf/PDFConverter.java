@@ -6,6 +6,7 @@
 package conversion.pdf;
 
 import conversion.IConverter;
+import conversion.pdf.util.DOM;
 import conversion.pdf.util.PDFException;
 import conversion.pdf.util.PDFTextExtractor;
 import conversion.pdf.util.PDFImageExtractor;
@@ -14,7 +15,6 @@ import conversion.pdf.util.getImageLocations;
 import conversion.pdf.util.getImageLocations2;
 import java.io.File;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
@@ -54,9 +54,12 @@ public class PDFConverter implements IConverter {
         this.file = file;
         try {
             document = PDDocument.load(file);
+            //DOM dom = new DOM(document);
             if (document.isEncrypted()) {
                 document.decrypt("");
             }
+            
+          
         } catch (CryptographyException ex) {
             //System.out.println("er ging iets mis bij de decryptie....");
             output.println("er ging iets mis bij de decryptie....");
@@ -69,6 +72,13 @@ public class PDFConverter implements IConverter {
                     + "--TIP: try 'printing to pdf' instead of 'saving as'");
         }
     }
+    
+    
+    
+           
+    
+    
+    
 
     /**
      * finalized should be called after using this function, this way the

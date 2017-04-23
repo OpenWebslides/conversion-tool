@@ -39,12 +39,13 @@ public class PDFImageExtractor extends PDFStreamEngine {
      */
     public void extractImage(PDDocument document, String location) throws IOException {
         List<PDPage> list = document.getDocumentCatalog().getAllPages();
-
+        //List<PDPage> list = (List<PDPage>) document.getDocumentCatalog().getPages();
         int totalImages = 1;
         for (PDPage page : list) {
             PDResources pdResources = page.getResources();
 
             Map pageImages = pdResources.getImages();
+      
             if (pageImages != null) {
 
                 Iterator imageIter = pageImages.keySet().iterator();
