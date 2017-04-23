@@ -57,10 +57,7 @@ public class SimpleListLogic extends AListLogic {
                             lastLevel = lastLevel + 1;
                         }
                         lastX = x;
-                    } else {
-
-                    }
-
+                    } 
                 }
             }
             index_line++;

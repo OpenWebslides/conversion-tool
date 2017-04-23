@@ -17,14 +17,13 @@ public class Logic implements ILogic {
     @Override
     public void format(PPT ppt) {
         //Ordered list checks for multiple levels first in case there is a list in simple form
-        //Needs indentation in Text objects (level)
         /*ComplexListLogic cll = new ComplexListLogic();
         cll.formatList(ppt, "(\\d+\\.(\\d+\\.)*(?!\\d))\\s+", true, true);*/
         SimpleListLogic sll = new SimpleListLogic();
-        //sll.formatList(ppt, "(\\d+[\\.)](?!\\d))\\s+", false);
-        sll.formatList(ppt, "(\\d+[\\.)](?!\\d))", false, true);
-        /*UnorderedListLogic ull = new UnorderedListLogic();
-        ull.formatList(ppt, "([^a-zA-z0-9]+)\\s+", false, false);*/
+        sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", false, true);
+        //sll.formatList(ppt, "^(\\[A-Z]+[\\.)])", false, true);
+        UnorderedListLogic ull = new UnorderedListLogic();
+        ull.formatList(ppt, "^([^a-zA-z0-9]+)", false, false);
         //TODO: ordered lists with a,b,c
         formatTitle(ppt);
     }
@@ -62,7 +61,7 @@ public class Logic implements ILogic {
             for (int j = 0; j < slide.getPptObjects().size(); j++) {
                 if (!hasTitle && slide.getPptObjects().get(j) instanceof Text && !((Text) slide.getPptObjects().get(j)).getTextparts().isEmpty()) {
                     int firstSize = ((Text) slide.getPptObjects().get(j)).getTextparts().get(0).getSize();
-                    if ((firstSize < 1000 && firstSize > (minSize + (maxSize - minSize) * 4 / 5)) || (firstSize >= 1000 && (firstSize > (minSize + (maxSize - minSize) / 3) || firstSize >= 4000))) {
+                    if ((firstSize < 1000 && firstSize >= maxSize - 5/*(minSize + (maxSize - minSize) * 4 / 5)*/) || (firstSize >= 1000 && (firstSize > (minSize + (maxSize - minSize) / 3) || firstSize >= 4000))) {
                         Title title = new Title();
                         title.getTextparts().addAll(((Text) slide.getPptObjects().get(j)).getTextparts());
                         slide.getPptObjects().set(j, title);

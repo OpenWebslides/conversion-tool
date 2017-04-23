@@ -1,6 +1,6 @@
 package logic;
 
-import objects.*;
+import objects.PPT;
 
 /**
  *
