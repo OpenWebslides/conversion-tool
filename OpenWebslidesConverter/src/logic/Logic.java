@@ -18,13 +18,13 @@ public class Logic implements ILogic {
     public void format(PPT ppt) {
         //Ordered list checks for multiple levels first in case there is a list in simple form
         /*ComplexListLogic cll = new ComplexListLogic();
-        cll.formatList(ppt, "(\\d+\\.(\\d+\\.)*(?!\\d))\\s+", true, true);*/
+        cll.formatList(ppt, "(\\d+\\.(\\d+\\.)*(?!\\d))", true, true);*/
         SimpleListLogic sll = new SimpleListLogic();
         sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", false, true);
-        //sll.formatList(ppt, "^(\\[A-Z]+[\\.)])", false, true);
+        sll.formatList(ppt, "^([A-Z][\\.)])", false, true);
+        sll.formatList(ppt, "^([a-z][\\.)])", false, true);
         UnorderedListLogic ull = new UnorderedListLogic();
         ull.formatList(ppt, "^([^a-zA-z0-9]+)", false, false);
-        //TODO: ordered lists with a,b,c
         formatTitle(ppt);
     }
 

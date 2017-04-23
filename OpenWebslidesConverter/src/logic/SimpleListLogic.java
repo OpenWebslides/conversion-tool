@@ -16,9 +16,14 @@ import objects.Textpart;
  */
 public class SimpleListLogic extends AListLogic {
 
-    //orig
+    /**
+     *
+     * @param slide
+     * @param regex
+     * @return
+     */
     @Override
-    public Map<Integer, Integer> getLevelsPerText(Slide slide) {
+    public Map<Integer, Integer> getLevelsPerText(Slide slide, String regex) {
         Map<Integer, Integer> numbers = new LinkedHashMap<>();  //Index, level
         Map<Integer, Integer> numberPerLevel = new HashMap<>();  //Saves last used bullet number per level (level as xPos, bulletNr)
         Map<Integer, Integer> levelPerXPos = new HashMap<>();  //Saves level per xPosition
@@ -32,7 +37,9 @@ public class SimpleListLogic extends AListLogic {
                 Text text = (Text) object;
                 Textpart tp = text.getTextparts().get(0);
                 int x = (int) tp.getXPosition();
-                Pattern pattern = Pattern.compile("(\\d+[\\.)](?!\\d))");
+                //Pattern pattern = Pattern.compile("(\\d+[\\.)](?!\\d))");
+                Pattern pattern = Pattern.compile(regex);
+
                 Matcher matcher = pattern.matcher(text.getTextparts().get(0).getContent());
                 if (matcher.find()) {
                     if (levelPerXPos.containsKey(x) || (!levelPerXPos.containsKey(x) && x > lastX)) {
@@ -40,7 +47,18 @@ public class SimpleListLogic extends AListLogic {
                             levelPerXPos.put(x, lastLevel + 1);
                         }
                         int level = levelPerXPos.get(x);
-                        int bulletNr = Integer.parseInt(matcher.group(1).replaceAll("\\.", "").replaceAll("\\)", ""));
+                        int bulletNr;
+                        String bullet = matcher.group(1).replaceAll("\\.", "").replaceAll("\\)", "");
+                        try {
+                            bulletNr = Integer.parseInt(bullet);
+                        } catch (NumberFormatException e) {
+                            if (bullet.charAt(0) >= 'A' && bullet.charAt(0) <= 'Z') {
+                                bulletNr = bullet.charAt(0) - 'A' + 1;
+                            } else {
+                                bulletNr = bullet.charAt(0) - 'a' + 1;
+                            }
+                        }
+
                         if (numberPerLevel.containsKey(level) && bulletNr == numberPerLevel.get(level) + 1) {
                             numberPerLevel.put(level, bulletNr);
                             numbers.put(index_line, level);
@@ -57,7 +75,7 @@ public class SimpleListLogic extends AListLogic {
                             lastLevel = lastLevel + 1;
                         }
                         lastX = x;
-                    } 
+                    }
                 }
             }
             index_line++;

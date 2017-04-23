@@ -82,6 +82,7 @@ public class OpenWebslidesConverter {
         } catch (Exception ex) {
             //***//
             output.error("error while converting: " + ex.getMessage(), ex.getMessage());
+            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

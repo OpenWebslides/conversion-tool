@@ -20,10 +20,11 @@ public class ComplexListLogic extends AListLogic {
     /**
      *
      * @param slide
+     * @param regex
      * @return
      */
     @Override
-    public Map<Integer, Integer> getLevelsPerText(Slide slide) {
+    public Map<Integer, Integer> getLevelsPerText(Slide slide, String regex) {
         Map<Integer, Integer> numbers = new LinkedHashMap<>();  //Index, level
         int index_line = 0;
         //Searches for ordered lists that start with the number 1
