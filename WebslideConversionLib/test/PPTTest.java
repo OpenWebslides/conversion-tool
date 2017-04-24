@@ -2,10 +2,12 @@
 import conversion.ConverterFactory;
 import conversion.IConverter;
 import conversion.pdf.util.PDFException;
+import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.logging.Level;
+import java.util.zip.ZipOutputStream;
 import logger.Logger;
 import objects.PPT;
 import static org.junit.Assert.*;
@@ -24,9 +26,13 @@ import output.StdLogOutput;
 public class PPTTest {
 
     @Test
-    public void main() {
-        File file = new File("C:\\temp\\testPpts\\13.pptx");
+    public void main() throws FileNotFoundException {
+        File file = new File("C:\\temp\\testPpts\\pres.pptx");
 
+        FileOutputStream dest = new FileOutputStream("C:\\temp\\testPpts\\zip.zip");
+        ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(dest));
+        
+        
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
@@ -35,7 +41,8 @@ public class PPTTest {
 
         PPT ppt = new PPT();
 
-        converter.parse(ppt, "C:\\temp\\images");
+        converter.parse(ppt,zip, "images");
+        zip.close();
         } catch (PDFException ex) {
             java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
