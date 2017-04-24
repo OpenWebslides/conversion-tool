@@ -17,6 +17,7 @@ import openwebslidesconverter.Converter;
 import logger.Logger;
 import objects.PPT;
 import objects.Slide;
+import openwebslidesconverter.WebslidesConverterException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -56,20 +57,20 @@ public class ConverterTests {
     // @Test
     // public void hello() {}
     
-    /*
+    
     @Test
-    public void imagesToZip() throws IOException{
+    public void imagesToZip() throws IOException, WebslidesConverterException{
         Converter converter = new Converter(new LogOutput(new Logger("C:\\temp\\ziptest\\imagesToZip\\", "testlog", "1")));
         
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("C:\\temp\\ziptest\\imagesToZip\\output.zip"));
         
-        converter.convert(new File("C:\\temp\\ziptest\\imagesToZip\\input.pptx"), zos);
+        converter.convert(new File("C:\\temp\\ziptest\\imagesToZip\\input.pptx"), zos, "images");
         
         zos.close();
     }
     
     @Test
-    public void saveToStream1() throws FileNotFoundException{
+    public void saveToStream1() throws FileNotFoundException, WebslidesConverterException{
         Converter converter = new Converter(new StdOutput());
         
         PPT ppt = new PPT();
@@ -138,7 +139,7 @@ public class ConverterTests {
     }
     
     @Test
-    public void saveToZip1() throws FileNotFoundException, IOException{
+    public void saveToZip1() throws FileNotFoundException, IOException, WebslidesConverterException{
         Converter converter = new Converter(new StdOutput());
         
         PPT ppt = new PPT();
@@ -155,7 +156,7 @@ public class ConverterTests {
     }
     
     @Test
-    public void saveToZip2() throws FileNotFoundException, IOException{
+    public void saveToZip2() throws FileNotFoundException, IOException, WebslidesConverterException{
         Converter converter = new Converter(new StdOutput());
         
         PPT ppt = new PPT();
@@ -179,5 +180,5 @@ public class ConverterTests {
         File outputDir = new File("C:\\temp\\tests\\converterTest1");
         converter.saveToDirectory(outputDir, Converter.outputType.SHOWER, Converter.outputFormat.HTML);
     }
-    */
+    
 }

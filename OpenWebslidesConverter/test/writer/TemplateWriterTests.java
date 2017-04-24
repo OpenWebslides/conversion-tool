@@ -68,7 +68,7 @@ public class TemplateWriterTests {
             out.flush();
             result = sw.toString();
         }
-        String expected = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n\t<title>Introduction</title>\n\t<meta charset=\"utf-8\">\n\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n\t<link rel=\"stylesheet\" href=\"_shared/styles/screen-16x10.css\">\n</head>\n<body class=\"shower list\">\n\t<header class=\"caption\">\n\t\t<h1>\n\t\t\t<a class=\"series\" href=\"#title\">Opleidingsonderdeel</a><br>\n\t\t\t<a class=\"module\" href=\"#title\">Hoofdstuk</a>\n\t\t</h1>\n\t\t<p>\n\t\t</p>\n\t</header>\n\n\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t</div>\n\n\t<footer>\n\t</footer>\n\t<script src=\"_shared/scripts/shower.min.js\"></script>\n\t<script src=\"_shared/scripts/enhancements.js\"></script>\n\t<script>ga=function(){ga.q.push(arguments)};ga.q=[['create','UA-6142365-12','auto'],['require','autotrack'],['send','pageview']];ga.l=1*new Date</script>\n\t<script async src=\"_shared/scripts/autotrack.js\"></script>\n</body>\n</html>";
+        String expected = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n\t<title>Introduction</title>\n\t<meta charset=\"utf-8\">\n\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n\t<link rel=\"stylesheet\" href=\"_shared/styles/screen-16x10.css\">\n</head>\n<body class=\"shower list\">\n\t<header class=\"caption\">\n\t\t<h1>\n\t\t\t<a class=\"series\" href=\"#title\">Opleidingsonderdeel</a><br>\n\t\t\t<a class=\"module\" href=\"#title\">Hoofdstuk</a>\n\t\t</h1>\n\t\t<p>\n\t\t</p>\n\t</header>\n\n\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t</div>\n\n\t<footer>\n\t</footer>\n\t<script src=\"_shared/scripts/shower.min.js\"></script>\n\t<script src=\"_shared/scripts/enhancements.js\"></script>\n</body>\n</html>";
         
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
@@ -89,11 +89,12 @@ public class TemplateWriterTests {
             out.flush();
             result = sw.toString();
         }
-        String expected = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n\t<title>Introduction</title>\n\t<meta charset=\"utf-8\">\n\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n\t<link rel=\"stylesheet\" href=\"_shared/styles/screen-16x10.css\">\n</head>\n<body class=\"shower list\">\n\t<header class=\"caption\">\n\t\t<h1>\n\t\t\t<a class=\"series\" href=\"#title\">vak 0123456789</a><br>\n\t\t\t<a class=\"module\" href=\"#title\">deel 987</a>\n\t\t</h1>\n\t\t<p>\n\t\t</p>\n\t</header>\n\n\n\n\t<footer>\n\t</footer>\n\t<script src=\"_shared/scripts/shower.min.js\"></script>\n\t<script src=\"_shared/scripts/enhancements.js\"></script>\n\t<script>ga=function(){ga.q.push(arguments)};ga.q=[['create','UA-6142365-12','auto'],['require','autotrack'],['send','pageview']];ga.l=1*new Date</script>\n\t<script async src=\"_shared/scripts/autotrack.js\"></script>\n</body>\n</html>";
+        String expected = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n\t<title>Introduction</title>\n\t<meta charset=\"utf-8\">\n\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n\t<link rel=\"stylesheet\" href=\"_shared/styles/screen-16x10.css\">\n</head>\n<body class=\"shower list\">\n\t<header class=\"caption\">\n\t\t<h1>\n\t\t\t<a class=\"series\" href=\"#title\">vak 0123456789</a><br>\n\t\t\t<a class=\"module\" href=\"#title\">deel 987</a>\n\t\t</h1>\n\t\t<p>\n\t\t</p>\n\t</header>\n\n\n\n\t<footer>\n\t</footer>\n\t<script src=\"_shared/scripts/shower.min.js\"></script>\n\t<script src=\"_shared/scripts/enhancements.js\"></script>\n</body>\n</html>";
         
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
         Assert.assertEquals(result, expected);
     }
+    
 }
