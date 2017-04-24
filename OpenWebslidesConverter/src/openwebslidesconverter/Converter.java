@@ -244,7 +244,8 @@ public class Converter {
      */
     public void saveToStream(OutputStream os, outputType type, outputFormat format) throws WebslidesConverterException {
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, charsetName));
+            //BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, charsetName));
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os));
 
             if (format == outputFormat.HTML) {
                 output.println("creating .html file");
