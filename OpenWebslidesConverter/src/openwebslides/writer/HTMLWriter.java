@@ -235,7 +235,13 @@ public class HTMLWriter extends Writer implements Indentation{
             for(PPTObject object : item){
                 if(!itemString.equals(""))
                     itemString += "\n" + TABS;
-                itemString += objectToHtml(object);
+                if(object instanceof Text){
+                    Text text = (Text)object;
+                    itemString += printTextparts(text.getTextparts());
+                }
+                else{
+                    itemString += objectToHtml(object);
+                }
             }
             res += "\n" + TABS + addSimpleTag("li", itemString);
         }
