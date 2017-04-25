@@ -260,7 +260,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<p>This is text with a <strong>important</strong> word, <strong class=\"underline\">underlined</strong> word and <em>italic</em> word.</p>\n\t\t<p>You could be using <strike>deprecated</strike> code.</p>\n\t\t<p>Some <strike><em><strong class=\"underline\"><strong>nested</strong></strong></em></strike> tags.</p>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<p>This is text with a <strong>important</strong> word, <strong class=\"underline\">underlined</strong> word and <em>italic</em> word.</p>\n\t\t<p>You could be using <strike>deprecated</strike> code.</p>\n\t\t<p>Some <strike><em><strong class=\"underline\">nested</strong></em></strike> tags.</p>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
@@ -295,7 +295,7 @@ public class HTMLWriterTests {
             out.flush();
             result = sw.toString();
         }
-        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<ol>\n\t\t\t<li><p>Line 0</p></li>\n\t\t\t<li><p>Line 1</p></li>\n\t\t\t<li><p>Line 2</p></li>\n\t\t</ol>\n\t</div>";
+        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<ol>\n\t\t\t<li>Line 0</li>\n\t\t\t<li>Line 1</li>\n\t\t\t<li>Line 2</li>\n\t\t</ol>\n\t</div>";
         
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
@@ -333,7 +333,7 @@ public class HTMLWriterTests {
             out.flush();
             result = sw.toString();
         }
-        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<ul>\n\t\t\t<li><p>Line 0</p></li>\n\t\t\t<li><p>Line 1</p></li>\n\t\t\t<li><p>Line 2</p></li>\n\t\t</ul>\n\t</div>";
+        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<ul>\n\t\t\t<li>Line 0</li>\n\t\t\t<li>Line 1</li>\n\t\t\t<li>Line 2</li>\n\t\t</ul>\n\t</div>";
         
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
@@ -375,7 +375,7 @@ public class HTMLWriterTests {
             out.flush();
             result = sw.toString();
         }
-        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<ol>\n\t\t\t<li><ul>\n\t\t\t\t<li><p>Line 0</p></li>\n\t\t\t\t<li><p>Line 1</p></li>\n\t\t\t\t<li><p>Line 2</p></li>\n\t\t\t</ul></li>\n\t\t</ol>\n\t</div>";
+        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<ol>\n\t\t\t<li><ul>\n\t\t\t\t<li>Line 0</li>\n\t\t\t\t<li>Line 1</li>\n\t\t\t\t<li>Line 2</li>\n\t\t\t</ul></li>\n\t\t</ol>\n\t</div>";
         
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
