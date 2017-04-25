@@ -193,10 +193,10 @@ public class HTMLWriter extends Writer implements Indentation{
             else {
                 part = textpart.getContent();
 
-                if(textpart.getType().contains(FontDecoration.BOLD))
-                    part = addSimpleTag("strong", part);
                 if(textpart.getType().contains(FontDecoration.UNDERLINE))
                     part = "<strong class=\"underline\">" + part + "</strong>";
+                if(textpart.getType().contains(FontDecoration.BOLD) && !textpart.getType().contains(FontDecoration.UNDERLINE))
+                    part = addSimpleTag("strong", part);
                 if(textpart.getType().contains(FontDecoration.ITALIC))
                     part = addSimpleTag("em", part);
                 if(textpart.getType().contains(FontDecoration.STRIKETHROUH))
