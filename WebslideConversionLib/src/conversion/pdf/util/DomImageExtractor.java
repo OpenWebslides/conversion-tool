@@ -5,21 +5,13 @@
  */
 package conversion.pdf.util;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDResources;
 import org.apache.pdfbox.contentstream.PDFStreamEngine;
 
 /**
- * This class gets makes image objects from the DOM
+ * This class extracts imageses from a PDF Document 
  * @author Gertjan
  */
 public class DomImageExtractor extends PDFStreamEngine {

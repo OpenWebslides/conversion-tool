@@ -10,10 +10,22 @@ import conversion.pdf.util.PDFException;
 import conversion.pdf.util.TextIntelligence;
 import java.io.File;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipOutputStream;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import objects.PPT;
 import objects.PPTObject;
 import org.apache.pdfbox.pdmodel.PDDocument;
+import org.fit.pdfdom.PDFDomTree;
+import org.w3c.dom.Document;
 import output.Output;
 
 /**
@@ -29,6 +41,7 @@ public class PDFConverter implements IConverter {
     private final File file;
     private PDDocument document;
     private Output output;
+    private Document dom;
 
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
@@ -41,7 +54,11 @@ public class PDFConverter implements IConverter {
         this.file = file;
         try {
             document = PDDocument.load(file);
-            
+            // create the DOM parser
+            PDFDomTree parser = new PDFDomTree();
+            // parse the file and get the DOM Document
+            dom = parser.createDOM(document);
+
         } catch (Exception ex) {
             //System.out.println("Er ging iets mis met de file... ");
             output.println("Er ging iets mis met de file... ");
@@ -86,8 +103,22 @@ public class PDFConverter implements IConverter {
         File directory = new File(Location);
         if (!directory.exists()) {
             directory.mkdirs();
-
         }
+
+        // wegschrijven naar xml
+        Transformer transformer;
+        try {
+            transformer = TransformerFactory.newInstance().newTransformer();
+            Result outputXML = new StreamResult(new File(Location + File.separator +"output.xml"));
+            Source input = new DOMSource(dom);
+
+            transformer.transform(input, outputXML);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         try {
             retrieveImagesToFile(Location);
         } catch (IOException ex) {
@@ -121,17 +152,12 @@ public class PDFConverter implements IConverter {
          imEx.extractImage(document, Location);*/
     }
 
-    
-    
     private void parse(PPT ppt) throws PDFException {
         try {
-           //invullen van DOM object=================================================================================
-            
-           //aanpassen van ppt object met door DOM te overlopen======================================================
-            
-            
-            
-           //naverwerking op ppt loslaten============================================================================
+//==============invullen van DOM object=================================================================================
+
+//==============aanpassen van ppt object met door DOM te overlopen======================================================
+//==============naverwerking op ppt loslaten============================================================================
             //testPPT(ppt);
             TextIntelligence tI = new TextIntelligence();
             tI.makeText(ppt);
