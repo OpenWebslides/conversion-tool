@@ -18,7 +18,7 @@ import output.Output;
 
 /**
  * PDFConvertor has 1 main function, parse. Parse can be invoked with a string
- * or a ZipOutputStream. A pdfConvertor get's a File on consturction. This has
+ * or a ZipOutputStream. A pdfConvertor gets a File on construction. This has
  * to be a PDF file. The parse method will change a PPT object and fill it with
  * information from the File.
  *
