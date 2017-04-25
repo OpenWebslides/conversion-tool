@@ -106,19 +106,8 @@ public class PDFConverter implements IConverter {
         }
 
         // wegschrijven naar xml
-        Transformer transformer;
-        try {
-            transformer = TransformerFactory.newInstance().newTransformer();
-            Result outputXML = new StreamResult(new File(Location + File.separator +"output.xml"));
-            Source input = new DOMSource(dom);
-
-            transformer.transform(input, outputXML);
-        } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
-            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        //kan hier gebeuren maar is dus niet nodig..
+        
         try {
             retrieveImagesToFile(Location);
         } catch (IOException ex) {
@@ -183,6 +172,22 @@ public class PDFConverter implements IConverter {
     @Override
     public void setOutput(Output output) {
         this.output = output;
+    }
+    
+    public void maakXML(String Location){
+    Transformer transformer;
+        try {
+            transformer = TransformerFactory.newInstance().newTransformer();
+            Result outputXML = new StreamResult(new File(Location + File.separator +"output.xml"));
+            Source input = new DOMSource(dom);
+
+            transformer.transform(input, outputXML);
+        } catch (TransformerConfigurationException ex) {
+            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (TransformerException ex) {
+            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
 }

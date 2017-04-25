@@ -8,6 +8,7 @@ package PDFTests;
 
 import conversion.ConverterFactory;
 import conversion.IConverter;
+import conversion.pdf.PDFConverter;
 import conversion.pdf.util.PDFException;
 import java.io.File;
 import java.io.FileWriter;
@@ -49,7 +50,7 @@ public class PDFTest {
 
     @Test
     public void main1() {
-        File file = new File("C:\\temp\\slides.pdf");
+        File file = new File("C:\\temp\\slidesJoann.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
@@ -57,6 +58,8 @@ public class PDFTest {
             PPT ppt = new PPT();
 
             converter.parse(ppt, "C:\\temp\\output");
+            PDFConverter pdfc = (PDFConverter) converter; //even casten, deze methode is enkel voor testing...
+            pdfc.maakXML("C:\\temp\\output");
 
         } catch (PDFException ex) {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
