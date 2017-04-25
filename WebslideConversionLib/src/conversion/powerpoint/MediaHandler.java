@@ -24,7 +24,6 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import logger.Logger;
 import objects.*;
-import org.apache.pdfbox.util.NullOutputStream;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.xslf.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
