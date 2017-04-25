@@ -8,7 +8,7 @@ package openwebslides.writer;
 import objects.Slide;
 
 /**
- *
+ * A writer that prints the slides with indentation in the output.
  * @author Jonas
  */
 public interface Indentation {

@@ -5,17 +5,21 @@
  */
 package zip;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import openwebslides.zip.ZipException;
 import openwebslides.zip.Zipper;
+import openwebslidesconverter.Converter;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -64,7 +68,7 @@ public class ZipTest {
         Zipper.addFolder(zos, folder);
         zos.close();
     }
-    */
+    
     @Test
     public void test2() throws FileNotFoundException, ZipException, IOException{
         ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(new File("C:\\temp\\ziptest\\result.zip")));
@@ -85,6 +89,18 @@ public class ZipTest {
         
         zos.close();
     }
+    */
     
+    @Test
+    public void templateTest() throws FileNotFoundException, ZipException, IOException{
+        ZipInputStream zis = new ZipInputStream(new BufferedInputStream(Converter.class.getResourceAsStream("/openwebslides/template.zip")));
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("C:\\temp\\tests\\templateTest\\result_zip.zip"));
+        Zipper.copyZip(zis, zos);
+        zos.close();
+        
+        zis = new ZipInputStream(new BufferedInputStream(Converter.class.getResourceAsStream("/openwebslides/template.zip")));
+        File dir = new File("C:\\temp\\tests\\templateTest");
+        Zipper.copyZip(zis, dir);
+    }
     
 }
