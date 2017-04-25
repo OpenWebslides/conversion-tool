@@ -82,7 +82,9 @@ public class Converter {
      * @throws openwebslidesconverter.WebslidesConverterException If the
      * conversion has failed.
      */
-    /***Delete throws Exception*/
+    /**
+     * *Delete throws Exception
+     */
     public void convert(File file, String imageSaveLocation) throws WebslidesConverterException, Exception {
         try {
             output.println("Start conversion");
@@ -244,15 +246,16 @@ public class Converter {
      */
     public void saveToStream(OutputStream os, outputType type, outputFormat format) throws WebslidesConverterException {
         try {
-            //BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, charsetName));
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os));
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os, charsetName));
+            //BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(os));
 
             if (format == outputFormat.HTML) {
                 output.println("creating .html file");
 
                 if (type == outputType.RAW) {
                     bufferedWriter.write("<!DOCTYPE html>\n"
-                            + "<html>");
+                            + "<html>" + "\t<meta charset=\"utf-8\">\n");
+
                     HTMLWriter writer = new HTMLWriter(output);
                     writer.write(bufferedWriter, readPpt);
                     bufferedWriter.write("\n</html>");
