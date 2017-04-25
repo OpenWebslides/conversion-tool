@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -94,9 +95,9 @@ class MediaHandler {
                                 ((Media) po).setFilename(((XSLFPictureShape) sh).getPictureData().getFileName());
                                 //Copy the image from the ppt to our filesystem
                                 if (zip == null) {
-                                    copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true);
+                                    copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, false, zip);
                                 } else {
-                                    copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, zip, saveLocation);
+                                    copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
                                 }
 
                             }
@@ -174,34 +175,6 @@ class MediaHandler {
         }
     }
 
-    /**
-     * Copy the image to zip
-     *
-     * @param img Media
-     * @param name String
-     * @param file File
-     * @param output Output
-     * @param zip ZipOutputStream
-     * @param saveLoc String
-     */
-    private static void copyImage(Media img, String name, File file, Output output, ZipOutputStream zip, String saveLoc) {
-        try {
-            //Get the byte array of the media
-            ArrayList<byte[]> f = copyImage(img, name, file, output, saveLoc, false);
-            //Add it to a zipentry, in the correct folder
-            ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + currentFilename);
-            zip.putNextEntry(zipEntry);
-            //Write
-            for (byte[] buffer : f) {
-                zip.write(buffer, 0, buffer.length);
-            }
-            //Close
-            zip.closeEntry();
-
-        } catch (Exception e) {
-            output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
-        }
-    }
 
     /**
      * Copy image to filesystem
@@ -213,7 +186,7 @@ class MediaHandler {
      * @param saveLoc String
      * @return
      */
-    private static ArrayList<byte[]> copyImage(Media img, String name, File file, Output output, String saveLoc, boolean save) {
+    private static ArrayList<byte[]> copyImage(Media img, String name, File file, Output output, String saveLoc, boolean zip, ZipOutputStream zipoutput) {
         File f;
         ArrayList<byte[]> bytes = new ArrayList<>();
         try {
@@ -235,22 +208,25 @@ class MediaHandler {
                     f = new File(saveLoc + "\\" + n);
                     img.setFilename(n);
                     img.setCopied(true);
-                    if (save) {
-                        f.getParentFile().mkdirs();
-                    }
+                    OutputStream out;
                     currentFilename = n;
-                    OutputStream out = null;
+                    if (!zip) {
+                        f.getParentFile().mkdirs();
+                        out = new FileOutputStream(f);
+                    }
+                    else{ 
+                        out = zipoutput;
+                        System.out.println(saveLoc + "\\" + currentFilename);
+                        ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + currentFilename);
+                        ((ZipOutputStream)out).putNextEntry(zipEntry);
+                    }
                     try {
-                        if (!save) {
-                            out = new NullOutputStream();
-                        } else {
-                            out = new FileOutputStream(f);
-                        }
+                        
                         byte[] buffer = new byte[8192];
                         int len;
+                        
                         while ((len = zin.read(buffer)) != -1) {
                             out.write(buffer, 0, len);
-                            bytes.add(buffer);
                         }
                         if (img instanceof Video) {
                             mediaCount++;
@@ -258,8 +234,14 @@ class MediaHandler {
                     } catch (Exception e) {
                         img.setCopied(false);
                     } finally {
-                        out.close();
-                    }
+                        if (!zip) {
+                            out.close();
+                        }
+                        else{ 
+                        System.out.println("close" + out.getClass().toString());
+                            ((ZipOutputStream)out).closeEntry();
+                        }
+                        }
                     break;
                 }
             }

@@ -47,7 +47,7 @@ public class PDFTest {
 
     @Test
     public void main1() {
-        File file = new File("C:\\temp\\slidesJoann.pdf");
+        File file = new File("C:\\temp\\slides.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
