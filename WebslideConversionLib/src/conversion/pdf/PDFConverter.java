@@ -27,7 +27,9 @@ import objects.PPT;
 import objects.PPTObject;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.fit.pdfdom.PDFDomTree;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import output.Output;
@@ -47,6 +49,7 @@ public class PDFConverter implements IConverter {
     private Output output;
     private Document dom;
     private FileWriter fw; //testing
+
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
      * use.
@@ -55,15 +58,15 @@ public class PDFConverter implements IConverter {
      * @throws conversion.pdf.util.PDFException
      */
     public PDFConverter(File file) throws PDFException {
-            try {
-                /*
-                for testing purposes only:
-                */
-                fw = new FileWriter(new File("C:\\temp\\nodes.txt"));
-            } catch (IOException ex) {
-                Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
+        try {
+            /*
+             for testing purposes only:
+             */
+            fw = new FileWriter(new File("C:\\temp\\nodes.txt"));
+        } catch (IOException ex) {
+            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         this.file = file;
         try {
             document = PDDocument.load(file);
@@ -163,7 +166,8 @@ public class PDFConverter implements IConverter {
             }
 
 //==============aanpassen van ppt object met door DOM te overlopen======================================================
-           // visitRecursively(dom,-1);
+            visitRecursively(dom, -1);
+
             fw.close();
 
 //==============naverwerking op ppt loslaten============================================================================
@@ -177,26 +181,43 @@ public class PDFConverter implements IConverter {
             output.println("onherkende fout, wss de schult van apache..."
                     + e.getMessage());
             //e.printStackTrace();
+
             throw new PDFException("Parsing aborded to soon");
+        } finally {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
-    
+
     private void visitRecursively(Node node, int niveau) throws IOException {
-        
+
         // get all child nodes
         NodeList list = node.getChildNodes();
         niveau++;
         for (int i = 0; i < list.getLength(); i++) {
             // get child node
             Node childNode = list.item(i);
-            for(int j = 0; j< niveau; j++){
-               fw.write("\t");
+            for (int j = 0; j < niveau; j++) {
+                fw.write("\t");
             }
-            fw.write("Found Node: " + childNode.getNodeName() + " - with value: " + childNode.getNodeValue() + "\n");
+            fw.write(childNode.getNodeName() + " ");
+            
+            if (childNode.hasAttributes()) {
+                NamedNodeMap attrs = childNode.getAttributes();
+                for (int k = 0; k < attrs.getLength(); k++) {
+                    Attr attribute = (Attr) attrs.item(i);
+                    if (attribute != null) {
+                        fw.write(attribute.getName() + " = " + attribute.getValue());
+                    }
+                }
+            }
             fw.write(System.lineSeparator());
-            if(childNode.getNodeName().equalsIgnoreCase("style")){
-            return;
+            if (childNode.getNodeName().equalsIgnoreCase("style")) {
+                return;
             }
             // visit child node
             visitRecursively(childNode, niveau);
