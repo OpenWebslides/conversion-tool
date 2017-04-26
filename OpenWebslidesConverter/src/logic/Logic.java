@@ -1,7 +1,6 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import objects.*;
 
@@ -28,25 +27,27 @@ public class Logic implements ILogic {
         UnorderedListLogic ull = new UnorderedListLogic();
         ull.formatList(ppt, "^([^a-zA-z0-9]+)", false, false);
         formatTitle(ppt);
+        groupFontdecoration(ppt);
     }
 
     private void groupTextparts(Text text) {
         List<Integer> toRemove = new ArrayList<>();
         int i = 0;
         while (i < text.getTextparts().size() - 1) {
-            //for (int i = 0; i < text.getTextparts().size() - 1; i++) {
             Textpart tp1 = text.getTextparts().get(i);
             Textpart tp2 = text.getTextparts().get(i + 1);
 
-            while (tp1.getType().equals(tp2.getType()) && tp1.getColor().equals(tp2.getColor()) && tp1.getSize() == tp2.getSize() && tp1.getCharachterSpacing() == tp2.getCharachterSpacing()) {
+            while (tp1.getType().equals(tp2.getType())) {
+                i++;
                 tp1.setContent(tp1.getContent() + tp2.getContent());
                 tp2 = text.getTextparts().get(i + 1);
                 toRemove.add(i);
-                i++;
+                //i++;
             }
+            i++;
         }
-        for (int j = toRemove.size(); j >= 0; j--) {
-            text.getTextparts().remove((int) toRemove.get(i));
+        for (int j = toRemove.size() - 1; j >= 0; j--) {
+            text.getTextparts().remove((int) toRemove.get(j));
         }
     }
 
@@ -55,8 +56,13 @@ public class Logic implements ILogic {
             for (PPTObject obj : slide.getPptObjects()) {
                 if (obj instanceof Text) {
                     groupTextparts((Text) obj);
-                } else if(obj instanceof PPTList){
-                    //for((PPTList)obj)
+                } else if (obj instanceof PPTList) {
+                    List<PPTObject> pptObjects = ((PPTList) obj).getBullets();
+                    for (PPTObject obj2 : pptObjects) {
+                        if (obj2 instanceof Text) {
+                            groupTextparts((Text) obj2);
+                        }
+                    }
                 }
             }
         }
