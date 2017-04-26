@@ -183,7 +183,7 @@ public class HTMLWriter extends Writer implements Indentation{
             String part = "";
             if(textpart instanceof Hyperlink){
                 Hyperlink link = (Hyperlink)textpart;
-                part = " <a href=\"" + link.getUrl() + "\">";
+                part = " <a href=\"" + link.getUrl() + "\" target=\"_blank\">";
                 
                 for(Textpart linkpart: link.getParts()){
                     part += linkpart.getContent();
