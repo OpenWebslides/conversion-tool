@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+// hide the download all button on page load
+$("#download-form-all-btn").hide();
 
 var dropzone = Dropzone.options.myAwesomeDropzone = {
     paramName: "file", // The name that will be used to transfer the file
@@ -19,8 +21,6 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         return done();
     },
     init: function () {
-
-
         dropzone = this;
         if (localStorage["language"] !== "en" || localStorage["language"] === null) {
             setLanguage();
@@ -63,13 +63,12 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
                     .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-1"}))
                     .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-2"}))
                     .append($("<button >" + file.name + "</button>").attr({type: "button", onclick: "startDownload(" + shared_vars.filesInProgress.length + ")", id: "download-form-" + shared_vars.filesInProgress.length + "-btn"}).addClass("btn btn-primary").hide())
-                    );
-
+                    );            
             shared_vars.filesInProgress.push(file.name);
             console.log(file);
+            console.log("current state of filesInProgress "+shared_vars.filesInProgress);
             console.log("success");
         });
-
     }
 };
 
