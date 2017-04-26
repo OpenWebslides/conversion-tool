@@ -9,7 +9,9 @@ import conversion.IConverter;
 import conversion.pdf.util.PDFException;
 import conversion.pdf.util.TextIntelligence;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipOutputStream;
@@ -26,12 +28,14 @@ import objects.PPTObject;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.fit.pdfdom.PDFDomTree;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import output.Output;
 
 /**
  * PDFConvertor has 1 main function, parse. Parse can be invoked with a string
- * or a ZipOutputStream. A pdfConvertor gets a File on construction. This has
- * to be a PDF file. The parse method will change a PPT object and fill it with
+ * or a ZipOutputStream. A pdfConvertor gets a File on construction. This has to
+ * be a PDF file. The parse method will change a PPT object and fill it with
  * information from the File.
  *
  * @author Gertjan
@@ -42,7 +46,7 @@ public class PDFConverter implements IConverter {
     private PDDocument document;
     private Output output;
     private Document dom;
-
+    private FileWriter fw; //testing
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
      * use.
@@ -51,6 +55,15 @@ public class PDFConverter implements IConverter {
      * @throws conversion.pdf.util.PDFException
      */
     public PDFConverter(File file) throws PDFException {
+            try {
+                /*
+                for testing purposes only:
+                */
+                fw = new FileWriter(new File("C:\\temp\\nodes.txt"));
+            } catch (IOException ex) {
+                Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
         this.file = file;
         try {
             document = PDDocument.load(file);
@@ -107,7 +120,6 @@ public class PDFConverter implements IConverter {
 
         // wegschrijven naar xml
         //kan hier gebeuren maar is dus niet nodig..
-        
         try {
             retrieveImagesToFile(Location);
         } catch (IOException ex) {
@@ -144,8 +156,16 @@ public class PDFConverter implements IConverter {
     private void parse(PPT ppt) throws PDFException {
         try {
 //==============invullen van DOM object=================================================================================
+            /*gebeurt bij aanmaken Converter!*/
+            if (dom == null) {
+                output.println("the pdf file was empty or not readable");
+                return;
+            }
 
 //==============aanpassen van ppt object met door DOM te overlopen======================================================
+           // visitRecursively(dom,-1);
+            fw.close();
+
 //==============naverwerking op ppt loslaten============================================================================
             //testPPT(ppt);
             TextIntelligence tI = new TextIntelligence();
@@ -161,6 +181,27 @@ public class PDFConverter implements IConverter {
         }
 
     }
+    
+    private void visitRecursively(Node node, int niveau) throws IOException {
+        
+        // get all child nodes
+        NodeList list = node.getChildNodes();
+        niveau++;
+        for (int i = 0; i < list.getLength(); i++) {
+            // get child node
+            Node childNode = list.item(i);
+            for(int j = 0; j< niveau; j++){
+               fw.write("\t");
+            }
+            fw.write("Found Node: " + childNode.getNodeName() + " - with value: " + childNode.getNodeValue() + "\n");
+            fw.write(System.lineSeparator());
+            if(childNode.getNodeName().equalsIgnoreCase("style")){
+            return;
+            }
+            // visit child node
+            visitRecursively(childNode, niveau);
+        }
+    }
 
     private void testPPT(PPT ppt) {
         System.out.println("PPT CONTROLE");
@@ -173,12 +214,12 @@ public class PDFConverter implements IConverter {
     public void setOutput(Output output) {
         this.output = output;
     }
-    
-    public void maakXML(String Location){
-    Transformer transformer;
+
+    public void maakXML(String Location) {
+        Transformer transformer;
         try {
             transformer = TransformerFactory.newInstance().newTransformer();
-            Result outputXML = new StreamResult(new File(Location + File.separator +"output.xml"));
+            Result outputXML = new StreamResult(new File(Location + File.separator + "output.xml"));
             Source input = new DOMSource(dom);
 
             transformer.transform(input, outputXML);
