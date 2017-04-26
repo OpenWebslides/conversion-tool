@@ -205,13 +205,16 @@ public class PDFConverter implements IConverter {
                 fw.write("\t");
             }
             fw.write(childNode.getNodeName() + " ");
+            if(childNode.getNodeValue() != null){
+             fw.write(childNode.getNodeValue() + " ");
+            }
             
             if (childNode.hasAttributes()) {
                 NamedNodeMap attrs = childNode.getAttributes();
                 for (int k = 0; k < attrs.getLength(); k++) {
                     Attr attribute = (Attr) attrs.item(i);
                     if (attribute != null) {
-                        fw.write(attribute.getName() + " = " + attribute.getValue());
+                        fw.write("attributes: " + attribute.getName() + " = " + attribute.getValue());
                     }
                 }
             }
