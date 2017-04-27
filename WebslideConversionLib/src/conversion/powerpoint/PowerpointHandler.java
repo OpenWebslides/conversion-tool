@@ -6,11 +6,8 @@
 package conversion.powerpoint;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import logger.Logger;
 import objects.*;
 import output.*;
@@ -24,7 +21,8 @@ import org.xml.sax.*;
 public class PowerpointHandler extends DefaultHandler {
 
     //Variables from constructor
-    private final List<PPTObject> pptobjects;
+    private Slide pptobjects;
+    private Slide previousPptobjects;
     private final Output output;
 
     //Variables text
@@ -62,7 +60,7 @@ public class PowerpointHandler extends DefaultHandler {
     //
     private String lastId;
 
-    PowerpointHandler(List<PPTObject> pptobjects, Output output) {
+    PowerpointHandler(Slide pptobjects, Output output) {
         this.pptobjects = pptobjects;
         this.output = output;
     }
@@ -156,6 +154,7 @@ public class PowerpointHandler extends DefaultHandler {
      */
     private void startText(String qName, Attributes attributes) {
         try {
+            
             switch (qName) {
                 case PPTXMLConstants.TEXT:
                     text = new Text();
@@ -256,12 +255,18 @@ public class PowerpointHandler extends DefaultHandler {
                     break;
                 case PPTXMLConstants.TEXTTYPE:
                     if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR) != null) {
-                        if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE_HEADER)) {
-                            titleheader = true;
-                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_SUBTITLE_HEADER)) {
-                            subtitleheader = true;
-                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE)) {
-                            title = true;
+                        switch (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR)) {
+                            case PPTXMLConstants.TEXT_TITLE_HEADER:
+                                titleheader = true;
+                                break;
+                            case PPTXMLConstants.TEXT_SUBTITLE_HEADER:
+                                subtitleheader = true;
+                                break;
+                            case PPTXMLConstants.TEXT_TITLE:
+                                title = true;
+                                break;
+                            default:
+                                break;
                         }
                     } else {
                         defaultsize = true;
@@ -308,14 +313,14 @@ public class PowerpointHandler extends DefaultHandler {
                         if (text.getLevel() == null) {
                             Object[] keys = lists.keySet().toArray();
                             Arrays.sort(keys);
-                            pptobjects.add(lists.get((Integer)keys[0]));
-                            pptobjects.add(text);
+                            pptobjects.getPptObjects().add(lists.get((Integer)keys[0]));
+                            pptobjects.getPptObjects().add(text);
                             textAdded = true;
                             lists = null;
                             list = null;
                         }
                     } else if (list == null && text.getLevel() == null) {
-                        pptobjects.add(text);
+                        pptobjects.getPptObjects().add(text);
                         textAdded = true;
                         text = null;
                         titleheader = false;
@@ -327,12 +332,12 @@ public class PowerpointHandler extends DefaultHandler {
                     title = false;
                     subtitleheader = false;
                     if (text != null && !textAdded) {
-                        pptobjects.add(text);
+                        pptobjects.getPptObjects().add(text);
                     }
                     if (list != null) {
                         Object[] keys = lists.keySet().toArray();
                         Arrays.sort(keys);
-                        pptobjects.add(lists.get((Integer)keys[0]));
+                        pptobjects.getPptObjects().add(lists.get((Integer)keys[0]));
                         lists = null;
                         list = null;
                     }
@@ -418,7 +423,7 @@ public class PowerpointHandler extends DefaultHandler {
     private void endImage(String qName) {
         try {
             if (qName.equals(PPTXMLConstants.MEDIABOX)) {
-                pptobjects.add(media);
+                pptobjects.getPptObjects().add(media);
                 media = null;
                 imagebody = false;
             }
@@ -431,7 +436,7 @@ public class PowerpointHandler extends DefaultHandler {
         try {
             if (qName.equals(PPTXMLConstants.CHARTBODY)) {
                 chart = new Chart(lastId);
-                pptobjects.add(chart);
+                pptobjects.getPptObjects().add(chart);
                 canRead = false;
             }
 
@@ -442,13 +447,27 @@ public class PowerpointHandler extends DefaultHandler {
 
     private void endRest(String qName) {
         try {
-            if (qName.equals(PPTXMLConstants.TABLE)) {
-                pptobjects.add(new Table());
-                canRead = true;
-            } else if (qName.equals(PPTXMLConstants.FRAGMENT)) {
-            } else if (qName.equals(PPTXMLConstants.GFRAME)) {
-                gframe = false;
-                canRead = true;
+            switch (qName) {
+                case PPTXMLConstants.TABLE:
+                    pptobjects.getPptObjects().add(new Table());
+                    canRead = true;
+                    break;
+                case PPTXMLConstants.FRAGMENT:
+                    break;
+                case PPTXMLConstants.GFRAME:
+                    gframe = false;
+                    canRead = true;
+                    break;
+                case PPTXMLConstants.SECTION:
+                    if(!canRead){
+                        canRead = true;
+                    }
+                    else if(previousPptobjects != pptobjects && previousPptobjects!=null){  
+                        previousPptobjects.getPptObjects().add(pptobjects);
+                        pptobjects = previousPptobjects;
+                    }
+                default:
+                    break;
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while ending slide chart tags (DefaultHandler endElement)", e));
@@ -460,12 +479,25 @@ public class PowerpointHandler extends DefaultHandler {
             switch (qName) {
                 case PPTXMLConstants.TEXTTYPE:
                     if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR) != null) {
-                        if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE_HEADER)) {
-                            titleheader = true;
-                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_SUBTITLE_HEADER)) {
-                            subtitleheader = true;
-                        } else if (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR).equals(PPTXMLConstants.TEXT_TITLE)) {
-                            title = true;
+                        switch (attributes.getValue(PPTXMLConstants.TEXTTYPEATTR)) {
+                            case PPTXMLConstants.TEXT_TITLE_HEADER:
+                                titleheader = true;
+                                break;
+                            case PPTXMLConstants.TEXT_SUBTITLE_HEADER:
+                                subtitleheader = true;
+                                break;
+                            case PPTXMLConstants.TEXT_TITLE:
+                                title = true;
+                                break;
+                            case PPTXMLConstants.FOOTER:
+                                previousPptobjects = pptobjects;
+                                pptobjects = new Footer();
+                                break;
+                            case PPTXMLConstants.DIANR:
+                                canRead = false;
+                                break;
+                            default:
+                                break;
                         }
                     } else {
                         defaultsize = true;
