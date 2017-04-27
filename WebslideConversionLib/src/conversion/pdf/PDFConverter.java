@@ -167,7 +167,7 @@ public class PDFConverter implements IConverter {
                 //na het parsen halen we de objecten op... van 1 pagina!!!
 
                 ArrayList<PPTObject> paginaobjects = parser.getObjecten();
-
+               
                 //na het parsen halen we ook de imLocacties voor die pagina op...
                 paginaobjects.addAll(imLocParser.getObjecten());
                 //even testen wat er in zit in die objecten:
