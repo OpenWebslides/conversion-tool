@@ -57,5 +57,19 @@ public class PPTInsight {
     public void setConvertTime(long convertTime) {
         this.convertTime = convertTime;
     }
+    
+    public String printInsights(PPT ppt) {
+        String toret = "";
+        toret += "***** Insights ******\n";
+        toret += "Convert time\n";
+        toret += (double) ((double)ppt.getInsight().getConvertTime()/1000) + "\n\n";
+        toret += "Objectcount\n";
+        toret += ppt.getInsight().generateDifferentObjectsString() + "\n\n";
+        toret += "Wordcount\n";
+        toret += "Number of different words: " + ppt.getInsight().generateDifferentWordsString() + "\n";
+        toret += "Number of words: ";
+        toret +="Number of words: " + ppt.getInsight().generateWordString();
+        return toret;
+    }
 
 }

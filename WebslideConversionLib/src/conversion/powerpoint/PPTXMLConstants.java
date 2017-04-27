@@ -32,6 +32,7 @@ public class PPTXMLConstants {
     public static final String TEXTFONT = "a:latin";
     public static final String COLORDETAIL = "a:srgbClr";
     public static final String TEXTTYPE = "p:ph";
+    public static final String SECTION = "p:sp";
     public static final String NOLIST = "a:buNone";
     public static final String TEXTLINK = "a:hlinkClick";
 
@@ -49,12 +50,14 @@ public class PPTXMLConstants {
     public static final String DIRTY = "dirty";
     public static final String ERR = "err";
     public static final String RID = "r:id";
+    public static final String DIANR = "sldNum";
     
     
     //Text title values
     public static final String TEXT_TITLE_HEADER = "ctrTitle";
     public static final String TEXT_SUBTITLE_HEADER = "subTitle";
     public static final String TEXT_TITLE = "title";
+    public static final String FOOTER = "ftr";
     
     //Text default sizes
     public static final int TEXT_TITLE_HEADER_SIZE = 6000; //60 font size
