@@ -74,8 +74,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
 
 
 $(document).ready(function () {
-    $('.language').click(function (e) {
-        //console.log($(e.target).html());
+    $('.language').click(function (e) {        
         if (localStorage["language"] !== $(e.target).html()) {
             setLanguage($(e.target).html());
         }

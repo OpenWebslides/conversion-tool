@@ -70,13 +70,13 @@ and open the template in the editor.
         </div>
             
         <div class="container">
-            <div class="row">                
-                <div class="col-md-3 pull-right">
-                    <button class="btn btn-lg btn-primary" type="button" id="btn-cancel">Cancel</button> 
-                </div>
-                <div class="col-md-3 pull-right">
+            <div class="row">      
+                <div class="col-xs-1 col-xs-offset-9">
                     <button class="btn btn-lg btn-primary" type="button" id="btn-convert">Convert</button>
                 </div>
+                <div class="col-xs-1 col-xs-offset-1">
+                    <button class="btn btn-primary" type="button" id="btn-cancel">Cancel</button> 
+                </div>                
             </div>
         </div>
         
@@ -86,7 +86,7 @@ and open the template in the editor.
             </div>
             <div class="row" id="field-download-all">
                 <form action="download" id="download-form-all" target="_blank" class="col-xs-12">
-                    <input type="hidden" id="donwload-form-all-param-1" />
+                    <input type="hidden" id="download-form-all-param-1" />
                     <input type="hidden" id="download-form-all-param-2" />                   
                     <button type="button" id="download-form-all-btn" class="btn btn-primary btn-block">Download all </button>
                 </form>
@@ -94,6 +94,7 @@ and open the template in the editor.
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        
         <script src="resources/js/bootstrap.min.js"></script>
         
         <script src="resources/js/dropzone.js"></script>
