@@ -83,20 +83,23 @@ public class PPTConverter implements IConverter {
             SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
 
-            for (XSLFSlide slide : slides) {
+           for (XSLFSlide slide : slides) {
+              //  XSLFSlide slide = slides.get(14);
                 try {
-                    //output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
+                    output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
                     //Webslide object
                     Slide webslide = new Slide();
 
+                    String xml = slide.getXmlObject().getCSld().getSpTree().toString();
+                                        
                     //for testing
-                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    //output.println(xml);
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide.getPptObjects(), output);
 
                     //parse
-                    sp.parse(new InputSource(new StringReader(slide.getXmlObject().getCSld().getSpTree().toString())), handler);
+                    sp.parse(new InputSource(new StringReader(xml)), handler);
 
                     //Handle media: video, image, hyperlink, chart
                     MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output, zip);
@@ -113,12 +116,12 @@ public class PPTConverter implements IConverter {
                     InsightHandler.handle(ppt.getInsight(), webslide.getPptObjects());
 
                     //print the slide for testing toString details
-                    //output.println("------------ toString -------------");
-                    //output.println(webslide.toString());
+                    output.println("------------ toString -------------");
+                    output.println(webslide.toString());
 
                     //print the slide for testing getContent
-                    //output.println("------------ getContent -------------");
-                    //output.println(webslide.getContent());
+                    output.println("------------ getContent -------------");
+                    output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
@@ -151,5 +154,6 @@ public class PPTConverter implements IConverter {
         output.print("Number of words: ");
         output.println("" + ppt.getInsight().generateWordString());
     }
+
 
 }

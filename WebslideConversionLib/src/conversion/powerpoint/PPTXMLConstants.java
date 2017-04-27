@@ -40,6 +40,7 @@ public class PPTXMLConstants {
     public static final String BOLD = "b";
     public static final String ITALIC = "i";
     public static final String STRIKE = "strike";
+    public static final String NOSTRIKE = "noStrike";
     public static final String UNDERLINE = "u";
     public static final String SIZE = "sz";
     public static final String CHARACTERSPACING = "spc";
