@@ -6,7 +6,6 @@
 package conversion.pdf;
 
 import conversion.IConverter;
-import conversion.pdf.util.DOM;
 import conversion.pdf.util.PDFException;
 import conversion.pdf.util.PDFTextExtractor;
 import conversion.pdf.util.PDFImageExtractor;
@@ -72,12 +71,6 @@ public class PDFConverter implements IConverter {
                     + "--TIP: try 'printing to pdf' instead of 'saving as'");
         }
     }
-    
-    
-    
-           
-    
-    
     
 
     /**
