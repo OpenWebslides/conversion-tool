@@ -31,6 +31,9 @@ import objects.PPTObject;
 import org.apache.pdfbox.cos.COSBase;
 import org.apache.pdfbox.cos.COSNumber;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.util.PDFOperator;
+import org.apache.pdfbox.util.PDFTextStripper;
+import org.apache.pdfbox.util.TextPosition;
 
 /**
  * This class overrides the processOperator in order to extract information about images.
@@ -40,7 +43,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 Info in verband met nummering: nummers tellen voor elke afbeelding zoals die ontdekt wordt... 
 -> de stream van de afbeeldingen krijgt dezelfde naam en zal langs een andere weg in de zip komen...
 */
-public class getImageLocations {
+public class getImageLocations extends PDFTextStripper {
     private static int imageNumber;
     private ArrayList<Image> images= new ArrayList<>();
     public getImageLocations() throws IOException {
@@ -50,6 +53,58 @@ public class getImageLocations {
     }
     public int getImageNumber(){
         return imageNumber;
+    }
+
+    @Override
+    protected void startPage(PDPage page) throws IOException {
+        // process start of the page
+        super.startPage(page);
+    }
+    /**
+     * Fills the images arrayList with image objects found in arguments.
+     * @param operator
+     * @param arguments
+     * @throws IOException 
+     */
+    @Override
+    protected void processOperator(PDFOperator operator, List<COSBase> arguments) throws IOException {
+        //super.processOperator(operator, arguments); //To change body of generated methods, choose Tools | Templates.
+
+        if ("cm".equals(operator.getOperation())) {
+            if (!arguments.isEmpty()) {
+                float width = ((COSNumber) arguments.get(0)).floatValue();
+                float height = ((COSNumber) arguments.get(3)).floatValue();
+                float x = ((COSNumber) arguments.get(4)).floatValue();
+                float y = ((COSNumber) arguments.get(5)).floatValue();
+                // process image coordinates
+                if(x!=0){    //hij vind ook afbeeldingen die geen afbeelding zijn... gekke objecten...
+              //  System.out.println("afbeelding gevonden met hoogte: " + height + " breedte: " + width);
+              //  System.out.println("gevonden op: " + x + "," + y);
+                
+                Image im = new Image();
+                im.setFilename("img" + imageNumber + ".jpg");
+                Dimension positie = new Dimension();
+                Dimension afmeting = new Dimension();
+                positie.setSize(x, y);
+                afmeting.setSize(height, width);
+                im.getLocation().setSize(positie);
+                im.getDimension().setSize(afmeting);
+                images.add(im);
+                imageNumber++;
+                
+                }
+                
+            }
+            super.processOperator(operator, arguments);
+        }
+        //super.processOperator(operator, arguments);
+    }
+
+    @Override
+    protected void writeString(String text,
+            List<TextPosition> textPositions) throws IOException {
+        super.writeString(text, textPositions);
+        /*not very shure if there's any use to this anymore...*/
     }
 
     public Collection<? extends PPTObject> getObjecten() {
