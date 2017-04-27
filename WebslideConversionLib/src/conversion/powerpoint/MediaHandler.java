@@ -13,7 +13,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.zip.ZipEntry;
@@ -96,7 +98,7 @@ class MediaHandler {
                                 if (zip == null) {
                                     copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, false, zip);
                                 } else {
-                                    copyImage(((Image) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
+                                    copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
                                 }
 
                             }
@@ -215,7 +217,6 @@ class MediaHandler {
                     }
                     else{ 
                         out = zipoutput;
-                        System.out.println(saveLoc + "\\" + currentFilename);
                         ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + currentFilename);
                         ((ZipOutputStream)out).putNextEntry(zipEntry);
                     }
@@ -237,7 +238,6 @@ class MediaHandler {
                             out.close();
                         }
                         else{ 
-                        System.out.println("close" + out.getClass().toString());
                             ((ZipOutputStream)out).closeEntry();
                         }
                         }
@@ -245,8 +245,19 @@ class MediaHandler {
                 }
             }
         } catch (Exception e) {
-            output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
-            img.setCopied(false);
+            try{
+                StringWriter sw = new StringWriter();
+                PrintWriter pw = new PrintWriter(sw);
+                e.printStackTrace(pw);
+                String error = sw.toString();
+                if(!error.contains("duplicate entry:")){
+                    output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), e));
+                    img.setCopied(false);
+                }
+            }catch (Exception ex) {
+                    output.println(Logger.error("Error while extracting images from powerpoint zip " + img.toString(), ex));
+                    img.setCopied(false);
+            }
         }
         return bytes;
     }

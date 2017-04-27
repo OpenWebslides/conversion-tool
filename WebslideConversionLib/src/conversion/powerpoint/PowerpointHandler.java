@@ -5,9 +5,12 @@
  */
 package conversion.powerpoint;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import logger.Logger;
 import objects.*;
 import output.*;
@@ -136,9 +139,9 @@ public class PowerpointHandler extends DefaultHandler {
     public void characters(char ch[], int start, int length) throws SAXException {
         try {
             if (textpartContent) {
-                if(textpart!=null)
-                    textpart.setContent(new String(ch, start, length).trim());
-                textpartContent = false;
+                if (textpart != null) {
+                    textpart.setContent(textpart.getContent() + new String(ch, start, length).trim());
+                }
             }
         } catch (Exception e) {
             output.println(Logger.error("Error while reading slide text data (DefaultHandler characters)", e));
@@ -203,14 +206,16 @@ public class PowerpointHandler extends DefaultHandler {
                     textpart = new Textpart();
                     break;
                 case PPTXMLConstants.TEXTDETAILS:
-                    if (attributes.getValue(PPTXMLConstants.BOLD) != null) {
+                    if (attributes.getValue(PPTXMLConstants.BOLD) != null && !attributes.getValue(PPTXMLConstants.BOLD).equals("0")) {
                         textpart.addType(FontDecoration.BOLD);
                     }
-                    if (attributes.getValue(PPTXMLConstants.ITALIC) != null) {
+                    if (attributes.getValue(PPTXMLConstants.ITALIC) != null && !attributes.getValue(PPTXMLConstants.ITALIC).equals("0")) {
                         textpart.addType(FontDecoration.ITALIC);
                     }
                     if (attributes.getValue(PPTXMLConstants.STRIKE) != null) {
-                        textpart.addType(FontDecoration.STRIKETHROUH);
+                        if (!attributes.getValue(PPTXMLConstants.STRIKE).equals(PPTXMLConstants.NOSTRIKE)) {
+                            textpart.addType(FontDecoration.STRIKETHROUH);
+                        }
                     }
                     if (attributes.getValue(PPTXMLConstants.UNDERLINE) != null) {
                         textpart.addType(FontDecoration.UNDERLINE);
@@ -292,8 +297,8 @@ public class PowerpointHandler extends DefaultHandler {
                         } else {
                             textpart.setSize(PPTXMLConstants.TEXT_DEFAULT_SMALL_SIZE);
                         }
+                        textpartContent = false;
                     }
-                    //if(textpart.getContent()!=null && !textpart.getContent().equals("")&& !textpart.getContent().equals(" "))
                     if (!textpartadded) {
                         text.getTextparts().add(textpart);
                     }
@@ -301,7 +306,9 @@ public class PowerpointHandler extends DefaultHandler {
                 case PPTXMLConstants.TEXT:
                     if (list != null) {
                         if (text.getLevel() == null) {
-                            pptobjects.add(lists.get(0));
+                            Object[] keys = lists.keySet().toArray();
+                            Arrays.sort(keys);
+                            pptobjects.add(lists.get((Integer)keys[0]));
                             pptobjects.add(text);
                             textAdded = true;
                             lists = null;
@@ -323,7 +330,9 @@ public class PowerpointHandler extends DefaultHandler {
                         pptobjects.add(text);
                     }
                     if (list != null) {
-                        pptobjects.add(lists.get(0));
+                        Object[] keys = lists.keySet().toArray();
+                        Arrays.sort(keys);
+                        pptobjects.add(lists.get((Integer)keys[0]));
                         lists = null;
                         list = null;
                     }
@@ -359,7 +368,6 @@ public class PowerpointHandler extends DefaultHandler {
                 }
             }
             list.addPPTObject(text);
-            //  output.println(Arrays.toString(lists.values().toArray()));
             textAdded = true;
             previousLevel = level;
         } catch (Exception e) {
