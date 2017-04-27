@@ -7,41 +7,39 @@ package conversion.pdf;
 
 import conversion.IConverter;
 import conversion.pdf.util.PDFException;
+import conversion.pdf.util.PDFTextExtractor;
+import conversion.pdf.util.PDFImageExtractor;
 import conversion.pdf.util.TextIntelligence;
+import conversion.pdf.util.getImageLocations;
+import conversion.pdf.util.getImageLocations2;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipOutputStream;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import objects.PPT;
 import objects.PPTObject;
+import objects.Slide;
+import org.apache.pdfbox.exceptions.CryptographyException;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.fit.pdfdom.PDFDomTree;
-import org.w3c.dom.Document;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDStream;
 import output.Output;
 
 /**
  * PDFConvertor has 1 main function, parse. Parse can be invoked with a string
- * or a ZipOutputStream. A pdfConvertor gets a File on construction. This has
+ * or a ZipOutputStream. A pdfConvertor get's a File on consturction. This has
  * to be a PDF file. The parse method will change a PPT object and fill it with
  * information from the File.
  *
  * @author Gertjan
  */
+ 
 public class PDFConverter implements IConverter {
 
     private final File file;
     private PDDocument document;
     private Output output;
-    private Document dom;
 
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
@@ -50,14 +48,21 @@ public class PDFConverter implements IConverter {
      * @param file
      * @throws conversion.pdf.util.PDFException
      */
+     
     public PDFConverter(File file) throws PDFException {
         this.file = file;
         try {
             document = PDDocument.load(file);
-            // create the DOM parser
-            PDFDomTree parser = new PDFDomTree();
-            // parse the file and get the DOM Document
-            dom = parser.createDOM(document);
+            //DOM dom = new DOM(document);
+            if (document.isEncrypted()) {
+                document.decrypt("");
+            }
+            
+          
+        } catch (CryptographyException ex) {
+            //System.out.println("er ging iets mis bij de decryptie....");
+            output.println("er ging iets mis bij de decryptie....");
+            throw new PDFException("Decription failed");
 
         } catch (Exception ex) {
             //System.out.println("Er ging iets mis met de file... ");
@@ -66,6 +71,7 @@ public class PDFConverter implements IConverter {
                     + "--TIP: try 'printing to pdf' instead of 'saving as'");
         }
     }
+    
 
     /**
      * finalized should be called after using this function, this way the
@@ -103,11 +109,8 @@ public class PDFConverter implements IConverter {
         File directory = new File(Location);
         if (!directory.exists()) {
             directory.mkdirs();
-        }
 
-        // wegschrijven naar xml
-        //kan hier gebeuren maar is dus niet nodig..
-        
+        }
         try {
             retrieveImagesToFile(Location);
         } catch (IOException ex) {
@@ -118,7 +121,7 @@ public class PDFConverter implements IConverter {
     }
 
     @Override
-    public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) throws PDFException {
+    public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) throws PDFException{
 
         ZipOutputStream outputStream = zOS;
         System.out.println("laat het parsen beginnen!");
@@ -132,27 +135,63 @@ public class PDFConverter implements IConverter {
     }
 
     private void retrieveImagesToZOS(ZipOutputStream ZOS, String saveLocation) throws IOException {
-        /*DomImageExtractor imEx = new DomImageExtractor();
-         imEx.extractImage(document, ZOS, saveLocation);*/
+        PDFImageExtractor imEx = new PDFImageExtractor();
+        imEx.extractImage(document, ZOS, saveLocation);
     }
 
     private void retrieveImagesToFile(String Location) throws IOException {
-        /*DomImageExtractor imEx = new DomImageExtractor();
-         imEx.extractImage(document, Location);*/
+        PDFImageExtractor imEx = new PDFImageExtractor();
+        imEx.extractImage(document, Location);
     }
 
     private void parse(PPT ppt) throws PDFException {
         try {
-//==============invullen van DOM object=================================================================================
+            getImageLocations imLocParser = new getImageLocations();
+            getImageLocations2 imLocParser2 = new getImageLocations2();
+            PDFTextExtractor parser = new PDFTextExtractor();
 
-//==============aanpassen van ppt object met door DOM te overlopen======================================================
-//==============naverwerking op ppt loslaten============================================================================
-            //testPPT(ppt);
+            List allPages = document.getDocumentCatalog().getAllPages();
+
+            for (int i = 0; i < allPages.size(); i++) {
+                //System.out.println("page-start=============================");
+                PDPage page = (PDPage) allPages.get(i);
+                System.out.println("Processing page: " + i);
+                //elke pagina is 1 slide!!! -> als slide af is moet je die hier dus aanmaken en de objecten uit extractor halen
+                PDStream contents = page.getContents();
+                if (contents != null) {
+                    parser.processStream(page, page.findResources(), page.getContents().getStream());
+                    //voor afbeelding posities (hopelijk)
+                    imLocParser.processStream(page, page.findResources(), page.getContents().getStream());
+                    imLocParser2.processStream(page, page.findResources(), page.getContents().getStream());
+                }
+                //na het parsen halen we de objecten op... van 1 pagina!!!
+
+                ArrayList<PPTObject> paginaobjects = parser.getObjecten();
+
+                //na het parsen halen we ook de imLocacties voor die pagina op...
+                paginaobjects.addAll(imLocParser.getObjecten());
+                //even testen wat er in zit in die objecten:
+               /* for (PPTObject obj : paginaobjects) {
+                 // System.out.println("object: " + obj.toString() + "\tType: "+obj.getClass().getName());
+                 System.out.printf("object: %-30.30s  type: %-30.30s%n", obj.toString(), obj.getClass().getName());
+                 }
+                 */
+                //System.out.println("page-end=========================");
+                Slide slide = new Slide();
+                slide.getPptObjects().addAll(paginaobjects);
+                ppt.getSlides().add(slide);
+
+                //testPPT(ppt);
+            }
             TextIntelligence tI = new TextIntelligence();
             tI.makeText(ppt);
             // testPPT(ppt);
 
-            //output.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
+            output.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
+
+        } catch (IOException ex) {
+            output.println("er ging iets mis in de conversie.... ");
+            throw new PDFException("Parsing aborded to soon");
         } catch (Exception e) {
             output.println("onherkende fout, wss de schult van apache..."
                     + e.getMessage());
@@ -172,22 +211,6 @@ public class PDFConverter implements IConverter {
     @Override
     public void setOutput(Output output) {
         this.output = output;
-    }
-    
-    public void maakXML(String Location){
-    Transformer transformer;
-        try {
-            transformer = TransformerFactory.newInstance().newTransformer();
-            Result outputXML = new StreamResult(new File(Location + File.separator +"output.xml"));
-            Source input = new DOMSource(dom);
-
-            transformer.transform(input, outputXML);
-        } catch (TransformerConfigurationException ex) {
-            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (TransformerException ex) {
-            Logger.getLogger(PDFConverter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
     }
 
 }

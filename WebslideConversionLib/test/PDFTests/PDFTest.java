@@ -50,7 +50,7 @@ public class PDFTest {
 
     @Test
     public void main1() {
-        File file = new File("C:\\temp\\slidesJoann.pdf");
+        File file = new File("C:\\temp\\slides.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
@@ -59,8 +59,7 @@ public class PDFTest {
 
             converter.parse(ppt, "C:\\temp\\output");
             PDFConverter pdfc = (PDFConverter) converter; //even casten, deze methode is enkel voor testing...
-            pdfc.maakXML("C:\\temp\\output");
-
+           
         } catch (PDFException ex) {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
