@@ -24,12 +24,16 @@ import org.apache.pdfbox.util.PDFStreamEngine;
  * @author Gertjan
  */
 public class PDFImageExtractor extends PDFStreamEngine {
-
+    private int pagenr = 0;
     public PDFImageExtractor() throws IOException {
         super(org.apache.pdfbox.util.ResourceLoader.loadProperties(
                 "org/apache/pdfbox/resources/PDFTextStripper.properties", true));
     }
 
+    
+    
+    
+    
     /**
      * This method extracts all images from a pdf file and creates jpg files on the location given by s.
      *
@@ -52,12 +56,14 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    //System.out.println("saving: "+ location + File.separator +  "img" + totalImages + ".jpg");
-                    FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + totalImages + ".jpg"));
+                    System.out.println("saving: "+ location + File.separator +  "img" + totalImages + ".jpg");
+                    FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg"));
+                       
                     pdxObjectImage.write2OutputStream(output);
                     totalImages++;
                 }
             }
+            pagenr++;
         }
 
     }
@@ -66,6 +72,8 @@ public class PDFImageExtractor extends PDFStreamEngine {
      * Extracts images from document and gives them to the ZOS (creating what represents a jpg as well as making a subfolder images)
      * @param document
      * @param ZOS 
+     * @param saveLocation 
+     * @throws java.io.IOException 
      */
     public void extractImage(PDDocument document, ZipOutputStream ZOS, String saveLocation) throws IOException {
         List<PDPage> list = document.getDocumentCatalog().getAllPages();
@@ -82,7 +90,7 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    ZOS.putNextEntry(new ZipEntry(saveLocation + File.separator + "img" + totalImages + ".jpg"));
+                    ZOS.putNextEntry(new ZipEntry(saveLocation + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg"));
                     pdxObjectImage.write2OutputStream(ZOS);
                     ZOS.closeEntry();
                     totalImages++;

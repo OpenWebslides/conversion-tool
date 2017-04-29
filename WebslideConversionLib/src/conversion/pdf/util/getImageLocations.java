@@ -21,6 +21,7 @@ package conversion.pdf.util;
  * limitations under the License.
  */
 
+import conversion.pdf.PDFConverter;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,9 +47,10 @@ Info in verband met nummering: nummers tellen voor elke afbeelding zoals die ont
 public class getImageLocations extends PDFTextStripper {
     private static int imageNumber;
     private ArrayList<Image> images= new ArrayList<>();
-    public getImageLocations() throws IOException {
-        
+    private PDFConverter conv;
+    public getImageLocations(PDFConverter p) throws IOException {
         super();
+        this.conv = p;
         imageNumber = 1;
     }
     public int getImageNumber(){
@@ -58,6 +60,7 @@ public class getImageLocations extends PDFTextStripper {
     @Override
     protected void startPage(PDPage page) throws IOException {
         // process start of the page
+       
         super.startPage(page);
     }
     /**
@@ -82,7 +85,8 @@ public class getImageLocations extends PDFTextStripper {
               //  System.out.println("gevonden op: " + x + "," + y);
                 
                 Image im = new Image();
-                im.setFilename("img" + imageNumber + ".jpg");
+                im.setFilename("img"  + conv.getCurrentPageNumber() + "-"+ imageNumber + ".jpg");
+                    System.out.println("made image: " + im.getFilename());
                 Dimension positie = new Dimension();
                 Dimension afmeting = new Dimension();
                 positie.setSize(x, y);

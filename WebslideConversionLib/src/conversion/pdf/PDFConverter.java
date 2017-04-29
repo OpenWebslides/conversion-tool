@@ -7,6 +7,7 @@ package conversion.pdf;
 
 import conversion.IConverter;
 import conversion.pdf.util.PDFException;
+import conversion.pdf.util.PDFHyperlinkExtractor;
 import conversion.pdf.util.PDFTextExtractor;
 import conversion.pdf.util.PDFImageExtractor;
 import conversion.pdf.util.TextIntelligence;
@@ -40,7 +41,7 @@ public class PDFConverter implements IConverter {
     private final File file;
     private PDDocument document;
     private Output output;
-
+    private int currentPageNumber;
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
      * use.
@@ -109,7 +110,6 @@ public class PDFConverter implements IConverter {
         File directory = new File(Location);
         if (!directory.exists()) {
             directory.mkdirs();
-
         }
         try {
             retrieveImagesToFile(Location);
@@ -146,16 +146,17 @@ public class PDFConverter implements IConverter {
 
     private void parse(PPT ppt) throws PDFException {
         try {
-            getImageLocations imLocParser = new getImageLocations();
+            getImageLocations imLocParser = new getImageLocations(this);
             getImageLocations2 imLocParser2 = new getImageLocations2();
             PDFTextExtractor parser = new PDFTextExtractor();
-
+            PDFHyperlinkExtractor hyperExtract = new PDFHyperlinkExtractor();
             List allPages = document.getDocumentCatalog().getAllPages();
 
             for (int i = 0; i < allPages.size(); i++) {
                 //System.out.println("page-start=============================");
                 PDPage page = (PDPage) allPages.get(i);
                 System.out.println("Processing page: " + i);
+                currentPageNumber = i;
                 //elke pagina is 1 slide!!! -> als slide af is moet je die hier dus aanmaken en de objecten uit extractor halen
                 PDStream contents = page.getContents();
                 if (contents != null) {
@@ -164,6 +165,8 @@ public class PDFConverter implements IConverter {
                     imLocParser.processStream(page, page.findResources(), page.getContents().getStream());
                     imLocParser2.processStream(page, page.findResources(), page.getContents().getStream());
                 }
+                hyperExtract.extract(page);
+                
                 //na het parsen halen we de objecten op... van 1 pagina!!!
 
                 ArrayList<PPTObject> paginaobjects = parser.getObjecten();
@@ -212,5 +215,7 @@ public class PDFConverter implements IConverter {
     public void setOutput(Output output) {
         this.output = output;
     }
-
+    public int getCurrentPageNumber(){
+        return currentPageNumber;
+    }
 }
