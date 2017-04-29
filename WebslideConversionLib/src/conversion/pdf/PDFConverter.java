@@ -6,6 +6,7 @@
 package conversion.pdf;
 
 import conversion.IConverter;
+import conversion.pdf.util.ImageIntelligence;
 import conversion.pdf.util.PDFException;
 import conversion.pdf.util.PDFHyperlinkExtractor;
 import conversion.pdf.util.PDFTextExtractor;
@@ -42,6 +43,7 @@ public class PDFConverter implements IConverter {
     private PDDocument document;
     private Output output;
     private int currentPageNumber;
+    private ImageIntelligence imageIntel;
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
      * use.
@@ -58,7 +60,7 @@ public class PDFConverter implements IConverter {
             if (document.isEncrypted()) {
                 document.decrypt("");
             }
-            
+            imageIntel = new ImageIntelligence();
           
         } catch (CryptographyException ex) {
             //System.out.println("er ging iets mis bij de decryptie....");
@@ -111,12 +113,15 @@ public class PDFConverter implements IConverter {
         if (!directory.exists()) {
             directory.mkdirs();
         }
+        
         try {
             retrieveImagesToFile(Location);
+            
         } catch (IOException ex) {
             output.println("io exception bij ophalen afbeeldingen...");
         }
         parse(ppt);
+        imageIntel.checkImages(ppt, Location);
 
     }
 
@@ -131,6 +136,7 @@ public class PDFConverter implements IConverter {
             output.println("IO exception... ");
         }
         parse(ppt);
+        imageIntel.checkImages(ppt, zOS);
 
     }
 
