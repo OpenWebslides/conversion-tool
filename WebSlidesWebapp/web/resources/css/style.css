@@ -24,6 +24,12 @@ and open the template in the editor.
     margin-top: 10px;
 }
 
+#field-download-all{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+}
+
 .btn, .btn:active, .btn:focus{
     color: #1E64C8;
     background-color: #E9F0FA;

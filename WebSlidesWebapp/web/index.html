@@ -35,15 +35,7 @@ and open the template in the editor.
             </div>
         </div>
 
-        <div class="container dragndrop">
-            <div class="row">
-                <button class="btn col-md-1" type="button" id="btn-convert">
-                    Convert
-                </button>
-                <button class="btn col-md-1" type="button" id="btn-cancel">
-                    Cancel
-                </button>
-            </div>
+        <div class="container dragndrop">           
             <div class="row">
                 <form action="upload" class="dropzone dz-clickable col-xs-12" id="my-awesome-dropzone">
                 </form>
@@ -63,33 +55,47 @@ and open the template in the editor.
                 </div>
             </div>
             <div class="row">
-                <button class="btn" type="button" data-toggle="collapse" data-target="#collapseOptions" aria-controls="collapseOptions" id="btn-options">
+                <button class="btn col-md-2" type="button" data-toggle="collapse" data-target="#collapseOptions" aria-controls="collapseOptions" id="btn-options">
                     More options...
                 </button>
 
                 <div class="collapse" id="collapseOptions">
                     <div class="radio-type ">
                         <span class="col-md-2" id="output-type">Output type: </span>
-                        <label class="radio-inline"><input type="radio" name="outputType" value="raw" checked>Raw</label>
-                        <label class="radio-inline"><input type="radio" name="outputType" value="shower">Shower</label>
+                        <label class="radio-inline"><input type="radio" name="outputType" value="raw" >Raw</label>
+                        <label class="radio-inline"><input type="radio" name="outputType" value="shower" checked>Shower</label>
                     </div>
-                </div> 
+                </div>                            
+            </div>
+        </div>
+            
+        <div class="container">
+            <div class="row">                
+                <div class="col-md-3 pull-right">
+                    <button class="btn btn-lg btn-primary" type="button" id="btn-cancel">Cancel</button> 
+                </div>
+                <div class="col-md-3 pull-right">
+                    <button class="btn btn-lg btn-primary" type="button" id="btn-convert">Convert</button>
+                </div>
             </div>
         </div>
         
+
         <div class="container">
             <div class="row" id="field-download">                
+            </div>
+            <div class="row" id="field-download-all">
+                <form action="download" id="download-form-all" target="_blank" class="col-xs-12">
+                    <input type="hidden" id="donwload-form-all-param-1" />
+                    <input type="hidden" id="download-form-all-param-2" />                   
+                    <button type="button" id="download-form-all-btn" class="btn btn-primary btn-block">Download all </button>
+                </form>
             </div>
         </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="resources/js/bootstrap.min.js"></script>
-        <script type="text/javascript">var shared_vars = {
-            socket:new WebSocket("ws://localhost:8080/WebSlidesWebapp/pipe"),
-            filesInProgress : [],        
-            filesReady: []            
-        };
-        </script>
+        
         <script src="resources/js/dropzone.js"></script>
         <script src="resources/js/dropzone_options.js"></script>
         <script src="resources/js/websocket.js"></script>          
