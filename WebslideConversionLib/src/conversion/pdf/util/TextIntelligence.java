@@ -19,9 +19,7 @@ import objects.Textpart;
 public class TextIntelligence {
 
     public void makeText(PPT ppt) {
-        /*
-            voorlopig
-         */
+       
 
         for (Slide slide : ppt.getSlides()) {
             List<Integer> toRemove = new ArrayList<>();
