@@ -100,9 +100,10 @@ public class PDFImageExtractor extends PDFStreamEngine {
                     pdxObjectImage.write2OutputStream(ZOS);
                     ZOS.closeEntry();
                     afbPerPage.add(saveLocation + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg");
+                    afbeeldingen.add("img" + pagenr + "-" + totalImages + ".jpg");
                     totalImages++;
                 }
-                afbeeldingen.add(saveLocation + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg");
+                
             }
             pagenr++;
         }

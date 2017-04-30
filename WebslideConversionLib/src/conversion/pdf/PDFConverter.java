@@ -132,6 +132,7 @@ public class PDFConverter implements IConverter {
 
     @Override
     public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) throws PDFException{
+        //System.out.println("parsing to ZIP...");
         if(!isOpen){
             openDocument();
         }

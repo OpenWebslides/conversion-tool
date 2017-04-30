@@ -33,13 +33,14 @@ public class ImageIntelligence {
      *
      */
     public void checkImages(PPT ppt, ArrayList<String> afbeeldingen) {
+        //System.out.println("checking from ZIP...");
         for (Slide slide : ppt.getSlides()) {
             int i = 0;
             while (i < slide.getPptObjects().size()) {
                 if (slide.getPptObjects().get(i) != null && slide.getPptObjects().get(i) instanceof Image) {
                     Image im = (Image) slide.getPptObjects().get(i);
 
-                    
+                   
                     if (!afbeeldingen.contains(im.getFilename())) {
                         System.out.println("Unable to find image: " +File.separator+ im.getFilename() + " - placeholder inserted");
                         Placeholder p = new Placeholder();
@@ -63,6 +64,7 @@ public class ImageIntelligence {
      * @param location
      */
     public void checkImages(PPT ppt, String location) {
+        //System.out.println("checking from location...");
         for (Slide slide : ppt.getSlides()) {
             int i = 0;
             while (i < slide.getPptObjects().size()) {
