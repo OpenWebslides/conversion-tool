@@ -200,7 +200,7 @@ public class HTMLWriter extends Writer implements Indentation{
                 if(textpart.getType().contains(FontDecoration.ITALIC))
                     part = addSimpleTag("em", part);
                 if(textpart.getType().contains(FontDecoration.STRIKETHROUH))
-                    part = addSimpleTag("strike", part);
+                    part = addSimpleTag("del", part);
             }
             res += part;
         }
