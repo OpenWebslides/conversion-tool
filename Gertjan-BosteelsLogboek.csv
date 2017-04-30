@@ -72,3 +72,4 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijfing,Issue #,Opmerkingen
 29/04/17,10:00,12:00,extern,Projectwerk,hyperlink extractie,,
 29/04/17,13:00,15:00,extern,Projectwerk,image extractie veranderen + voorbereiden intelligentie images en placeholders,,
 29/04/17,15:10,17:30,extern,Projectwerk,image placeholders voorzien indien afbeelding niet opgeslagen,,
+30/04/17,08:15,11:30,extern,Projectwerk,image placeholders bij zip output stream voorzien,,
