@@ -260,7 +260,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<p>This is text with a <strong>important</strong> word, <strong class=\"underline\">underlined</strong> word and <em>italic</em> word.</p>\n\t\t<p>You could be using <strike>deprecated</strike> code.</p>\n\t\t<p>Some <strike><em><strong class=\"underline\">nested</strong></em></strike> tags.</p>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<p>This is text with a <strong>important</strong> word, <strong class=\"underline\">underlined</strong> word and <em>italic</em> word.</p>\n\t\t<p>You could be using <del>deprecated</del> code.</p>\n\t\t<p>Some <del><em><strong class=\"underline\">nested</strong></em></del> tags.</p>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
@@ -856,6 +856,80 @@ public class HTMLWriterTests {
         //System.out.println(result);
         
         String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<div class=\"placeholder\">chart</div>\n\t</div>";
+        
+        Assert.assertEquals(expected, result);
+    }
+    
+    @Test
+    //1 slide with a hyperlink
+    public void writePPTTest21() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Textpart part1 = new Textpart();
+            part1.setContent("Klik ");
+            Textpart part2 = new Textpart();
+            part2.setContent("hier");
+            Hyperlink link = new Hyperlink(part2);
+            link.getParts().add(part2);
+            link.setUrl("http://webslide.ugent.be/");
+            
+            Text text = new Text();
+            text.addTextpart(part1);
+            text.addTextpart(link);
+            
+            slide.getPptObjects().add(text);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<p>Klik  <a href=\"http://webslide.ugent.be/\" target=\"_blank\">hier</a> </p>\n\t</div>";
+        
+        Assert.assertEquals(expected, result);
+    }
+    
+    @Test
+    //1 slide with a footer
+    public void writePPTTest22() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Image img = new Image();
+            img.setFilename("image1.jpg");
+            
+            Text text = new Text();
+            Textpart part = new Textpart();
+            part.setContent("Dit is de footer");
+            text.addTextpart(part);
+            
+            Footer footer = new Footer();
+            footer.getPptObjects().add(text);
+            
+            slide.getPptObjects().add(img);
+            slide.getPptObjects().add(footer);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure>\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t\t<div class=\"footer\">\n\t\t\t<p>Dit is de footer</p>\n\t\t</div>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
