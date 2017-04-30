@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipOutputStream;
 import objects.Image;
 import objects.PPT;
@@ -46,6 +48,7 @@ public class PDFConverter implements IConverter {
     private Output output;
     private int currentPageNumber;
     private ImageIntelligence imageIntel;
+    private boolean isOpen;
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
      * use.
@@ -53,17 +56,20 @@ public class PDFConverter implements IConverter {
      * @param file
      * @throws conversion.pdf.util.PDFException
      */
-     
     public PDFConverter(File file) throws PDFException {
         this.file = file;
-        try {
+        openDocument();
+    }
+   
+    private void openDocument() throws PDFException{
+    try {
             document = PDDocument.load(file);
             //DOM dom = new DOM(document);
             if (document.isEncrypted()) {
                 document.decrypt("");
             }
             imageIntel = new ImageIntelligence();
-          
+            isOpen = true;
         } catch (CryptographyException ex) {
             //System.out.println("er ging iets mis bij de decryptie....");
             output.println("er ging iets mis bij de decryptie....");
@@ -77,24 +83,18 @@ public class PDFConverter implements IConverter {
         }
     }
     
-
-    /**
-     * finalized should be called after using this function, this way the
-     * document is closed properly. garbage collection will call this method
-     * thus the method acts like a destructor in C
-     */
-    @Override
-    public void finalize() {
+    private void closeDocument(){
         try {
             document.close();
-        } catch (Exception e) {
-        } finally {
-            try {
-                super.finalize();
-            } catch (Throwable ex) {
-            }
+            isOpen = false;
+            
+        } catch (IOException ex) {
+            output.println("Couldn't close document - parsing should be fine");
         }
     }
+    
+
+    
 
     /**
      * this function will fill the ppt object with content - if any the param s
@@ -107,7 +107,9 @@ public class PDFConverter implements IConverter {
      */
     @Override
     public void parse(PPT ppt, String Location) throws PDFException {
-
+        if(!isOpen){
+            openDocument();
+        }
         output.println("laat het parsen beginnen!");
         //controleren of plaats bestaat of niet...
         //indien niet proberen aanmaken... (wat?)
@@ -124,12 +126,15 @@ public class PDFConverter implements IConverter {
         }
         parse(ppt);
         imageIntel.checkImages(ppt, Location);
+        closeDocument();
 
     }
 
     @Override
     public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) throws PDFException{
-
+        if(!isOpen){
+            openDocument();
+        }
         System.out.println("laat het parsen beginnen!");
         ArrayList<String> afbeeldingen = null;
         try {
@@ -139,7 +144,7 @@ public class PDFConverter implements IConverter {
         }
         parse(ppt);
         imageIntel.checkImages(ppt, afbeeldingen);
-
+        closeDocument();
     }
 
     private ArrayList<String> retrieveImagesToZOS(ZipOutputStream ZOS, String saveLocation) throws IOException {
