@@ -110,7 +110,7 @@ public class PDFConverter implements IConverter {
         if(!isOpen){
             openDocument();
         }
-        output.println("laat het parsen beginnen!");
+        output.println("parsing with location started!");
         //controleren of plaats bestaat of niet...
         //indien niet proberen aanmaken... (wat?)
         File directory = new File(Location);
@@ -136,7 +136,7 @@ public class PDFConverter implements IConverter {
         if(!isOpen){
             openDocument();
         }
-        System.out.println("laat het parsen beginnen!");
+        System.out.println("Parsing with ZOS started!");
         ArrayList<String> afbeeldingen = null;
         try {
             afbeeldingen = retrieveImagesToZOS(zOS, saveLocation);
