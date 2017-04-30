@@ -17,8 +17,10 @@ import conversion.pdf.util.getImageLocations2;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
+import objects.Image;
 import objects.PPT;
 import objects.PPTObject;
 import objects.Slide;
@@ -128,21 +130,22 @@ public class PDFConverter implements IConverter {
     @Override
     public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) throws PDFException{
 
-        ZipOutputStream outputStream = zOS;
         System.out.println("laat het parsen beginnen!");
+        ArrayList<String> afbeeldingen = null;
         try {
-            retrieveImagesToZOS(zOS, saveLocation);
+            afbeeldingen = retrieveImagesToZOS(zOS, saveLocation);
         } catch (IOException ex) {
             output.println("IO exception... ");
         }
         parse(ppt);
-        imageIntel.checkImages(ppt, zOS);
+        imageIntel.checkImages(ppt, afbeeldingen);
 
     }
 
-    private void retrieveImagesToZOS(ZipOutputStream ZOS, String saveLocation) throws IOException {
+    private ArrayList<String> retrieveImagesToZOS(ZipOutputStream ZOS, String saveLocation) throws IOException {
         PDFImageExtractor imEx = new PDFImageExtractor();
-        imEx.extractImage(document, ZOS, saveLocation);
+        ArrayList<String> images = imEx.extractImage(document, ZOS, saveLocation);
+        return images;
     }
 
     private void retrieveImagesToFile(String Location) throws IOException {

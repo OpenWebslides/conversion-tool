@@ -7,13 +7,12 @@ package conversion.pdf.util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.zip.ZipOutputStream;
 import objects.Image;
 import objects.PPT;
 import objects.Placeholder;
 import objects.Slide;
-import objects.Textpart;
 
 /**
  * this class can be used to resolve image issues, synchronizing the model with
@@ -25,15 +24,33 @@ public class ImageIntelligence {
 
     /**
      * Checks if the imagelocation from the images in the ppt object can be
-     * found in the ZOS if not, the images are replaces by placeholders this is
+     * found in the array of arraylists. if not, the images are replaces by placeholders this is
      * correct on Page level. (the exact order of placeholder and image is
      * lost).
      *
      * @param ppt
-     * @param zos
+     * @param afbeeldingen
+     *
      */
-    public void checkImages(PPT ppt, ZipOutputStream zos) {
+    public void checkImages(PPT ppt, ArrayList<String> afbeeldingen) {
+        for (Slide slide : ppt.getSlides()) {
+            int i = 0;
+            while (i < slide.getPptObjects().size()) {
+                if (slide.getPptObjects().get(i) != null && slide.getPptObjects().get(i) instanceof Image) {
+                    Image im = (Image) slide.getPptObjects().get(i);
 
+                    
+                    if (!afbeeldingen.contains(im.getFilename())) {
+                        System.out.println("Unable to find image: " +File.separator+ im.getFilename() + " - placeholder inserted");
+                        Placeholder p = new Placeholder();
+                        p.setContent("Image");
+                        slide.getPptObjects().set(i, p);
+                    }
+                }
+                i++;
+            }
+
+        }
     }
 
     /**
