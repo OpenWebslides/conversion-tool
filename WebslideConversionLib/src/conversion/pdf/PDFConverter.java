@@ -180,7 +180,8 @@ public class PDFConverter implements IConverter {
                     imLocParser.processStream(page, page.findResources(), page.getContents().getStream());
                     imLocParser2.processStream(page, page.findResources(), page.getContents().getStream());
                 }
-                hyperExtract.extract(page);
+                
+                
                 
                 //na het parsen halen we de objecten op... van 1 pagina!!!
 
@@ -197,6 +198,7 @@ public class PDFConverter implements IConverter {
                 //System.out.println("page-end=========================");
                 Slide slide = new Slide();
                 slide.getPptObjects().addAll(paginaobjects);
+                slide.getPptObjects().addAll(hyperExtract.extract(page));
                 ppt.getSlides().add(slide);
 
                 //testPPT(ppt);

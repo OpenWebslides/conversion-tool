@@ -8,8 +8,17 @@ package conversion.pdf.util;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import objects.FontDecoration;
+import static objects.FontDecoration.ITALIC;
+import static objects.FontDecoration.UNDERLINE;
+import objects.Hyperlink;
+import objects.PPTObject;
+import objects.Placeholder;
+import objects.Textpart;
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.interactive.action.type.PDAction;
 import org.apache.pdfbox.pdmodel.interactive.action.type.PDActionGoTo;
 import org.apache.pdfbox.pdmodel.interactive.action.type.PDActionURI;
@@ -17,6 +26,7 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotation;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDestination;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
+import org.apache.pdfbox.text.PDFTextStripperByArea;
 
 /**
  *
@@ -24,60 +34,8 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPa
  */
 public class PDFHyperlinkExtractor {
 
-    public void extract(PDPage page) throws IOException {
-
-//    PDFTextStripperByArea stripper = new PDFTextStripperByArea();
-//    List<PDAnnotation> annotations = page.getAnnotations();
-//    if(annotations == null){
-//        System.out.println("there are no annotations on this page...");
-//    }
-//    //first setup text extraction regions
-//    for( int j=0; j<annotations.size(); j++ )
-//    {
-//        PDAnnotation annot = annotations.get(j);
-//        if( annot instanceof PDAnnotationLink )
-//        {
-//            PDAnnotationLink link = (PDAnnotationLink)annot;
-//            PDRectangle rect = link.getRectangle();
-//            //need to reposition link rectangle to match text space
-//            float x = rect.getLowerLeftX();
-//            float y = rect.getUpperRightY();
-//            float width = rect.getWidth();
-//            float height = rect.getHeight();
-//            int rotation = page.getRotation();
-//            if( rotation == 0 )
-//            {
-//                PDRectangle pageSize = page.getMediaBox();
-//                y = pageSize.getHeight() - y;
-//            }
-//            else if( rotation == 90 )
-//            {
-//                //do nothing
-//            }
-//
-//            Rectangle2D.Float awtRect = new Rectangle2D.Float( x,y,width,height );
-//            stripper.addRegion( "" + j, awtRect );
-//        }
-//    }
-//
-//    stripper.extractRegions( page );
-//    System.out.println("regions extracted...");
-//    for( int j=0; j<annotations.size(); j++ )
-//    {
-//        PDAnnotation annot = annotations.get(j);
-//        if( annot instanceof PDAnnotationLink )
-//        {
-//            PDAnnotationLink link = (PDAnnotationLink)annot;
-//            PDAction action = link.getAction();
-//            String urlText = stripper.getTextForRegion( "" + j );
-//            if( action instanceof PDActionURI )
-//            {
-//                PDActionURI uri = (PDActionURI)action;
-//                System.out.println( "found: " + urlText.trim() + "'=" + uri.getURI() );
-//            }
-//        }
-//            
-//    }
+    public ArrayList<PPTObject> extract(PDPage page) throws IOException {
+        ArrayList<PPTObject> links = new ArrayList();
         List<PDAnnotation> annotations = page.getAnnotations();
         for (PDAnnotation annot : annotations) {
             if (annot instanceof PDAnnotationLink) {
@@ -94,6 +52,12 @@ public class PDFHyperlinkExtractor {
                             // get uri link
                             PDActionURI uri = (PDActionURI) action;
                             System.out.println("uri link:" + uri.getURI());
+                            Textpart tp = new Textpart();
+                            tp.setContent(uri.getURI());
+                            tp.addType(UNDERLINE);
+                            tp.setColor("#0000FF");
+                            Hyperlink h = new Hyperlink(tp);
+                            links.add(h);
                         } else {
                             if (action instanceof PDActionGoTo) {
                                 // get internal link
@@ -101,6 +65,11 @@ public class PDFHyperlinkExtractor {
                                 PDPageDestination pageDestination;
                                 if (destination instanceof PDPageDestination) {
                                     pageDestination = (PDPageDestination) destination;
+                                    System.out.println("internal link found - placeholder inserted");
+                                   
+                                    Placeholder p = new Placeholder();
+                                    p.setContent("Internal Link");
+                                    links.add(p);
                                 } else {
                                     break;
                                 }
@@ -114,6 +83,7 @@ public class PDFHyperlinkExtractor {
                 }
             }
         }
+        return links;
     }
 
 }

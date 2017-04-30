@@ -26,6 +26,7 @@ public class Hyperlink extends Textpart{
         super.setColor(textpart.getColor());
         parts = new ArrayList<>();
     }
+    public Hyperlink(){}
 
     public ArrayList<Textpart> getParts() {
         return parts;
