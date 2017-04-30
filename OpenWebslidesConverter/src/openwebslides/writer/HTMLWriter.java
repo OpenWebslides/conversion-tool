@@ -209,21 +209,6 @@ public class HTMLWriter extends Writer implements Indentation{
     
     private String toHtml(PPTList list){
         return toHtml(changeStructure(list));
-        
-        /*String res = "";
-        
-        setTABS(++indentation);
-        for(PPTObject object : list.getBullets()){
-            String html = objectToHtml(object);
-            res += "\n" + TABS + addSimpleTag("li", html);
-        }
-        setTABS(--indentation);
-        res += "\n" + TABS;
-        if(list.isOrdered())
-            return addSimpleTag("ol", res);
-        else
-            return addSimpleTag("ul", res);
-        */
     }
     
     private String toHtml(DeepPPTList list){
@@ -272,67 +257,6 @@ public class HTMLWriter extends Writer implements Indentation{
         
         return res;
     }
-    
-    /*
-    private PPTList extractElementen(PPTList list) {
-        PPTList res = new PPTList();
-        
-        for(PPTObject obj : list.getBullets()){
-            if(obj instanceof PPTList){
-                PPTList l = (PPTList)obj;
-                PPTList inside = extractElementen(l);
-                res.getBullets().addAll(inside.getBullets());
-            }
-            else{
-                res.addPPTObject(obj);
-            }
-        }
-        
-        return res;
-    }
-    
-    
-    private DeepPPTList changeStructure(PPTList list){
-        list = extractElementen(list);
-        DeepPPTList res = new DeepPPTList();
-        int lastParent = list.getBullets().get(0) instanceof Text && getLevel((Text)list.getBullets().get(0))!=null ? getLevel((Text)list.getBullets().get(0)) : 0;
-        
-        int i=0;
-        while(i<list.getBullets().size()){
-            PPTObject obj = list.getBullets().get(i);
-            Text text = setText(obj);
-            
-            //moet while zijn, opletten wat als je een lijst van afbeeldingen hebt, niet op 1 lijn plaatsen!
-            if(text==null || (getLevel(text)!=null && getLevel(text) > lastParent)){
-                //bij vorige item
-                res.getLast().add(obj);
-            }
-            //else if(getLevel(text)==null || getLevel(text) <= lastParent){
-            else{
-                //nieuw item
-                List<PPTObject> nw = new ArrayList<>();
-                nw.add(obj);
-                res.add(nw);
-            }
-            i++;
-        }
-        
-        return res;
-    }
-    
-    private Text setText(PPTObject obj){
-        Text text = null;
-        if(obj instanceof Text){
-            text = (Text)obj;
-        }
-        return text;
-    }
-    
-    private Integer getLevel(Text text){
-        if(text.getLevel()==null)
-            return null;
-        return Integer.parseInt(text.getLevel());
-    }*/
     
     private String toHtml(Image image){
         if(image.getFilename() == null){
@@ -436,6 +360,18 @@ public class HTMLWriter extends Writer implements Indentation{
     
     private String getVideoType(Video video){
         return "video/" + FilenameUtils.getExtension(video.getFilename()).toLowerCase();
+    }
+    
+    private String toHtml(Footer footer){
+        String res = "<div class=\"footer\">";
+        
+        setTABS(++indentation);
+        for(PPTObject obj : footer.getPptObjects()){
+            res += "\n" + TABS + objectToHtml(obj);
+        }
+        setTABS(--indentation);
+        
+        return res += "\n" + TABS + "</div>";
     }
     
 }
