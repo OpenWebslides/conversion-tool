@@ -37,12 +37,13 @@ public class Logic implements ILogic {
             Textpart tp1 = text.getTextparts().get(i);
             Textpart tp2 = text.getTextparts().get(i + 1);
 
-            while (tp1.getType().equals(tp2.getType())) {
+            while (tp1.getType().equals(tp2.getType()) && i < text.getTextparts().size() - 1) {
                 i++;
                 tp1.setContent(tp1.getContent() + tp2.getContent());
-                tp2 = text.getTextparts().get(i + 1);
+                if (i < text.getTextparts().size() - 1) {
+                    tp2 = text.getTextparts().get(i + 1);
+                }
                 toRemove.add(i);
-                //i++;
             }
             i++;
         }
