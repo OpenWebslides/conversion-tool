@@ -19,17 +19,19 @@ import org.apache.pdfbox.util.PDFTextStripper;
 import org.apache.pdfbox.util.TextPosition;
 
 /**
- * TextExtractor overrides certain methodes from PDFTextStripper in order to put information in the arrayList of PPTObjects objecten.
+ * TextExtractor overrides certain methodes from PDFTextStripper in order to put
+ * information in the arrayList of PPTObjects objecten.
+ *
  * @author Gertjan
  */
 public class PDFTextExtractor extends PDFTextStripper {
-
+    
     private TekenPlus teken = new TekenPlus();
     private ArrayList<TekenPlus> woord = new ArrayList<>();
     private boolean isNewWord = true;
     private ArrayList<PPTObject> objecten = new ArrayList<>();
     private Info2Object Inf2Obj = new Info2Object();
-   
+    
     public TekenPlus getTekenPlus() {
         return this.teken;
     }
@@ -42,9 +44,9 @@ public class PDFTextExtractor extends PDFTextStripper {
         } finally {
             objecten = new ArrayList<>();
         }
-
+        
     }
-
+    
     @Override
     public void processStream(PDPage aPage, PDResources resources, COSStream cosStream) throws IOException {
         super.processStream(aPage, resources, cosStream); //To change body of generated methods, choose Tools | Templates.
@@ -52,12 +54,12 @@ public class PDFTextExtractor extends PDFTextStripper {
         objecten.add(Inf2Obj.convert(woord));
         woord = new ArrayList<>();
     }
-
+    
     public PDFTextExtractor() throws IOException {
         super.setSortByPosition(true);
-       
+        
     }
-
+    
     @Override
     protected void processTextPosition(TextPosition text) {
         /*deze methode haalt letters met info uit de text... hier gaan we de tekst opvangen 
@@ -75,15 +77,19 @@ public class PDFTextExtractor extends PDFTextStripper {
         teken.setPosY(text.getYDirAdj());
         teken.setSpace(text.getWidthOfSpace());
         teken.setXscale(text.getXScale());
-        
+
         //System.out.println(text.getFont().getFontDescriptor());
-         if (text.getFont().getBaseFont().toLowerCase().contains("bold")){
+        if (text.getFont().getBaseFont().toLowerCase().contains("bold")) {
             teken.setBold(true);
             //System.out.println("made bold!");
-         }
-        if (text.getFont().getBaseFont().toLowerCase().contains("italic")){
+        } else {
+            teken.setBold(false);
+        }
+        if (text.getFont().getBaseFont().toLowerCase().contains("italic")) {
             teken.setItalic(true);
             //System.out.println("made italic!");
+        } else {
+            teken.setItalic(false);
         }
         /*enum bepalen -> kijken watvoor letter het is gebeurt hier al!!!*/
         if (text.getCharacter().matches("[A-Za-z]")) {
@@ -92,12 +98,10 @@ public class PDFTextExtractor extends PDFTextStripper {
         } else if (text.getCharacter().matches("[0-9]")) {
             //System.out.println("---cijfer gevonden!!!" + text.getCharacter());
             teken.setType(TekenPlus.type.CIJFER);
-        } else if(text.getCharacter().matches("[--?()., ]")) { //OPM laat die - vanvoor staan anders klopt regex niet!!!
+        } else if (text.getCharacter().matches("[--?()., ]")) { //OPM laat die - vanvoor staan anders klopt regex niet!!!
             //System.out.println("+++niet splitsend symbool" + text.getCharacter());
             teken.setType(TekenPlus.type.NONSPLITTING);
-        } 
-        /*BELANGRIJKE OPM: een spatie is geen split teken... een spatie houdt meestal dingen gewoon samen...*/
-        else {
+        } /*BELANGRIJKE OPM: een spatie is geen split teken... een spatie houdt meestal dingen gewoon samen...*/ else {
             //System.out.println(">>>onbekend split teken gevonden" + text.getCharacter());
             teken.setType(TekenPlus.type.SPLITTING);
         }
@@ -114,9 +118,9 @@ public class PDFTextExtractor extends PDFTextStripper {
          */
         //een korte commercial break om ons teken nu ook hogerop te krijgen!
         verwerkTeken(teken);
-
+        
     }
-
+    
     private void verwerkTeken(TekenPlus teken) {
         /*Het idee is als volgt, indien het teken de zelfde eigenschappen heeft als het vorige dan wordt het
          erbij gepusht in een tijdelijk tekstdeel, is het anders dan wordt het in een nieuw tekstdeel gezet*/
@@ -125,7 +129,7 @@ public class PDFTextExtractor extends PDFTextStripper {
          */
         //System.out.println("te verwerken teken: " + teken.getTeken());
         if (isNewWord) {
-          //  System.out.println("gekozen voor : new word optie");
+            //  System.out.println("gekozen voor : new word optie");
             woord = new ArrayList<>();
             isNewWord = false;
         }
@@ -133,18 +137,18 @@ public class PDFTextExtractor extends PDFTextStripper {
         /*Hier wordt onderzocht welke soort delimiter je hebt, is het een ander teken dan gewone tekst dan splits je daarop ook...*/
         if (teken.getType() == TekenPlus.type.SPLITTING) {
             //System.out.println("gekozen voor: splitting optie");
-           // System.out.println("SPLITTING teken");
+            // System.out.println("SPLITTING teken");
             objecten.add(Inf2Obj.convert(woord));
             woord = new ArrayList<>();
-            }
+        }
         
-        if(!woord.isEmpty() && !tekenControle(teken)){ //doet hetzelfde als kijken of het splitting is! 
+        if (!woord.isEmpty() && !tekenControle(teken)) { //doet hetzelfde als kijken of het splitting is! 
             //controle op leeg zijn anders nullpointers!!
             //System.out.println("INFO splitting");
             objecten.add(Inf2Obj.convert(woord));
             woord = new ArrayList<>();
-            }
-        
+        }
+
         //even een kopie nemen, hij doet iets vreemd anders...
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -153,46 +157,47 @@ public class PDFTextExtractor extends PDFTextStripper {
             ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
             ObjectInputStream ois = new ObjectInputStream(bais);
             TekenPlus kopie = (TekenPlus) ois.readObject();
-
+            
             woord.add(kopie);
         } catch (Exception e) {
             System.out.println("fout bij kopiëren..." + e.getMessage());
         }
-
+        
     }
     /*
-    Teken controle is een functie die kijkt of het teken er wel nog bij mag bij het zelfde woord...
-    geeft false terug indien er een soort splitting event optreed... (ander lettertype ofzo...)
-    */
-    private boolean tekenControle(TekenPlus teken){
+     Teken controle is een functie die kijkt of het teken er wel nog bij mag bij het zelfde woord...
+     geeft false terug indien er een soort splitting event optreed... (ander lettertype ofzo...)
+     */
+
+    private boolean tekenControle(TekenPlus teken) {
         
         TekenPlus vorigeLetter = woord.get(woord.size() - 1); //dit haalt de laatste letter eraf...
         //System.out.print("De vorige letter was: ");
         //vorigeLetter.schrijfPlus();
         //opm = xpos is dat hori of verti? (programma assen of menselijker... :p
-        if(vorigeLetter.getPosY() != teken.getPosY()){
+        if (vorigeLetter.getPosY() != teken.getPosY()) {
             //System.out.println("split op PosY!");
             return false;
             
         }
-        if(vorigeLetter.getFontsize() != teken.getFontsize()){
+        if (vorigeLetter.getFontsize() != teken.getFontsize()) {
             //System.out.println("split op FontSize");
             return false;
         }
-        if(vorigeLetter.isBold() != teken.isBold()){
+        if (vorigeLetter.isBold() != teken.isBold()) {
             return false;
         }
-        if(vorigeLetter.isItalic() != teken.isItalic()){
+        if (vorigeLetter.isItalic() != teken.isItalic()) {
             return false;
         }
         
-        if((teken.getPosX()-vorigeLetter.getPosX()) > 100){
+        if ((teken.getPosX() - vorigeLetter.getPosX()) > 100) {
             //100 is arbitrair gekozen, merk op dat deze test enkel gedaan wordt voor woorden met zelfde fontsize op zelfde lijn!
-        //System.out.println("verschil tekens: " + (teken.getPosX() - vorigeLetter.getPosX()));
+            //System.out.println("verschil tekens: " + (teken.getPosX() - vorigeLetter.getPosX()));
             return false;
         }
         
         return true;
     }
-
+    
 }

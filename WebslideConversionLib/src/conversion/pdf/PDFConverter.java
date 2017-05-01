@@ -201,7 +201,7 @@ public class PDFConverter implements IConverter {
             }
             TextIntelligence tI = new TextIntelligence();
             tI.makeText(ppt);
-            //testPPT(ppt);
+            testPPT(ppt);
 
             output.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
 

@@ -36,7 +36,7 @@ public class TextIntelligence {
 
                     text.addTextpart(tp);
                     double posY = tp.getYPosition();
-                    System.out.println("Tekstpart behandeld: " + tp.getContent() + " " + tp.getXPosition() + "," + tp.getYPosition());
+                    //System.out.println("Tekstpart behandeld: " + tp.getContent() + " " + tp.getXPosition() + "," + tp.getYPosition());
                     int ii = i;
                     while (ii + 1 < slide.getPptObjects().size() && slide.getPptObjects().get(ii + 1) instanceof Textpart && posY == ((Textpart) slide.getPptObjects().get(ii + 1)).getYPosition()) {
                         tp = new Textpart((Textpart) slide.getPptObjects().get(ii + 1));
@@ -47,7 +47,7 @@ public class TextIntelligence {
                         text.addTextpart(tp);
                         toRemove.add(ii + 1);
                         ii++;
-                        System.out.println("Tekstpart behandeld: " + tp.getContent() + " " + tp.getXPosition() + "," + tp.getYPosition());
+                        //System.out.println("Tekstpart behandeld: " + tp.getContent() + " " + tp.getXPosition() + "," + tp.getYPosition());
 
                     }
                     slide.getPptObjects().set(i, text);
