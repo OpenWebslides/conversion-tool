@@ -179,7 +179,18 @@ public class PDFTextExtractor extends PDFTextStripper {
             //System.out.println("split op FontSize");
             return false;
         }
+        if(vorigeLetter.isBold() != teken.isBold()){
+            return false;
+        }
+        if(vorigeLetter.isItalic() != teken.isItalic()){
+            return false;
+        }
         
+        if((teken.getPosX()-vorigeLetter.getPosX()) > 100){
+            //100 is arbitrair gekozen, merk op dat deze test enkel gedaan wordt voor woorden met zelfde fontsize op zelfde lijn!
+        //System.out.println("verschil tekens: " + (teken.getPosX() - vorigeLetter.getPosX()));
+            return false;
+        }
         
         return true;
     }

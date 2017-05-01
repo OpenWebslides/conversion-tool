@@ -17,12 +17,8 @@ import conversion.pdf.util.getImageLocations2;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.ZipOutputStream;
-import objects.Image;
 import objects.PPT;
 import objects.PPTObject;
 import objects.Slide;
@@ -205,7 +201,7 @@ public class PDFConverter implements IConverter {
             }
             TextIntelligence tI = new TextIntelligence();
             tI.makeText(ppt);
-            // testPPT(ppt);
+            //testPPT(ppt);
 
             output.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
 
@@ -223,8 +219,12 @@ public class PDFConverter implements IConverter {
 
     private void testPPT(PPT ppt) {
         System.out.println("PPT CONTROLE");
-        for (PPTObject obj : ppt.getSlides()) {
-            System.out.println(obj.toString());
+        for (Slide slds : ppt.getSlides()) {
+            for(PPTObject obj : slds.getPptObjects()){
+                System.out.println(obj.getContent());
+                
+            }
+            
         }
     }
 
