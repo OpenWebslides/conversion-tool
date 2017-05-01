@@ -74,3 +74,4 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijfing,Issue #,Opmerkingen
 29/04/17,15:10,17:30,extern,Projectwerk,image placeholders voorzien indien afbeelding niet opgeslagen,,
 30/04/17,08:15,11:30,extern,Projectwerk,image placeholders bij zip output stream voorzien,,
 30/04/17,12:30,15:00,extern,Projectwerk,url's uitzoeken + bugfixes en stabiliteit,,
+01/05/17,12:30,16:00,extern,Projectwerk,output en conversie tekstparts optimalizeren + fouten aanpakken,,
