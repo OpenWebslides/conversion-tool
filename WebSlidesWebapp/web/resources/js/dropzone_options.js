@@ -15,8 +15,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
     autoProcessQueue: false,
     parallelUploads: 8,
     maxFiles: 8,
-    accept: function (file, done) {
-        //console.log("Accept");
+    accept: function (file, done) {        
         $('.dz-progress').hide();
         return done();
     },
@@ -58,7 +57,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
 
 
             $("#field-download").append(
-                    $("<form></form>", {action: "download", id: "download-form-" + shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3").prop({'target': '_blank'})
+                    $("<form></form>", {action: "download", id: "download-form-" + shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3").prop({'target': '_blank'+shared_vars.filesInProgress.length,'rel':'noopener noreferrer'})            
                     .append($("<img />").attr({src: "resources/images/loading_blue.gif", alt: "loading animation", id: "download-loading-anim-" + shared_vars.filesInProgress.length}))
                     .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-1"}))
                     .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-2"}))

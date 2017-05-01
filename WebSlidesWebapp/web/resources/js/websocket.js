@@ -22,8 +22,7 @@ shared_vars.socket.onmessage = function (event) {
     var msg = JSON.parse(event.data);
     console.log(msg);
     // dynamically add property to socket
-    shared_vars.socket.WSSessionToken = msg.WSSessionToken;    
-    console.log("message action = " + msg.status);
+    shared_vars.socket.WSSessionToken = msg.WSSessionToken;        
     var targetId; // = btnFormDownloadToShow
     console.log("looping looking for " + msg.fileName);
     $.each(shared_vars.filesInProgress, function (k, v) {

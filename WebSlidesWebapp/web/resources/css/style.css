@@ -45,9 +45,24 @@ and open the template in the editor.
     margin-top:20px;
 }
 
-.btn:hover{
+.btn-primary:hover{
     color: #FFFFFF;
     background-color: #1E64C8;
+}
+
+.btn-secondary {
+   background-color:#fcffaa;
+   color:#1e1d1d;
+}
+
+.btn-roomy{
+    padding: 10px;
+    margin: 20px;
+}
+
+.btn-secondary:hover{
+    background-color: #FFD200;
+    color: #202020;
 }
 
 .dragndrop {
@@ -82,6 +97,7 @@ and open the template in the editor.
 .language-selected{
     font-weight: bolder;
 }
+
 
 @media screen {
     .header-title{
