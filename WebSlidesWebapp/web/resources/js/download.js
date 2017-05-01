@@ -8,23 +8,20 @@ function startDownload(downloadFormNr) {
     console.log("called startDownload voor " + downloadFormNr);
 
     if (downloadFormNr === -1) {
-        $("#download-form-all-param-1").attr({
+        for(i = 0; i<shared_vars.filesInProgress.length;i++){
+            $("#download-form-" + i + "-param-1").attr({
             name: "WSSessionToken",
-            value:shared_vars.socket.WSSessionToken
+            value: shared_vars.socket.WSSessionToken
         });
-
-        var names = "";
-        $.each(shared_vars.filesInProgress, function (index, value) {
-            console.log(index + ": " + value);
-            names += $("#download-form-" + index + "-btn").text() + ";";
+        console.log($("#download-form-" + i + "-btn").text());
+        $("#download-form-" + i + "-param-2").attr({
+            name: "fileName",
+            value: $("#download-form-" + i + "-btn").text()
         });
-        console.log("filling the hidden field download-form-all-param-2 with " + names);
-
-        $("#download-form-all-param-2").attr({
-            name: "fileNames",
-            value: names
-        });
-        $("#download-form-all").submit();
+            
+            console.log("submitting download-form-"+i);
+            $("#download-form-"+i).submit(); 
+        }
     } else {
         $("#download-form-" + downloadFormNr + "-param-1").attr({
             name: "WSSessionToken",
