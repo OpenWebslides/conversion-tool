@@ -18,8 +18,7 @@ function setLanguage() {
         contentType: 'json',
         dataType: "text",
         data: {language: localStorage["language"], bundle: "GenericError"},
-        success: function (result, status, xhr) {
-            //console.log(result);
+        success: function (result, status, xhr) {            
             var dict = JSON.parse(result);
 
             $(".header-title").html(dict["header-title"]);

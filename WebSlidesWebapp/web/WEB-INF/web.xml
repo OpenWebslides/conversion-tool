@@ -15,7 +15,7 @@
     <servlet-mapping>
         <servlet-name>LanguageServlet</servlet-name>
         <url-pattern>/LanguageServlet</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping>    
     <error-page>
         <error-code>404</error-code>
         <location>/404.html</location>
@@ -28,9 +28,19 @@
         <exception-type>java.lang.Exception</exception-type>
         <location>/500.html</location>
     </error-page>
-    <error-page>
+    <error-page> 
+        <error-code>401</error-code>       
         <location>/GenericError.html</location>
     </error-page>
+    <error-page> 
+        <error-code>403</error-code>       
+        <location>/GenericError.html</location>
+    </error-page>
+    <error-page> 
+        <error-code>503</error-code>       
+        <location>/GenericError.html</location>
+    </error-page>
+    
     <mime-mapping>
         <extension>zip</extension>
         <mime-type>application/zip</mime-type>
