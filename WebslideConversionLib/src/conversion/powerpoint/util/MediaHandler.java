@@ -117,6 +117,9 @@ public class MediaHandler {
                                         String link = xml.substring(startPos + 8, endPos -1);
                                         ((Video)po).setLink(link);
                                     }
+                                    else{
+                                        ((Video)po).setLink(null);
+                                    }
                                 }
 
                             }
