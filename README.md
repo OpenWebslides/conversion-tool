@@ -15,7 +15,7 @@ Dit is de master branch voor de bachelorproef Open-Webslides.
 * Projectbranches: 
   * webslides_webapp: front-end
   * open_webslides-converter: back-end
-  * zipper, logger en webslides_conversion_test: zipper en logger zijn zelfgeschreven libraries, webslides_conversion_test is een integratietest
+  * zipper, logger en webslides_conversion_lib  zijn elk zelfgeschreven libraries (Er is ook een niet gebruikte DAOLib aanwezig)
 
 Het project is modulair en dat wordt hier weerspiegeld, elk deel kan apart getest worden.  
 Het geheel testen kan door interactie met de gedeployde versie op [webslide.ugent.be](http://webslide.ugent.be/OpenWebslidesWebapp/)
