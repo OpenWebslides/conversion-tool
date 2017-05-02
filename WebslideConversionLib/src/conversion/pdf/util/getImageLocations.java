@@ -56,7 +56,12 @@ public class getImageLocations extends PDFTextStripper {
     public int getImageNumber(){
         return imageNumber;
     }
-
+    private int ImagesOnPage = 0;
+    public void resetNumber(){
+        ImagesOnPage = 0;
+    }
+    
+    
     @Override
     protected void startPage(PDPage page) throws IOException {
         // process start of the page
@@ -85,8 +90,9 @@ public class getImageLocations extends PDFTextStripper {
               //  System.out.println("gevonden op: " + x + "," + y);
                 
                 Image im = new Image();
-                im.setFilename("img"  + conv.getCurrentPageNumber() + "-"+ imageNumber + ".jpg");
+                im.setFilename("img"  + (conv.getCurrentPageNumber()) + "-"+ ImagesOnPage + ".jpg");
                     System.out.println("made image: " + im.getFilename());
+                    ImagesOnPage++;
                 Dimension positie = new Dimension();
                 Dimension afmeting = new Dimension();
                 //size in mm

@@ -48,10 +48,10 @@ public class PDFTest {
      }
      }
      }*/
-
+/*
     @Test
-    public void main1() {
-        File file = new File("C:\\temp\\slidesSaved.pdf");
+    public void main1() {//test met file location
+        File file = new File("C:\\temp\\slidesJoann.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
@@ -78,11 +78,11 @@ public class PDFTest {
             } catch (IOException ex) {
             }
         }
-    }
+    }*/
 
     @Test
-    public void imagesToZip() throws IOException {
-        File file = new File("C:\\temp\\slidesSaved.pdf");
+    public void imagesToZip() throws IOException {//test met zip
+        File file = new File("C:\\temp\\slidesJoann.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
