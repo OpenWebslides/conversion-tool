@@ -158,7 +158,7 @@ public class PDFConverter implements IConverter {
     private void parse(PPT ppt) throws PDFException {
         try {
             getImageLocations imLocParser = new getImageLocations(this);
-            getImageLocations2 imLocParser2 = new getImageLocations2();
+            //getImageLocations2 imLocParser2 = new getImageLocations2();
             PDFTextExtractor parser = new PDFTextExtractor();
             PDFHyperlinkExtractor hyperExtract = new PDFHyperlinkExtractor();
             List allPages = document.getDocumentCatalog().getAllPages();
@@ -174,7 +174,8 @@ public class PDFConverter implements IConverter {
                     parser.processStream(page, page.findResources(), page.getContents().getStream());
                     //voor afbeelding posities (hopelijk)
                     imLocParser.processStream(page, page.findResources(), page.getContents().getStream());
-                    imLocParser2.processStream(page, page.findResources(), page.getContents().getStream());
+                   
+                    //imLocParser2.processStream(page, page.findResources(), page.getContents().getStream());
                 }
                 
                 
@@ -201,7 +202,7 @@ public class PDFConverter implements IConverter {
             }
             TextIntelligence tI = new TextIntelligence();
             tI.makeText(ppt);
-            testPPT(ppt);
+            //testPPT(ppt);
 
             output.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
 

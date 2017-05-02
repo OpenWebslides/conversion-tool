@@ -58,7 +58,7 @@ public class getImageLocations2 extends PDFStreamEngine{
                 int imageHeight = image.getHeight();
                 double pageHeight = page.getMediaBox().getHeight();
              //   System.out.println("*******************************************************************");
-             //   System.out.println("Found image [" + objectName.getName() + "]");
+                System.out.println("Found image [" + objectName.getName() + "]");
         
                 Matrix ctmNew = getGraphicsState().getCurrentTransformationMatrix();
                 float yScaling = ctmNew.getYScale();
@@ -77,19 +77,19 @@ public class getImageLocations2 extends PDFStreamEngine{
 
                 float imageXScale = ctmNew.getXScale();
                 float imageYScale = ctmNew.getYScale();
-            //    System.out.println("position = " + ctmNew.getXPosition() + ", " + ctmNew.getYPosition());
+                System.out.println("position = " + ctmNew.getXPosition() + ", " + ctmNew.getYPosition());
                 // size in pixel
-            //    System.out.println("size = " + imageWidth + "px, " + imageHeight + "px");
+                System.out.println("size = " + imageWidth + "px, " + imageHeight + "px");
                 // size in page units
-            //    System.out.println("size = " + imageXScale + ", " + imageYScale);
+                System.out.println("size = " + imageXScale + ", " + imageYScale);
                 // size in inches 
                 imageXScale /= 72;
                 imageYScale /= 72;
-            //    System.out.println("size = " + imageXScale + "in, " + imageYScale + "in");
+                System.out.println("size = " + imageXScale + "in, " + imageYScale + "in");
                 // size in millimeter
                 imageXScale *= 25.4;
                 imageYScale *= 25.4;
-             //   System.out.println("size = " + imageXScale + "mm, " + imageYScale + "mm");
+                System.out.println("size = " + imageXScale + "mm, " + imageYScale + "mm");
               //  System.out.println();
             }
             else if(xobject instanceof PDXObjectForm)
