@@ -13,6 +13,7 @@ import objects.Image;
 import objects.PPT;
 import objects.Placeholder;
 import objects.Slide;
+import output.Output;
 
 /**
  * this class can be used to resolve image issues, synchronizing the model with
@@ -22,6 +23,7 @@ import objects.Slide;
  */
 public class ImageIntelligence {
 
+    private Output output;
     /**
      * Checks if the imagelocation from the images in the ppt object can be
      * found in the array of arraylists. if not, the images are replaces by placeholders this is
@@ -42,7 +44,7 @@ public class ImageIntelligence {
 
                    
                     if (!afbeeldingen.contains(im.getFilename())) {
-                        System.out.println("Unable to find image: " +File.separator+ im.getFilename() + " - placeholder inserted");
+                        output.println("Unable to find image: " +File.separator+ im.getFilename() + " - placeholder inserted");
                         Placeholder p = new Placeholder();
                         p.setContent("Image");
                         slide.getPptObjects().set(i, p);
@@ -52,6 +54,10 @@ public class ImageIntelligence {
             }
 
         }
+        
+    }
+    public void setOutput(Output output) {
+        this.output = output;
     }
 
     /**
@@ -73,7 +79,7 @@ public class ImageIntelligence {
 
                     File f = new File(location +File.separator +  im.getFilename());
                     if (!f.exists() && !f.isDirectory()) {
-                        System.out.println("Unable to find image: " + location +File.separator+ im.getFilename() + " - placeholder inserted");
+                        output.println("Unable to find image: " + location +File.separator+ im.getFilename() + " - placeholder inserted");
                         Placeholder p = new Placeholder();
                         p.setContent("Image");
                         slide.getPptObjects().set(i, p);

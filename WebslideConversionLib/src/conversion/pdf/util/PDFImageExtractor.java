@@ -47,7 +47,7 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
+                    //System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
                     FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg"));
                     totalImagesOnPage++;
                     pdxObjectImage.write2OutputStream(output);
@@ -82,7 +82,7 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
+                   // System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
                     FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg"));
                     totalImagesOnPage++;
                     pdxObjectImage.write2OutputStream(output);
