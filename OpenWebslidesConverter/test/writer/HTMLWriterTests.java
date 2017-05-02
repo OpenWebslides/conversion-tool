@@ -260,7 +260,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<p>This is text with a <strong>important</strong> word, <strong class=\"underline\">underlined</strong> word and <em>italic</em> word.</p>\n\t\t<p>You could be using <del>deprecated</del> code.</p>\n\t\t<p>Some <del><em><strong class=\"underline\">nested</strong></em></del> tags.</p>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<p>This is text with a <strong>important</strong> word, <span class=\"underline\">underlined</span> word and <em>italic</em> word.</p>\n\t\t<p>You could be using <del>deprecated</del> code.</p>\n\t\t<p>Some <em><span class=\"underline\"><del><strong>nested</strong></del></span></em> tags.</p>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
