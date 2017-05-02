@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package conversion.powerpoint;
+package conversion.powerpoint.sax;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -60,7 +60,7 @@ public class PowerpointHandler extends DefaultHandler {
     //
     private String lastId;
 
-    PowerpointHandler(Slide pptobjects, Output output) {
+    public PowerpointHandler(Slide pptobjects, Output output) {
         this.pptobjects = pptobjects;
         this.output = output;
     }
@@ -401,13 +401,13 @@ public class PowerpointHandler extends DefaultHandler {
             } else if (qName.equals(PPTXMLConstants.MEDIABOX)) {
                 imagesize = true;
             } else if (qName.equals(PPTXMLConstants.MEDIASIZE) && imagesize) {
-                int width = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIAWIDTH)) / 360000;
-                int height = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIAHEIGHT)) / 360000;
+                double width = Double.parseDouble(attributes.getValue(PPTXMLConstants.MEDIAWIDTH)) / 3600 / 33;
+                double height = Double.parseDouble(attributes.getValue(PPTXMLConstants.MEDIAHEIGHT)) / 3600 / 19;
                 media.getDimension().setSize(width, height);
                 imagesize = false;
             } else if (qName.equals(PPTXMLConstants.MEDIALOCATION) && imagesize) {
-                int offsetX = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIALOCX)) / 360000;
-                int offsetY = Integer.parseInt(attributes.getValue(PPTXMLConstants.MEDIALOCY)) / 360000;
+                double offsetX = Double.parseDouble(attributes.getValue(PPTXMLConstants.MEDIALOCX)) / 3600 / 33;
+                double offsetY = Double.parseDouble(attributes.getValue(PPTXMLConstants.MEDIALOCY)) / 3600 / 19;
                 media.getLocation().setSize(offsetX, offsetY);
             }
         } catch (Exception e) {
