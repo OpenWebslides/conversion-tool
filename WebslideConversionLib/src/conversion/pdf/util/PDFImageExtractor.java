@@ -48,7 +48,9 @@ public class PDFImageExtractor extends PDFStreamEngine {
         List<PDPage> list = document.getDocumentCatalog().getAllPages();
         //List<PDPage> list = (List<PDPage>) document.getDocumentCatalog().getPages();
         int totalImages = 1;
+        
         for (PDPage page : list) {
+            int totalImagesOnPage = 0;
             PDResources pdResources = page.getResources();
 
             Map pageImages = pdResources.getImages();
@@ -59,9 +61,9 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg");
-                    FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg"));
-                       
+                    System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
+                    FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg"));
+                    totalImagesOnPage++;
                     pdxObjectImage.write2OutputStream(output);
                     totalImages++;
                 }
@@ -86,22 +88,26 @@ public class PDFImageExtractor extends PDFStreamEngine {
         ArrayList<String> afbeeldingen = new ArrayList();
         
         for (PDPage page : list) {
-            
+            int totalImagesOnPage = 0;
             PDResources pdResources = page.getResources();
             ArrayList<String> afbPerPage = new ArrayList();
             Map pageImages = pdResources.getImages();
             if (pageImages != null) {
                 
                 Iterator imageIter = pageImages.keySet().iterator();
+                
                 while (imageIter.hasNext()) {
+                    
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    ZOS.putNextEntry(new ZipEntry(saveLocation + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg"));
+                    ZOS.putNextEntry(new ZipEntry(saveLocation + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg"));
                     pdxObjectImage.write2OutputStream(ZOS);
                     ZOS.closeEntry();
-                    afbPerPage.add(saveLocation + File.separator +  "img" + pagenr + "-" + totalImages + ".jpg");
-                    afbeeldingen.add("img" + pagenr + "-" + totalImages + ".jpg");
+                    afbPerPage.add(saveLocation + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
+                    afbeeldingen.add("img" + pagenr + "-" + totalImagesOnPage + ".jpg");
+                    //System.out.println("controle array: " + "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
                     totalImages++;
+                    totalImagesOnPage++;
                 }
                 
             }

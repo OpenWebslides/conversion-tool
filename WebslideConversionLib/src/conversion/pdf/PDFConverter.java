@@ -174,7 +174,7 @@ public class PDFConverter implements IConverter {
                     parser.processStream(page, page.findResources(), page.getContents().getStream());
                     //voor afbeelding posities (hopelijk)
                     imLocParser.processStream(page, page.findResources(), page.getContents().getStream());
-                   
+                   imLocParser.resetNumber();
                     //imLocParser2.processStream(page, page.findResources(), page.getContents().getStream());
                 }
                 
