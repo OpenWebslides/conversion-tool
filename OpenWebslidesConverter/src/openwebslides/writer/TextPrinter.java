@@ -7,10 +7,13 @@ package openwebslides.writer;
 
 import cz.vutbr.web.css.CSSProperty;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import objects.FontDecoration;
 import objects.Text;
 import objects.Textpart;
@@ -23,7 +26,7 @@ public class TextPrinter {
     
     private Map<FontDecoration,Boolean> map = new HashMap<>();
     
-    private static Deque<Integer> stack = new ArrayDeque<Integer>();
+    private static Deque<FontDecoration> stack = new ArrayDeque<>();
     
     public static String printText(Text text){
         resetUsedTags();
@@ -48,22 +51,63 @@ public class TextPrinter {
     
     private static String closeTags(Textpart textpart){
         String res = "";
+        
+        //fill close with the tags that should be closed
+        List<FontDecoration> close = new ArrayList<>();
         for(Iterator itr = stack.iterator();itr.hasNext();){
             FontDecoration dec = (FontDecoration)itr.next();
             if(!textpart.getType().contains(dec)){
-                if(dec == FontDecoration.BOLD){
-                    
-                }
-                else if(dec == FontDecoration.ITALIC){
-                    
-                }
-                else if(dec == FontDecoration.UNDERLINE){
-                    
-                }
-                else if(dec == FontDecoration.STRIKETHROUH){
-                    
-                }
+                close.add(dec);
             }
+        }
+        
+        while(!close.isEmpty()){
+            FontDecoration remove = stack.pollFirst();
+            res += closeTag(remove);
+        }
+        
+        return res;
+    }
+    
+    private static String closeAllTags(){
+        String res = "";
+        for(Iterator itr = stack.iterator();itr.hasNext();){
+            FontDecoration dec = (FontDecoration)itr.next();
+            res += closeTag(dec);
+        }
+        return res;
+    }
+    
+    private static String openTag(FontDecoration remove){
+        String res = "";
+        if(remove == FontDecoration.BOLD){
+            res += "<strong>";
+        }
+        else if(remove == FontDecoration.ITALIC){
+            res += "<em>";
+        }
+        else if(remove == FontDecoration.UNDERLINE){
+            res += "<span class=\"underline\">";
+        }
+        else if(remove == FontDecoration.STRIKETHROUH){
+            res += "<del>";
+        }
+        return res;
+    }
+    
+    private static String closeTag(FontDecoration remove){
+        String res = "";
+        if(remove == FontDecoration.BOLD){
+            res += "</strong>";
+        }
+        else if(remove == FontDecoration.ITALIC){
+            res += "</em>";
+        }
+        else if(remove == FontDecoration.UNDERLINE){
+            res += "</span>";
+        }
+        else if(remove == FontDecoration.STRIKETHROUH){
+            res += "</del>";
         }
         return res;
     }
