@@ -23,7 +23,6 @@ public class ConverterFactory {
     
     /*
      * Bugs PPTX:
-        *Sometimes there are bugs with special characters
         *...
      */
     /**
