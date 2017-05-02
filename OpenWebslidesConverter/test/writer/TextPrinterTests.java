@@ -213,31 +213,63 @@ public class TextPrinterTests {
     public void test5(){
         Text text = new Text();
         
-        Textpart[] part = new Textpart[4];
+        Textpart[] part = new Textpart[14];
         
         part[0] = new Textpart();
-        part[0].setContent("eerste");
-        part[0].getType().add(FontDecoration.BOLD);
+        part[0].setContent("E");
         part[1] = new Textpart();
-        part[1].setContent("tweede");
-        part[1].getType().add(FontDecoration.ITALIC);
-        part[1].getType().add(FontDecoration.BOLD);
+        part[1].setContent("e");
+        part[1].getType().add(FontDecoration.UNDERLINE);
         part[2] = new Textpart();
-        part[2].setContent("derde");
-        part[2].getType().add(FontDecoration.ITALIC);
-        part[2].getType().add(FontDecoration.ITALIC);
+        part[2].setContent("n m");
         part[3] = new Textpart();
-        part[3].setContent("derde");
+        part[3].setContent("oei");
         part[3].getType().add(FontDecoration.ITALIC);
-        part[3].getType().add(FontDecoration.ITALIC);
+        part[3].getType().add(FontDecoration.UNDERLINE);
+        part[3].getType().add(FontDecoration.BOLD);
+        part[4] = new Textpart();
+        part[4].setContent("li");
+        part[4].getType().add(FontDecoration.BOLD);
+        part[4].getType().add(FontDecoration.UNDERLINE);
+        part[5] = new Textpart();
+        part[5].setContent("j");
+        part[6] = new Textpart();
+        part[6].setContent("ke");
+        part[6].getType().add(FontDecoration.ITALIC);
+        part[6].getType().add(FontDecoration.UNDERLINE);
+        part[6].getType().add(FontDecoration.BOLD);
+        part[7] = new Textpart();
+        part[7].setContent(" z");
+        part[8] = new Textpart();
+        part[8].setContent("i");
+        part[8].getType().add(FontDecoration.STRIKETHROUH);
+        part[8].getType().add(FontDecoration.UNDERLINE);
+        part[9] = new Textpart();
+        part[9].setContent("n");
+        part[9].getType().add(FontDecoration.ITALIC);
+        part[9].getType().add(FontDecoration.UNDERLINE);
+        part[9].getType().add(FontDecoration.STRIKETHROUH);
+        part[10] = new Textpart();
+        part[10].setContent(" ");
+        part[11] = new Textpart();
+        part[11].setContent("of ");
+        part[11].getType().add(FontDecoration.ITALIC);
+        part[11].getType().add(FontDecoration.UNDERLINE);
+        part[11].getType().add(FontDecoration.BOLD);
+        part[12] = new Textpart();
+        part[12].setContent("n");
+        part[12].getType().add(FontDecoration.BOLD);
+        part[13] = new Textpart();
+        part[13].setContent("ieT?");
+        part[13].getType().add(FontDecoration.ITALIC);
+        part[13].getType().add(FontDecoration.BOLD);
         
         for(Textpart p : part){
             text.addTextpart(p);
         }
         
         String res = TextPrinter.printText(text);
-        String expected = "<strong>eerste<em>tweede</em></strong><em>derde</em>";
-        
+        String expected = "E<span class=\"underline\">e</span>n m<strong><em><span class=\"underline\">oei</span></em><span class=\"underline\">li</span></strong>j<strong><em><span class=\"underline\">ke</span></em></strong> z<del><span class=\"underline\">i<em>n</em></span></del> <strong><em><span class=\"underline\">of </span></em>n<em>ieT?</em></strong>";
         Assert.assertEquals(expected, res);
     }
     
