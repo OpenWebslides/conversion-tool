@@ -27,7 +27,7 @@ public class PPTTest {
 
     @Test
     public void main() throws FileNotFoundException {
-        File file = new File("C:\\temp\\testPpts\\slides.pptx");
+        File file = new File("C:\\temp\\testPpts\\input.pptx");
 
         FileOutputStream dest = new FileOutputStream("C:\\temp\\testPpts\\zip.zip");
         ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(dest));

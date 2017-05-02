@@ -12,5 +12,18 @@ package objects;
  */
 public class Video extends Media{
     
+   private String link;
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
    
+   
+    public String toString(){
+        return getFilename() + "("+ link + ") " + getDimension().getWidth() + "," + getDimension().getHeight() + " " + getLocation().getWidth() + "," + getLocation().getHeight();
+    }
 }

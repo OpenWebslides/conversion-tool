@@ -79,6 +79,7 @@ public class PPTXMLConstants {
     public static final String MEDIAHEIGHT = "cy";
     public static final String MEDIALOCX = "x";
     public static final String MEDIALOCY = "y";
+    public static final String VIDEOLINK = "r:link";
 
     //Chart elements
     public static final String CHARTBODY = "p:xfrm";

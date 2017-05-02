@@ -72,7 +72,7 @@ public class MediaHandler {
             //So even though there is some nesting, the performance will be good since we work with small numbers
 
             links = new ArrayList<>();
-
+            linkCount = 0;
             //Read the shapes on the slide
             for (XSLFShape sh : slide.getShapes()) {
 
@@ -99,6 +99,13 @@ public class MediaHandler {
                                     copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, false, zip);
                                 } else {
                                     copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
+                                }
+                                if(po instanceof Video && ((Video)po).getLink()!=null){
+                                    for (POIXMLDocumentPart.RelationPart part : slide.getRelationParts()) {
+                                        if(((Video)po).getLink().equals(part.getRelationship().getId())){
+                                            ((Video)po).setLink(part.getRelationship().getTargetURI().toURL().toString());
+                                        }
+                                    }
                                 }
 
                             }

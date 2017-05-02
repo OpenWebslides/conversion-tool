@@ -24,9 +24,11 @@ public class Hyperlink extends Textpart{
         super.setContent(textpart.getContent());
         super.setCharachterSpacing(textpart.getCharachterSpacing());
         super.setColor(textpart.getColor());
+        parts = new ArrayList<>();  
+    }
+    public Hyperlink(){
         parts = new ArrayList<>();
     }
-    public Hyperlink(){}
 
     public ArrayList<Textpart> getParts() {
         return parts;
