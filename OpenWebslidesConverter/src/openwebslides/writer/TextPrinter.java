@@ -5,6 +5,7 @@
  */
 package openwebslides.writer;
 
+import cz.vutbr.web.css.CSSProperty;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -45,10 +46,26 @@ public class TextPrinter {
         return res;
     }
     
-    private static void closeTags(Textpart textpart){
+    private static String closeTags(Textpart textpart){
+        String res = "";
         for(Iterator itr = stack.iterator();itr.hasNext();){
-            
+            FontDecoration dec = (FontDecoration)itr.next();
+            if(!textpart.getType().contains(dec)){
+                if(dec == FontDecoration.BOLD){
+                    
+                }
+                else if(dec == FontDecoration.ITALIC){
+                    
+                }
+                else if(dec == FontDecoration.UNDERLINE){
+                    
+                }
+                else if(dec == FontDecoration.STRIKETHROUH){
+                    
+                }
+            }
         }
+        return res;
     }
     
     private static void resetUsedTags(){
