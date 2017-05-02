@@ -91,7 +91,7 @@ public class getImageLocations extends PDFTextStripper {
                 
                 Image im = new Image();
                 im.setFilename("img"  + (conv.getCurrentPageNumber()) + "-"+ ImagesOnPage + ".jpg");
-                    System.out.println("made image: " + im.getFilename());
+                    //System.out.println("made image: " + im.getFilename());
                     ImagesOnPage++;
                 Dimension positie = new Dimension();
                 Dimension afmeting = new Dimension();

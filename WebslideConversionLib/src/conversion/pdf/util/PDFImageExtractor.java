@@ -6,6 +6,7 @@
 package conversion.pdf.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +35,27 @@ public class PDFImageExtractor extends PDFStreamEngine {
     }
 
     
-    
+    public void extractImage(PDPage page, String location) throws FileNotFoundException, IOException{
+        int totalImagesOnPage = 0;
+            PDResources pdResources = page.getResources();
+
+            Map pageImages = pdResources.getImages();
+      
+            if (pageImages != null) {
+
+                Iterator imageIter = pageImages.keySet().iterator();
+                while (imageIter.hasNext()) {
+                    String key = (String) imageIter.next();
+                    PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
+                    //System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
+                    FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg"));
+                    totalImagesOnPage++;
+                    pdxObjectImage.write2OutputStream(output);
+                    
+                }
+            }
+            
+    }
     
     
     /**
@@ -61,7 +82,7 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 while (imageIter.hasNext()) {
                     String key = (String) imageIter.next();
                     PDXObjectImage pdxObjectImage = (PDXObjectImage) pageImages.get(key);
-                    System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
+                   // System.out.println("saving: "+ location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg");
                     FileOutputStream output = new FileOutputStream(new File(location + File.separator +  "img" + pagenr + "-" + totalImagesOnPage + ".jpg"));
                     totalImagesOnPage++;
                     pdxObjectImage.write2OutputStream(output);

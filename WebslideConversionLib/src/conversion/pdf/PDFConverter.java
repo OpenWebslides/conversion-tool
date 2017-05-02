@@ -65,6 +65,7 @@ public class PDFConverter implements IConverter {
                 document.decrypt("");
             }
             imageIntel = new ImageIntelligence();
+            
             isOpen = true;
         } catch (CryptographyException ex) {
             //System.out.println("er ging iets mis bij de decryptie....");
@@ -121,6 +122,7 @@ public class PDFConverter implements IConverter {
             output.println("io exception bij ophalen afbeeldingen...");
         }
         parse(ppt);
+        
         imageIntel.checkImages(ppt, Location);
         closeDocument();
 
@@ -232,6 +234,7 @@ public class PDFConverter implements IConverter {
     @Override
     public void setOutput(Output output) {
         this.output = output;
+        imageIntel.setOutput(this.output);
     }
     public int getCurrentPageNumber(){
         return currentPageNumber;
