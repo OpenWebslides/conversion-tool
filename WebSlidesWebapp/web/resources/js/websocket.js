@@ -9,7 +9,8 @@
 
 var shared_vars = {
                 socket: new WebSocket("ws://localhost:8080/WebSlidesWebapp/pipe"),
-                filesInProgress: []               
+                filesInProgress: [],
+                downloadAllPtr: 0
             };
         
 

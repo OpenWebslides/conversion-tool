@@ -50,11 +50,18 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
                 $("#alert").fadeOut(700);
             }, 3000);
         });
-
+        
+        dropzone.on("addedfile",function(file){
+            console.log("added file to DROPZONE "+file);
+            $("#btn-convert").removeAttr('disabled');
+        });
+        
+        
+        
         dropzone.on("success", function (file) {
             shared_vars.socket.send("File successfully uploaded" + file.toString());
-            shared_vars.socket.send(JSON.stringify({"msgType": "FILE", "name": file.name, "timestamp": file.lastModified, "fileType": file.type, "outputType": $("input[name='outputType']:checked").val()}));
-
+            shared_vars.socket.send(JSON.stringify({"msgType": "FILE", "name": file.name, "timestamp": file.lastModified, "fileType": file.type, "outputType": $("input[name='outputType']:checked").val()}));           
+            
 
             $("#field-download").append(
                     $("<form></form>", {action: "download", id: "download-form-" + shared_vars.filesInProgress.length}).removeClass().addClass("col-xs-3").prop({'target': '_blank'+shared_vars.filesInProgress.length,'rel':'noopener noreferrer'})            
