@@ -5,6 +5,11 @@
  */
 package conversion.powerpoint;
 
+import conversion.powerpoint.sax.PowerpointHandler;
+import conversion.powerpoint.util.InsightHandler;
+import conversion.powerpoint.util.MediaHandler;
+import conversion.powerpoint.util.TextHandler;
+import conversion.powerpoint.util.GarbageHandler;
 import conversion.IConverter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,14 +91,14 @@ public class PPTConverter implements IConverter {
            for (XSLFSlide slide : slides) {
                // XSLFSlide slide = slides.get(13);
                 try {
-                   // output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
+                    output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
                     //Webslide object
                     Slide webslide = new Slide();
 
                     String xml = slide.getXmlObject().getCSld().getSpTree().toString();
                                         
                     //for testing
-                  // output.println(xml);
+                    //output.println(xml);
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide, output);
@@ -116,12 +121,12 @@ public class PPTConverter implements IConverter {
                     InsightHandler.handle(ppt.getInsight(), webslide.getPptObjects());
 
                     //print the slide for testing toString details
-                  //  output.println("------------ toString -------------");
-                  //  output.println(webslide.toString());
+                    output.println("------------ toString -------------");
+                    output.println(webslide.toString());
 
                     //print the slide for testing getContent
-                  //  output.println("------------ getContent -------------");
-                  //  output.println(webslide.getContent());
+                    output.println("------------ getContent -------------");
+                    output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);

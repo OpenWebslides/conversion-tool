@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package conversion.powerpoint;
+package conversion.powerpoint.util;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +17,9 @@ import objects.Textpart;
  *
  * @author Karel
  */
-class InsightHandler {
+public class InsightHandler {
 
-    static void handle(PPTInsight insight, List<PPTObject> pptObjects) {
+    public static void handle(PPTInsight insight, List<PPTObject> pptObjects) {
         countObjects(insight, pptObjects);
     }
 

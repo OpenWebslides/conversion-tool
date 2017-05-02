@@ -19,6 +19,13 @@ import java.io.File;
  */
 public class ConverterFactory {
     
+    
+    
+    /*
+     * Bugs PPTX:
+        *Sometimes there are bugs with special characters
+        *...
+     */
     /**
      * Return an IConverter object
      * The correct implementation is decided by the file type
@@ -26,9 +33,6 @@ public class ConverterFactory {
      * @return 
      * @throws conversion.pdf.util.PDFException 
      */
-
-    
-
     public static IConverter getConverter(File file) throws IllegalArgumentException, PDFException{
 
         String ext2 = getExtension(file.getName());

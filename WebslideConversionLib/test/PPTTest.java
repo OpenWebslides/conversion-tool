@@ -27,7 +27,7 @@ public class PPTTest {
 
     @Test
     public void main() throws FileNotFoundException {
-        File file = new File("C:\\temp\\testPpts\\4.pptx");
+        File file = new File("C:\\temp\\testPpts\\slides.pptx");
 
         FileOutputStream dest = new FileOutputStream("C:\\temp\\testPpts\\zip.zip");
         ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(dest));
@@ -43,6 +43,8 @@ public class PPTTest {
 
         converter.parse(ppt,zip,"images");
         zip.close();
+        } catch (IllegalArgumentException ex) {
+            java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PDFException ex) {
             java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {

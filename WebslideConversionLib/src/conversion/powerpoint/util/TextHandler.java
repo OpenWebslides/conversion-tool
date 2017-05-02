@@ -3,13 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package conversion.powerpoint;
+package conversion.powerpoint.util;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import objects.FontDecoration;
 import objects.PPTList;
 import objects.PPTObject;
 import objects.Text;
@@ -19,7 +15,7 @@ import objects.Textpart;
  *
  * @author Karel
  */
-class TextHandler {
+public class TextHandler {
 
     public static void handle(List<PPTObject> pptobjects) {
         for (PPTObject po : pptobjects) {

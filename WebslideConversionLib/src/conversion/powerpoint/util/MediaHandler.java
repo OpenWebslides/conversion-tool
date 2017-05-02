@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package conversion.powerpoint;
+package conversion.powerpoint.util;
 
 import java.util.List;
 import objects.Image;
@@ -40,7 +40,7 @@ import output.Output;
  *
  * @author Karel
  */
-class MediaHandler {
+public class MediaHandler {
 
     private static final String RELATION_NAMESPACE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships";
 
@@ -274,8 +274,7 @@ class MediaHandler {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser sp = factory.newSAXParser();
 
-            DefaultHandler handler;
-            handler = new ChartHandler(output, chartObj);
+            DefaultHandler handler = new ChartHandler(output, chartObj);
             sp.parse(new InputSource(new StringReader(chart.getCTChart().xmlText())), handler);
 
         } catch (Exception e) {
