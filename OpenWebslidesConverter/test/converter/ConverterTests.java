@@ -16,6 +16,7 @@ import java.util.zip.ZipOutputStream;
 import openwebslidesconverter.Converter;
 import logger.Logger;
 import objects.PPT;
+import objects.PPTObject;
 import objects.Slide;
 import openwebslidesconverter.WebslidesConverterException;
 import org.junit.After;
@@ -57,7 +58,7 @@ public class ConverterTests {
     // @Test
     // public void hello() {}
     
-    
+    /*
     @Test
     public void imagesToZip() throws IOException, WebslidesConverterException{
         Converter converter = new Converter(new LogOutput(new Logger("C:\\temp\\ziptest\\imagesToZip\\", "testlog", "1")));
@@ -179,6 +180,18 @@ public class ConverterTests {
         converter.convert(inputFile, "C:\\temp\\tests\\converterTest1\\images");
         File outputDir = new File("C:\\temp\\tests\\converterTest1");
         converter.saveToDirectory(outputDir, Converter.outputType.SHOWER, Converter.outputFormat.HTML);
+    }
+    */
+    @Test
+    public void link() throws WebslidesConverterException{
+        Converter converter = new Converter(new StdOutput());
+        File inputFile = new File("C:\\temp\\tests\\link\\input.pptx");
+        converter.convert(inputFile, "C:\\temp\\tests\\link\\images");
+        File outputDir = new File("C:\\temp\\tests\\link");
+        converter.saveToDirectory(outputDir, Converter.outputType.SHOWER, Converter.outputFormat.HTML);
+        
+        Slide slide = converter.getPPT().getSlides().get(0);
+        PPTObject obj = slide.getPptObjects().get(0);
     }
     
 }
