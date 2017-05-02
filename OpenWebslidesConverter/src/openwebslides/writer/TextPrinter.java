@@ -29,23 +29,29 @@ public class TextPrinter {
     private static Deque<FontDecoration> stack = new ArrayDeque<>();
     
     public static String printText(Text text){
-        resetUsedTags();
+        stack.clear();
         String res = "";
         
         for(Textpart textpart : text.getTextparts()){
-            
-            //array vullen met alle decorations die niet in de tekst aanwezig zijn
-            //close decorations die niet meer nodig zijn (array meegeven)
-                //zal de stack overlopen en telkens de eerste sluiten zolang de array niet leeg is
-            
-            //open nieuwe decorations
-                //geef alle decorations mee, zal allemaal overlopen en als ze nog niet open zijn ze openen en op de stack duwen
-            
+            res += closeTags(textpart);
+            res += openTags(textpart);
+            res += textpart.getContent();
         }
         
-        //alle decorations sluiten, van voor beginnen in de stack
+        res += closeAllTags();
         
-        resetUsedTags();
+        stack.clear();
+        return res;
+    }
+    
+    private static String openTags(Textpart textpart){
+        String res = "";
+        for(FontDecoration dec : textpart.getType()){
+            if(!stack.contains(dec)){
+                stack.addFirst(dec);
+                res += openTag(dec);
+            }
+        }
         return res;
     }
     
@@ -63,6 +69,7 @@ public class TextPrinter {
         
         while(!close.isEmpty()){
             FontDecoration remove = stack.pollFirst();
+            close.remove(remove);
             res += closeTag(remove);
         }
         
@@ -71,9 +78,8 @@ public class TextPrinter {
     
     private static String closeAllTags(){
         String res = "";
-        for(Iterator itr = stack.iterator();itr.hasNext();){
-            FontDecoration dec = (FontDecoration)itr.next();
-            res += closeTag(dec);
+        while(!stack.isEmpty()){
+            res += closeTag(stack.pollFirst());
         }
         return res;
     }
@@ -110,9 +116,5 @@ public class TextPrinter {
             res += "</del>";
         }
         return res;
-    }
-    
-    private static void resetUsedTags(){
-        //alles op false zetten
     }
 }
