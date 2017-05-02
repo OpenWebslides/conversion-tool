@@ -79,10 +79,6 @@ public class OpenWebslidesConverter {
         } catch (IOException | InvalidParameterException | WebslidesConverterException ex) {
             output.error("error while converting: " + ex.getMessage(), ex.getMessage());
             java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            //***//
-            output.error("error while converting: " + ex.getMessage(), ex.getMessage());
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

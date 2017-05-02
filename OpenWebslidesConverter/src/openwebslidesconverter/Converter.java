@@ -82,10 +82,8 @@ public class Converter {
      * @throws openwebslidesconverter.WebslidesConverterException If the
      * conversion has failed.
      */
-    /**
-     * *Delete throws Exception
-     */
-    public void convert(File file, String imageSaveLocation) throws WebslidesConverterException, Exception {
+   
+    public void convert(File file, String imageSaveLocation) throws WebslidesConverterException {
         try {
             output.println("Start conversion");
 
@@ -99,7 +97,7 @@ public class Converter {
             output.println("Input file successfully read");
             //} catch (FileNotFoundException ex) {
         } catch (Exception ex) {
-            throw ex;//new WebslidesConverterException(ex);
+            throw new WebslidesConverterException(ex);
         }
     }
 
