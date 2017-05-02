@@ -12,13 +12,17 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.Scanner;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import javax.xml.namespace.QName;
@@ -49,6 +53,9 @@ public class MediaHandler {
 
     //The link counter, links are saved in order
     private static int linkCount = 0;
+    
+    //current slide
+    private static int slideNr = 0;
 
     //Read the links and later attach them to the right hyperlink object
     private static ArrayList<String> links;
@@ -71,6 +78,7 @@ public class MediaHandler {
             //This is done for every slide, a slide contains by average 5-10 shapes and 10-15 objects
             //So even though there is some nesting, the performance will be good since we work with small numbers
 
+            slideNr++;
             links = new ArrayList<>();
             linkCount = 0;
             //Read the shapes on the slide
@@ -101,10 +109,13 @@ public class MediaHandler {
                                     copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
                                 }
                                 if(po instanceof Video && ((Video)po).getLink()!=null){
-                                    for (POIXMLDocumentPart.RelationPart part : slide.getRelationParts()) {
-                                        if(((Video)po).getLink().equals(part.getRelationship().getId())){
-                                            ((Video)po).setLink(part.getRelationship().getTargetURI().toURL().toString());
-                                        }
+                                    String xml = getRelationshipXML(file,slideNr);
+                                    if(xml.contains("Id=\"" + ((Video)po).getLink())){
+                                        xml = xml.substring(xml.indexOf("Id=\"" + ((Video)po).getLink()));
+                                        int startPos = xml.indexOf("Target=");
+                                        int endPos = startPos + xml.substring(startPos).indexOf("\" ");
+                                        String link = xml.substring(startPos + 8, endPos -1);
+                                        ((Video)po).setLink(link);
                                     }
                                 }
 
@@ -367,4 +378,24 @@ public class MediaHandler {
         }
     }
 
+    private static String getRelationshipXML(File file, int slide){
+        String result = "";
+        try{
+            ZipFile zipFile = new ZipFile(file);
+
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+
+            while(entries.hasMoreElements()){
+                ZipEntry entry = entries.nextElement();
+                String eq = "ppt/slides/_rels/slide" + slide + ".xml.rels";
+                if(entry.getName().equals(eq)){
+                    InputStream stream = zipFile.getInputStream(entry);
+                    Scanner s = new Scanner(stream).useDelimiter("\\A");
+                    result = s.hasNext() ? s.next() : "";
+                }
+            }
+        }
+        catch(Exception e){}
+        return result;
+    }
 }
