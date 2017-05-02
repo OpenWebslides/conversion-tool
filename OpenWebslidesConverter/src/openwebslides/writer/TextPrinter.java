@@ -5,7 +5,6 @@
  */
 package openwebslides.writer;
 
-import cz.vutbr.web.css.CSSProperty;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -13,8 +12,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import objects.FontDecoration;
+import objects.Hyperlink;
 import objects.Text;
 import objects.Textpart;
 
@@ -28,14 +27,26 @@ public class TextPrinter {
     
     private static Deque<FontDecoration> stack = new ArrayDeque<>();
     
-    public static String printText(Text text){
+    public static String printText(List<Textpart> text){
         stack.clear();
         String res = "";
         
-        for(Textpart textpart : text.getTextparts()){
-            res += closeTags(textpart);
-            res += openTags(textpart);
-            res += textpart.getContent();
+        for(Textpart textpart : text){
+            if(textpart instanceof Hyperlink){
+                res += closeAllTags();
+                Hyperlink link = (Hyperlink)textpart;
+                res += " <a href=\"" + link.getUrl() + "\" target=\"_blank\">";
+                
+                for(Textpart linkpart: link.getParts()){
+                    res += linkpart.getContent();
+                }
+                res += "</a> ";
+            }
+            else{
+                res += closeTags(textpart);
+                res += openTags(textpart);
+                res += textpart.getContent();
+            }
         }
         
         res += closeAllTags();

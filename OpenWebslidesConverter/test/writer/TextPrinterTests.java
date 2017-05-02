@@ -11,6 +11,7 @@ import java.util.Iterator;
 import objects.FontDecoration;
 import objects.Text;
 import objects.Textpart;
+import objects.Hyperlink;
 import openwebslides.writer.TextPrinter;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -64,7 +65,7 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
+        String res = TextPrinter.printText(text.getTextparts());
         String expected = "<strong>eerste</strong>";
         
         Assert.assertEquals(expected, res);
@@ -84,7 +85,7 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
+        String res = TextPrinter.printText(text.getTextparts());
         String expected = "<em>eerste</em>";
         
         Assert.assertEquals(expected, res);
@@ -104,7 +105,7 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
+        String res = TextPrinter.printText(text.getTextparts());
         String expected = "<span class=\"underline\">eerste</span>";
         
         Assert.assertEquals(expected, res);
@@ -124,7 +125,7 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
+        String res = TextPrinter.printText(text.getTextparts());
         String expected = "<del>eerste</del>";
         
         Assert.assertEquals(expected, res);
@@ -148,7 +149,7 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
+        String res = TextPrinter.printText(text.getTextparts());
         String expected = "<strong>eerste<em>tweede</em></strong>";
         
         Assert.assertEquals(expected, res);
@@ -176,7 +177,7 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
+        String res = TextPrinter.printText(text.getTextparts());
         String expected = "<strong>eerste<em>tweedederde</em></strong>";
         
         Assert.assertEquals(expected, res);
@@ -203,7 +204,7 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
+        String res = TextPrinter.printText(text.getTextparts());
         String expected = "<strong>eerste<em>tweede</em></strong><em>derde</em>";
         
         Assert.assertEquals(expected, res);
@@ -268,8 +269,43 @@ public class TextPrinterTests {
             text.addTextpart(p);
         }
         
-        String res = TextPrinter.printText(text);
-        String expected = "E<span class=\"underline\">e</span>n m<strong><em><span class=\"underline\">oei</span></em><span class=\"underline\">li</span></strong>j<strong><em><span class=\"underline\">ke</span></em></strong> z<del><span class=\"underline\">i<em>n</em></span></del> <strong><em><span class=\"underline\">of </span></em>n<em>ieT?</em></strong>";
+        String res = TextPrinter.printText(text.getTextparts());
+        String expected = "E<span class=\"underline\">e</span>n m<span class=\"underline\"><em><strong>oei</strong></em><strong>li</strong></span>j<span class=\"underline\"><em><strong>ke</strong></em></span> z<del><span class=\"underline\">i<em>n</em></span></del> <span class=\"underline\"><em><strong>of </strong></em></span><strong>n<em>ieT?</em></strong>";
+        Assert.assertEquals(expected, res);
+    }
+    
+    @Test
+    public void test6(){
+        Text text = new Text();
+        
+        Textpart[] part = new Textpart[4];
+        
+        part[0] = new Textpart();
+        part[0].setContent("eerste");
+        part[0].getType().add(FontDecoration.BOLD);
+        part[1] = new Textpart();
+        part[1].setContent("tweede");
+        part[1].getType().add(FontDecoration.ITALIC);
+        part[1].getType().add(FontDecoration.BOLD);
+        
+        Hyperlink link = new Hyperlink(new Textpart());
+        link.setUrl("http://webslide.ugent.be/");
+        Textpart tp = new Textpart();
+        tp.setContent("klik");
+        link.getParts().add(tp);
+        part[2] = link;
+        
+        part[3] = new Textpart();
+        part[3].setContent("derde");
+        part[3].getType().add(FontDecoration.ITALIC);
+        
+        for(Textpart p : part){
+            text.addTextpart(p);
+        }
+        
+        String res = TextPrinter.printText(text.getTextparts());
+        String expected = "<strong>eerste<em>tweede</em></strong> <a href=\"http://webslide.ugent.be/\" target=\"_blank\">klik</a> <em>derde</em>";
+        
         Assert.assertEquals(expected, res);
     }
     
