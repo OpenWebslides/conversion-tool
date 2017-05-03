@@ -99,15 +99,27 @@ public class Logic implements ILogic {
                 }
                 i++;
             }
+            List<Integer> toRemove = new ArrayList<>();
+            List<Title> toAdd = new ArrayList<>();
             for (int j = 0; j < slide.getPptObjects().size(); j++) {
                 if (!hasTitle && slide.getPptObjects().get(j) instanceof Text && !((Text) slide.getPptObjects().get(j)).getTextparts().isEmpty()) {
                     int firstSize = ((Text) slide.getPptObjects().get(j)).getTextparts().get(0).getSize();
                     if ((firstSize < 1000 && firstSize >= maxSize - 5/*(minSize + (maxSize - minSize) * 4 / 5)*/) || (firstSize >= 1000 && (firstSize > (minSize + (maxSize - minSize) / 3) || firstSize >= 4000))) {
                         Title title = new Title();
                         title.getTextparts().addAll(((Text) slide.getPptObjects().get(j)).getTextparts());
-                        slide.getPptObjects().set(j, title);
+                        toRemove.add(j);
+                        toAdd.add(title);
+                        //slide.getPptObjects().set(j, title);
                     }
                 }
+            }
+
+            for (int j = toRemove.size() - 1; j >= 0; j--) {
+                slide.getPptObjects().remove((int) toRemove.get(j));
+            }
+
+            for (int j = toAdd.size() - 1; j >= 0; j--) {
+                slide.getPptObjects().add(0, toAdd.get(j));
             }
         }
     }
