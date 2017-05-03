@@ -82,7 +82,7 @@ public class PDFTest {
 
     @Test
     public void imagesToZip() throws IOException {
-        File file = new File("C:\\temp\\slidesJoann.pdf");
+        File file = new File("C:\\temp\\slides.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
