@@ -397,6 +397,7 @@ public class PowerpointHandler extends DefaultHandler {
                 video.getLocation().setSize(media.getLocation());
                 video.setId(media.getId());
                 video.setFilename(media.getFilename());
+                video.setLink(attributes.getValue(PPTXMLConstants.VIDEOLINK));
                 media = video;
             } else if (qName.equals(PPTXMLConstants.MEDIABOX)) {
                 imagesize = true;
