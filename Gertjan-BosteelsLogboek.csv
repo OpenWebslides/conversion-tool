@@ -76,3 +76,4 @@ Datum,Start,Einde,Plaats,Categorie,Omschrijfing,Issue #,Opmerkingen
 30/04/17,12:30,15:00,extern,Projectwerk,url's uitzoeken + bugfixes en stabiliteit,,
 01/05/17,12:30,16:00,extern,Projectwerk,output en conversie tekstparts optimalizeren + fouten aanpakken,,
 02/05/17,08:15,12:30,intern,Projectwerk,major bugfixes + small bugfixes + versie synchronisatie,,
+03/05/17,09:00,10:25,extern,Projectwerk,opstart table intelligence,,
