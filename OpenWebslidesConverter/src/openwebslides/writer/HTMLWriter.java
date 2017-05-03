@@ -243,20 +243,19 @@ public class HTMLWriter extends Writer implements Indentation{
         String res = TABS + "<img src=\"" + getImageSource(image) + "\">";
         setTABS(--indentation);
         
-        double W = image.getDimension().getWidth()/33;
-        double H = image.getDimension().getHeight()/19;
+        double W = image.getDimension().getWidth();
+        double H = image.getDimension().getHeight();
         
-        if(W>0.9 && (H>1.1 || H<=0.9)){ //full width
+        if(W>90 && (H>110 || H<=90)){ //full width
             res = "<figure class=\"cover width\">\n" + res;
         }
-        else if(H>0.9){ //full height
+        else if(H>90){ //full height
             res = "<figure class=\"cover height\">\n" + res;
         }
         else{ //normal image
             if(image.getDimension().getWidth()>0 && image.getDimension().getHeight()>0){
                 setTABS(++indentation);
-                int width = (int) (image.getDimension().getWidth()/33.0*100.0);
-                res = TABS + "<img src=\"" + getImageSource(image) + "\" width=\"" + width + "%\">";
+                res = TABS + "<img src=\"" + getImageSource(image) + "\" width=\"" + (int)W + "%\">";
                 setTABS(--indentation);
             }
             res = "<figure>\n" + res;

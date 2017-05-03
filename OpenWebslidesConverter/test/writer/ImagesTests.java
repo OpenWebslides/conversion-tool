@@ -154,7 +154,7 @@ public class ImagesTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure>\n\t\t\t<img src=\"images/image1.jpg\" width=\"81%\">\n\t\t</figure>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure>\n\t\t\t<img src=\"images/image1.jpg\" width=\"80%\">\n\t\t</figure>\n\t</div>";
         Assert.assertEquals(result, expected);
     }
     
@@ -214,7 +214,7 @@ public class ImagesTests {
     PPT createPPT(double w, double h){
         Image image = new Image();
         image.setFilename("image1.jpg");
-        image.getDimension().setSize(w*33, h*19);
+        image.getDimension().setSize(w*100, h*100);
         
         Slide slide = new Slide();
         slide.getPptObjects().add(image);

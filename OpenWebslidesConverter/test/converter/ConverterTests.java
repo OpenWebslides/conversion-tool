@@ -5,10 +5,12 @@
  */
 package converter;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Timestamp;
@@ -17,10 +19,16 @@ import openwebslidesconverter.Converter;
 import logger.Logger;
 import objects.PPT;
 import objects.PPTObject;
+import objects.Placeholder;
 import objects.Slide;
+import objects.Textpart;
+import objects.Title;
+import openwebslides.writer.HTMLWriter;
+import openwebslides.writer.Writer;
 import openwebslidesconverter.WebslidesConverterException;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -181,7 +189,7 @@ public class ConverterTests {
         File outputDir = new File("C:\\temp\\tests\\converterTest1");
         converter.saveToDirectory(outputDir, Converter.outputType.SHOWER, Converter.outputFormat.HTML);
     }
-    */
+    
     @Test
     public void link() throws WebslidesConverterException{
         Converter converter = new Converter(new StdOutput());
@@ -192,6 +200,32 @@ public class ConverterTests {
         
         Slide slide = converter.getPPT().getSlides().get(0);
         PPTObject obj = slide.getPptObjects().get(0);
+    }
+    */
+    @Test
+    //1 slide with a placeholder
+    public void placeHolder() throws Exception{
+        
+        Converter converter = new Converter(new StdOutput());
+        
+        PPT ppt = new PPT();
+        Slide front = new Slide();
+        Slide slide = new Slide();
+        Title title = new Title();
+        Textpart tp = new Textpart();
+        tp.setContent("titel van de slide");
+        title.addTextpart(tp);
+        Placeholder ph = new Placeholder();
+        ph.setContent("This graph could not be converted.");
+        slide.getPptObjects().add(title);
+        slide.getPptObjects().add(ph);
+        ppt.getSlides().add(front);
+        ppt.getSlides().add(slide);
+        converter.setPPT(ppt);
+        
+        File dir = new File("C:\\temp\\tests\\placeholder");
+        converter.saveToDirectory(dir, Converter.outputType.SHOWER, Converter.outputFormat.HTML);
+        
     }
     
 }
