@@ -68,6 +68,7 @@ public class PDFConverter implements IConverter {
             }
             imageIntel = new ImageIntelligence();
             tableIntel = new TableIntelligence();
+            
             isOpen = true;
         } catch (CryptographyException ex) {
             //System.out.println("er ging iets mis bij de decryptie....");
@@ -124,9 +125,10 @@ public class PDFConverter implements IConverter {
             output.println("io exception bij ophalen afbeeldingen...");
         }
         parse(ppt);
-        
+         
+        tableIntel.placeTables(ppt,tableIntel.extractTables(document));
         imageIntel.checkImages(ppt, Location);
-        tableIntel.checkTables(ppt);
+        //tableIntel.checkTables(ppt);
         closeDocument();
 
     }
@@ -145,8 +147,11 @@ public class PDFConverter implements IConverter {
             output.println("IO exception... ");
         }
         parse(ppt);
+        
+        tableIntel.placeTables(ppt,tableIntel.extractTables(document));
+        
         imageIntel.checkImages(ppt, afbeeldingen);
-        tableIntel.checkTables(ppt);
+        //tableIntel.checkTables(ppt);
         closeDocument();
     }
 
@@ -174,6 +179,7 @@ public class PDFConverter implements IConverter {
                 PDPage page = (PDPage) allPages.get(i);
                 System.out.println("Processing page: " + i);
                 currentPageNumber = i;
+                
                 //elke pagina is 1 slide!!! -> als slide af is moet je die hier dus aanmaken en de objecten uit extractor halen
                 PDStream contents = page.getContents();
                 if (contents != null) {
