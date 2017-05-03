@@ -178,33 +178,7 @@ public class HTMLWriter extends Writer implements Indentation{
     }
     
     private String printTextparts(List<Textpart> parts){
-        String res = "";
-        for(Textpart textpart : parts){
-            String part = "";
-            if(textpart instanceof Hyperlink){
-                Hyperlink link = (Hyperlink)textpart;
-                part = " <a href=\"" + link.getUrl() + "\" target=\"_blank\">";
-                
-                for(Textpart linkpart: link.getParts()){
-                    part += linkpart.getContent();
-                }
-                part += "</a> ";
-            }
-            else {
-                part = textpart.getContent();
-
-                if(textpart.getType().contains(FontDecoration.UNDERLINE))
-                    part = "<strong class=\"underline\">" + part + "</strong>";
-                if(textpart.getType().contains(FontDecoration.BOLD) && !textpart.getType().contains(FontDecoration.UNDERLINE))
-                    part = addSimpleTag("strong", part);
-                if(textpart.getType().contains(FontDecoration.ITALIC))
-                    part = addSimpleTag("em", part);
-                if(textpart.getType().contains(FontDecoration.STRIKETHROUH))
-                    part = addSimpleTag("del", part);
-            }
-            res += part;
-        }
-        return res;
+        return TextPrinter.printText(parts);
     }
     
     private String toHtml(PPTList list){
@@ -269,20 +243,19 @@ public class HTMLWriter extends Writer implements Indentation{
         String res = TABS + "<img src=\"" + getImageSource(image) + "\">";
         setTABS(--indentation);
         
-        double W = image.getDimension().getWidth()/33;
-        double H = image.getDimension().getHeight()/19;
+        double W = image.getDimension().getWidth();
+        double H = image.getDimension().getHeight();
         
-        if(W>0.9 && (H>1.1 || H<=0.9)){ //full width
+        if(W>90 && (H>110 || H<=90)){ //full width
             res = "<figure class=\"cover width\">\n" + res;
         }
-        else if(H>0.9){ //full height
+        else if(H>90){ //full height
             res = "<figure class=\"cover height\">\n" + res;
         }
         else{ //normal image
             if(image.getDimension().getWidth()>0 && image.getDimension().getHeight()>0){
                 setTABS(++indentation);
-                int width = (int) (image.getDimension().getWidth()/33.0*100.0);
-                res = TABS + "<img src=\"" + getImageSource(image) + "\" width=\"" + width + "%\">";
+                res = TABS + "<img src=\"" + getImageSource(image) + "\" width=\"" + (int)W + "%\">";
                 setTABS(--indentation);
             }
             res = "<figure>\n" + res;
