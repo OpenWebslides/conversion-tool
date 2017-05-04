@@ -71,6 +71,7 @@ public class MediaHandler {
      * @param saveLocation String
      * @param file File
      * @param output Output
+     * @param zip Zip
      */
     public static void handle(XSLFSlide slide, List<PPTObject> pptObjects, String saveLocation, File file, Output output, ZipOutputStream zip) {
         try {
@@ -382,10 +383,12 @@ public class MediaHandler {
                         //If we linked the hyperlink with the according link, update the hyperlink url and finish the object
                         if(links.size()<=linkCount){
                             ((Hyperlink) tp).setUrl(tp.getContent());
+                            tp.setContent(tp.getContent()+" ");
                             ((Hyperlink) tp).getParts().add(0, new Textpart(tp));
                             ((Hyperlink) tp).setContent("");
                         }else{
                             ((Hyperlink) tp).setUrl(links.get(linkCount++));
+                            tp.setContent(tp.getContent()+" ");
                             ((Hyperlink) tp).getParts().add(0, new Textpart(tp));
                             ((Hyperlink) tp).setContent("");
                         }

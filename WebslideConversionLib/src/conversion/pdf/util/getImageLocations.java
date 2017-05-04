@@ -70,9 +70,9 @@ public class getImageLocations extends PDFTextStripper {
     }
     /**
      * Fills the images arrayList with image objects found in arguments.
-     * @param operator
-     * @param arguments
-     * @throws IOException 
+     * @param operator PDOperator
+     * @param arguments List
+     * @throws IOException exception
      */
     @Override
     protected void processOperator(PDFOperator operator, List<COSBase> arguments) throws IOException {

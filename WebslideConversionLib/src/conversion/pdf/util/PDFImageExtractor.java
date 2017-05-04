@@ -61,9 +61,9 @@ public class PDFImageExtractor extends PDFStreamEngine {
     /**
      * This method extracts all images from a pdf file and creates jpg files on the location given by s.
      *
-     * @param document
-     * @param location
-     * @throws IOException
+     * @param document PDDocument
+     * @param location String
+     * @throws IOException exception
      */
     public void extractImage(PDDocument document, String location) throws IOException {
         List<PDPage> list = document.getDocumentCatalog().getAllPages();
@@ -96,16 +96,17 @@ public class PDFImageExtractor extends PDFStreamEngine {
 
     /**
      * Extracts images from document and gives them to the ZOS (creating what represents a jpg as well as making a subfolder images)
-     * @param document
-     * @param ZOS 
-     * @param saveLocation 
-     * @return  
-     * @throws java.io.IOException 
+     * @param document Document
+     * @param ZOS ZipOutputStream
+     * @param saveLocation String
+     * @return  ArrayList arraylist
+     * @throws java.io.IOException exception
      */
     public ArrayList<String> extractImage(PDDocument document, ZipOutputStream ZOS, String saveLocation) throws IOException {
+        
+        int totalImages = 1;
         List<PDPage> list = document.getDocumentCatalog().getAllPages();
 
-        int totalImages = 1;
         ArrayList<String> afbeeldingen = new ArrayList();
         
         for (PDPage page : list) {
