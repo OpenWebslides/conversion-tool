@@ -102,23 +102,36 @@ public class MediaHandler {
                             if (((Media) po).getId().equals("" + sh.getShapeId())) {
                                 //Set the filename, which we can get from the shape
                                 ((Media) po).setFilename(((XSLFPictureShape) sh).getPictureData().getFileName());
-                                //Copy the image from the ppt to our filesystem
-                                if (zip == null) {
-                                    copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, false, zip);
-                                } else {
-                                    copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
-                                }
+                                
                                 if(po instanceof Video && ((Video)po).getLink()!=null){
                                     String xml = getRelationshipXML(file,slideNr);
                                     if(xml.contains("Id=\"" + ((Video)po).getLink())){
                                         xml = xml.substring(xml.indexOf("Id=\"" + ((Video)po).getLink()));
                                         int startPos = xml.indexOf("Target=");
                                         int endPos = startPos + xml.substring(startPos).indexOf("\" ");
-                                        String link = xml.substring(startPos + 8, endPos -1);
-                                        ((Video)po).setLink(link);
+                                        String link = xml.substring(startPos + 8, endPos);
+                                        if(link.contains("youtube")){
+                                            ((Video)po).setLink(link);                                            
+                                        }
+                                        else{
+                                            ((Video)po).setLink(null);
+                                            if (zip == null) {
+                                                copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, false, zip);
+                                            } else {
+                                                copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
+                                            }
+                                        }
                                     }
                                     else{
                                         ((Video)po).setLink(null);
+                                    }
+                                }
+                                else{
+                                    //Copy the image from the ppt to our filesystem
+                                    if (zip == null) {
+                                        copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, false, zip);
+                                    } else {
+                                        copyImage(((Media) po), ((XSLFPictureShape) sh).getPictureData().getFileName(), file, output, saveLocation, true, zip);
                                     }
                                 }
 
