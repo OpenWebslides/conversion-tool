@@ -91,7 +91,7 @@ public class PPTConverter implements IConverter {
            for (XSLFSlide slide : slides) {
                // XSLFSlide slide = slides.get(13);
                 try {
-                    output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
+                    //output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
                     //Webslide object
                     Slide webslide = new Slide();
 

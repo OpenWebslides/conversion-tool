@@ -7,7 +7,6 @@ package conversion.powerpoint.sax;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import logger.Logger;
 import objects.*;
 import output.*;

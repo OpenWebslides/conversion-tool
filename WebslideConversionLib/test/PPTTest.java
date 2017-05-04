@@ -16,7 +16,7 @@ import output.StdLogOutput;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this templat   e file, choose Tools | Templates
  * and open the template in the editor.
  */
 /**
@@ -27,7 +27,7 @@ public class PPTTest {
 
     @Test
     public void main() throws FileNotFoundException {
-        File file = new File("C:\\temp\\testPpts\\yt.pptx");
+        File file = new File("C:\\temp\\testPpts\\testppt.pptx");
 
         FileOutputStream dest = new FileOutputStream("C:\\temp\\testPpts\\zip.zip");
         ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(dest));
