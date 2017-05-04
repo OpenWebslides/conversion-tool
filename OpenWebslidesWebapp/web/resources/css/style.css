@@ -37,12 +37,13 @@ and open the template in the editor.
 }
 
 #download-form-all-btn {
-    margin:20px;
+    margin:0 auto;
     padding:10px;
+    width:95%;
 }
 
-#btn-convert #btn-cancel {
-    margin-top:20px;
+#collapse-options{
+    margin-top:30px;    
 }
 
 .btn-primary:hover{
@@ -50,9 +51,9 @@ and open the template in the editor.
     background-color: #1E64C8;
 }
 
-.btn-secondary {
-   background-color:#fcffaa;
-   color:#1e1d1d;
+.btn-secondary, .btn-secondary:focus {   
+   background-color: #FFD200;
+    color: #202020;
 }
 
 .btn-roomy{
@@ -61,13 +62,14 @@ and open the template in the editor.
 }
 
 .btn-secondary:hover{
-    background-color: #FFD200;
-    color: #202020;
+   background-color:#fcffaa;
+   color:#1e1d1d;
 }
 
-.dragndrop {
-    padding: 30px;
-    border: 2px solid #1E64C8;
+.blue-box {
+    padding: 20px;
+    border: 2px solid #1E64C8;   
+    margin-bottom: 5px;    
     border-radius: 15px;
 }
 .header-text{

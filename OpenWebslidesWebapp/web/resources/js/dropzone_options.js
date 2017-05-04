@@ -7,6 +7,15 @@
 // hide the download all button on page load
 $("#download-form-all-btn").hide();
 
+$("#collapse-options").hide();
+
+$("#btn-options").click(function(){
+    
+   if($("#collapse-options").is(":hidden")) $("#collapse-options").show(1000)    
+   else $("#collapse-options:visible").hide(1000);
+});
+        
+
 var dropzone = Dropzone.options.myAwesomeDropzone = {
     paramName: "file", // The name that will be used to transfer the file
     maxFilesize: 10000, // MB
@@ -68,7 +77,7 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
                     .append($("<img />").attr({src: "resources/images/loading_blue.gif", alt: "loading animation", id: "download-loading-anim-" + shared_vars.filesInProgress.length}))
                     .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-1"}))
                     .append($("<input />").attr({type: "hidden", id: "download-form-" + shared_vars.filesInProgress.length + "-param-2"}))
-                    .append($("<button >" + file.name + "</button>").attr({type: "button", onclick: "startDownload(" + shared_vars.filesInProgress.length + ")", id: "download-form-" + shared_vars.filesInProgress.length + "-btn"}).addClass("btn btn-primary").hide())
+                    .append($("<button >" + file.name + "</button>").attr({type: "button", onclick: "startDownload(" + shared_vars.filesInProgress.length + ")", id: "download-form-" + shared_vars.filesInProgress.length + "-btn"}).addClass("btn btn-primary btn-roomy").hide())
                     );            
             shared_vars.filesInProgress.push(file.name);
             console.log(file);
