@@ -46,6 +46,12 @@ and open the template in the editor.
     margin-top:30px;    
 }
 
+#downloads-placeholder {
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+}
+
 .btn-primary:hover{
     color: #FFFFFF;
     background-color: #1E64C8;
