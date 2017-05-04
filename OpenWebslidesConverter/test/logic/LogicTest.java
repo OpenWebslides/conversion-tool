@@ -214,8 +214,8 @@ public class LogicTest {
     @Test
     public void testNestedFontDecoration() {
         Slide slide = new Slide();
-        String[] tekst = {"Hieronder staat een opsomming.", "• A", "• B", "• C", "...", "○ CA", "◌ CAA", "• D", "..."};
-        int[] level = {0, 0, 0, 0, 0, 1, 4, 0, 0};
+        String[] tekst = {"Hieronder staat een opsomming.", "• A", "• B", "• C", "...", "○ CA", "○ CB", "◌ CBA", "◌ CBB", "• D", "..."};
+        int[] level = {0, 0, 0, 0, 0, 1, 1, 4, 4, 0, 0};
         for (int i = 0; i < tekst.length; i++) {
             Text text = new Text();
             Textpart textpart = new Textpart();
@@ -243,7 +243,9 @@ public class LogicTest {
                 + "§*-B-*§"
                 + "§*-C...-*§"
                 + "§%§*-CA-*§"
-                + "§%§*-CAA-*§%§%§"
+                + "§*-CB-*§"
+                + "§%§*-CBA-*§"
+                + "§*-CBB-*§%§%§"
                 + "§*-D...-*§%\n";
         assertEquals(result, text);
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
@@ -344,6 +346,5 @@ public class LogicTest {
     private String writeTextpart(Textpart tp) {
         return "-" + tp.getContent() + "-";
     }
-    
-   
+
 }

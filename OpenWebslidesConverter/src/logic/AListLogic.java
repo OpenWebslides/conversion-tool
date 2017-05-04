@@ -45,14 +45,19 @@ public abstract class AListLogic {
                     //System.out.println("currentLevel: " + currentLevel + "(" + numbers.size() + ")");
                 }
                 //Remove ppt textobjects that are being used in list
+                List<Integer> toRemove = new ArrayList<>();
+
                 //for (int i = pptobjects.size() - 1; i > (int) keys[0]; i--) {
                 for (int i = (int) keys[keys.length - 1]; i > (int) keys[0]; i--) {
-                    pptobjects.remove(i);
+                    toRemove.add(i);
                 }
-                int i = (int) keys[keys.length - 1] + 1 - keys.length;
+                int i = (int) keys[keys.length - 1] + 1;
                 while (i < pptobjects.size() && pptobjects.get(i) instanceof Text) {
-                    pptobjects.remove(i);
+                    toRemove.add(i);
                     i++;
+                }
+                for (i = toRemove.size() - 1; i >= 0; i--) {
+                    pptobjects.remove((int) toRemove.get(i));
                 }
                 pptobjects.set((int) keys[0], lists.get(0));
             }

@@ -3,6 +3,8 @@ package logic;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import objects.PPTObject;
 import objects.Slide;
 import objects.Text;
@@ -31,7 +33,12 @@ public class UnorderedListLogic extends AListLogic {
                 Textpart tp = text.getTextparts().get(0);
                 int x = (int) tp.getXPosition();
                 char symbol = text.getTextparts().get(0).getContent().charAt(0);
-                if (!((symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z') || (symbol >= '0' && symbol <= '9'))) {
+
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(symbol + "");
+
+                //if (!((symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z') || (symbol >= '0' && symbol <= '9'))) {
+                if (matcher.find()) {
                     if (levelPerXPos.containsKey(x) || (!levelPerXPos.containsKey(x) && x > lastX)) {
                         if (!levelPerXPos.containsKey(x) && x > lastX) {
                             levelPerXPos.put(x, lastLevel + 1);
