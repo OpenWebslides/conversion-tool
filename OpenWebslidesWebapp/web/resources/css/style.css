@@ -5,7 +5,7 @@ and open the template in the editor.
 */
 /* 
     Created on : 18-mrt-2017, 11:43:19
-    Author     : Joann
+    Author     : Joann / Laurens
 */
 
 @font-face
@@ -22,12 +22,14 @@ and open the template in the editor.
 
 #field-download{    
     margin-top: 10px;
+    background-color: rgb(244, 247, 252);
 }
 
 #field-download-all{
     display:block;
     margin-left:auto;
     margin-right:auto;
+    background-color: rgb(244, 247, 252);
 }
 
 .btn, .btn:active, .btn:focus{
@@ -40,6 +42,7 @@ and open the template in the editor.
     margin:0 auto;
     padding:10px;
     width:95%;
+    opacity: 0.85;
 }
 
 #collapse-options{
