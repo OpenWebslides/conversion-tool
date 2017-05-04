@@ -52,10 +52,15 @@ public class LogicTest {
     }
 
     @Test
-    public void testOrderedList2() {
+    public void testOrderedList() {
+        testNumberedList();
+        testAlpList();
+    }
+
+    private void testAlpList() {
         Slide slide = new Slide();
-        String[] tekst = {"Hieronder staat een opsomming.", "1) Een", "2) Twee", "3) Drie", "Nog altijd 3", "1) Drie.Een", "1) Drie.Een.Een", "4) Vier", "Nog altijd 4"};
-        int[] level = {0, 0, 0, 0, 0, 1, 5, 0, 0};
+        String[] tekst = {"Hieronder staat een opsomming.", "A. Een", "B. Twee", "C. Drie", "Nog altijd 3", "A. Drie.Een", "A. Drie.Een.Een", "D. Vier", "Nog altijd 4"};
+        int[] level = {0, 4, 4, 4, 4, 8, 13, 4, 4};
         for (int i = 0; i < tekst.length; i++) {
             Text text = new Text();
             Textpart textpart = new Textpart();
@@ -74,13 +79,56 @@ public class LogicTest {
 
         for (Slide s : ppt.getSlides()) {
             for (PPTObject obj : s.getPptObjects()) {
-                if (obj instanceof PPTList) {
-                    text += writePPTList((PPTList) obj);
-                }
+                text += writePPTObject(obj);
             }
         }
 
-        String result = "Een\nTwee\nDrieNog altijd 3\nDrie.Een\nDrie.Een.Een\nVierNog altijd 4\n";
+        String result = "*-Hieronder staat een opsomming.-*\n"
+                + "°§*-Een-*§"
+                + "§*-Twee-*§"
+                + "§*-DrieNog altijd 3-*§"
+                + "§°§*-Drie.Een-*§"
+                + "§°§*-Drie.Een.Een-*§°§°§"
+                + "§*-VierNog altijd 4-*§°\n";
+
+        assertEquals(result, text);
+        assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
+    }
+
+    private void testNumberedList() {
+        Slide slide = new Slide();
+        String[] tekst = {"Hieronder staat een opsomming.", "1) Een", "2) Twee", "3) Drie", "Nog altijd 3", "1) Drie.Een", "1) Drie.Een.Een", "4) Vier", "Nog altijd 4"};
+        int[] level = {0, 4, 4, 4, 4, 8, 13, 4, 4};
+        for (int i = 0; i < tekst.length; i++) {
+            Text text = new Text();
+            Textpart textpart = new Textpart();
+            textpart.setContent(tekst[i]);
+            textpart.setXPosition(level[i]);
+            text.addTextpart(textpart);
+            slide.getPptObjects().add(text);
+        }
+        String text = "";
+
+        PPT ppt = new PPT();
+        ppt.getSlides().add(slide);
+
+        Logic logic = new Logic();
+        logic.format(ppt);
+
+        for (Slide s : ppt.getSlides()) {
+            for (PPTObject obj : s.getPptObjects()) {
+                text += writePPTObject(obj);
+            }
+        }
+
+        String result = "*-Hieronder staat een opsomming.-*\n"
+                + "°§*-Een-*§"
+                + "§*-Twee-*§"
+                + "§*-DrieNog altijd 3-*§"
+                + "§°§*-Drie.Een-*§"
+                + "§°§*-Drie.Een.Een-*§°§°§"
+                + "§*-VierNog altijd 4-*§°\n";
+
         assertEquals(result, text);
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
@@ -108,13 +156,17 @@ public class LogicTest {
 
         for (Slide s : ppt.getSlides()) {
             for (PPTObject obj : s.getPptObjects()) {
-                if (obj instanceof PPTList) {
-                    text += writePPTList((PPTList) obj);
-                }
+                text += writePPTObject(obj);
             }
         }
 
-        String result = "Een\nTwee\nDrieNog altijd 3\nDrie.Een\nDrie.Een.Een\nVierNog altijd 4\n";
+        String result = "*-Hieronder staat een opsomming.-*\n"
+                + "%§*-Een-*§"
+                + "§*-Twee-*§"
+                + "§*-DrieNog altijd 3-*§"
+                + "§%§*-Drie.Een-*§"
+                + "§%§*-Drie.Een.Een-*§%§%§"
+                + "§*-VierNog altijd 4-*§%\n";
         assertEquals(result, text);
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
@@ -159,20 +211,99 @@ public class LogicTest {
         assertEquals("Dit \nis \neen zin\n...\n", str);
     }
 
-    private String writePPTList(PPTList list) {
-        String res = "";
+    @Test
+    public void testTitleFirst() {
+        Slide slide = new Slide();
+        String[] tekst = {"Paragraaf 1", "Paragraaf 2", "Titel 1", "Paragraaf 3", "Titel 2", "Paragraaf 4"};
 
-        for (PPTObject obj2 : list.getBullets()) {
-            if (obj2 instanceof Text) {
-                for (Textpart p : ((Text) obj2).getTextparts()) {
-                    res += p.getContent();
-                }
-                res += "\n";
-            } else if (obj2 instanceof PPTList) {
-                res += writePPTList((PPTList) obj2);
+        for (String t : tekst) {
+            Textpart tp = new Textpart();
+            tp.setContent(t);
+            if (t.contains("Titel")) {
+                tp.setSize(4400);
+            } else {
+                tp.setSize(1800);
             }
+            Text text = new Text();
+            text.addTextpart(tp);
+            slide.getPptObjects().add(text);
         }
 
+        PPT ppt = new PPT();
+        ppt.getSlides().add(slide);
+
+        Logic logic = new Logic();
+        logic.format(ppt);
+
+        boolean titleOK = true;
+        boolean otherObjects = false;
+
+        for (PPTObject obj : ppt.getSlides().get(0).getPptObjects()) {
+            if (!(obj instanceof Title)) {
+                otherObjects = true;
+            } else if (otherObjects) {
+                titleOK = false;
+            }
+        }
+        assertTrue(titleOK);
+    }
+
+    /*
+        ** tekst
+        $$ title
+        -- textpart
+        °° ol
+        %% ul
+        §§ bullet
+     */
+    private String writePPTObject(PPTObject obj) {
+        String res = "";
+        if (obj instanceof Text) {
+            res += writeText((Text) obj);
+        } else if (obj instanceof PPTList) {
+            res += writePPTList((PPTList) obj);
+        } else if (obj instanceof Title) {
+            res += writeTitle((Title) obj);
+        }
+        res += "\n";
         return res;
+    }
+
+    private String writePPTList(PPTList list) {
+        String res = "";
+        String li = "%";
+        if (list.isOrdered()) {
+            li = "°";
+        }
+        for (PPTObject obj : list.getBullets()) {
+            res += "§";
+            if (obj instanceof Text) {
+                res += writeText((Text) obj);
+            } else if (obj instanceof PPTList) {
+                res += writePPTList((PPTList) obj);
+            }
+            res += "§";
+        }
+        return li + res + li;
+    }
+
+    private String writeText(Text text) {
+        String res = "";
+        for (Textpart tp : text.getTextparts()) {
+            res += writeTextpart(tp);
+        }
+        return "*" + res + "*";
+    }
+
+    private String writeTitle(Title title) {
+        String res = "";
+        for (Textpart tp : title.getTextparts()) {
+            res += writeTextpart(tp);
+        }
+        return "$" + res + "$";
+    }
+
+    private String writeTextpart(Textpart tp) {
+        return "-" + tp.getContent() + "-";
     }
 }
