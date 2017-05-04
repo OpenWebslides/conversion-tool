@@ -11,6 +11,7 @@ import conversion.pdf.util.PDFException;
 import conversion.pdf.util.PDFHyperlinkExtractor;
 import conversion.pdf.util.PDFTextExtractor;
 import conversion.pdf.util.PDFImageExtractor;
+import conversion.pdf.util.TableIntelligence;
 import conversion.pdf.util.TextIntelligence;
 import conversion.pdf.util.getImageLocations;
 import conversion.pdf.util.getImageLocations2;
@@ -44,6 +45,7 @@ public class PDFConverter implements IConverter {
     private Output output;
     private int currentPageNumber;
     private ImageIntelligence imageIntel;
+    private TableIntelligence tableIntel;
     private boolean isOpen;
     /**
      * The parameter file has to be a PDF file. It will be decrypted for further
@@ -65,6 +67,7 @@ public class PDFConverter implements IConverter {
                 document.decrypt("");
             }
             imageIntel = new ImageIntelligence();
+            tableIntel = new TableIntelligence();
             
             isOpen = true;
         } catch (CryptographyException ex) {
@@ -122,8 +125,10 @@ public class PDFConverter implements IConverter {
             output.println("io exception bij ophalen afbeeldingen...");
         }
         parse(ppt);
-        
+         
+        tableIntel.placeTables(ppt,tableIntel.extractTables(document));
         imageIntel.checkImages(ppt, Location);
+        //tableIntel.checkTables(ppt);
         closeDocument();
 
     }
@@ -142,7 +147,11 @@ public class PDFConverter implements IConverter {
             output.println("IO exception... ");
         }
         parse(ppt);
+        
+        tableIntel.placeTables(ppt,tableIntel.extractTables(document));
+        
         imageIntel.checkImages(ppt, afbeeldingen);
+        //tableIntel.checkTables(ppt);
         closeDocument();
     }
 
@@ -170,6 +179,7 @@ public class PDFConverter implements IConverter {
                 PDPage page = (PDPage) allPages.get(i);
                 System.out.println("Processing page: " + i);
                 currentPageNumber = i;
+                
                 //elke pagina is 1 slide!!! -> als slide af is moet je die hier dus aanmaken en de objecten uit extractor halen
                 PDStream contents = page.getContents();
                 if (contents != null) {
