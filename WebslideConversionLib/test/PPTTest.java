@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.zip.ZipOutputStream;
 import logger.Logger;
 import objects.PPT;
+import objects.Slide;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import output.StdLogOutput;
@@ -42,6 +43,10 @@ public class PPTTest {
         PPT ppt = new PPT();
 
         converter.parse(ppt,zip,"images");
+        
+        for(Slide slide : ppt.getSlides()){
+            System.out.println(slide.toString());   
+        }
         zip.close();
         } catch (IllegalArgumentException ex) {
             java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
