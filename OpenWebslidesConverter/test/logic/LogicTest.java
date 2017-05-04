@@ -51,7 +51,7 @@ public class LogicTest {
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
-    @Test
+    //@Test
     public void testOrderedList() {
         testNumberedList();
         testAlpList();
@@ -133,7 +133,7 @@ public class LogicTest {
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
-    @Test
+    //@Test
     public void testUnorderedList() {
         Slide slide = new Slide();
         String[] tekst = {"Hieronder staat een opsomming.", "• Een", "• Twee", "• Drie", "Nog altijd 3", "○ Drie.Een", "◌ Drie.Een.Een", "• Vier", "Nog altijd 4"};
@@ -171,7 +171,7 @@ public class LogicTest {
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
-    @Test
+    //@Test
     public void testFontDecoration() {
         Slide slide = new Slide();
         String[] tekst = {"Dit ", "is ", "een ", "zin", ".", ".", "."};
@@ -212,6 +212,44 @@ public class LogicTest {
     }
 
     @Test
+    public void testNestedFontDecoration() {
+        Slide slide = new Slide();
+        String[] tekst = {"Hieronder staat een opsomming.", "• A", "• B", "• C", "...", "○ CA", "◌ CAA", "• D", "..."};
+        int[] level = {0, 0, 0, 0, 0, 1, 4, 0, 0};
+        for (int i = 0; i < tekst.length; i++) {
+            Text text = new Text();
+            Textpart textpart = new Textpart();
+            textpart.setXPosition(level[i]);
+            textpart.setContent(tekst[i]);
+            text.addTextpart(textpart);
+            slide.getPptObjects().add(text);
+        }
+        String text = "";
+
+        PPT ppt = new PPT();
+        ppt.getSlides().add(slide);
+
+        Logic logic = new Logic();
+        logic.format(ppt);
+
+        for (Slide s : ppt.getSlides()) {
+            for (PPTObject obj : s.getPptObjects()) {
+                text += writePPTObject(obj);
+            }
+        }
+
+        String result = "*-Hieronder staat een opsomming.-*\n"
+                + "%§*-A-*§"
+                + "§*-B-*§"
+                + "§*-C...-*§"
+                + "§%§*-CA-*§"
+                + "§%§*-CAA-*§%§%§"
+                + "§*-D...-*§%\n";
+        assertEquals(result, text);
+        assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
+    }
+
+    //@Test
     public void testTitleFirst() {
         Slide slide = new Slide();
         String[] tekst = {"Paragraaf 1", "Paragraaf 2", "Titel 1", "Paragraaf 3", "Titel 2", "Paragraaf 4"};
@@ -305,5 +343,18 @@ public class LogicTest {
 
     private String writeTextpart(Textpart tp) {
         return "-" + tp.getContent() + "-";
+    }
+    
+    @Test
+    private void testTable(){
+        PPT ppt = new PPT();
+        Slide slide = new Slide();
+        
+        Table t = new Table();
+        Text te = new Text();
+        
+        
+        
+        
     }
 }

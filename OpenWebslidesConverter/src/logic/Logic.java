@@ -36,7 +36,6 @@ public class Logic implements ILogic {
         while (i < text.getTextparts().size() - 1) {
             Textpart tp1 = text.getTextparts().get(i);
             Textpart tp2 = text.getTextparts().get(i + 1);
-
             while (tp1.getType().equals(tp2.getType()) && i < text.getTextparts().size() - 1) {
                 i++;
                 tp1.setContent(tp1.getContent() + tp2.getContent());
@@ -52,19 +51,24 @@ public class Logic implements ILogic {
         }
     }
 
+    private void groupTextparts(PPTList list) {
+        for (PPTObject obj : list.getBullets()) {
+            groupTextparts(obj);
+        }
+    }
+
+    private void groupTextparts(PPTObject obj) {
+        if (obj instanceof Text) {
+            groupTextparts((Text) obj);
+        } else if (obj instanceof PPTList) {
+            groupTextparts((PPTList) obj);
+        }
+    }
+
     private void groupFontdecoration(PPT ppt) {
         for (Slide slide : ppt.getSlides()) {
             for (PPTObject obj : slide.getPptObjects()) {
-                if (obj instanceof Text) {
-                    groupTextparts((Text) obj);
-                } else if (obj instanceof PPTList) {
-                    List<PPTObject> pptObjects = ((PPTList) obj).getBullets();
-                    for (PPTObject obj2 : pptObjects) {
-                        if (obj2 instanceof Text) {
-                            groupTextparts((Text) obj2);
-                        }
-                    }
-                }
+                groupTextparts(obj);
             }
         }
     }
