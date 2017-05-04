@@ -51,7 +51,7 @@ public class LogicTest {
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
-    //@Test
+    @Test
     public void testOrderedList() {
         testNumberedList();
         testAlpList();
@@ -133,7 +133,7 @@ public class LogicTest {
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
-    //@Test
+    @Test
     public void testUnorderedList() {
         Slide slide = new Slide();
         String[] tekst = {"Hieronder staat een opsomming.", "• Een", "• Twee", "• Drie", "Nog altijd 3", "○ Drie.Een", "◌ Drie.Een.Een", "• Vier", "Nog altijd 4"};
@@ -171,7 +171,7 @@ public class LogicTest {
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
-    //@Test
+    @Test
     public void testFontDecoration() {
         Slide slide = new Slide();
         String[] tekst = {"Dit ", "is ", "een ", "zin", ".", ".", "."};
@@ -249,7 +249,7 @@ public class LogicTest {
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
-    //@Test
+    @Test
     public void testTitleFirst() {
         Slide slide = new Slide();
         String[] tekst = {"Paragraaf 1", "Paragraaf 2", "Titel 1", "Paragraaf 3", "Titel 2", "Paragraaf 4"};
@@ -345,16 +345,5 @@ public class LogicTest {
         return "-" + tp.getContent() + "-";
     }
     
-    @Test
-    private void testTable(){
-        PPT ppt = new PPT();
-        Slide slide = new Slide();
-        
-        Table t = new Table();
-        Text te = new Text();
-        
-        
-        
-        
-    }
+   
 }

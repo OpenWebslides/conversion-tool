@@ -49,6 +49,11 @@ public abstract class AListLogic {
                 for (int i = (int) keys[keys.length - 1]; i > (int) keys[0]; i--) {
                     pptobjects.remove(i);
                 }
+                int i = (int) keys[keys.length - 1] + 1 - keys.length;
+                while (i < pptobjects.size() && pptobjects.get(i) instanceof Text) {
+                    pptobjects.remove(i);
+                    i++;
+                }
                 pptobjects.set((int) keys[0], lists.get(0));
             }
         }
@@ -81,7 +86,7 @@ public abstract class AListLogic {
     private void consecutiveText(List<PPTObject> pptobjects, Text text, int i, Object[] keys) {
         //Add consecutive text parts
         int nextLineNr = ((int) keys[i]) + 1;
-        while ((i < keys.length - 1 && nextLineNr < (int) keys[i + 1])) {//|| (i == keys.length - 1 && nextLineNr < pptobjects.size())) {
+        while ((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) {
             if (pptobjects.get(nextLineNr) instanceof Text) {
                 text.getTextparts().addAll(((Text) pptobjects.get(nextLineNr)).getTextparts());
             }
