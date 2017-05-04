@@ -16,88 +16,33 @@ import javafx.util.Pair;
 
 import objects.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import static org.apache.poi.hssf.usermodel.HeaderFooter.file;
 import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
 import technology.tabula.PageIterator;
 import technology.tabula.RectangularTextContainer;
 import technology.tabula.Table;
-import technology.tabula.TextElement;
 import technology.tabula.extractors.BasicExtractionAlgorithm;
 import technology.tabula.extractors.ExtractionAlgorithm;
 
 /**
- * This class can be used to check if a textpart could contain a table.
+ * This class extracts tables from a pdf.
  *
  * @author Gertjan
  */
 public class TableIntelligence {
 
-    /*public void checkTables(PPT ppt) {
-     for (Slide slide : ppt.getSlides()) {
-     List<Integer> toRemove = new ArrayList<>();
-
-     int i = 0;
-     while (i < slide.getPptObjects().size()) {
-     if (slide.getPptObjects().get(i) != null && slide.getPptObjects().get(i) instanceof Text) {
-     Text text = (Text) slide.getPptObjects().get(i);
-     //System.out.println("Tekstpart behandeld: " + tp.getContent() + " " + tp.getXPosition() + "," + tp.getYPosition());
-     if (isTable(text)) {
-     //...
-     //make table!
-                        
-     //add next line to table 
-     int ii = i;
-     while (ii + 1 < slide.getPptObjects().size() && slide.getPptObjects().get(ii + 1) instanceof Text && isTable((Text) slide.getPptObjects().get(ii + 1))) {
-     //zolang het volgende ook nog een tabel kan zijn
-                            
-                            
-     toRemove.add(ii + 1);
-     ii++;
-     //System.out.println("Tekstpart behandeld: " + tp.getContent() + " " + tp.getXPosition() + "," + tp.getYPosition());
-
-     }
-
-     //slide.getPptObjects().set(i, text); !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-     i = ii + 1;
-     //System.out.println(i);
-     } else {
-     //not a table... 
-     i++;
-     //System.out.println(i);
-     }
-     } else {
-     //no text
-     i++;
-     }
-     }
-     Object[] keys = toRemove.toArray();
-     for (int j = keys.length - 1; j >= 0; j--) {
-     slide.getPptObjects().remove((int) keys[j]);
-     }
-     }
-     }
+    /**
+     * returns an arraylist with pairs of int and table objects. The int
+     * represents the pagenumber. The array is filled with info from a
+     * PDDocument.
+     *
+     * @param d
+     * @return
      */
-    /*
-    private boolean isTable(Text text) {
-        boolean isTabel = false;
-
-        //table logic here
-        ArrayList<Textpart> parts = text.getTextparts();
-        for (Textpart part : parts) {
-            // System.out.println("found part on posX: "+ part.getXPosition());
-        }
-
-        //System.out.println("return");
-        return isTabel;
-    }
-    */
-
-    public ArrayList<Pair<Integer,objects.Table>> extractTables(PDDocument d) {
+    public ArrayList<Pair<Integer, objects.Table>> extractTables(PDDocument d) {
         ObjectExtractor oe;
         int pagenr = -1;
-        ArrayList<Pair<Integer,objects.Table>> tabellen = new ArrayList();
+        ArrayList<Pair<Integer, objects.Table>> tabellen = new ArrayList();
         try {
             oe = new ObjectExtractor(d);
 
@@ -115,7 +60,7 @@ public class TableIntelligence {
                         //System.out.print("|");
                         for (RectangularTextContainer cell : row) {
                             //System.out.print(cell.getText() + "|");
-                            
+
                             if (cell.getText() != "") {
                                 teller++;
                             }
@@ -127,14 +72,13 @@ public class TableIntelligence {
                             //System.out.print(" =tabel!!!");
                             objects.Row rij = new objects.Row();
                             for (RectangularTextContainer cell : row) {
-                                rij.getCells().add(new objects.Cell(cell.getText(), 0,0));
+                                rij.getCells().add(new objects.Cell(cell.getText(), 0, 0));
                             }
                             tabel.getRows().add(rij);
-                        }
-                        else if(growing = true){
-                        //hij was aan het groeien maar nu heb je dingen te kort -> tabel afsluiten
-                           tabellen.add(new Pair(pagenr,tabel));
-                           tabel = new objects.Table();
+                        } else if (growing = true) {
+                            //hij was aan het groeien maar nu heb je dingen te kort -> tabel afsluiten
+                            tabellen.add(new Pair(pagenr, tabel));
+                            tabel = new objects.Table();
                         }
                         //System.out.println("");
                     }
@@ -146,9 +90,36 @@ public class TableIntelligence {
         }
         return tabellen;
     }
-    
-    public void placeTables(PPT ppt, ArrayList<Pair<Integer, objects.Table>> tab){
-        
+
+    /**
+     * adds all tables on the right place
+     *
+     * @param ppt
+     * @param tab
+     */
+    public void placeTables(PPT ppt, ArrayList<Pair<Integer, objects.Table>> tab) {
+        int pagenr = 0;
+        /*  first place the slides on the page where they belong
+         next remove te double text per page.  */
+        for (Slide slide : ppt.getSlides()) {
+           
+            for (Pair<Integer, objects.Table> t : tab) {
+                if (t.getKey() == pagenr) {
+                    slide.getPptObjects().add(t.getValue());
+                    //tab.remove(t); //verwijderen bespaard zoekwerk voor toekomst! maar gaat blijkbaar niet in foreach
+                }
+            }
+            pagenr++;
+        }
+        RemoveDouble(ppt);
+    }   
+
+    /**
+     * removes text that is found in a table on the same page. (once, because double extracted).
+     * @param ppt 
+     */
+    private void RemoveDouble(PPT ppt) {
+
     }
-    
+
 }
