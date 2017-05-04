@@ -34,4 +34,13 @@ public class PPT {
         this.insight = insight;
     }
     
+    @Override
+    public String toString(){
+        String toret = "";
+        for(Slide slide : slides){
+            toret += (slide.toString());
+        }
+        return toret;
+    }
+    
 }
