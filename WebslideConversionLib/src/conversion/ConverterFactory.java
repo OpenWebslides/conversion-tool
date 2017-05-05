@@ -29,8 +29,8 @@ public class ConverterFactory {
      * Return an IConverter object
      * The correct implementation is decided by the file type
      * @param file File
-     * @return 
-     * @throws conversion.pdf.util.PDFException 
+     * @return  IConverter converter
+     * @throws conversion.pdf.util.PDFException exception
      */
     public static IConverter getConverter(File file) throws IllegalArgumentException, PDFException{
 

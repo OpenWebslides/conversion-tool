@@ -21,7 +21,7 @@ public interface IConverter {
      *
      * @param ppt PPT
      * @param saveLocation String
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception exception
      */
     public void parse(PPT ppt, String saveLocation) throws Exception;
     

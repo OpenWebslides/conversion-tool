@@ -30,8 +30,8 @@ public class ImageIntelligence {
      * correct on Page level. (the exact order of placeholder and image is
      * lost).
      *
-     * @param ppt
-     * @param afbeeldingen
+     * @param ppt PPT
+     * @param afbeeldingen ArrayList
      *
      */
     public void checkImages(PPT ppt, ArrayList<String> afbeeldingen) {
@@ -66,8 +66,8 @@ public class ImageIntelligence {
      * placeholders this is correct on Page level. (the exact order of
      * placeholder and image is lost).
      *
-     * @param ppt
-     * @param location
+     * @param ppt PPT
+     * @param location String
      */
     public void checkImages(PPT ppt, String location) {
         //System.out.println("checking from location...");

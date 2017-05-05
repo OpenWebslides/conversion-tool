@@ -51,8 +51,8 @@ public class PDFConverter implements IConverter {
      * The parameter file has to be a PDF file. It will be decrypted for further
      * use.
      *
-     * @param file
-     * @throws conversion.pdf.util.PDFException
+     * @param file File
+     * @throws conversion.pdf.util.PDFException exception
      */
     public PDFConverter(File file) throws PDFException {
         this.file = file;
@@ -101,9 +101,9 @@ public class PDFConverter implements IConverter {
      * represents the location where a images folder will be created and
      * filled...
      *
-     * @param ppt
-     * @param Location
-     * @throws conversion.pdf.util.PDFException
+     * @param ppt PPT
+     * @param Location String
+     * @throws conversion.pdf.util.PDFException exception
      */
     @Override
     public void parse(PPT ppt, String Location) throws PDFException {
