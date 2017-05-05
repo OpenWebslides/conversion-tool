@@ -17,6 +17,7 @@ import java.util.logging.Level;
 import java.util.zip.ZipOutputStream;
 import logger.Logger;
 import objects.PPT;
+import objects.Slide;
 import org.junit.Test;
 import output.StdLogOutput;
 
@@ -49,6 +50,9 @@ public class PDFTest {
      }
      }*/
 
+    
+    
+    
     @Test
     public void main1() {
         File file = new File("C:\\temp\\tabellen.pdf");
@@ -59,6 +63,7 @@ public class PDFTest {
             PPT ppt = new PPT();
 
             converter.parse(ppt, "C:\\temp\\output");
+            SchrijfUit(ppt);
             PDFConverter pdfc = (PDFConverter) converter; //even casten, deze methode is enkel voor testing...
 
         } catch (PDFException ex) {
@@ -91,6 +96,7 @@ public class PDFTest {
             PPT ppt = new PPT();
             converter.parse(ppt, zos, "images");
             zos.close();
+            SchrijfUit(ppt);
         } catch (IllegalArgumentException ex) {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PDFException ex) {
@@ -100,6 +106,12 @@ public class PDFTest {
         }
         
         
+    }
+    
+    public void SchrijfUit(PPT ppt){
+        for(Slide slide : ppt.getSlides()){
+            System.out.println(slide.getContent());
+        }
     }
 
 }

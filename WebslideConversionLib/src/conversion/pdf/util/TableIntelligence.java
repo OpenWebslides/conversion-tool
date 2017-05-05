@@ -102,7 +102,7 @@ public class TableIntelligence {
         /*  first place the slides on the page where they belong
          next remove te double text per page.  */
         for (Slide slide : ppt.getSlides()) {
-           
+
             for (Pair<Integer, objects.Table> t : tab) {
                 if (t.getKey() == pagenr) {
                     slide.getPptObjects().add(t.getValue());
@@ -112,14 +112,73 @@ public class TableIntelligence {
             pagenr++;
         }
         RemoveDouble(ppt);
-    }   
+    }
 
     /**
-     * removes text that is found in a table on the same page. (once, because double extracted).
-     * @param ppt 
+     * removes text that is found in a table on the same page. (once, because
+     * double extracted).
+     *
+     * @param ppt
      */
     private void RemoveDouble(PPT ppt) {
 
+        for (Slide slide : ppt.getSlides()) {
+            ArrayList<objects.Text> removeFromSlide = new ArrayList();
+            for (PPTObject obj : slide.getPptObjects()) {
+                if (obj instanceof objects.Table) {
+                    objects.Table tab = (objects.Table) obj;
+                    for (objects.Row rij : tab.getRows()) {
+                        //System.out.print("rij gevonden: ");
+                        //System.out.println(rij.getContent());
+                        ArrayList<String> cellen = new ArrayList();
+                        for (objects.Cell cel : rij.getCells()) {
+                            cellen.add(cel.getContent());
+                        }
+                        removeFromSlide.addAll(removeTextFromSlide(slide, cellen));
+                    }
+                }
+            }
+
+            for (Text txt : removeFromSlide) {
+                slide.getPptObjects().remove(txt);
+            }
+
+        }
+    }
+
+    private ArrayList<Text> removeTextFromSlide(objects.Slide slide, ArrayList<String> cellen) {
+        //System.out.println("cellen:");
+        ArrayList<String> removeFromCellen = new ArrayList();
+        for (String s : cellen) {
+            if (s.isEmpty()) {
+                removeFromCellen.add(s);
+            } else {
+               // System.out.println(s);
+            }
+        }
+        //System.out.println("===============");
+        for (String s : removeFromCellen) {
+            cellen.remove(s);
+        }
+
+        ArrayList<objects.Text> toRemove = new ArrayList();
+        for (PPTObject obj : slide.getPptObjects()) {
+            if (obj instanceof objects.Text) {
+                objects.Text t = (objects.Text) obj;
+                int i = 0;
+                for (Textpart tp : t.getTextparts()) {
+                    while (i < cellen.size() && tp.getContent().trim().equals(cellen.get(i).trim())) {
+                       // System.out.println("vergeleken: " + tp.getContent() + cellen.get(i));
+                        i++;
+                    }
+                }
+                //System.out.println("size: " + cellen.size() + " i: " + i);
+                if (i == cellen.size()) {
+                    toRemove.add(t);
+                }
+            }
+        }
+        return toRemove;
     }
 
 }
