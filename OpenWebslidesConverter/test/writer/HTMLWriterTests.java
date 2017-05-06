@@ -745,7 +745,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<video controls>\n\t\t\t<source src=\"source.mp4\" type=\"video/mp4\">\n\t\t</video>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<video controls>\n\t\t\t<source src=\"images/source.mp4\" type=\"video/mp4\">\n\t\t</video>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
@@ -773,7 +773,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<video controls>\n\t\t\t<source src=\"source.ogg\" type=\"video/ogg\">\n\t\t</video>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<video controls>\n\t\t\t<source src=\"images/source.ogg\" type=\"video/ogg\">\n\t\t</video>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
@@ -801,7 +801,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<video controls>\n\t\t\t<source src=\"source.webm\" type=\"video/webm\">\n\t\t</video>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<video controls>\n\t\t\t<source src=\"images/source.webm\" type=\"video/webm\">\n\t\t</video>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
@@ -931,6 +931,92 @@ public class HTMLWriterTests {
         //System.out.println(result);
         
         String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<figure>\n\t\t\t<img src=\"images/image1.jpg\">\n\t\t</figure>\n\t\t<div class=\"footer\">\n\t\t\t<p>Dit is de footer</p>\n\t\t</div>\n\t</div>";
+        
+        Assert.assertEquals(expected, result);
+    }
+    
+    @Test
+    //1 slide with a youtube video
+    public void writePPTTest23() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            video.setLink("https://www.youtube.com/embed/yMjPqr1s-cg");
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<iframe class=\"cover width height\" src=\"https://www.youtube.com/embed/yMjPqr1s-cg?cc_load_policy=1&iv_load_policy=3&disablekb=1&rel=0&showinfo=0&autohide=1\"></iframe>\n\t</div>";
+        
+        Assert.assertEquals(expected, result);
+    }
+    
+    @Test
+    //1 slide with a youtube video with size
+    public void writePPTTest24() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            video.setLink("https://www.youtube.com/embed/yMjPqr1s-cg");
+            video.getDimension().setSize(60, 40);
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<iframe width=\"60%\" height=\"40%\" src=\"https://www.youtube.com/embed/yMjPqr1s-cg?cc_load_policy=1&iv_load_policy=3&disablekb=1&rel=0&showinfo=0&autohide=1\"></iframe>\n\t</div>";
+        
+        Assert.assertEquals(expected, result);
+    }
+    
+    @Test
+    //1 slide with a youtube video fullscreen
+    public void writePPTTest25() throws IOException{
+        String result;
+        try(StringWriter sw = new StringWriter(); BufferedWriter out = new BufferedWriter(sw)){
+            PPT ppt = new PPT();
+            Slide slide = new Slide();
+            
+            Video video = new Video();
+            video.setLink("https://www.youtube.com/embed/yMjPqr1s-cg");
+            video.getDimension().setSize(95, 95);
+            
+            slide.getPptObjects().add(video);
+            ppt.getSlides().add(slide);
+            
+            Writer writer = new HTMLWriter(new StdOutput());
+            writer.write(out, ppt);
+            
+            out.flush();
+            result = sw.toString();
+        }
+        //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
+        //System.out.println(result);
+        
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<iframe class=\"cover width height\" src=\"https://www.youtube.com/embed/yMjPqr1s-cg?cc_load_policy=1&iv_load_policy=3&disablekb=1&rel=0&showinfo=0&autohide=1\"></iframe>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }
