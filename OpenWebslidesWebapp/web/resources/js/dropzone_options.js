@@ -13,7 +13,15 @@ $("#btn-options").click(function(){
    if($("#collapse-options").is(":hidden")) $("#collapse-options").show(1000)    
    else $("#collapse-options:visible").hide(1000);
 });
-        
+
+// hide the content of the manual
+$("#field-manual-content").hide();
+
+$("#field-manual-btn").click(function(){    
+   if($("#field-manual-content").is(":hidden")) $("#field-manual-content").show(500)    
+   else $("#field-manual-content:visible").hide(500);
+});
+
 
 var dropzone = Dropzone.options.myAwesomeDropzone = {
     paramName: "file", // The name that will be used to transfer the file
