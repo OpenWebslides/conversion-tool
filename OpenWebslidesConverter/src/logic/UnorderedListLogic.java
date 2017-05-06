@@ -27,7 +27,11 @@ public class UnorderedListLogic extends AListLogic {
         int lastLevel = -1;
         int lastX = -1;
 
-        for (PPTObject object : slide.getPptObjects()) {
+        while (index_line < slide.getPptObjects().size()) {
+
+            //for (PPTObject object : slide.getPptObjects()) {
+            PPTObject object = slide.getPptObjects().get(index_line);
+
             if (object instanceof Text && !((Text) object).getTextparts().isEmpty() && ((Text) object).getTextparts().get(0).getContent() != null && !((Text) object).getTextparts().get(0).getContent().equals("")) {
                 Text text = (Text) object;
                 Textpart tp = text.getTextparts().get(0);
@@ -55,6 +59,8 @@ public class UnorderedListLogic extends AListLogic {
                         lastX = x;
                     }
                 }
+            } else {
+                index_line = slide.getPptObjects().size();
             }
             index_line++;
         }

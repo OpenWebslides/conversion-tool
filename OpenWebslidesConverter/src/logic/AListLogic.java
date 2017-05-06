@@ -94,10 +94,10 @@ public abstract class AListLogic {
     private void consecutiveText(List<PPTObject> pptobjects, Text text, int i, Object[] keys) {
         //Add consecutive text parts
         int nextLineNr = ((int) keys[i]) + 1;
-        while ((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) {
-            if (pptobjects.get(nextLineNr) instanceof Text) {
-                text.getTextparts().addAll(((Text) pptobjects.get(nextLineNr)).getTextparts());
-            }
+        while (((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) && pptobjects.get(nextLineNr) instanceof Text) {
+            //if (pptobjects.get(nextLineNr) instanceof Text) {
+            text.getTextparts().addAll(((Text) pptobjects.get(nextLineNr)).getTextparts());
+            //}
             nextLineNr++;
         }
     }
