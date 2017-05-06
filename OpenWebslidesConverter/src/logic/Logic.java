@@ -23,10 +23,8 @@ public class Logic implements ILogic {
         sll.formatList(ppt, "^([A-Z][\\.)])", false, true);
         sll.formatList(ppt, "^([a-z][\\.)])", false, true);
         UnorderedListLogic ull = new UnorderedListLogic();
-        ull.formatList(ppt, "^([^a-zA-z0-9\'\"`´‘])", false, false);
-        //ull.formatList(ppt, "^([^\\w\'\"`´‘])", false, false);
-        //ull.formatList(ppt, "^([^\\p{L}])", false, false);
-
+        //ull.formatList(ppt, "^([^\\w\'\"`´‘()!?\\.])", false, false);
+        ull.formatList(ppt, "([^\\x00-\\x7E]|-)", false, false);
         groupFontdecoration(ppt);
     }
 

@@ -52,23 +52,40 @@ public class FontDecorationTest {
         logic.format(ppt);
 
         assertEquals(4, ((Text) ppt.getSlides().get(0).getPptObjects().get(0)).getTextparts().size());
-        String str = "";
+        String actual = "";
         for (Textpart tp : ((Text) ppt.getSlides().get(0).getPptObjects().get(0)).getTextparts()) {
-            str += tp.getContent() + "\n";
+            actual += tp.getContent() + "\n";
         }
-        assertEquals("Dit \nis \neen zin\n...\n", str);
+        assertEquals("Dit \nis \neen zin\n...\n", actual);
     }
 
     @Test
     public void testNestedFontDecoration() {
         Slide slide = new Slide();
-        String[] tekst = {"Hieronder staat een opsomming.", "• A", "• B", "• C", "...", "○ CA", "○ CB", "◌ CBA", "◌ CBB", "• D", "..."};
-        int[] level = {0, 0, 0, 0, 0, 1, 1, 4, 4, 0, 0};
+        String[] tekst = {"Hieronder staat een opsomming.", "• A", "• B", "• C", ".", ".", ".", "○ CA", "!=", "○ CB", "◌ CBA", "!=", ".", ".", "◌ CBB", "• D", "..."};
+        int[] level = {0, 0, 0, 0, 0, 0, 0, 2, 3, 2, 5, 6, 6, 6, 5, 0, 1};
+        boolean[] bold = {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+        boolean[] underline = {true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false};
+        boolean[] italic = {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+        boolean[] strikethrough = {true, false, false, false, false, false, false, false, false, false, false, true, false, false, false, false, false};
+
         for (int i = 0; i < tekst.length; i++) {
             Text text = new Text();
             Textpart textpart = new Textpart();
             textpart.setXPosition(level[i]);
             textpart.setContent(tekst[i]);
+            if (bold[i]) {
+                textpart.addType(FontDecoration.BOLD);
+            }
+            if (underline[i]) {
+                textpart.addType(FontDecoration.UNDERLINE);
+            }
+            if (italic[i]) {
+                textpart.addType(FontDecoration.ITALIC);
+            }
+            if (strikethrough[i]) {
+                textpart.addType(FontDecoration.STRIKETHROUH);
+            }
             text.addTextpart(textpart);
             slide.getPptObjects().add(text);
         }
@@ -76,22 +93,23 @@ public class FontDecorationTest {
         PPT ppt = new PPT();
         ppt.getSlides().add(slide);
 
+        assertEquals(17, ppt.getSlides().get(0).getPptObjects().size());
+
         Logic logic = new Logic();
         logic.format(ppt);
 
-        String text = HelpWriter.writeSlide(ppt.getSlides().get(0));
-
-        String result = "§-Hieronder staat een opsomming.-§\n"
+        String actual = HelpWriter.writeSlide(ppt.getSlides().get(0));
+        String expected = "§-Hieronder staat een opsomming.-§\n"
                 + "°~§-A-§~"
                 + "~§-B-§~"
                 + "~§-C...-§~"
-                + "~°~§-CA-§~"
+                + "~°~§-CA--!=-§~"
                 + "~§-CB-§~"
-                + "~°~§-CBA-§~"
+                + "~°~§-CBA--!=--..-§~"
                 + "~§-CBB-§~°~°~"
                 + "~§-D...-§~°\n";
 
-        assertEquals(result, text);
+        assertEquals(expected, actual);
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 

@@ -49,9 +49,8 @@ public class ListTest {
         Logic logic = new Logic();
         logic.format(ppt);
 
-        String text2 = HelpWriter.writeSlide(ppt.getSlides().get(0));
-
-        String result = "§-Hieronder staat een opsomming.-§\n"
+        String actual = HelpWriter.writeSlide(ppt.getSlides().get(0));
+        String expected = "§-Hieronder staat een opsomming.-§\n"
                 + "#~§-Een-§~"
                 + "~§-Twee-§~"
                 + "~§-DrieNog altijd 3-§~"
@@ -61,7 +60,7 @@ public class ListTest {
                 + "[CHART]\n"
                 + "§-Tekst na chart-§\n";
 
-        assertEquals(result, text2);
+        assertEquals(expected, actual);
         assertEquals(4, ppt.getSlides().get(0).getPptObjects().size());
     }
 
@@ -85,9 +84,8 @@ public class ListTest {
         Logic logic = new Logic();
         logic.format(ppt);
 
-        String text = HelpWriter.writeSlide(ppt.getSlides().get(0));
-
-        String result = "§-Hieronder staat een opsomming.-§\n"
+        String actual = HelpWriter.writeSlide(ppt.getSlides().get(0));
+        String expected = "§-Hieronder staat een opsomming.-§\n"
                 + "#~§-Een-§~"
                 + "~§-Twee-§~"
                 + "~§-DrieNog altijd 3-§~"
@@ -95,7 +93,7 @@ public class ListTest {
                 + "~#~§-Drie.Een.Een-§~#~#~"
                 + "~§-VierNog altijd 4-§~#\n";
 
-        assertEquals(result, text);
+        assertEquals(expected, actual);
         assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
     }
 
@@ -133,9 +131,8 @@ public class ListTest {
         Logic logic = new Logic();
         logic.format(ppt);
 
-        String text2 = HelpWriter.writeSlide(ppt.getSlides().get(0));
-
-        String result = "§-Tekst-§\n"
+        String actual = HelpWriter.writeSlide(ppt.getSlides().get(0));
+        String expected = "§-Tekst-§\n"
                 + "[CHART]\n"
                 + "§-Tekst-§\n"
                 + "[CHART]\n"
@@ -146,7 +143,8 @@ public class ListTest {
                 + "~°~§-Drie.Een-§~"
                 + "~°~§-Drie.Een.Een-§~°~°~"
                 + "~§-VierNog altijd 4-§~°\n";
-        assertEquals(result, text2);
+        
+        assertEquals(expected, actual);
         assertEquals(6, ppt.getSlides().get(0).getPptObjects().size());
     }
 
