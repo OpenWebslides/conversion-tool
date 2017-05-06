@@ -59,8 +59,6 @@ public class UnorderedListLogic extends AListLogic {
                         lastX = x;
                     }
                 }
-            } else {
-                index_line = slide.getPptObjects().size();
             }
             index_line++;
         }

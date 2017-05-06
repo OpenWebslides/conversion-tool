@@ -102,11 +102,25 @@ public class ListTest {
     @Test
     public void testUnorderedList() {
         Slide slide = new Slide();
+
+        Text text = new Text();
+        Textpart textpart = new Textpart();
+        textpart.setXPosition(0);
+        textpart.setContent("Tekst");
+        text.addTextpart(textpart);
+
+        Chart chart = new Chart("");
+
+        slide.getPptObjects().add(text);
+        slide.getPptObjects().add(chart);
+        slide.getPptObjects().add(text);
+        slide.getPptObjects().add(chart);
+
         String[] tekst = {"Hieronder staat een opsomming.", "• Een", "• Twee", "• Drie", "Nog altijd 3", "○ Drie.Een", "◌ Drie.Een.Een", "• Vier", "Nog altijd 4"};
         int[] level = {0, 0, 0, 0, 0, 1, 4, 0, 0};
         for (int i = 0; i < tekst.length; i++) {
-            Text text = new Text();
-            Textpart textpart = new Textpart();
+            text = new Text();
+            textpart = new Textpart();
             textpart.setXPosition(level[i]);
             textpart.setContent(tekst[i]);
             text.addTextpart(textpart);
@@ -119,17 +133,21 @@ public class ListTest {
         Logic logic = new Logic();
         logic.format(ppt);
 
-        String text = HelpWriter.writeSlide(ppt.getSlides().get(0));
+        String text2 = HelpWriter.writeSlide(ppt.getSlides().get(0));
 
-        String result = "§-Hieronder staat een opsomming.-§\n"
+        String result = "§-Tekst-§\n"
+                + "[CHART]\n"
+                + "§-Tekst-§\n"
+                + "[CHART]\n"
+                + "§-Hieronder staat een opsomming.-§\n"
                 + "°~§-Een-§~"
                 + "~§-Twee-§~"
                 + "~§-DrieNog altijd 3-§~"
                 + "~°~§-Drie.Een-§~"
                 + "~°~§-Drie.Een.Een-§~°~°~"
                 + "~§-VierNog altijd 4-§~°\n";
-        assertEquals(result, text);
-        assertEquals(2, ppt.getSlides().get(0).getPptObjects().size());
+        assertEquals(result, text2);
+        assertEquals(6, ppt.getSlides().get(0).getPptObjects().size());
     }
 
 }

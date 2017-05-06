@@ -17,9 +17,6 @@ public class Logic implements ILogic {
      */
     @Override
     public void format(PPT ppt) {
-        //Ordered list checks for multiple levels first in case there is a list in simple form
-        /*ComplexListLogic cll = new ComplexListLogic();
-        cll.formatList(ppt, "(\\d+\\.(\\d+\\.)*(?!\\d))", true, true);*/
         formatTitle(ppt);
         SimpleListLogic sll = new SimpleListLogic();
         sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", false, true);
