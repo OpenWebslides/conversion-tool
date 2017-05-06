@@ -313,17 +313,42 @@ public class HTMLWriter extends Writer implements Indentation{
     }
     
     private String toHtml(Video video){
-        if(video.getFilename() == null || !validVideoExtension(video)){
-            Placeholder ph = new Placeholder();
-            ph.setContent("video");
-            return toHtml(ph);
+        if(video.getLink() == null){ //local video
+            if(video.getFilename() == null || !validVideoExtension(video)){
+                Placeholder ph = new Placeholder();
+                ph.setContent("video");
+                return toHtml(ph);
+            }
+
+            String res = "<video controls>";
+            setTABS(++indentation);
+            res += "\n" + TABS + "<source src=\"" + getVideoSource(video) + "\" type=\"" + getVideoType(video) + "\">";
+            setTABS(--indentation);
+            return res += "\n" + TABS + "</video>";
         }
-        
-        String res = "<video controls>";
-        setTABS(++indentation);
-        res += "\n" + TABS + "<source src=\"" + video.getFilename() + "\" type=\"" + getVideoType(video) + "\">";
-        setTABS(--indentation);
-        return res += "\n" + TABS + "</video>";
+        else{ //youtube video
+            //https://www.youtube.com/embed/yMjPqr1s-cg?cc_load_policy=1&iv_load_policy=3&disablekb=1&rel=0&showinfo=0&autohide=1
+            String res = "<iframe ";
+            
+            if(video.getDimension().getWidth() > 0  && video.getDimension().getHeight() > 0 &&
+               video.getDimension().getWidth() < 90 && video.getDimension().getHeight() < 90){
+                res += "width=\""+(int)video.getDimension().getWidth()+"%\" height=\""+(int)video.getDimension().getHeight()+"%\" ";
+            }
+            else{
+                res += "class=\"cover width height\" ";
+            }
+            
+            res += "src=\""
+                    + video.getLink()
+                    + "?cc_load_policy=1&iv_load_policy=3&disablekb=1&rel=0&showinfo=0&autohide=1"
+                    + "\"></iframe>";
+            
+            return res;
+        }
+    }
+    
+    private String getVideoSource(Video video){
+        return imagesFolder + "/" + video.getFilename();
     }
     
     private boolean validVideoExtension(Video video){
