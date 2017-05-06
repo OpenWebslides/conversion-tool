@@ -48,7 +48,10 @@ public abstract class AListLogic {
                 List<Integer> toRemove = new ArrayList<>();
 
                 //for (int i = pptobjects.size() - 1; i > (int) keys[0]; i--) {
-                for (int i = (int) keys[keys.length - 1]; i > (int) keys[0]; i--) {
+                /*for (int i = (int) keys[keys.length - 1]; i > (int) keys[0]; i--) {
+                    toRemove.add(i);
+                }*/
+                for (int i = (int) keys[0] + 1; i <= (int) keys[keys.length - 1]; i++) {
                     toRemove.add(i);
                 }
                 int i = (int) keys[keys.length - 1] + 1;
