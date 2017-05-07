@@ -50,17 +50,17 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         $("#btn-cancel").click(function () {
             //console.log("Clicked btn cancel");
             dropzone.removeAllFiles(true);
+            $("#btn-convert").attr('disabled','true');
         });
         dropzone.on("sending", function (file, xhr, formData) {
             //console.log(xhr);
             formData.append("output-type", $('input[name="output_type"]:checked').val());
             //console.log("Sending");
         });
-        dropzone.on("error", function (file, message) {
+        dropzone.on("error", function (file) {
             //console.log("Error");
             if (!file.accepted)
-                this.removeFile(file);
-            $("#message_alert").text(message);
+                this.removeFile(file);            
             $("#alert").attr("style", "");
             setTimeout(function () {
                 $("#alert").fadeOut(700);
