@@ -136,9 +136,14 @@ function setLanguage(language) {
             $("#btn-options").html(dict["btn-options"]);
             $("#logo-ugent").attr("alt", dict["logo-alt"]);
             $("#logo-ugent").attr("src", dict["logo-src"]);
-
             $("#output-type").html(dict["output-type"] + ": ");
-
+            $("#downloads-placeholder").html(dict["downloads-placeholder"]);
+            $("#download-form-all-btn").html(dict["download-form-all-btn"]);
+            $("#field-manual-btn").html(dict["field-manual-btn"]);
+            $("#manual-1").html(dict["manual-1"]);
+            $("#manual-2").html(dict["manual-2"]);
+            $("#manual-3").html(dict["manual-3"]);
+            $("#download-application").html(dict["download-application"]);
             $(".language").removeClass("language-selected");
             $("#lang-" + dict["lang"]).addClass("language-selected");
             localStorage["language"] = dict["lang"];
