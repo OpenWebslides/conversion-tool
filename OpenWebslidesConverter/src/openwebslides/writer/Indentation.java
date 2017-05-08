@@ -12,5 +12,11 @@ import objects.Slide;
  * @author Jonas
  */
 public interface Indentation {
+    /**
+     * Write the content of the slides with indentation.
+     * @param slide The Slide that should be written out.
+     * @param indentation The amound of tabs used as indentation.
+     * @return 
+     */
     public String writeSlide(Slide slide, int indentation);
 }

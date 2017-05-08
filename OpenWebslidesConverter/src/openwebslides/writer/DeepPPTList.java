@@ -10,17 +10,22 @@ import java.util.List;
 import objects.PPTObject;
 
 /**
- *
+ * This class is used as an internal representation of PPTLists for the 
+ * HTMLWriter class. This DeepPPTList can hold other lists of PPTObjects.
  * @author Jonas
  */
 public class DeepPPTList extends ArrayList<List<PPTObject>> implements PPTObject{
 
+    /**
+     * whether the list is ordered or unordered.
+     */
     private boolean ordered;
     
-    /*public DeepPPTList(){
-        this.add(new ArrayList<>());
-    }*/
-    
+    /**
+     * Returns the last item inside the list. If the list was empty, a new
+     * item is added and is returned.
+     * @return The last available item in the list.
+     */
     public List<PPTObject> getLastItem(){
         if(this.size()==0){
             return getNewItem();
@@ -28,6 +33,10 @@ public class DeepPPTList extends ArrayList<List<PPTObject>> implements PPTObject
         return this.get(this.size()-1);
     }
     
+    /**
+     * Creates a new item in the list and returns it.
+     * @return A new item in the list.
+     */
     public List<PPTObject> getNewItem(){
         this.add(new ArrayList<>());
         return this.get(this.size()-1);
