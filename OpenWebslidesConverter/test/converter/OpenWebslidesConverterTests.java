@@ -131,7 +131,9 @@ public class OpenWebslidesConverterTests {
     public void allElementsTest(){
         String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\allElementsTest\\input.pptx",
                                       "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\allElementsTest",
-                                      "-t","shower"};
+                                      "-t","shower",
+                                      "-co","Bachelorproef",
+                                      "-ch","All elements"};
         OpenWebslidesConverter.main(args);
     }
     /*
