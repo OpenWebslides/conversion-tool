@@ -124,7 +124,7 @@ public class OpenWebslidesConverterTests {
             IOUtils.copy(is, os);
         }
     }
-    
+    */
     
     
     @Test
@@ -134,7 +134,7 @@ public class OpenWebslidesConverterTests {
                                       "-t","shower"};
         OpenWebslidesConverter.main(args);
     }
-    
+    /*
     @Test
     public void imagesSizes() throws WebslidesConverterException{
         String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\imagesSizes";
