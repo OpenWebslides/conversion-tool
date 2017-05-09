@@ -53,7 +53,7 @@ public class PDFTest {
     
     
     
-    //@Test
+    @Test
     public void main1() {
         File file = new File("C:\\temp\\tabelJoann.pdf");
         System.out.println("Testing: tabelJoann");
@@ -88,7 +88,7 @@ public class PDFTest {
 
     @Test
     public void imagesToZip() throws IOException {
-        File file = new File("C:\\temp\\tabelJoann.pdf");
+        File file = new File("C:\\temp\\slidesJonas.pdf");
         System.out.println("Testing: slides.pdf");
         IConverter converter;
         try {

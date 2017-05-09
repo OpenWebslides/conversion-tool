@@ -19,9 +19,9 @@ import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
 import technology.tabula.PageIterator;
 import technology.tabula.RectangularTextContainer;
-import technology.tabula.Table;
 import technology.tabula.extractors.BasicExtractionAlgorithm;
 import technology.tabula.extractors.ExtractionAlgorithm;
+
 
 /**
  * This class extracts tables from a pdf.
@@ -55,14 +55,14 @@ public class TableIntelligence {
 
             ExtractionAlgorithm extractor = new BasicExtractionAlgorithm();
 
-            PageIterator it = oe.extract();
+            myPageIterator it = (myPageIterator) oe.extract();
             boolean growing = false;
             try {
                 while (it != null && it.hasNext()) {
                     try {
                         Page page = it.next();
                         pagenr++;
-                        for (Table table : extractor.extract(page)) {
+                        for (technology.tabula.Table table : extractor.extract(page)) {
                             System.out.println("extracted a page...");
                             objects.Table tabel = new objects.Table();
                             // System.out.println("tabel gevonden:");
