@@ -61,6 +61,7 @@ public class PDFConverter implements IConverter {
    
     private void openDocument() throws PDFException{
     try {
+        
             document = PDDocument.load(file);
             //DOM dom = new DOM(document);
             if (document.isEncrypted()) {
@@ -84,13 +85,17 @@ public class PDFConverter implements IConverter {
     }
     
     private void closeDocument(){
+        System.out.println("closing document...");
         try {
             document.close();
             isOpen = false;
             
         } catch (IOException ex) {
             output.println("Couldn't close document - parsing should be fine");
+        } catch (Exception e){
+            output.println("Couldn't close docuemnt - parsing should be fine");
         }
+        
     }
     
 
@@ -106,6 +111,7 @@ public class PDFConverter implements IConverter {
      * @throws conversion.pdf.util.PDFException exception
      */
     @Override
+    @SuppressWarnings("unchecked")
     public void parse(PPT ppt, String Location) throws PDFException {
         if(!isOpen){
             openDocument();
@@ -125,15 +131,19 @@ public class PDFConverter implements IConverter {
             output.println("io exception bij ophalen afbeeldingen...");
         }
         parse(ppt);
-         
+        
         tableIntel.placeTables(ppt,tableIntel.extractTables(document));
         imageIntel.checkImages(ppt, Location);
+        output.println("er zijn " + tableIntel.getTableNumber() + " tabellen gevonden.");
         //tableIntel.checkTables(ppt);
+        
         closeDocument();
-
+        System.out.println("document closed succesfully");
+        return;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void parse(PPT ppt, ZipOutputStream zOS, String saveLocation) throws PDFException{
         //System.out.println("parsing to ZIP...");
         if(!isOpen){
@@ -146,13 +156,18 @@ public class PDFConverter implements IConverter {
         } catch (IOException ex) {
             output.println("IO exception... ");
         }
-        parse(ppt);
         
+        parse(ppt);
+        System.out.println("parsing done");
+        System.out.println("table exctration...");
         tableIntel.placeTables(ppt,tableIntel.extractTables(document));
         
         imageIntel.checkImages(ppt, afbeeldingen);
+        output.println("er zijn " + tableIntel.getTableNumber() + " tabellen gevonden.");
         //tableIntel.checkTables(ppt);
         closeDocument();
+        System.out.println("document closed succesfully");
+        return;
     }
 
     private ArrayList<String> retrieveImagesToZOS(ZipOutputStream ZOS, String saveLocation) throws IOException {
@@ -217,7 +232,7 @@ public class PDFConverter implements IConverter {
             //testPPT(ppt);
 
             output.println("er zijn " + (imLocParser.getImageNumber() - 1) + " afbeeldingen gevonden.");
-
+            
         } catch (IOException ex) {
             output.println("er ging iets mis in de conversie.... ");
             throw new PDFException("Parsing aborded to soon");

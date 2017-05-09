@@ -5,10 +5,9 @@
  */
 package conversion.pdf.util;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +30,8 @@ import technology.tabula.extractors.ExtractionAlgorithm;
  */
 public class TableIntelligence {
 
+    private int totalTables = 0;
+
     /**
      * returns an arraylist with pairs of int and table objects. The int
      * represents the pagenumber. The array is filled with info from a
@@ -39,7 +40,15 @@ public class TableIntelligence {
      * @param d Document
      * @return ArrayList
      */
+    @SuppressWarnings("unchecked")
     public ArrayList<Pair<Integer, objects.Table>> extractTables(PDDocument d) {
+       // System.err.close();
+        PrintStream original = System.out;
+        System.setErr(new processOperatorBug());
+        
+        
+        
+        System.out.println("extracting into array of pairs...");
         ObjectExtractor oe;
         int pagenr = -1;
         ArrayList<Pair<Integer, objects.Table>> tabellen = new ArrayList();
@@ -50,43 +59,66 @@ public class TableIntelligence {
 
             PageIterator it = oe.extract();
             boolean growing = false;
-            while (it.hasNext()) {
-                Page page = it.next();
-                pagenr++;
-                for (Table table : extractor.extract(page)) {
-                    objects.Table tabel = new objects.Table();
-                    for (List<RectangularTextContainer> row : table.getRows()) {
-                        int teller = 0;
-                        //System.out.print("|");
-                        for (RectangularTextContainer cell : row) {
-                            //System.out.print(cell.getText() + "|");
-
-                            if (cell.getText() != "") {
-                                teller++;
-                            }
-                        }
-                        //System.out.print(teller);
-                        if (teller > 1) {
-                            //maak tabel aan
-                            growing = true;
-                            //System.out.print(" =tabel!!!");
-                            objects.Row rij = new objects.Row();
+            try {
+                while (it != null && it.hasNext()) {
+                    try{Page page = it.next();
+                    pagenr++;
+                    for (Table table : extractor.extract(page)) {
+                        System.out.println("extracted a page...");
+                        objects.Table tabel = new objects.Table();
+                        // System.out.println("tabel gevonden:");
+                        for (List<RectangularTextContainer> row : table.getRows()) {
+                            
+                            int teller = 0;
+                            //System.out.print("|");
                             for (RectangularTextContainer cell : row) {
-                                rij.getCells().add(new objects.Cell(cell.getText(), 0, 0));
+                                //System.out.print(cell.getText() + "|");
+
+                                if (cell.getText() != "") {
+                                    teller++;
+                                }
                             }
-                            tabel.getRows().add(rij);
-                        } else if (growing = true) {
-                            //hij was aan het groeien maar nu heb je dingen te kort -> tabel afsluiten
-                            tabellen.add(new Pair(pagenr, tabel));
-                            tabel = new objects.Table();
-                        }
+                            //System.out.print(teller);
+                            if (teller > 1) {
+                                //maak tabel aan
+                                growing = true;
+                                //System.out.print(" =tabel!!!");
+                                objects.Row rij = new objects.Row();
+                                for (RectangularTextContainer cell : row) {
+                                    rij.getCells().add(new objects.Cell(cell.getText(), 0, 0));
+                                }
+                                tabel.getRows().add(rij);
+                            } else if (growing = true) {
+                                //hij was aan het groeien maar nu heb je dingen te kort -> tabel afsluiten
+                                if (tabel.toString().trim().length() == 0) {
+                                    // System.out.println("lege tabel!!!");
+                                    tabel = new objects.Table();
+                                } else {
+                                    // System.out.println("adding: " + tabel.toString().trim().length());
+                                    tabellen.add(new Pair(pagenr, tabel));
+                                    totalTables++;
+                                    tabel = new objects.Table();
+                                }
+                            }
                         //System.out.println("");
-                    }
+                            // System.out.println(tabel.toString());
+                        }
+
+                    }} catch(Exception e){System.out.println("gevangen");}
                 }
+            } catch (ArrayIndexOutOfBoundsException exeption) {
+                System.out.println("catching AIOBex");
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(TableIntelligence.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("exceptie gevangen");
+            //Logger.getLogger(TableIntelligence.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            System.out.println("table extraction failed");
+        }
+        //removeEmptyTables(tabellen);
+        finally{
+         System.setErr(original);
         }
         return tabellen;
     }
@@ -97,7 +129,9 @@ public class TableIntelligence {
      * @param ppt PPT
      * @param tab ArrayList
      */
+    @SuppressWarnings("unchecked")
     public void placeTables(PPT ppt, ArrayList<Pair<Integer, objects.Table>> tab) {
+        System.out.println("placing tables in ppt...");
         int pagenr = 0;
         /*  first place the slides on the page where they belong
          next remove te double text per page.  */
@@ -112,6 +146,7 @@ public class TableIntelligence {
             pagenr++;
         }
         RemoveDouble(ppt);
+        removeFalseTables(ppt);
     }
 
     /**
@@ -120,6 +155,7 @@ public class TableIntelligence {
      *
      * @param ppt
      */
+    @SuppressWarnings("unchecked")
     private void RemoveDouble(PPT ppt) {
 
         for (Slide slide : ppt.getSlides()) {
@@ -145,7 +181,7 @@ public class TableIntelligence {
 
         }
     }
-
+    @SuppressWarnings("unchecked")
     private ArrayList<Text> removeTextFromSlide(objects.Slide slide, ArrayList<String> cellen) {
         //System.out.println("cellen:");
         ArrayList<String> removeFromCellen = new ArrayList();
@@ -153,7 +189,7 @@ public class TableIntelligence {
             if (s.isEmpty()) {
                 removeFromCellen.add(s);
             } else {
-               // System.out.println(s);
+                // System.out.println(s);
             }
         }
         //System.out.println("===============");
@@ -168,7 +204,7 @@ public class TableIntelligence {
                 int i = 0;
                 for (Textpart tp : t.getTextparts()) {
                     while (i < cellen.size() && tp.getContent().trim().equals(cellen.get(i).trim())) {
-                       // System.out.println("vergeleken: " + tp.getContent() + cellen.get(i));
+                        // System.out.println("vergeleken: " + tp.getContent() + cellen.get(i));
                         i++;
                     }
                 }
@@ -179,6 +215,37 @@ public class TableIntelligence {
             }
         }
         return toRemove;
+    }
+
+    public int getTableNumber() {
+        return totalTables;
+    }
+
+    @SuppressWarnings("unchecked")
+    private void removeFalseTables(objects.PPT ppt) {
+        System.out.println("removing empty tables: ");
+
+        for (objects.Slide slide : ppt.getSlides()) {
+            ArrayList<objects.Table> toRemove = new ArrayList();
+            for (objects.PPTObject obj : slide.getAllPptObjects()) {
+
+                if (obj instanceof objects.Table) {
+                    objects.Table tabel = (objects.Table) obj;
+                    //System.out.println("tabel met: "+tabel.getRows().size() + " rijen");
+                    //System.out.println(tabel.getContent().trim());
+                    if (tabel.getRows() != null && tabel.getRows().get(0).getCells().get(0).getContent().contains("•")) {
+                        //System.out.println("lijsttabel :o");
+                        toRemove.add(tabel);
+                        totalTables--;
+                    }
+
+                }
+            }
+            for (objects.Table t : toRemove) {
+                slide.getPptObjects().remove(t);
+            }
+
+        }
     }
 
 }

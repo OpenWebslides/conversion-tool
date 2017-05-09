@@ -53,9 +53,10 @@ public class PDFTest {
     
     
     
-    @Test
+    //@Test
     public void main1() {
-        File file = new File("C:\\temp\\tabellen.pdf");
+        File file = new File("C:\\temp\\tabelJoann.pdf");
+        System.out.println("Testing: tabelJoann");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
@@ -64,7 +65,7 @@ public class PDFTest {
 
             converter.parse(ppt, "C:\\temp\\output");
             SchrijfUit(ppt);
-            PDFConverter pdfc = (PDFConverter) converter; //even casten, deze methode is enkel voor testing...
+            //PDFConverter pdfc = (PDFConverter) converter; //even casten, deze methode is enkel voor testing...
 
         } catch (PDFException ex) {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -87,7 +88,8 @@ public class PDFTest {
 
     @Test
     public void imagesToZip() throws IOException {
-        File file = new File("C:\\temp\\slides.pdf");
+        File file = new File("C:\\temp\\tabelJoann.pdf");
+        System.out.println("Testing: slides.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
@@ -95,13 +97,15 @@ public class PDFTest {
             ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("C:\\temp\\output.zip"));
             PPT ppt = new PPT();
             converter.parse(ppt, zos, "images");
+            System.out.println("parse completed");
             zos.close();
-            SchrijfUit(ppt);
+           // SchrijfUit(ppt);
         } catch (IllegalArgumentException ex) {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PDFException ex) {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception ex) {
+            System.out.println("exception found");
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         

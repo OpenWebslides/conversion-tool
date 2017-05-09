@@ -49,6 +49,7 @@ public class Table implements PPTObject {
      * Return the content of the Table, this contains all of the getContent methods of its rows
      */
     public String getContent() {
+        
         String toret = "\n";
         for(Row row : rows){
             toret += row.getContent()+ "\n";
