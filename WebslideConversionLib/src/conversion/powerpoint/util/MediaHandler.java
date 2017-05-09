@@ -141,7 +141,6 @@ public class MediaHandler {
                     }
                 } //If the shape is from the table class, we'll build our table
                 else if (sh instanceof XSLFTable) {
-                    POIXMLTypeLoader.setClassLoader(CTTable.class.getClassLoader());
                     //Check our object for a Table object
                     for (PPTObject po : pptObjects) {
                         if (po!=null && po.getClass().equals(Table.class)) {
