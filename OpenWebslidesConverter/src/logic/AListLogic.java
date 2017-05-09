@@ -23,14 +23,13 @@ public abstract class AListLogic {
      * @param multiLevels
      * @param ordered
      *
-     *
      */
     public void formatList(PPT ppt, String regex, boolean multiLevels, boolean ordered) {
         for (Slide slide : ppt.getSlides()) {
             List<PPTObject> pptobjects = slide.getPptObjects();
             Map<Integer, Integer> numbers = getLevelsPerText(slide, regex); //Index in pptObjects, level
 
-            if ((multiLevels && numbers.size() >= 1 && new HashSet<>(numbers.values()).size() > 1) || (!multiLevels && numbers.size() >= 1)) {
+            while ((multiLevels && numbers.size() >= 1 && new HashSet<>(numbers.values()).size() > 1) || (!multiLevels && numbers.size() >= 1)) {
                 List<PPTList> lists = new ArrayList<>();
                 PPTList pptList = new PPTList();
                 pptList.setOrdered(ordered);
@@ -65,6 +64,7 @@ public abstract class AListLogic {
                     pptobjects.remove((int) toRemove.get(i));
                 }
                 pptobjects.set((int) keys[0], lists.get(0));
+                numbers = getLevelsPerText(slide, regex); //Index in pptObjects, level
             }
         }
     }
@@ -98,9 +98,7 @@ public abstract class AListLogic {
         int nextLineNr = ((int) keys[i]) + 1;
         double currentX = text.getTextparts().get(0).getXPosition();
         while (((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) && pptobjects.get(nextLineNr) instanceof Text && ((Text) pptobjects.get(nextLineNr)).getTextparts().get(0).getXPosition() >= currentX) {
-            //if (pptobjects.get(nextLineNr) instanceof Text) {
             text.getTextparts().addAll(((Text) pptobjects.get(nextLineNr)).getTextparts());
-            //}
             nextLineNr++;
         }
     }
