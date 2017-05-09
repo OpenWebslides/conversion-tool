@@ -14,7 +14,7 @@ import objects.Textpart;
  *
  * @author Joann
  */
-public class SimpleListLogic extends AListLogic {
+public class OrderedListLogic extends AListLogic {
 
     /**
      *
@@ -34,13 +34,11 @@ public class SimpleListLogic extends AListLogic {
         int lastX = -1;
         while (index_line < slide.getPptObjects().size()) {
 
-            // for (PPTObject object : slide.getPptObjects()) {
             PPTObject object = slide.getPptObjects().get(index_line);
             if (object instanceof Text && !((Text) object).getTextparts().isEmpty() && ((Text) object).getTextparts().get(0).getContent() != null && !((Text) object).getTextparts().get(0).getContent().equals("")) {
                 Text text = (Text) object;
                 Textpart tp = text.getTextparts().get(0);
                 int x = (int) tp.getXPosition();
-                //Pattern pattern = Pattern.compile("(\\d+[\\.)](?!\\d))");
                 Pattern pattern = Pattern.compile(regex);
 
                 Matcher matcher = pattern.matcher(text.getTextparts().get(0).getContent());

@@ -23,13 +23,11 @@ public class UnorderedListLogic extends AListLogic {
         Map<Integer, Integer> levelPerXPos = new HashMap<>();  //Saves level per xPosition
 
         int index_line = 0;
-        //Read all text objects in slide and puts the line number and level number in a map
         int lastLevel = -1;
         int lastX = -1;
 
         while (index_line < slide.getPptObjects().size()) {
 
-            //for (PPTObject object : slide.getPptObjects()) {
             PPTObject object = slide.getPptObjects().get(index_line);
 
             if (object instanceof Text && !((Text) object).getTextparts().isEmpty() && ((Text) object).getTextparts().get(0).getContent() != null && !((Text) object).getTextparts().get(0).getContent().equals("")) {
@@ -40,8 +38,6 @@ public class UnorderedListLogic extends AListLogic {
 
                 Pattern pattern = Pattern.compile(regex);
                 Matcher matcher = pattern.matcher(symbol + "");
-
-                //if (!((symbol >= 'a' && symbol <= 'z') || (symbol >= 'A' && symbol <= 'Z') || (symbol >= '0' && symbol <= '9'))) {
                 if (matcher.find()) {
                     if (levelPerXPos.containsKey(x) || (!levelPerXPos.containsKey(x) && x > lastX)) {
                         if (!levelPerXPos.containsKey(x) && x > lastX) {

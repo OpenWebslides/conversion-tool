@@ -19,11 +19,11 @@ public class Logic implements ILogic {
     public void format(PPT ppt) {
         formatTitle(ppt);
         UnorderedListLogic ull = new UnorderedListLogic();
-        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’]|-)", false, false);
-        SimpleListLogic sll = new SimpleListLogic();
-        sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", false, true);
-        sll.formatList(ppt, "^([A-Z][\\.)])", false, true);
-        sll.formatList(ppt, "^([a-z][\\.)])", false, true);
+        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’]|-)", false);
+        OrderedListLogic sll = new OrderedListLogic();
+        sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", true);
+        sll.formatList(ppt, "^([A-Z][\\.)])", true);
+        sll.formatList(ppt, "^([a-z][\\.)])", true);
         groupFontdecoration(ppt);
     }
 
@@ -110,7 +110,6 @@ public class Logic implements ILogic {
                         title.getTextparts().addAll(((Text) slide.getPptObjects().get(j)).getTextparts());
                         toRemove.add(j);
                         toAdd.add(title);
-                        //slide.getPptObjects().set(j, title);
                     }
                 }
             }

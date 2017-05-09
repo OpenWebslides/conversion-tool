@@ -20,16 +20,16 @@ public abstract class AListLogic {
      *
      * @param ppt
      * @param regex
-     * @param multiLevels
      * @param ordered
      *
      */
-    public void formatList(PPT ppt, String regex, boolean multiLevels, boolean ordered) {
+    public void formatList(PPT ppt, String regex, boolean ordered) {
         for (Slide slide : ppt.getSlides()) {
             List<PPTObject> pptobjects = slide.getPptObjects();
             Map<Integer, Integer> numbers = getLevelsPerText(slide, regex); //Index in pptObjects, level
 
-            while ((multiLevels && numbers.size() >= 1 && new HashSet<>(numbers.values()).size() > 1) || (!multiLevels && numbers.size() >= 1)) {
+            while (numbers.size() >= 1) {
+
                 List<PPTList> lists = new ArrayList<>();
                 PPTList pptList = new PPTList();
                 pptList.setOrdered(ordered);
@@ -46,10 +46,6 @@ public abstract class AListLogic {
                 //Remove ppt textobjects that are being used in list
                 List<Integer> toRemove = new ArrayList<>();
 
-                //for (int i = pptobjects.size() - 1; i > (int) keys[0]; i--) {
-                /*for (int i = (int) keys[keys.length - 1]; i > (int) keys[0]; i--) {
-                    toRemove.add(i);
-                }*/
                 for (int i = (int) keys[0] + 1; i <= (int) keys[keys.length - 1]; i++) {
                     toRemove.add(i);
                 }
@@ -94,7 +90,6 @@ public abstract class AListLogic {
 
     //Adds multiple line text to the same text object, so there will be only one bullet
     private void consecutiveText(List<PPTObject> pptobjects, Text text, int i, Object[] keys) {
-        //Add consecutive text parts
         int nextLineNr = ((int) keys[i]) + 1;
         double currentX = text.getTextparts().get(0).getXPosition();
         while (((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) && pptobjects.get(nextLineNr) instanceof Text && ((Text) pptobjects.get(nextLineNr)).getTextparts().get(0).getXPosition() >= currentX) {
@@ -111,6 +106,7 @@ public abstract class AListLogic {
         return text;
     }
 
+    //Reads all text objects in slide and puts the index where a bullet starts with the level number in a map
     abstract Map<Integer, Integer> getLevelsPerText(Slide slide, String regex);
 
 }
