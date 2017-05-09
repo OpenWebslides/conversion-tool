@@ -34,6 +34,7 @@ public class Table implements PPTObject {
 
     @Override
     public String getContent() {
+        
         String toret = "\n";
         for(Row row : rows){
             toret += row.getContent()+ "\n";
