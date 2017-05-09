@@ -17,6 +17,10 @@ import objects.Textpart;
  */
 public class TextHandler {
 
+    /**
+     * Handle the text of the powerpoint, create spaces etc
+     * @param pptobjects 
+     */
     public static void handle(List<PPTObject> pptobjects) {
         for (PPTObject po : pptobjects) {
             if (po instanceof Text) {
@@ -36,18 +40,10 @@ public class TextHandler {
 
     private static boolean tpEquals(Textpart tp1, Textpart tp2) {
         if (tp1.isDirty() && tp2.isDirty()) {
-            if (tp1.isErr() && tp2.isErr()) {
-                return true;
-            } else {
-                return false;
-            }
+            return tp1.isErr() && tp2.isErr();
         }
         if (tp1.isErr() && tp2.isErr()) {
-            if (tp1.isDirty() && tp2.isDirty()) {
-                return true;
-            } else {
-                return false;
-            }
+            return tp1.isDirty() && tp2.isDirty();
         }
         return false;
     }
@@ -89,27 +85,4 @@ public class TextHandler {
         }*/
 
     }
-
-    private static void handleList(PPTList pptList) {
-        List<PPTObject> objs = pptList.getBullets();
-        for (int i = 0; i < objs.size() - 1; i++) {
-            if (objs.get(i + 1) instanceof PPTList) {
-                ((PPTList) objs.get(i + 1)).getBullets().add(0, objs.get(i));
-                remove(pptList, objs.get(i));
-                handleList((PPTList) objs.get(i));
-            }
-        }
-    }
-
-    private static void remove(PPTList pptList, PPTObject objs) {
-        for (PPTObject po : pptList.getBullets()) {
-            if (po.equals(objs)) {
-                pptList.getBullets().remove(po);
-                break;
-            } else if (po instanceof PPTList) {
-                remove((PPTList) po, objs);
-            }
-        }
-    }
-
 }

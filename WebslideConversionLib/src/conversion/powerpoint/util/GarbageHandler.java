@@ -32,7 +32,7 @@ public class GarbageHandler {
 
     /**
      * Remove the Null values, empty elements in lists, empty lists, empty charts,...
-     * @param pptObjects 
+     * @param pptObjects List
      */
     private static void removeNullValues(List<PPTObject> pptObjects) {
         pptObjects.removeAll(Collections.singleton(null));
@@ -79,6 +79,11 @@ public class GarbageHandler {
         pptObjects.removeAll(toRemove);
     }
 
+    /**
+     * Test if a text object is empty
+     * @param text Text
+     * @return boolean
+     */
     private static boolean textEmpty(Text text) {
         int i = 0;
         int remove = 0;

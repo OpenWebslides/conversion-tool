@@ -20,27 +20,39 @@ import output.Output;
  */
 public class ChartHandler extends DefaultHandler {
 
+    //Where the errors should be written to
     private final Output output;
+    
+    //The content of the chart will be saved here
     private final HashMap<String, HashMap<String, ArrayList<Double>>> content;
 
+    //XML constants
     private final String SERIE = "c:tx";
     private final String CATEGORY = "c:cat";
     private final String VALUE = "c:v";
     private final String NUMDATA = "c:numCache";
 
+    //booleans to determine what is currently being read
     private boolean serie;
     private boolean category;
     private boolean numdata;
-
-    private String currentSerie;
-
-    private int categorycount = 0;
-    private final ArrayList<String> categories;
-
     private boolean serievalue;
     private boolean categoryvalue;
     private boolean numvalue;
 
+    //String of the current serie
+    private String currentSerie;
+
+    //The category + the current category
+    private int categorycount = 0;
+    private final ArrayList<String> categories;
+
+
+    /**
+     * Create a new ChartHandler instance
+     * @param output Output where to write output to
+     * @param chart Chart where to save the data
+     */
     public ChartHandler(Output output, Chart chart) {
         this.output = output;
 
@@ -89,7 +101,6 @@ public class ChartHandler extends DefaultHandler {
     @Override
     /**
      * The implementation of endElement, to keep it organized it has been split
-     * it endText, endImage,..
      */
     public void endElement(String uri, String localName, String qName) throws SAXException {
         try {
