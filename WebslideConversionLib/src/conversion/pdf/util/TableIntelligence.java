@@ -5,10 +5,9 @@
  */
 package conversion.pdf.util;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,6 +42,13 @@ public class TableIntelligence {
      */
     @SuppressWarnings("unchecked")
     public ArrayList<Pair<Integer, objects.Table>> extractTables(PDDocument d) {
+       // System.err.close();
+        PrintStream original = System.out;
+        System.setErr(new processOperatorBug());
+        
+        
+        
+        System.out.println("extracting into array of pairs...");
         ObjectExtractor oe;
         int pagenr = -1;
         ArrayList<Pair<Integer, objects.Table>> tabellen = new ArrayList();
@@ -55,13 +61,14 @@ public class TableIntelligence {
             boolean growing = false;
             try {
                 while (it != null && it.hasNext()) {
-                    Page page = it.next();
+                    try{Page page = it.next();
                     pagenr++;
                     for (Table table : extractor.extract(page)) {
-
+                        System.out.println("extracted a page...");
                         objects.Table tabel = new objects.Table();
                         // System.out.println("tabel gevonden:");
                         for (List<RectangularTextContainer> row : table.getRows()) {
+                            
                             int teller = 0;
                             //System.out.print("|");
                             for (RectangularTextContainer cell : row) {
@@ -97,19 +104,22 @@ public class TableIntelligence {
                             // System.out.println(tabel.toString());
                         }
 
-                    }
+                    }} catch(Exception e){System.out.println("gevangen");}
                 }
             } catch (ArrayIndexOutOfBoundsException exeption) {
                 System.out.println("catching AIOBex");
             }
 
         } catch (IOException ex) {
-
-            Logger.getLogger(TableIntelligence.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("exceptie gevangen");
+            //Logger.getLogger(TableIntelligence.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             System.out.println("table extraction failed");
         }
         //removeEmptyTables(tabellen);
+        finally{
+         System.setErr(original);
+        }
         return tabellen;
     }
 
@@ -121,6 +131,7 @@ public class TableIntelligence {
      */
     @SuppressWarnings("unchecked")
     public void placeTables(PPT ppt, ArrayList<Pair<Integer, objects.Table>> tab) {
+        System.out.println("placing tables in ppt...");
         int pagenr = 0;
         /*  first place the slides on the page where they belong
          next remove te double text per page.  */
