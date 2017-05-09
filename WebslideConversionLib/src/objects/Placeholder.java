@@ -8,6 +8,7 @@ package objects;
 /**
  *
  * @author Karel
+ * This object will be used when an object can not be converted/is not implemented yet from the dataset to HTML/XML/...
  */
 public class Placeholder implements PPTObject{
     

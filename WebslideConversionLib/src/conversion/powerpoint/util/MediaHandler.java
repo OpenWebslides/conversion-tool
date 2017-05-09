@@ -6,7 +6,6 @@
 package conversion.powerpoint.util;
 
 import java.util.List;
-import objects.Image;
 import objects.PPTObject;
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -18,7 +17,6 @@ import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Scanner;
 import java.util.zip.ZipEntry;
@@ -31,10 +29,12 @@ import javax.xml.parsers.SAXParserFactory;
 import logger.Logger;
 import objects.*;
 import org.apache.poi.POIXMLDocumentPart;
+import org.apache.poi.POIXMLTypeLoader;
 import org.apache.poi.xslf.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.apache.xmlbeans.XmlObject;
 import org.openxmlformats.schemas.drawingml.x2006.chart.*;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTTable;
 import org.openxmlformats.schemas.presentationml.x2006.main.CTGraphicalObjectFrame;
 import org.xml.sax.InputSource;
 import org.xml.sax.helpers.DefaultHandler;
@@ -140,7 +140,7 @@ public class MediaHandler {
                         }
                     }
                 } //If the shape is from the table class, we'll build our table
-                else if (sh.getClass().equals(XSLFTable.class)) {
+                else if (sh instanceof XSLFTable) {
                     //Check our object for a Table object
                     for (PPTObject po : pptObjects) {
                         if (po!=null && po.getClass().equals(Table.class)) {

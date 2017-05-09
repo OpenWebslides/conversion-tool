@@ -8,6 +8,8 @@ package objects;
 /**
  *
  * @author Karel
+ * These are all the ChartTypes which exist in powerpoint
+ * The data is always saved in the same manner, the representation is dependent on the ChartType
  */
 public enum ChartType {
     barChart,

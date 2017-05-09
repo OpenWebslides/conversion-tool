@@ -14,7 +14,10 @@ import java.util.List;
  */
 public class PPTList implements PPTObject {
 
+    //Contains all of the list items
     private final java.util.List<PPTObject> bullets;
+    
+    //Ordered list or unordered list?
     private boolean ordered;
 
     /**
@@ -89,6 +92,11 @@ public class PPTList implements PPTObject {
         this.ordered = ordered;
     }
 
+    /**
+     * Return all of the objects in this list, without containing other lists
+     * eg. if a list contains multiple lists 3 list items this method will return all of the items in his sublists, but not the sublists themselves
+     * @return List
+     */
     public List<PPTObject> getAllObjects() {
         List<PPTObject> list = new ArrayList<>();
         for (PPTObject po : bullets) {
@@ -101,6 +109,11 @@ public class PPTList implements PPTObject {
         return list;
     }
 
+    /**
+     * Replace a list item with something else
+     * @param pp PPTObject Object to replace
+     * @param obj PPTObject Object to replace with
+     */
     public void replace(PPTObject pp, PPTObject obj) {
         if(bullets.contains(obj)){
             bullets.set(bullets.indexOf(pp), obj);
