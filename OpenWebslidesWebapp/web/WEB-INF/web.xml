@@ -14,6 +14,10 @@
     </filter>
     <filter-mapping>
         <filter-name>CacheFilter</filter-name>
+        <url-pattern>*.css</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheFilter</filter-name>
         <url-pattern>*.jpg</url-pattern>
     </filter-mapping>
     <filter-mapping>
@@ -30,7 +34,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>CacheFilter</filter-name>
-        <url-pattern>*.svg</url-pattern>
+        <url-pattern>fonts/*</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>LanguageServlet</servlet-name>

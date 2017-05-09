@@ -46,12 +46,10 @@ public class CacheFilter implements Filter {
             throws IOException, ServletException {
         if (debug) {
             log("CacheFilter:DoBeforeProcessing");
-        }
-        System.out.println("[**]CACHING");
+        }        
         System.out.println(request.getRequestURI());
         String requestUri = request.getRequestURI();        
-        response.setHeader("Cache-Control", "public, max-age=1209600");
-
+        response.setHeader("Cache-Control", "public, max-age=2419200");
     }
 
     /**
