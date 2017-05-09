@@ -55,7 +55,9 @@ public abstract class AListLogic {
                     toRemove.add(i);
                 }
                 int i = (int) keys[keys.length - 1] + 1;
-                while (i < pptobjects.size() && pptobjects.get(i) instanceof Text) {
+
+                double currentX = ((Text) pptobjects.get((int) keys[keys.length - 1])).getTextparts().get(0).getXPosition();  //text.getTextparts().get(0).getXPosition();
+                while (i < pptobjects.size() && pptobjects.get(i) instanceof Text && ((Text) pptobjects.get(i)).getTextparts().get(0).getXPosition() >= currentX) {
                     toRemove.add(i);
                     i++;
                 }
@@ -94,7 +96,8 @@ public abstract class AListLogic {
     private void consecutiveText(List<PPTObject> pptobjects, Text text, int i, Object[] keys) {
         //Add consecutive text parts
         int nextLineNr = ((int) keys[i]) + 1;
-        while (((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) && pptobjects.get(nextLineNr) instanceof Text) {
+        double currentX = text.getTextparts().get(0).getXPosition();
+        while (((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) && pptobjects.get(nextLineNr) instanceof Text && ((Text) pptobjects.get(nextLineNr)).getTextparts().get(0).getXPosition() >= currentX) {
             //if (pptobjects.get(nextLineNr) instanceof Text) {
             text.getTextparts().addAll(((Text) pptobjects.get(nextLineNr)).getTextparts());
             //}

@@ -19,13 +19,11 @@ public class Logic implements ILogic {
     public void format(PPT ppt) {
         formatTitle(ppt);
         UnorderedListLogic ull = new UnorderedListLogic();
-        //ull.formatList(ppt, "^([^\\w\'\"`´‘()!?\\.])", false, false);
-        ull.formatList(ppt, "([^\\x00-\\x7E]|-)", false, false);
+        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’]|-)", false, false);
         SimpleListLogic sll = new SimpleListLogic();
         sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", false, true);
         sll.formatList(ppt, "^([A-Z][\\.)])", false, true);
         sll.formatList(ppt, "^([a-z][\\.)])", false, true);
-
         groupFontdecoration(ppt);
     }
 
