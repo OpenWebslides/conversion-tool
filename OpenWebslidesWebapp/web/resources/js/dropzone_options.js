@@ -50,17 +50,17 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         $("#btn-cancel").click(function () {
             //console.log("Clicked btn cancel");
             dropzone.removeAllFiles(true);
+            $("#btn-convert").attr('disabled','true');
         });
         dropzone.on("sending", function (file, xhr, formData) {
             //console.log(xhr);
             formData.append("output-type", $('input[name="output_type"]:checked').val());
             //console.log("Sending");
         });
-        dropzone.on("error", function (file, message) {
+        dropzone.on("error", function (file) {
             //console.log("Error");
             if (!file.accepted)
-                this.removeFile(file);
-            $("#message_alert").text(message);
+                this.removeFile(file);            
             $("#alert").attr("style", "");
             setTimeout(function () {
                 $("#alert").fadeOut(700);
@@ -136,9 +136,14 @@ function setLanguage(language) {
             $("#btn-options").html(dict["btn-options"]);
             $("#logo-ugent").attr("alt", dict["logo-alt"]);
             $("#logo-ugent").attr("src", dict["logo-src"]);
-
             $("#output-type").html(dict["output-type"] + ": ");
-
+            $("#downloads-placeholder").html(dict["downloads-placeholder"]);
+            $("#download-form-all-btn").html(dict["download-form-all-btn"]);
+            $("#field-manual-btn").html(dict["field-manual-btn"]);
+            $("#manual-1").html(dict["manual-1"]);
+            $("#manual-2").html(dict["manual-2"]);
+            $("#manual-3").html(dict["manual-3"]);
+            $("#download-application").html(dict["download-application"]);
             $(".language").removeClass("language-selected");
             $("#lang-" + dict["lang"]).addClass("language-selected");
             localStorage["language"] = dict["lang"];
