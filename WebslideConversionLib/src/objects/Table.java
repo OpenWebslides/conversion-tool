@@ -13,17 +13,29 @@ import java.util.ArrayList;
  */
 public class Table implements PPTObject {
     
+    //A Table contains rows
     private ArrayList<Row> rows;
 
+    /**
+     * Create an instance of Table object
+     */
     public Table(){
         rows = new ArrayList<>();
     }
     
+    /**
+     * Get the rows of the Table
+     * This is an editable ArrayList, changes will be saved in the Table
+     * @return ArrayList
+     */
     public ArrayList<Row> getRows() {
         return rows;
     }
     
     @Override
+    /**
+     * Return the data behind the Table, this contains all of the toString methods of its rows
+     */
     public String toString(){
         String toret = "";
         for(Row row : rows){
@@ -33,6 +45,9 @@ public class Table implements PPTObject {
     }
 
     @Override
+    /**
+     * Return the content of the Table, this contains all of the getContent methods of its rows
+     */
     public String getContent() {
         String toret = "\n";
         for(Row row : rows){

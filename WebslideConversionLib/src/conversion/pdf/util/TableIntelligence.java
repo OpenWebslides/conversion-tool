@@ -36,8 +36,8 @@ public class TableIntelligence {
      * represents the pagenumber. The array is filled with info from a
      * PDDocument.
      *
-     * @param d
-     * @return
+     * @param d Document
+     * @return ArrayList
      */
     public ArrayList<Pair<Integer, objects.Table>> extractTables(PDDocument d) {
         ObjectExtractor oe;
@@ -94,8 +94,8 @@ public class TableIntelligence {
     /**
      * adds all tables on the right place
      *
-     * @param ppt
-     * @param tab
+     * @param ppt PPT
+     * @param tab ArrayList
      */
     public void placeTables(PPT ppt, ArrayList<Pair<Integer, objects.Table>> tab) {
         int pagenr = 0;
