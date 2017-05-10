@@ -1,7 +1,6 @@
 package logic;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import objects.PPT;
@@ -16,13 +15,6 @@ import objects.Text;
  */
 public abstract class AListLogic {
 
-    /**
-     *
-     * @param ppt
-     * @param regex
-     * @param ordered
-     *
-     */
     public void formatList(PPT ppt, String regex, boolean ordered) {
         for (Slide slide : ppt.getSlides()) {
             List<PPTObject> pptobjects = slide.getPptObjects();
@@ -41,11 +33,9 @@ public abstract class AListLogic {
                     fillList(numbers.get((int) keys[i]) - currentLevel, text, lists, ordered);
                     consecutiveText(pptobjects, text, i, keys);
                     currentLevel = numbers.get((int) keys[i]);
-                    //System.out.println("currentLevel: " + currentLevel + "(" + numbers.size() + ")");
                 }
                 //Remove ppt textobjects that are being used in list
                 List<Integer> toRemove = new ArrayList<>();
-
                 for (int i = (int) keys[0] + 1; i <= (int) keys[keys.length - 1]; i++) {
                     toRemove.add(i);
                 }
