@@ -73,7 +73,7 @@ public class HTMLWriterTests {
             out.flush();
             result = sw.toString();
         }
-        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t</div>\r\n\t<div class=\"slide\" id=\"slide1\">\n\t</div>\r\n\t<div class=\"slide\" id=\"slide2\">\n\t</div>";
+        String expected_result = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t</div>\r\n\t<div class=\"slide\" id=\"slide1\">\n\t\t<div class=\"slidenumber\">1</div>\n\t</div>\r\n\t<div class=\"slide\" id=\"slide2\">\n\t\t<div class=\"slidenumber\">2</div>\n\t</div>";
         
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
@@ -171,7 +171,7 @@ public class HTMLWriterTests {
         //System.out.println("**" + org.apache.commons.lang3.StringEscapeUtils.escapeJava(result) + "**");
         //System.out.println(result);
         
-        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<h2>Lorem ipsum dolor sit amet</h2>\n\t\t<p>Consectetur adipiscing elit. Nullam tincidunt ligula quis ligula bibendum pharetra. Donec eget lectus ut nisi laoreet aliquam. Curabitur eget posuere purus.</p>\n\t</div>\r\n\t<div class=\"slide\" id=\"slide1\">\n\t\t<h2>Vivamus posuere neque</h2>\n\t\t<p>Sit amet ante porta, vitae ornare nunc luctus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam volutpat dictum felis quis semper. Phasellus vitae nisi consectetur, semper lorem vel, tempor nunc.</p>\n\t</div>";
+        String expected = "\r\n\t<div class=\"title slide\" id=\"slide0\">\n\t\t<h2>Lorem ipsum dolor sit amet</h2>\n\t\t<p>Consectetur adipiscing elit. Nullam tincidunt ligula quis ligula bibendum pharetra. Donec eget lectus ut nisi laoreet aliquam. Curabitur eget posuere purus.</p>\n\t</div>\r\n\t<div class=\"slide\" id=\"slide1\">\n\t\t<h2>Vivamus posuere neque</h2>\n\t\t<p>Sit amet ante porta, vitae ornare nunc luctus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nam volutpat dictum felis quis semper. Phasellus vitae nisi consectetur, semper lorem vel, tempor nunc.</p>\n\t\t<div class=\"slidenumber\">1</div>\n\t</div>";
         
         Assert.assertEquals(expected, result);
     }

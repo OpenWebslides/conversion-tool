@@ -60,13 +60,18 @@ public class HTMLWriter extends Writer implements Indentation{
         //open slide tag
         String res = TABS + "<div class=\"";
         res += slideIndex==0 ? SLIDE_TITLE : SLIDE_NORMAL;
-        res += "\" id=\"slide" + slideIndex++ + "\">";
+        res += "\" id=\"slide" + slideIndex + "\">";
         
         setTABS(++indentation);
         //content of slide
         for(PPTObject pptObj : slide.getPptObjects()){
             res += "\n" + TABS + objectToHtml(pptObj);
         }
+        
+        //slide number
+        if(slideIndex > 0)
+            res += "\n" + TABS + "<div class=\"slidenumber\">" + slideIndex + "</div>";
+        slideIndex++;
         setTABS(--indentation);
         
         //close slide tag
