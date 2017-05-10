@@ -8,6 +8,7 @@ package openwebslidesconverter;
 import conversion.ConverterFactory;
 import conversion.IConverter;
 import conversion.pdf.util.PDFException;
+import conversion.powerpoint.PPTConverter;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -26,6 +27,8 @@ import openwebslides.writer.Indentation;
 import openwebslides.writer.TemplateWriter;
 import openwebslides.zip.ZipException;
 import openwebslides.zip.Zipper;
+import org.apache.poi.POIXMLTypeLoader;
+import org.openxmlformats.schemas.drawingml.x2006.main.CTTable;
 
 /**
  * Converts a file that represents a presentation (pptx and pdf). By calling a
@@ -156,6 +159,15 @@ public class Converter {
      */
     private IConverter getConverter(File file) throws IllegalArgumentException, PDFException {
         IConverter converter = ConverterFactory.getConverter(file);
+        
+        /*
+        * Needed for the conversion of tables in pptx. If the queueEntry is called
+        * reflexive the PPTConverter can't find the classLoader itself.
+        * It's a known Pesky XmlBeans bug inside the XSLFTable class.
+        */
+        if(converter instanceof PPTConverter)
+            POIXMLTypeLoader.setClassLoader(CTTable.class.getClassLoader());
+        
         converter.setOutput(output);
         return converter;
     }
