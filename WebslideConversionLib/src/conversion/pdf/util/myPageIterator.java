@@ -7,15 +7,9 @@ package conversion.pdf.util;
 
 /**
  *This class serves to suppres warnings of a missmatch between the used libraries 
+ * just like that...
  * @author Gertjan
  */
-
-    	
-
-
-
-
-
 
 import technology.tabula.ObjectExtractor;
 import technology.tabula.PageIterator;

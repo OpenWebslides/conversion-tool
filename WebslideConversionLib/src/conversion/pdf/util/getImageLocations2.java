@@ -23,7 +23,7 @@ import org.apache.pdfbox.util.PDFStreamEngine;
 import org.apache.pdfbox.util.ResourceLoader;
 
 /**
- *
+ * **no longer used**
  * @author Gertjan
  */
 

@@ -13,7 +13,7 @@ import objects.Text;
 import objects.Textpart;
 
 /**
- *
+ * makes text from textparts, checks if they belong together or not...
  * @author Gertjan
  */
 public class TextIntelligence {

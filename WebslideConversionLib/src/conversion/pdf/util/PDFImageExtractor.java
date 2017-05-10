@@ -10,13 +10,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import objects.Image;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDResources;
@@ -24,7 +22,7 @@ import org.apache.pdfbox.pdmodel.graphics.xobject.PDXObjectImage;
 import org.apache.pdfbox.util.PDFStreamEngine;
 
 /**
- *
+ * Extracts fysical images from PDFStream
  * @author Gertjan
  */
 public class PDFImageExtractor extends PDFStreamEngine {
@@ -34,7 +32,13 @@ public class PDFImageExtractor extends PDFStreamEngine {
                 "org/apache/pdfbox/resources/PDFTextStripper.properties", true));
     }
 
-    
+    /**
+     * Extract per page to a given location
+     * @param page
+     * @param location
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     public void extractImage(PDPage page, String location) throws FileNotFoundException, IOException{
         int totalImagesOnPage = 0;
             PDResources pdResources = page.getResources();
@@ -96,6 +100,8 @@ public class PDFImageExtractor extends PDFStreamEngine {
 
     /**
      * Extracts images from document and gives them to the ZOS (creating what represents a jpg as well as making a subfolder images)
+     * the returned arraylist serves as a controle mechanism to get syncronisation between images and imagelocations
+     * the image locations are extracted with text extraction...
      * @param document Document
      * @param ZOS ZipOutputStream
      * @param saveLocation String

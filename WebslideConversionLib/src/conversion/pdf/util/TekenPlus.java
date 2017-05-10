@@ -8,7 +8,7 @@ package conversion.pdf.util;
 import java.io.Serializable;
 
 /**
- *
+ * util class to help extracting words character by character
  * @author Gertjan
  */
 public class TekenPlus implements Serializable{

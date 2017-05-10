@@ -6,18 +6,14 @@
 package conversion.pdf.util;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.util.Pair;
 
 import objects.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
-import technology.tabula.PageIterator;
 import technology.tabula.RectangularTextContainer;
 import technology.tabula.extractors.BasicExtractionAlgorithm;
 import technology.tabula.extractors.ExtractionAlgorithm;
@@ -46,7 +42,7 @@ public class TableIntelligence {
         // PrintStream original = System.out;
         // System.setErr(new processOperatorBug());
 
-        System.out.println("extracting into array of pairs...");
+        //System.out.println("extracting into array of pairs...");
         ObjectExtractor oe;
         int pagenr = -1;
         ArrayList<Pair<Integer, objects.Table>> tabellen = new ArrayList();
@@ -63,7 +59,7 @@ public class TableIntelligence {
                         Page page = it.next();
                         pagenr++;
                         for (technology.tabula.Table table : extractor.extract(page)) {
-                            System.out.println("extracted a page...");
+                           // System.out.println("extracted a page...");
                             objects.Table tabel = new objects.Table();
                             // System.out.println("tabel gevonden:");
                             for (List<RectangularTextContainer> row : table.getRows()) {
@@ -226,7 +222,7 @@ public class TableIntelligence {
 
     @SuppressWarnings("unchecked")
     private void removeFalseTables(objects.PPT ppt) {
-        System.out.println("removing empty tables: ");
+        //System.out.println("removing empty tables: ");
 
         for (objects.Slide slide : ppt.getSlides()) {
             ArrayList<objects.Table> toRemove = new ArrayList();
