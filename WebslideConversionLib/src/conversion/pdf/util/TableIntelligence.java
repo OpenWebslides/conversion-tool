@@ -129,7 +129,7 @@ public class TableIntelligence {
      */
     @SuppressWarnings("unchecked")
     public void placeTables(PPT ppt, ArrayList<Pair<Integer, objects.Table>> tab) {
-        System.out.println("placing tables in ppt...");
+        //System.out.println("placing tables in ppt...");
         int pagenr = 0;
         /*  first place the slides on the page where they belong
          next remove te double text per page.  */

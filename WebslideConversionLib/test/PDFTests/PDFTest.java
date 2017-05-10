@@ -97,7 +97,7 @@ public class PDFTest {
             ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("C:\\temp\\output.zip"));
             PPT ppt = new PPT();
             converter.parse(ppt, zos, "images");
-            System.out.println("parse completed");
+            //System.out.println("parse completed");
             zos.close();
            // SchrijfUit(ppt);
         } catch (IllegalArgumentException ex) {

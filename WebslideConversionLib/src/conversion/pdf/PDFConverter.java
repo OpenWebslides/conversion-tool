@@ -141,6 +141,7 @@ public class PDFConverter implements IConverter {
         output.println("parser found " + tableIntel.getTableNumber() + " table(s).");
         //tableIntel.checkTables(ppt);
 
+        output.println("+++Parsing finnished+++");
         closeDocument();
         //System.out.println("document closed succesfully");
         //return;
@@ -180,6 +181,7 @@ public class PDFConverter implements IConverter {
         output.println("parser found " + tableIntel.getTableNumber() + " table(s).");
         //tableIntel.checkTables(ppt);
         closeDocument();
+        output.println("+++Parsing finnished+++");
         //System.out.println("document closed succesfully");
         //return;
     }
