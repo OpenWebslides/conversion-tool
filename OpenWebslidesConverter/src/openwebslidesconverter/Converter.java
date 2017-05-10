@@ -252,7 +252,7 @@ public class Converter {
 
                 if (type == outputType.RAW) {
                     bufferedWriter.write("<!DOCTYPE html>\n"
-                            + "<html>" + "\t<meta charset=\"utf-8\">\n");
+                            + "<html>" + "\n\t<meta charset=\"utf-8\">\n");
 
                     HTMLWriter writer = new HTMLWriter(output);
                     writer.write(bufferedWriter, readPpt);
