@@ -55,8 +55,8 @@ public class PDFTest {
     
     @Test
     public void main1() {
-        File file = new File("C:\\temp\\tabelJoann.pdf");
-        System.out.println("Testing: tabelJoann");
+        File file = new File("C:\\temp\\slidesJonas.pdf");
+        //System.out.println("Testing: tabelJoann");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
@@ -64,7 +64,7 @@ public class PDFTest {
             PPT ppt = new PPT();
 
             converter.parse(ppt, "C:\\temp\\output");
-            SchrijfUit(ppt);
+            //SchrijfUit(ppt);
             //PDFConverter pdfc = (PDFConverter) converter; //even casten, deze methode is enkel voor testing...
 
         } catch (PDFException ex) {
@@ -88,8 +88,8 @@ public class PDFTest {
 
     @Test
     public void imagesToZip() throws IOException {
-        File file = new File("C:\\temp\\slidesJonas.pdf");
-        System.out.println("Testing: slides.pdf");
+        File file = new File("C:\\temp\\slides.pdf");
+        //System.out.println("Testing: slides.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);

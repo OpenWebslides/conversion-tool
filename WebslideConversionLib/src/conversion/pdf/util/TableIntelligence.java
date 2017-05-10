@@ -14,10 +14,10 @@ import objects.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
+import technology.tabula.PageIterator;
 import technology.tabula.RectangularTextContainer;
 import technology.tabula.extractors.BasicExtractionAlgorithm;
 import technology.tabula.extractors.ExtractionAlgorithm;
-
 
 /**
  * This class extracts tables from a pdf.
@@ -50,61 +50,60 @@ public class TableIntelligence {
             oe = new ObjectExtractor(d);
 
             ExtractionAlgorithm extractor = new BasicExtractionAlgorithm();
-
-            myPageIterator it = (myPageIterator) oe.extract();
+            
+            
+            PageIterator it = oe.extract();
             boolean growing = false;
             try {
                 while (it != null && it.hasNext()) {
-                    try {
-                        Page page = it.next();
-                        pagenr++;
-                        for (technology.tabula.Table table : extractor.extract(page)) {
-                           // System.out.println("extracted a page...");
-                            objects.Table tabel = new objects.Table();
-                            // System.out.println("tabel gevonden:");
-                            for (List<RectangularTextContainer> row : table.getRows()) {
 
-                                int teller = 0;
-                                //System.out.print("|");
-                                for (RectangularTextContainer cell : row) {
-                                    //System.out.print(cell.getText() + "|");
+                    Page page = it.next();
+                    pagenr++;
+                    for (technology.tabula.Table table : extractor.extract(page)) {
+                        // System.out.println("extracted a page...");
+                        objects.Table tabel = new objects.Table();
+                        // System.out.println("tabel gevonden:");
+                        for (List<RectangularTextContainer> row : table.getRows()) {
 
-                                    if (cell.getText() != "") {
-                                        teller++;
-                                    }
+                            int teller = 0;
+                            //System.out.print("|");
+                            for (RectangularTextContainer cell : row) {
+                                //System.out.print(cell.getText() + "|");
+
+                                if (cell.getText() != "") {
+                                    teller++;
                                 }
-                                //System.out.print(teller);
-                                if (teller > 1) {
-                                    //maak tabel aan
-                                    growing = true;
-                                    //System.out.print(" =tabel!!!");
-                                    objects.Row rij = new objects.Row();
-                                    for (RectangularTextContainer cell : row) {
-                                        rij.getCells().add(new objects.Cell(cell.getText(), 0, 0));
-                                    }
-                                    tabel.getRows().add(rij);
-                                } else if (growing = true) {
-                                    //hij was aan het groeien maar nu heb je dingen te kort -> tabel afsluiten
-                                    if (tabel.toString().trim().length() == 0) {
-                                        // System.out.println("lege tabel!!!");
-                                        tabel = new objects.Table();
-                                    } else {
-                                        // System.out.println("adding: " + tabel.toString().trim().length());
-                                        tabellen.add(new Pair(pagenr, tabel));
-                                        totalTables++;
-                                        tabel = new objects.Table();
-                                    }
-                                }
-                        //System.out.println("");
-                                // System.out.println(tabel.toString());
                             }
-
+                            //System.out.print(teller);
+                            if (teller > 1) {
+                                //maak tabel aan
+                                growing = true;
+                                //System.out.print(" =tabel!!!");
+                                objects.Row rij = new objects.Row();
+                                for (RectangularTextContainer cell : row) {
+                                    rij.getCells().add(new objects.Cell(cell.getText(), 0, 0));
+                                }
+                                tabel.getRows().add(rij);
+                            } else if (growing = true) {
+                                //hij was aan het groeien maar nu heb je dingen te kort -> tabel afsluiten
+                                if (tabel.toString().trim().length() == 0) {
+                                    // System.out.println("lege tabel!!!");
+                                    tabel = new objects.Table();
+                                } else {
+                                    // System.out.println("adding: " + tabel.toString().trim().length());
+                                    tabellen.add(new Pair(pagenr, tabel));
+                                    totalTables++;
+                                    tabel = new objects.Table();
+                                }
+                            }
+                        //System.out.println("");
+                            // System.out.println(tabel.toString());
                         }
-                    } catch (Exception e) {
-                        System.out.println("gevangen");
+
                     }
+
                 }
-            } catch (ArrayIndexOutOfBoundsException exeption) {
+            } catch (ArrayIndexOutOfBoundsException exception) {
                 System.out.println("catching AIOBex");
             }
 
@@ -113,6 +112,7 @@ public class TableIntelligence {
             //Logger.getLogger(TableIntelligence.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             System.out.println("table extraction failed");
+            e.printStackTrace();
         }
         //removeEmptyTables(tabellen);
         //finally{
