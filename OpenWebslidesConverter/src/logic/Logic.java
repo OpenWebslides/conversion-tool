@@ -8,22 +8,22 @@ import objects.*;
  *
  * @author Joann
  */
-public class Logic implements ILogic {
+public class Logic {
 
     /**
-     * Searches for lists and titles in ppt and converts them
-     *
-     * @param ppt
+     * Searches for unordered and ordered lists and titles in ppt and converts them
+     * Groups Text objects with the same FontDecoration
+     * 
+     * @param ppt The PPT object that needs to be formatted
      */
-    @Override
     public void format(PPT ppt) {
         formatTitle(ppt);
         UnorderedListLogic ull = new UnorderedListLogic();
-        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’“”\u2200-\u22ff]|-)", false);
-        OrderedListLogic sll = new OrderedListLogic();
-        sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", true);
-        sll.formatList(ppt, "^([A-Z][\\.)])", true);
-        sll.formatList(ppt, "^([a-z][\\.)])", true);
+        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’“”\\u2200-\\u22ff]|-)", false);
+        OrderedListLogic oll = new OrderedListLogic();
+        oll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", true);
+        oll.formatList(ppt, "^([A-Z][\\.)])", true);
+        oll.formatList(ppt, "^([a-z][\\.)])", true);
         groupFontdecoration(ppt);
     }
 
@@ -105,7 +105,7 @@ public class Logic implements ILogic {
             for (int j = 0; j < slide.getPptObjects().size(); j++) {
                 if (!hasTitle && slide.getPptObjects().get(j) instanceof Text && !((Text) slide.getPptObjects().get(j)).getTextparts().isEmpty()) {
                     int firstSize = ((Text) slide.getPptObjects().get(j)).getTextparts().get(0).getSize();
-                    if (firstSize != 0 && ((firstSize < 1000 && firstSize >= maxSize - 5/*(minSize + (maxSize - minSize) * 4 / 5)*/) || (firstSize >= 1000 && (firstSize > (minSize + (maxSize - minSize) / 3) || firstSize >= 4000)))) {
+                    if (firstSize != 0 && ((firstSize < 1000 && firstSize >= maxSize - 5) || (firstSize >= 1000 && (firstSize > (minSize + (maxSize - minSize) / 3) || firstSize >= 4000)))) {
                         Title title = new Title();
                         title.getTextparts().addAll(((Text) slide.getPptObjects().get(j)).getTextparts());
                         toRemove.add(j);
@@ -117,7 +117,6 @@ public class Logic implements ILogic {
             for (int j = toRemove.size() - 1; j >= 0; j--) {
                 slide.getPptObjects().remove((int) toRemove.get(j));
             }
-
             for (int j = toAdd.size() - 1; j >= 0; j--) {
                 slide.getPptObjects().add(0, toAdd.get(j));
             }
