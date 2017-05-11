@@ -86,7 +86,7 @@ public class ConverterManager implements CallableCallback {
     /**
      * This is a dual purpose method, first it takes care of the bookkeeping and then calls convertFile which launches the conversion
      * @param key A Websocket session token to identify the owner of the original file and addressee for the converted file
-     * @param value An InboundMsgDefinition which contains the necessary info for administration & consistency
+     * @param value An InboundMsgDefinition which contains the necessary info for administration and consistency
      */
     public void addEntry(String key, InboundMsgDefinition value) {
         lastMessage = value;

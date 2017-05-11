@@ -17,8 +17,8 @@ public class Pair<L,R> {
   /**
    * Creates a new Pair with any datatype as left or right part
    * Also note that the left and right part don't have to be the same datatype
-   * @param left
-   * @param right 
+   * @param left Any type to be used as left part of the pair
+   * @param right Any type to be used as right part of the pair
    */
   public Pair(L left, R right) {
     this.left = left;
