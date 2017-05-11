@@ -241,7 +241,7 @@ public class MediaHandler {
                 //If it's our file, copy it to the filesystem, but only when asked to save it so filesystem, otherwise just create byte[]
                 if (ze.getName().contains(na)) {
                     String n = ze.getName().split("/")[ze.getName().split("/").length - 1];
-                    f = new File(saveLoc + "\\" + n);
+                    f = new File(saveLoc + File.separator + n);
                     img.setFilename(n);
                     img.setCopied(true);
                     OutputStream out;
@@ -252,7 +252,7 @@ public class MediaHandler {
                     }
                     else{ 
                         out = zipoutput;
-                        ZipEntry zipEntry = new ZipEntry(saveLoc + "\\" + currentFilename);
+                        ZipEntry zipEntry = new ZipEntry(saveLoc + File.separator + currentFilename);
                         ((ZipOutputStream)out).putNextEntry(zipEntry);
                     }
                     try {
