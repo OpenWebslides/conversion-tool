@@ -19,11 +19,11 @@ public class Logic {
     public void format(PPT ppt) {
         formatTitle(ppt);
         UnorderedListLogic ull = new UnorderedListLogic();
-        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’“”\u2200-\u22ff]|-)", false);
-        OrderedListLogic sll = new OrderedListLogic();
-        sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", true);
-        sll.formatList(ppt, "^([A-Z][\\.)])", true);
-        sll.formatList(ppt, "^([a-z][\\.)])", true);
+        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’“”\\u2200-\\u22ff]|-)", false);
+        OrderedListLogic oll = new OrderedListLogic();
+        oll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", true);
+        oll.formatList(ppt, "^([A-Z][\\.)])", true);
+        oll.formatList(ppt, "^([a-z][\\.)])", true);
         groupFontdecoration(ppt);
     }
 
