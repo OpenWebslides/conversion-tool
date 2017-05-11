@@ -6,11 +6,8 @@
 package conversion.pdf.util;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.util.Pair;
 
 import objects.*;
@@ -19,7 +16,6 @@ import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
 import technology.tabula.PageIterator;
 import technology.tabula.RectangularTextContainer;
-import technology.tabula.Table;
 import technology.tabula.extractors.BasicExtractionAlgorithm;
 import technology.tabula.extractors.ExtractionAlgorithm;
 
@@ -43,12 +39,10 @@ public class TableIntelligence {
     @SuppressWarnings("unchecked")
     public ArrayList<Pair<Integer, objects.Table>> extractTables(PDDocument d) {
        // System.err.close();
-        PrintStream original = System.out;
-        System.setErr(new processOperatorBug());
-        
-        
-        
-        System.out.println("extracting into array of pairs...");
+        // PrintStream original = System.out;
+        // System.setErr(new processOperatorBug());
+
+        //System.out.println("extracting into array of pairs...");
         ObjectExtractor oe;
         int pagenr = -1;
         ArrayList<Pair<Integer, objects.Table>> tabellen = new ArrayList();
@@ -56,19 +50,21 @@ public class TableIntelligence {
             oe = new ObjectExtractor(d);
 
             ExtractionAlgorithm extractor = new BasicExtractionAlgorithm();
-
+            
+            
             PageIterator it = oe.extract();
             boolean growing = false;
             try {
                 while (it != null && it.hasNext()) {
-                    try{Page page = it.next();
+
+                    Page page = it.next();
                     pagenr++;
-                    for (Table table : extractor.extract(page)) {
-                        System.out.println("extracted a page...");
+                    for (technology.tabula.Table table : extractor.extract(page)) {
+                        // System.out.println("extracted a page...");
                         objects.Table tabel = new objects.Table();
                         // System.out.println("tabel gevonden:");
                         for (List<RectangularTextContainer> row : table.getRows()) {
-                            
+
                             int teller = 0;
                             //System.out.print("|");
                             for (RectangularTextContainer cell : row) {
@@ -104,9 +100,10 @@ public class TableIntelligence {
                             // System.out.println(tabel.toString());
                         }
 
-                    }} catch(Exception e){System.out.println("gevangen");}
+                    }
+
                 }
-            } catch (ArrayIndexOutOfBoundsException exeption) {
+            } catch (ArrayIndexOutOfBoundsException exception) {
                 System.out.println("catching AIOBex");
             }
 
@@ -115,11 +112,12 @@ public class TableIntelligence {
             //Logger.getLogger(TableIntelligence.class.getName()).log(Level.SEVERE, null, ex);
         } catch (Exception e) {
             System.out.println("table extraction failed");
+            e.printStackTrace();
         }
         //removeEmptyTables(tabellen);
-        finally{
-         System.setErr(original);
-        }
+        //finally{
+        //System.setErr(original);
+        //}
         return tabellen;
     }
 
@@ -131,7 +129,7 @@ public class TableIntelligence {
      */
     @SuppressWarnings("unchecked")
     public void placeTables(PPT ppt, ArrayList<Pair<Integer, objects.Table>> tab) {
-        System.out.println("placing tables in ppt...");
+        //System.out.println("placing tables in ppt...");
         int pagenr = 0;
         /*  first place the slides on the page where they belong
          next remove te double text per page.  */
@@ -181,6 +179,7 @@ public class TableIntelligence {
 
         }
     }
+
     @SuppressWarnings("unchecked")
     private ArrayList<Text> removeTextFromSlide(objects.Slide slide, ArrayList<String> cellen) {
         //System.out.println("cellen:");
@@ -223,7 +222,7 @@ public class TableIntelligence {
 
     @SuppressWarnings("unchecked")
     private void removeFalseTables(objects.PPT ppt) {
-        System.out.println("removing empty tables: ");
+        //System.out.println("removing empty tables: ");
 
         for (objects.Slide slide : ppt.getSlides()) {
             ArrayList<objects.Table> toRemove = new ArrayList();

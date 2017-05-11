@@ -7,8 +7,6 @@ package conversion.pdf.util;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.zip.ZipOutputStream;
 import objects.Image;
 import objects.PPT;
 import objects.Placeholder;

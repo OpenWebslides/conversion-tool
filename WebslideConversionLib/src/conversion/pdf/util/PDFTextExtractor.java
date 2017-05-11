@@ -164,11 +164,13 @@ public class PDFTextExtractor extends PDFTextStripper {
         }
         
     }
-    /*
-     Teken controle is een functie die kijkt of het teken er wel nog bij mag bij het zelfde woord...
-     geeft false terug indien er een soort splitting event optreed... (ander lettertype ofzo...)
-     */
-
+    
+/**
+ * Checks if a symbol belongs to the same word or not....
+ *   returns false upon a splitting event (like a defferent font etc.)
+ * @param teken
+ * @return 
+ */
     private boolean tekenControle(TekenPlus teken) {
         
         TekenPlus vorigeLetter = woord.get(woord.size() - 1); //dit haalt de laatste letter eraf...

@@ -5,13 +5,9 @@
  */
 package conversion.pdf.util;
 
-import java.awt.geom.Rectangle2D;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import objects.FontDecoration;
-import static objects.FontDecoration.ITALIC;
 import static objects.FontDecoration.UNDERLINE;
 import objects.Hyperlink;
 import objects.PPTObject;
@@ -27,6 +23,8 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDe
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDPageDestination;
 
 /**
+ * Extracts hyperlinks from a saved pdf, a printed pdf will not rememeber
+ * hyperlinks
  *
  * @author Gertjan
  */
@@ -49,7 +47,7 @@ public class PDFHyperlinkExtractor {
                         if (action instanceof PDActionURI) {
                             // get uri link
                             PDActionURI uri = (PDActionURI) action;
-                            System.out.println("uri link:" + uri.getURI());
+                            //System.out.println("uri link:" + uri.getURI());
                             Textpart tp = new Textpart();
                             tp.setContent(uri.getURI());
                             tp.addType(UNDERLINE);
@@ -63,8 +61,8 @@ public class PDFHyperlinkExtractor {
                                 PDPageDestination pageDestination;
                                 if (destination instanceof PDPageDestination) {
                                     pageDestination = (PDPageDestination) destination;
-                                    System.out.println("internal link found - placeholder inserted");
-                                   
+                                    //System.out.println("internal link found - placeholder inserted");
+
                                     Placeholder p = new Placeholder();
                                     p.setContent("Internal Link");
                                     links.add(p);
