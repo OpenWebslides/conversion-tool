@@ -49,7 +49,7 @@ public class CacheFilter implements Filter {
         }        
         System.out.println(request.getRequestURI());
         String requestUri = request.getRequestURI();        
-        response.setHeader("Cache-Control", "public, max-age=2419200");
+        response.setHeader("Cache-Control", "public, max-age=24192000");
     }
 
     /**

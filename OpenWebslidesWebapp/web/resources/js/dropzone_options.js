@@ -10,7 +10,7 @@ $("#download-form-all-btn").hide();
 $("#collapse-options").hide();
 
 $("#btn-options").click(function(){    
-   if($("#collapse-options").is(":hidden")) $("#collapse-options").show(1000)    
+   if($("#collapse-options").is(":hidden")) $("#collapse-options").show(1000);   
    else $("#collapse-options:visible").hide(1000);
 });
 
@@ -142,7 +142,8 @@ function setLanguage(language) {
             $("#field-manual-btn").html(dict["field-manual-btn"]);
             $("#manual-1").html(dict["manual-1"]);
             $("#manual-2").html(dict["manual-2"]);
-            $("#manual-3").html(dict["manual-3"]);
+            $("#manual-3").html(dict["manual-3"]);            
+            $("#more-manual").attr("href",dict["more-manual-link"]).html(dict["more-manual"]);                        
             $("#download-application").html(dict["download-application"]);
             $(".language").removeClass("language-selected");
             $("#lang-" + dict["lang"]).addClass("language-selected");

@@ -34,7 +34,7 @@
     </filter-mapping>
     <filter-mapping>
         <filter-name>CacheFilter</filter-name>
-        <url-pattern>fonts/*</url-pattern>
+        <url-pattern>*.svg</url-pattern>
     </filter-mapping>
     <servlet>
         <servlet-name>LanguageServlet</servlet-name>
