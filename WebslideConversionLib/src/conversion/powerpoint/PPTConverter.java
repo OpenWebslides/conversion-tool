@@ -98,7 +98,7 @@ public class PPTConverter implements IConverter {
                     String xml = slide.getXmlObject().getCSld().getSpTree().toString();
                                         
                     //for testing
-                    output.println(xml);
+                    //output.println(xml);
                     
                     //handler that will parse the xml data
                     handler = new PowerpointHandler(webslide, output);
@@ -121,12 +121,12 @@ public class PPTConverter implements IConverter {
                     InsightHandler.handle(ppt.getInsight(), webslide.getPptObjects());
 
                     //print the slide for testing toString details
-                    output.println("------------ toString -------------");
-                  output.println(webslide.toString());
+                    //output.println("------------ toString -------------");
+                  //output.println(webslide.toString());
 
                     //print the slide for testing getContent
-                  output.println("------------ getContent -------------");
-                  output.println(webslide.getContent());
+                  //output.println("------------ getContent -------------");
+                  //output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
