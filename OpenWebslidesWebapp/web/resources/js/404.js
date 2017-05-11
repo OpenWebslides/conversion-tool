@@ -19,7 +19,6 @@ function setLanguage() {
         dataType: "text",
         data: {language: localStorage["language"], bundle: "404"},
         success: function (result, status, xhr) {
-            //console.log(result);
             var dict = JSON.parse(result);
 
             $(".header-title").html(dict["header-title"]);

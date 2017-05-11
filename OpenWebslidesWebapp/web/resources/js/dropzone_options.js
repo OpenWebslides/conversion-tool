@@ -42,23 +42,17 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         }
 
         $("#btn-convert").click(function () {
-            //console.log("Clicked btn convert");
             $('.dz-progress').show();
             dropzone.processQueue();
-            //console.log("Process Queue started");
         });
         $("#btn-cancel").click(function () {
-            //console.log("Clicked btn cancel");
             dropzone.removeAllFiles(true);
             $("#btn-convert").attr('disabled','true');
         });
         dropzone.on("sending", function (file, xhr, formData) {
-            //console.log(xhr);
             formData.append("output-type", $('input[name="output_type"]:checked').val());
-            //console.log("Sending");
         });
         dropzone.on("error", function (file) {
-            //console.log("Error");
             if (!file.accepted)
                 this.removeFile(file);            
             $("#alert").attr("style", "");
@@ -68,7 +62,6 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         });
         
         dropzone.on("addedfile",function(file){
-            console.log("added file to DROPZONE "+file);
             $("#btn-convert").removeAttr('disabled');
         });
         
@@ -87,9 +80,6 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
                     .append($("<button >" + file.name + "</button>").attr({type: "button", onclick: "startDownload(" + shared_vars.filesInProgress.length + ")", id: "download-form-" + shared_vars.filesInProgress.length + "-btn"}).addClass("btn btn-primary btn-roomy").hide())
                     );            
             shared_vars.filesInProgress.push(file.name);
-            console.log(file);
-            console.log("current state of filesInProgress "+shared_vars.filesInProgress);
-            console.log("success");
         });
     }
 };
@@ -112,7 +102,6 @@ function setLanguage(language) {
         dataType: "text",
         data: {language: language, bundle: "Index"},
         success: function (result, status, xhr) {
-            //console.log(result);
             var dict = JSON.parse(result);
             $(".dz-default, .dz-message").html(dict["dictDefaultMessage"]);
             $(".dz-remove").html(dict["dictRemoveFile"]);
