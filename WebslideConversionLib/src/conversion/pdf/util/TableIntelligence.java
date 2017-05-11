@@ -8,6 +8,7 @@ package conversion.pdf.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.util.Pair;
 
 import objects.*;
@@ -43,7 +44,12 @@ public class TableIntelligence {
         // System.setErr(new processOperatorBug());
 
         //System.out.println("extracting into array of pairs...");
+        
+        java.util.logging.Logger.getLogger("org.apache.pdfbox").setLevel(Level.OFF);
+        
+        
         ObjectExtractor oe;
+        
         int pagenr = -1;
         ArrayList<Pair<Integer, objects.Table>> tabellen = new ArrayList();
         try {
@@ -102,8 +108,9 @@ public class TableIntelligence {
 
                     }
 
-                }
-            } catch (ArrayIndexOutOfBoundsException exception) {
+                } 
+            } 
+           catch (ArrayIndexOutOfBoundsException exception) {
                 System.out.println("catching AIOBex");
             }
 
