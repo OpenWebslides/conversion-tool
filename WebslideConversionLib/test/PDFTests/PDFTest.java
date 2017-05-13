@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.zip.ZipOutputStream;
 import logger.Logger;
@@ -26,36 +27,12 @@ import output.StdLogOutput;
  * @author Gertjan
  */
 public class PDFTest {
-    /*
-     public static void main(String[] args) {
-     // TODO code application logic here
-     File file = new File("C:\\temp\\slides.pdf");
-     IConverter converter = ConverterFactory.getConverter(file);
-     PPT ppt = new PPT();
-        
-     converter.parse(ppt,"C:\\temp\\output");
-        
-        
-     FileWriter fw = null;
-     //uitschrijfstuk nog niet van toepassing...
-     try {
-     fw = new FileWriter("C:\\temp\\test.html");
-     // fw.write(ppt.toHTML());
-     } catch (Exception e) {
-     } finally {
-     try {
-     fw.close();
-     } catch (IOException ex) {
-     }
-     }
-     }*/
 
-    
-    
-    
     @Test
     public void main1() {
-        File file = new File("C:\\temp\\slidesJonas.pdf");
+        URL path = PDFTest.class.getResource("slides.pdf");
+        File file = new File(path.getFile());
+        
         //System.out.println("Testing: tabelJoann");
         IConverter converter;
         try {
@@ -63,7 +40,7 @@ public class PDFTest {
             converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "Gertjan")));
             PPT ppt = new PPT();
 
-            converter.parse(ppt, "C:\\temp\\output");
+            converter.parse(ppt, "output");
             //SchrijfUit(ppt);
             //PDFConverter pdfc = (PDFConverter) converter; //even casten, deze methode is enkel voor testing...
 
@@ -73,7 +50,7 @@ public class PDFTest {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         }
         FileWriter fw = null;
-        //uitschrijfstuk nog niet van toepassing...
+        //uitschrijfstuk nog niet van toepassing op dit niveau...
         try {
             fw = new FileWriter("C:\\temp\\test.html");
             // fw.write(ppt.toHTML());
@@ -88,18 +65,20 @@ public class PDFTest {
 
     @Test
     public void imagesToZip() throws IOException {
-        File file = new File("C:\\temp\\retestJoann.pdf");
+        URL path = PDFTest.class.getResource("slides.pdf");
+        File file = new File(path.getFile());
+        
         //System.out.println("Testing: slides.pdf");
         IConverter converter;
         try {
             converter = ConverterFactory.getConverter(file);
             converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "Gertjan")));
-            ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("C:\\temp\\output.zip"));
+            ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("output.zip"));
             PPT ppt = new PPT();
             converter.parse(ppt, zos, "images");
             //System.out.println("parse completed");
             zos.close();
-           // SchrijfUit(ppt);
+            // SchrijfUit(ppt);
         } catch (IllegalArgumentException ex) {
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (PDFException ex) {
@@ -108,12 +87,16 @@ public class PDFTest {
             System.out.println("exception found");
             java.util.logging.Logger.getLogger(PDFTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
     }
-    
-    public void SchrijfUit(PPT ppt){
-        for(Slide slide : ppt.getSlides()){
+
+    /**
+     * Can be used to see what's inside the ppt structure
+     *
+     * @param ppt
+     */
+    public void SchrijfUit(PPT ppt) {
+        for (Slide slide : ppt.getSlides()) {
             System.out.println(slide.getContent());
         }
     }
