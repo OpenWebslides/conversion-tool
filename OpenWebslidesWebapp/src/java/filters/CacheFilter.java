@@ -45,9 +45,8 @@ public class CacheFilter implements Filter {
     private void doBeforeProcessing(RequestWrapper request, ResponseWrapper response)
             throws IOException, ServletException {
         if (debug) {
-            log("CacheFilter:DoBeforeProcessing");
+            log("[WEB]CacheFilter:DoBeforeProcessing()");
         }        
-        System.out.println(request.getRequestURI());
         String requestUri = request.getRequestURI();        
         response.setHeader("Cache-Control", "public, max-age=24192000");
     }
@@ -66,7 +65,7 @@ public class CacheFilter implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("CacheFilter:doFilter()");
+            log("[WEB]CacheFilter:doFilter()");
         }
 
         // Create wrappers for the request and response objects.
@@ -115,7 +114,7 @@ public class CacheFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("CacheFilter: Initializing filter");
+                log("[WEB]CacheFilter: Initializing filter");
             }
         }
     }

@@ -12,8 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import websocket.InboundMsgDefinition;
-import java.sql.Timestamp;
-import java.util.Date;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import openwebslideslogger.Logger;
@@ -36,7 +34,7 @@ public class ConverterManager implements CallableCallback {
     private long lastid;
     private InboundMsgDefinition lastMessage;
     private final Queue<Queue<String>> conversionLogQueue;
-    private final ExecutorService executor = Executors.newFixedThreadPool(3);
+    private final ExecutorService executor = Executors.newFixedThreadPool(8);
     private final LogThread logthread;
     private final HashMap<Long,Pair<String,String>> threadSessionFile;
     private final ConversionCompleteCallback serverEndpoint;
@@ -51,8 +49,8 @@ public class ConverterManager implements CallableCallback {
      */
     private ConverterManager(ConversionCompleteCallback ccc) {
         this.sessionFiles = new HashMap<>();
-        this.logger = new Logger(System.getProperty("user.home") + File.separator+"tiwi"+File.separator+"java_app_logs"+File.separator, "threadcreation_log", "log of the conversionthread lifecycle");
-        this.threadLogger = new Logger(System.getProperty("user.home") + File.separator+"tiwi"+File.separator+"java_app_logs"+File.separator, "conversionprogress_log", "log of the progress of the individual loggers");
+        this.logger = new Logger(System.getProperty("user.home") + File.separator+"tiwi"+File.separator+"java_app_logs"+File.separator, "threadcreation_log", "[WEB-mgr] log of the ConversionCallable's lifecycle");
+        this.threadLogger = new Logger(System.getProperty("user.home") + File.separator+"tiwi"+File.separator+"java_app_logs"+File.separator, "conversionprogress_log", "[WEB-mgr] log of the progress of the individual loggers");
         this.lastid = 0;
         this.conversionLogQueue = new ConcurrentLinkedDeque<>();
         this.logthread = new LogThread(conversionLogQueue, threadLogger);
@@ -63,23 +61,33 @@ public class ConverterManager implements CallableCallback {
 
     //open voor Singleton pattern later
     public static ConverterManager getConverterManager(ConversionCompleteCallback ccc) {
-        return new ConverterManager(ccc);
+        return ConverterCreator.getUnique(ccc);
+    }
+    
+    private static class ConverterCreator {
+        static ConverterManager unique;
+        static ConverterManager getUnique(ConversionCompleteCallback ccc) {
+            if(unique==null){unique=new ConverterManager(ccc);
+                System.out.println("[WEB-mgr] create ConverterManager once "+unique.toString());}
+            return unique;
+        }
     }
 
+    
     /**
      * A method to start the logging thread
      */
     public void startLogThread() {
         logthread.start();
-        logger.println("The LogThread has been activated, it is used to log the internal messages generated during conversion by the converter");
+        logger.println("[WEB-mgr] The LogThread has been activated");
     }
 
     public void stopLogThread() {
-        try {
+        try {           
             logthread.join(1500);
-            logger.println("The LogThread has been deactivated");
+             logger.println("[WEB-mgr] The LogThread has been deactivated");            
         } catch (InterruptedException ex) {
-            logger.println("The LogThread didn't shut down correctly"+ex.getMessage());
+            logger.println("[WEB-mgr] The LogThread didn't shut down correctly"+ex.getMessage());
         }
     }
 
@@ -97,9 +105,8 @@ public class ConverterManager implements CallableCallback {
             sessionFiles.get(key).add(value);
         }
 
-        System.out.println("***I added to sessionFiles***");
+        System.out.println("[WEB-mgr] ConverterManager added to sessionFiles");
         ArrayList<InboundMsgDefinition> p = sessionFiles.get(key);
-        System.out.println("Websocket session key:" + key);
         for (InboundMsgDefinition t : p) {
             System.out.println(t);
         }
@@ -116,7 +123,7 @@ public class ConverterManager implements CallableCallback {
 
     public void printSessionFiles() {
         for (String k : sessionFiles.keySet()) {
-            System.out.println("Websocket session key:" + k);
+            System.out.println("[WEB-mgr] Content of sessionFiles for Websocket-client (session key):" + k);
 
             for (InboundMsgDefinition t : sessionFiles.get(k)) {
                 System.out.println(t);
@@ -136,17 +143,16 @@ public class ConverterManager implements CallableCallback {
      */   
     
     public void convertFile(String file,String sessionKey,String outputType) {
-        System.out.println("file to convert (should be FULL PATH) " + file);
+        System.out.println("[WEB-mgr] file to convert (should be FULL PATH) " + file);
         String targetDir = System.getProperty("user.home") +File.separator+"tiwi"+File.separator+"download"+File.separator+sessionKey+File.separator+lastMessage.getFileName();        
-        System.out.println("targetDir = " + targetDir);
+        System.out.println("[WEB-mgr] targetDir = " + targetDir);
         File directory = new File(String.valueOf(targetDir));
         if(! directory.exists())directory.mkdirs();
         // arguments to be passed to the converter
         String[] args = new String[]{"-i", file, "-o", targetDir, "-t", outputType};
         ++lastid;
-        logger.println(Logger.log(lastMessage.getFileName()));
-        logger.println(new Timestamp(new Date().getTime()) + "*** " + lastid);
-        System.out.println("Starting conversion thread with id: " + lastid);
+        logger.println(Logger.log(lastMessage.getFileName()+" -> assigned to ConversionCallable "+lastid));        
+        System.out.println("[WEB-mgr] Starting conversion callable with id: " + lastid);
         
         ConversionCallable t = new ConversionCallable(args, conversionLogQueue, lastid, this);        
         threadFinishedStatus.put(lastid, executor.submit(t));        
@@ -162,8 +168,8 @@ public class ConverterManager implements CallableCallback {
     @Override
     public void callableComplete(long id, int status) {
         try {
-            System.out.println("*-*-*-*The conversion Callable with id " + id + " has finished !!!");            
-                System.out.println("Signaling ServerEndpoint");
+            System.out.println("[WEB-mgr] The conversion Callable with id " + id + " has finished !");            
+                System.out.println("[WEB-mgr] Signaling ServerEndpoint");
                 Pair<String,String> tmp = threadSessionFile.get(id);
             if(status == 0){
                 serverEndpoint.conversionComplete(tmp.getLeft(),tmp.getRight(), "SUCCESS");
@@ -173,9 +179,9 @@ public class ConverterManager implements CallableCallback {
             }
         }
         finally {
-            System.out.println("Removing entry from threadSessionFile");
+            //System.out.println("[WEB-mgr] Removing entry from threadSessionFile");
             threadSessionFile.remove(id);
-            System.out.println("Removing entry from threadFinishedStatus");
+            //System.out.println("[WEB-mgr] Removing entry from threadFinishedStatus");
             threadFinishedStatus.remove(id);
         }
         

@@ -47,7 +47,7 @@ public class SecFilter implements Filter {
     private void doBeforeProcessing(RequestWrapper request, ResponseWrapper response)
             throws IOException, ServletException {
         if (debug) {
-            log("SecFilter:DoBeforeProcessing");
+            log("[WEB]SecFilter:DoBeforeProcessing()");
         }
 
         response.addHeader("X-XSS-Protection", "1; mode=block");
@@ -69,7 +69,7 @@ public class SecFilter implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("SecFilter:doFilter()");
+            log("[WEB]SecFilter:doFilter()");
         }
 
         // Create wrappers for the request and response objects.
@@ -118,7 +118,7 @@ public class SecFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("SecFilter: Initializing filter");
+                log("[WEB]SecFilter: Initializing filter");
             }
         }
     }

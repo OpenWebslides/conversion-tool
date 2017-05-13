@@ -37,16 +37,16 @@ public class FileDownloadServlet extends HttpServlet {
             String WSSessionToken = request.getParameter("WSSessionToken");
             String fileName= request.getParameter("fileName");
             String path = System.getProperty("user.home")+File.separator+"tiwi"+File.separator+"download"+File.separator+WSSessionToken+File.separator+fileName+File.separator+fileName.substring(0, fileName.indexOf('.'))+".zip";
-            System.out.println("Looking for the right file to download, should be here:\n"+path);
+            System.out.println("[WEB-download] Looking for the right file to download, should be here:"+path);
             File toDownload = new File(path);
             FileInputStream iStream = new FileInputStream(toDownload);
             
             ServletContext ctx = getServletContext();            
             String mimeType = ctx.getMimeType(path);
             if(mimeType == null){
-                mimeType = "application/octet-stream";
+                mimeType = "application/zip";
             }
-            System.out.println("MIME Type file download: "+mimeType);
+            System.out.println("[WEB-download] MIME Type file download: "+mimeType);
             
             response.setContentType(mimeType);
             response.setContentLength((int) toDownload.length());

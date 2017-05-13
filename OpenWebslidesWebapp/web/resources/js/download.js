@@ -11,7 +11,7 @@ function startDownload(downloadFormNr) {
                     setTimeout("startDownload("+i+")",16.667*i);
                 }                
         }
-        shared_vars.downloadAllPtr = shared_vars.filesInProgress.length-1;
+        shared_vars.downloadAllPtr = shared_vars.filesInProgress.length;
         
     } else {
         $("#download-form-" + downloadFormNr + "-param-1").attr({

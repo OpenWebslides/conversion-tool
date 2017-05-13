@@ -43,16 +43,16 @@ public class ServerEndpoint implements ConversionCompleteCallback{
             mgr.startLogThread();
         }
         ++nrOpen;
-        System.out.println("Serverendpoint opened a session, the new sessioncount is: " + nrOpen);
-        System.out.println("WEBSOCKET SESSION OPENED " + s);        
+        System.out.println("[WEB] Serverendpoint opened a session, the new sessioncount is: " + nrOpen);
+        System.out.println("[WEB] Websocket session opened " + s);        
     }
 
     @OnClose
     public void close(Session s) {
         session.removeSession(s);
         --nrOpen;
-        System.out.println("Serverendpoint closed a session, the new sessioncount is: " + nrOpen);
-        System.out.println("WEBSOCKET SESSION CLOSED " + s);
+        System.out.println("[WEB] Serverendpoint closed a session, the new sessioncount is: " + nrOpen);
+        System.out.println("[WEB] Websocket session closed " + s);
         if (nrOpen == 0) {
             mgr.stopLogThread();
         }        
@@ -66,7 +66,7 @@ public class ServerEndpoint implements ConversionCompleteCallback{
 
     @OnMessage
     public void handleMessage(String message, Session session) {
-        System.out.println("RECEIVED MESSAGE " + message + " FROM SESSION " + session.getId());
+        System.out.println("[WEB] Websocket received message " + message + " from session " + session.getId());
         if (message.contains("\"msgType\":\"FILE\"")) {
             JSONObject msg = new JSONObject(message);            
             String filename = msg.getString("name");
@@ -83,13 +83,13 @@ public class ServerEndpoint implements ConversionCompleteCallback{
         OutboundMsgDefinition msg;
         if(status.equals("SUCCESS")) msg = new OutboundMsgDefinition(file,"download-ready");        
         else msg = new OutboundMsgDefinition(file, "download-not-ready");
-        System.out.println(new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey).toString());
+        System.out.println("=> OutboundMsgDefinition (json)"+new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey).toString());
         sendToSession(s,new JSONObject(msg.getInfo()).append("WSSessionToken", sessionKey));        
     }
     
      private void sendToSession(Session session, JSONObject message) {
         try {
-            System.out.println("going to send to session: "+session.getId()+" the following message: "+message);
+            System.out.println("[WEB] going to send to session: "+session.getId()+" the following message: "+message);
             session.getBasicRemote().sendObject(message);
         } catch (IOException | EncodeException ex) {
             Logger.getLogger(SocketSession.class.getName()).log(Level.SEVERE, null, ex);

@@ -20,7 +20,7 @@ public class SocketSession {
     
      public void addSession(Session session) {
         sessions.put(session.getId(),session);    
-         System.out.println("New socket session + "+session);
+         System.out.println("[WEB] new Websocket session + "+session);
     }
 
     public void removeSession(Session session) {

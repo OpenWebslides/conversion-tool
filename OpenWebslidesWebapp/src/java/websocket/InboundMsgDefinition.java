@@ -46,7 +46,7 @@ public class InboundMsgDefinition {
 
     @Override
     public String toString() {
-        return "=> InboundMsgDefinition{" + "name=" + fileName + ", fileType=" + fileType + ", timestamp=" + timestamp + '}';
+        return "=> InboundMsgDefinition {" + "name=" + fileName + ", fileType=" + fileType + ", timestamp=" + timestamp + '}';
     }
     
     

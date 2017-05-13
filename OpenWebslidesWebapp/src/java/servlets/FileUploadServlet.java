@@ -63,15 +63,15 @@ public class FileUploadServlet extends HttpServlet {
             while ((read = filecontent.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
-            writer.println("New file " + fileName + " created at " + FileUploadServlet.UPLOAD_DESTINATION);
-            LOGGER.log(Level.INFO, "File {0} being uploaded to {1}",new Object[]{fileName, FileUploadServlet.UPLOAD_DESTINATION});
+            writer.println("[WEB-upload] New file " + fileName + " created at " + FileUploadServlet.UPLOAD_DESTINATION);
+            LOGGER.log(Level.INFO, "[WEB-upload] File {0} being uploaded to {1}",new Object[]{fileName, FileUploadServlet.UPLOAD_DESTINATION});
         } catch (FileNotFoundException fne) {
-            writer.println("You either did not specify a file to upload or are "
+            writer.println("[WEB-upload] You either did not specify a file to upload or are "
                     + "trying to upload a file to a protected or nonexistent "
                     + "location.");
             writer.println("<br/> ERROR: " + fne.getMessage());
 
-            LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
+            LOGGER.log(Level.SEVERE, "[WEB-upload] Problems during file upload. Error: {0}",
                     new Object[]{fne.getMessage()});
         } finally {
             if (out != null) {
@@ -88,7 +88,7 @@ public class FileUploadServlet extends HttpServlet {
 
     private String getFileName(final Part part) {
         final String partHeader = part.getHeader("content-disposition");
-        LOGGER.log(Level.INFO, "Part Header = {0}", partHeader);
+        LOGGER.log(Level.INFO, "[WEB-upload] Part Header = {0}", partHeader);
         for (String content : part.getHeader("content-disposition").split(";")) {
             if (content.trim().startsWith("filename")) {
                 return content.substring(

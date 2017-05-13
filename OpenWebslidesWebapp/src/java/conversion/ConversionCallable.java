@@ -73,7 +73,7 @@ public class ConversionCallable implements Callable<Integer> {
             this.queue = new ConcurrentLinkedDeque<>();
 
             // log start of thread
-            logToQueue("thread started");
+            logToQueue("[WEB] ConversionCallable with id "+id+" called");
 
             // Getting the jar URL which contains target class
             File jar = new File(CONVERTER_JAR);
@@ -89,10 +89,8 @@ public class ConversionCallable implements Callable<Integer> {
             Method method = OpenWebslidesConverter.getMethod("queueEntry", String[].class, OutputStream.class, Queue.class, long.class);
                        
             try{
-            System.out.println("ARGS[3]"+args[3]);
             String s = args[3].substring(args[3].lastIndexOf(File.separator)+1,args[3].length());
-            s = s.substring(0, s.lastIndexOf('.'));
-            System.out.println(s);
+            s = s.substring(0, s.lastIndexOf('.'));            
             OutputStream fos = new FileOutputStream(new File(args[3])+File.separator+s+".zip");           
             
             
@@ -102,29 +100,29 @@ public class ConversionCallable implements Callable<Integer> {
             param[2] = queue;
             param[3] = id;
             
-            logToQueue("invoke converter via queueEntry");
+            logToQueue("[WEB] invoke converter via OpenWebslidesConverter.queueEntry");
             
             method.invoke(null, param);
             fos.close();
             }
             catch(FileNotFoundException exe){ 
-                System.err.println("I COULD NOT FIND the FileOutputStream");
+                System.err.println("[WEB] I COULD NOT OPEN the FileOutputStream for converter zip-output");
             }
             
-            logToQueue("end of thread");
+            logToQueue("[WEB] end of ConversionCallble with id "+id);
             normalfinish = true;
 
         } catch (MalformedURLException | ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | IllegalStateException ex) {
-            System.err.println("THREAD_INSIDE error!" + ex.getClass());
-            System.err.println("THREAD_INSIDE stacktrace: ");
-            logToQueue("THREAD_INSIDE error:" + ex.getMessage());
-            logToQueue("THREAD_INSIDE stacktrace: "+ex.getStackTrace());
+            System.err.println("[WEB] CALLABLE_INSIDE error!" + ex.getClass());
+            System.err.println("[WEB] CALLABLE_INSIDE stacktrace: ");
+            logToQueue("[WEB] CALLABLE_INSIDE error:" + ex.getMessage());
+            logToQueue("[WEB] CALLABLE_INSIDE stacktrace: "+ex.getStackTrace());
             ex.printStackTrace();
            
             normalfinish = false;
         } catch (Exception ex) {
-            System.err.println("THREAD_INSIDE error! " + ex.getClass());
-            logToQueue("THREAD_INSIDE error:" + ex.getMessage());
+            System.err.println("[WEB] CALLABLE_INSIDE error! " + ex.getClass());
+            logToQueue("[WEB] CALLABLE_INSIDE error:" + ex.getMessage());
             normalfinish = false;
         } finally {
             logQueue.offer(queue);            

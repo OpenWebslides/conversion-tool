@@ -32,7 +32,7 @@ public class LogOperation extends TimerTask {
     @Override
     public void run() {
         if (!logQueue.isEmpty()) {
-            System.out.println("Logoperation ongoing");
+            System.out.println("[WEB] Log operation ongoing");
             Queue<String> threadToLog = logQueue.poll();
             if(threadToLog != null)logger.writeQueue(threadToLog);
         }
