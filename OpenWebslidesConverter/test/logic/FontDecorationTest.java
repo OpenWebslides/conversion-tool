@@ -62,7 +62,7 @@ public class FontDecorationTest {
     @Test
     public void testNestedFontDecoration() {
         Slide slide = new Slide();
-        String[] tekst = {"Hieronder staat een opsomming.", "• A", "• B", "• C", ".", ".", ".", "○ CA", "!=", "○ CB", "◌ CBA", "!=", ".", ".", "◌ CBB", "• D", "..."};
+        String[] tekst = {"Hieronder staat een opsomming.", "• A", "• B", "• C", ".", ".", ".", "○ CA", "!=", "○ CB", " CBA", "!=", ".", ".", " CBB", "• D", "..."};
         int[] level = {0, 0, 0, 0, 0, 0, 0, 2, 3, 2, 5, 6, 6, 6, 5, 0, 1};
         boolean[] bold = {true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
         boolean[] underline = {true, false, false, false, false, false, false, false, true, false, false, false, false, false, false, false, false};

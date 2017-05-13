@@ -39,8 +39,8 @@ public class OrderedListLogic extends AListLogic {
                 Text text = (Text) object;
                 Textpart tp = text.getTextparts().get(0);
                 int x = (int) tp.getXPosition();
+                
                 Pattern pattern = Pattern.compile(regex);
-
                 Matcher matcher = pattern.matcher(text.getTextparts().get(0).getContent());
                 if (matcher.find()) {
                     if (levelPerXPos.containsKey(x) || (!levelPerXPos.containsKey(x) && x > lastX)) {

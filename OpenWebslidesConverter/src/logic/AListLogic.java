@@ -82,7 +82,7 @@ public abstract class AListLogic {
     private void consecutiveText(List<PPTObject> pptobjects, Text text, int i, Object[] keys) {
         int nextLineNr = ((int) keys[i]) + 1;
         double currentX = text.getTextparts().get(0).getXPosition();
-        while (((i < keys.length - 1 && nextLineNr < (int) keys[i + 1]) || (i == keys.length - 1 && nextLineNr < pptobjects.size())) && pptobjects.get(nextLineNr) instanceof Text && ((Text) pptobjects.get(nextLineNr)).getTextparts().get(0).getXPosition() >= currentX) {
+        while ((i < keys.length - 1 && nextLineNr < (int) keys[i + 1] && pptobjects.get(nextLineNr) instanceof Text) || (i == keys.length - 1 && nextLineNr < pptobjects.size() && pptobjects.get(nextLineNr) instanceof Text && ((Text) pptobjects.get(nextLineNr)).getTextparts().get(0).getXPosition() >= currentX)) {
             text.getTextparts().addAll(((Text) pptobjects.get(nextLineNr)).getTextparts());
             nextLineNr++;
         }
@@ -91,7 +91,7 @@ public abstract class AListLogic {
     //Removes regex from the beginning of the text object and returns the text object
     private Text removeBulletSign(Text text, String regex) {
         String tekst = text.getTextparts().get(0).getContent();
-        tekst = tekst.replaceAll(regex + "\\s*", "");
+        tekst = tekst.replaceFirst(regex + "\\s*", "");
         text.getTextparts().get(0).setContent(tekst);
         return text;
     }

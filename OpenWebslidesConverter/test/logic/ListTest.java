@@ -114,7 +114,7 @@ public class ListTest {
         slide.getPptObjects().add(text);
         slide.getPptObjects().add(chart);
 
-        String[] tekst = {"Hieronder staat een opsomming.", "• Een", "• Twee", "• Drie", "Nog altijd 3", "○ Drie.Een", "◌ Drie.Een.Een", "• Vier", "Nog altijd 4"};
+        String[] tekst = {"Hieronder staat een opsomming.", "• Een", "• Twee", "• Drie", "Nog altijd 3", "○ Drie.Een", " Drie.Een.Een", "• Vier", "Nog altijd 4"};
         int[] level = {0, 0, 0, 0, 0, 1, 4, 0, 0};
         for (int i = 0; i < tekst.length; i++) {
             text = new Text();

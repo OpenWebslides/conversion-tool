@@ -11,22 +11,23 @@ import objects.*;
 public class Logic {
 
     /**
-     * Searches for unordered and ordered lists and titles in ppt and converts them
-     * Groups Text objects with the same FontDecoration
-     * 
+     * Searches for unordered and ordered lists and titles in ppt and converts
+     * them Groups Text objects with the same FontDecoration
+     *
      * @param ppt The PPT object that needs to be formatted
      */
     public void format(PPT ppt) {
         formatTitle(ppt);
         UnorderedListLogic ull = new UnorderedListLogic();
-        ull.formatList(ppt, "([^\\u0000-\\u00ff‘’“”\\u2200-\\u22ff]|-)", false);
+        //ull.formatList(ppt, "([•○-–])", false);
+        ull.formatList(ppt, "([\\u2022\\u25cb\\uf0a7\\uf0d8\\uf071\\uf076\\uf0fc\\u002d\\u2013])", false);
         OrderedListLogic oll = new OrderedListLogic();
         oll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", true);
         oll.formatList(ppt, "^([A-Z][\\.)])", true);
         oll.formatList(ppt, "^([a-z][\\.)])", true);
         groupFontdecoration(ppt);
     }
-
+    
     private void groupTextparts(Text text) {
         List<Integer> toRemove = new ArrayList<>();
         int i = 0;

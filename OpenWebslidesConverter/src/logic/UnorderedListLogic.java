@@ -47,7 +47,7 @@ public class UnorderedListLogic extends AListLogic {
                         if (charPerLevel.containsKey(level) && symbol == charPerLevel.get(level)) {
                             numbers.put(index_line, level);
                             lastLevel = level;
-                        } else if (tp.getXPosition() > lastLevel) {
+                        } else if (levelPerXPos.containsKey((int) tp.getXPosition()) && levelPerXPos.get((int) tp.getXPosition()) > lastLevel) {
                             charPerLevel.put(lastLevel + 1, symbol);
                             numbers.put(index_line, lastLevel + 1);
                             lastLevel++;
