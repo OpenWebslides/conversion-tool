@@ -239,7 +239,17 @@ public class TableIntelligence {
                     objects.Table tabel = (objects.Table) obj;
                     //System.out.println("tabel met: "+tabel.getRows().size() + " rijen");
                     //System.out.println(tabel.getContent().trim());
-                    if (tabel.getRows() != null && tabel.getRows().get(0).getCells().get(0).getContent().contains("•")) {
+                    //"([\\u2022\\u25cb\\uf0a7\\uf0d8\\uf071\\uf076\\uf0fc\\u002d\\u2013])"
+                    //([•○-–])
+                    if (tabel.getRows() != null && (tabel.getRows().get(0).getCells().get(0).getContent().contains("•"))||
+                            tabel.getRows().get(0).getCells().get(0).getContent().contains("○")
+                            ||tabel.getRows().get(0).getCells().get(0).getContent().contains("")
+                            ||tabel.getRows().get(0).getCells().get(0).getContent().contains("")
+                            ||tabel.getRows().get(0).getCells().get(0).getContent().contains("")
+                            ||tabel.getRows().get(0).getCells().get(0).getContent().contains("")
+                            ||tabel.getRows().get(0).getCells().get(0).getContent().contains("")
+                            ||tabel.getRows().get(0).getCells().get(0).getContent().contains("-")
+                            ||tabel.getRows().get(0).getCells().get(0).getContent().contains("–")) {
                         //System.out.println("lijsttabel :o");
                         toRemove.add(tabel);
                         totalTables--;
