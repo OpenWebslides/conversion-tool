@@ -128,7 +128,7 @@ public class ArgumentsParsingTests {
     
     @Test
     public void outputDirTest1() {
-        File file = new File("C:\\temp\\tests\\outputDirTest1\\sub\\sub2");
+        File file = new File("test\\files\\outputDirTest1\\sub\\sub2");
         if(!file.exists() && !file.mkdirs())
             System.out.println("fout");
         else
