@@ -1,0 +1,203 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 18-mrt-2017, 11:43:19
+    Author     : Joann / Laurens
+*/
+
+@font-face
+{
+    font-family: Oswald;
+    src: url(../fonts/Oswald-Regular.ttf);
+}
+
+
+#message-success{
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+#collapse-options{
+    margin-top:30px;    
+}
+
+
+#field-download{    
+    margin-top: 10px;
+    margin-bottom:5px;
+    background-color: rgb(244, 247, 252);
+    border-radius: 15px;
+}
+
+#field-download-all{
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    background-color: rgb(244, 247, 252);
+}
+
+#download-form-all-btn {
+    margin:0 auto;
+    padding:10px;
+    width:95%;
+    opacity: 0.85;
+}
+
+
+#downloads-placeholder {
+    margin: 0 auto;
+    width: 80%;
+    text-align: center;
+}
+
+.btn, .btn:active, .btn:focus{
+    color: #1E64C8;
+    background-color: #E9F0FA;
+    border:none;   
+}
+
+.btn-primary:hover{
+    color: #FFFFFF;
+    background-color: #1E64C8;
+}
+
+.btn-secondary, .btn-secondary:focus {   
+   background-color: #FFD200;
+    color: #202020;
+}
+
+.btn-roomy{
+    padding: 10px;
+    margin: 20px;
+}
+
+.btn-secondary:hover{
+   background-color:#fcffaa;
+   color:#1e1d1d;
+}
+
+.blue-box {
+    padding: 20px;
+    border: 2px solid #1E64C8;   
+    margin-bottom: 5px;    
+    border-radius: 15px;
+}
+.header-text{
+    font-family: 'Oswald', sans-serif;
+    background-color: #1E64C8;
+    color: #FFF;
+}
+
+.dropzone{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.language {
+    font-size: 1.5em;
+}
+
+.language:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.language-choice {
+    float: right;
+}
+
+.language-selected{
+    font-weight: bolder;
+}
+
+
+@media screen {
+    .header-title{
+        font-size: 20px;
+    }
+    .header-subtext{
+        font-size: 13px;
+    }
+    #logo-ugent{
+        height: 70px;
+    }
+    .header-text{
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .header{
+        padding: 3px;
+    }
+}
+
+@media screen and (min-width: 480px){
+    .header-title{
+        font-size: 30px;
+    }
+    .header-subtext{
+        font-size: 13px;
+    }
+    #logo-ugent{
+        height: 85px;
+    }
+    .header-text{
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .header{
+        padding: 5px;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .header-title{
+        font-size: 50px;
+    }
+    .header-subtext{
+        font-size: 17px;
+    }
+    #logo-ugent{
+        height: 110px;
+    }
+    .header-text{
+        padding-bottom: 15px;
+        padding-top: 15px;
+    }
+    .header{
+        padding: 15px;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .header-title{
+        font-size: 55px;
+    }
+    .header-subtext{
+        font-size: 17px;
+    }
+    #logo-ugent{
+        height: 120px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .header-title{
+        font-size: 60px;
+    }
+    .header-subtext{
+        font-size: 20px;
+    }
+    #logo-ugent{
+        height: 140px;
+    }
+    .header-text{
+        padding-bottom: 20px;
+        padding-top: 20px;
+    }
+    .header{
+        padding: 20px;
+    }
+}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Info</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" sizes="96x96" href="https://styleguide.ugent.be/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://styleguide.ugent.be/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://styleguide.ugent.be/favicon-16x16.png">
+        <link rel="icon" sizes="16x16 32x32" href="https://styleguide.ugent.be/favicon.ico">
+        <link href="resources/css/bootstrap.min.css" rel="stylesheet">
+        <link href="resources/css/style.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container header">
+            <div class="col-xs-2">
+                <a href="./">
+                    <img src="resources/images/logo-ugent_en.svg" alt="Ghent University" id="logo-ugent"/>
+                </a>
+            </div>
+            <div class="col-xs-offset-1 col-xs-9 header-text">
+                <div class="col-xs-11">
+                    <h3 class="header-title">Open Webslides Portal</h3>
+                    <p class="header-subtext" id="header-subtext">A Ghent University project</p>
+                </div>               
+            </div>
+        </div>
+
+        <div class="container dragndrop">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1 id="info1">Convert to webslides in three steps</h1>
+                    <h3 id="info2">Step 1: Drag your .pdf or .pptx file(s) to the file drop field</h3>
+
+                    <div class="row">
+                        <div class = "col-xs-4"><img class="img-responsive" src="resources/images/drop_manual.jpg" alt="upload file" style = "max-height: 70%; width:auto;">
+                        </div>    
+                        <div class="col-xs-8"><p id="info3">.pptx and .pdf files can be converted at the same time. A maximum of 8 files can be uploaded at once. 
+                                <br><strong>Attention: files with another extension (.ppt, .doc,...) wont be accepted.</strong><br>
+                                You can choose to do a raw or a shower conversion. You can achieve this by clicking the "More options" button.  
+                                <img class="img-responsive" src="resources/images/moreOptionsEN.jpg" alt="More options" style = "max-width: 60%; height:auto; max-height: 70%; width: auto; display: inline-block;"> 
+                                <br>The raw option will return a pure html code. De shower conversion will add a layout to the conversion, ready for usage.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <h3>Click the "Convert" button and wait until your download pops up</h3>
+                    <div class="row">
+                        <div class = "col-xs-4"><img class="img-responsive" src="resources/images/convert_manual.jpg" alt="click Convert" style = "max-height: 70%; width:auto;">
+                        </div>    
+                        <div class="col-xs-8"><p>
+                                Your file(s) will be converted, this could take a while. During convertion you will see this symbol: 
+                                <img class="img-responsive" src="resources/images/loading_blue.gif" alt="More options" style = "max-width: 20px; height:auto; display: inline-block;"> 
+                                . You can keep working while your files are being converted.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <h3>Step 3: Click the downloadlink to start your download</h3>
+                    <div class="row">
+                        <div class = "col-xs-4"><img class="img-responsive"  src="resources/images/download_manual.jpg" alt="download" style = "max-height: 70%; width:auto;">
+                        </div>    
+                        <div class="col-xs-8">
+                            <p>
+                                The download starts automaticly when u click on the file. 
+                                The download-all button downloads all of the files in just 1 click. 
+                                The file you download is a zip file. U can extract this file using windows explorer, 
+                                7zip, winrar or any other archive manager. 
+                                To open your webslide click the index.html file in the newly extracted folder.
+
+                               The zip file contains a folder <i>"_shared"</i> and a file <i>"index.html"</i>.
+                                <img class="img-responsive" src="resources/images/files.jpg" alt="More options" style = "max-height: 40%; width:auto; display: inline-block;"> <br>
+                                This html file can be opened in any browser. The _shared folder will take care of the lay out of the webslides.
+                            </p>
+                        </div>
+                    </div>
+                    <h3>You are now ready to use webslides!</h3>
+                </div>               
+            </div>
+        </div>
+        <div class="container dragndrop">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h1>Technical info</h1>
+                    <div>
+                        <h4 id="what-it-does">What it does</h4>
+                        <p>The OpenWebslidesConverter is a tool to convert .pptx files into html. The converter does not rebuild the slides with each
+                            element on the same place or same size. It is the meaning to interpret the content and create generic code. The information
+                            stays the same but it is possible to use another template without changing any code.</p>
+                        <p>You have two choices as output. The first is just raw, plain html code. Secondly, it is also possible to generate code for
+                            the shower and a template.</p>
+                        <h4 id="parameters">Parameters</h4>
+                        <p>There are a number of parameters.</p>
+                        <ol>
+                            <li>input file: must be of the type <em>.pptx</em> or <em>.pdf</em></li>
+                            <li>output folder: where the converted file(s) should be placed</li>
+                            <li>output type: convert to plain code (raw) or with a template and shower (shower)</li>
+                        </ol>
+                        <p>Values can be set on the command line or within the <em>converter.properties</em> file. If not, default values are used.</p>
+                        <p>A short overview:</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        parameter
+                                    </th>
+                                    <th style="text-align:center;">
+                                        command line
+                                    </th>
+                                    <th>
+                                        value
+                                    </th>
+                                    <th>
+                                        default
+                                    </th>
+                                    <th>
+                                        usage
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        input file
+                                    </td>
+                                    <td style="text-align:center;">
+                                        -i
+                                    </td>
+                                    <td>
+                                        *.pptx | *.pdf
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <strong>
+                                            required
+                                        </strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        output dir
+                                    </td>
+                                    <td style="text-align:center;">
+                                        -o
+                                    </td>
+                                    <td>
+                                        *
+                                    </td>
+                                    <td>
+                                        output
+                                    </td>
+                                    <td>
+                                        optional
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        output type
+                                    </td>
+                                    <td style="text-align:center;">
+                                        -t
+                                    </td>
+                                    <td>
+                                        raw | shower
+                                    </td>
+                                    <td>
+                                        raw
+                                    </td>
+                                    <td>
+                                        optional
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        zip as output
+                                    </td>
+                                    <td style="text-align:center;">
+                                        -zip
+                                    </td>
+                                    <td>
+                                        <em>
+                                            none
+                                        </em>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        optional
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            If the output type (-t) equals
+                            <em>
+                                shower
+                            </em>
+                            :
+                        </p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>
+                                        parameter
+                                    </th>
+                                    <th style="text-align:center;">
+                                        command line
+                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        course
+                                    </td>
+                                    <td style="text-align:center;">
+                                        -co
+                                    </td>
+                                    <td>
+                                        optional
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        chapter
+                                    </td>
+                                    <td style="text-align:center;">
+                                        -ch
+                                    </td>
+                                    <td>
+                                        optional
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            The default values can be changed: <em>converter.properties</em> overwrites the default values, the command line arguments
+                            overwrite the properties values.</p>
+                        <h4 id="_converterproperties_-file"><em>converter.properties</em> file</h4>
+                        <p>One way to set the values is to create the <em>converter.properties</em> file in the same directory as the converter jar.
+                            An example:</p>
+                        <pre><code>#directory for the log file: must end with "\\"
+LOG_FILE=c:\\temp\\log\\
+
+#output type: raw or shower
+OUTPUT_TYPE=shower
+
+#directory for the converted files
+OUTPUT_DIR=converted files</code></pre>
+                        <h4 id="template">
+                            Template</h4>
+                        <p>When using <em>shower</em> as output type, a template is used. The template files are stocked in template.zip, which is saved
+                            in the package <em>openwebslides</em> inside the builded jar.</p>
+                        <h4 id="use-as-a-command-line-tool">Use as a command line tool</h4>
+                        <h5 id="logging">Logging</h5>
+                        <p>There are 2 ways of logging: <em>-cl</em> (console log) and <em>-fl</em> (file log). Console logging shows a short message
+                            in case of an error while the log file also contains the stack trace. The default location for the log file is <code>c:\temp\</code>.</p>
+                        <p>There are four possible ways to set the logging:</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>flag(s)</th>
+                                    <th>logging</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><em>none</em></td>
+                                    <td>console logging</td>
+                                </tr>
+                                <tr>
+                                    <td>-cl</td>
+                                    <td>console logging</td>
+                                </tr>
+                                <tr>
+                                    <td>-fl</td>
+                                    <td>file logging</td>
+                                </tr>
+                                <tr>
+                                    <td>-cl -fl</td>
+                                    <td>console and file logging</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>Adjusting <code>LOG_FILE=...</code> in <em>converter.properties</em> is the only way to change the directory where the log
+                            files are created.</p>
+                        <h5 id="command">Command</h5>
+                        <pre><code>$ java -jar OpenWebslidesConverter.jar -i &lt;input file&gt; [options]</code></pre>
+                        <p>Examples:</p>
+                        <pre><code>$ java -jar OpenWebslidesConverter.jar -i file.pptx -t shower -fl</code></pre>
+                        <pre><code>$ java -jar OpenWebslidesConverter.jar -i file.pptx -o "converted files"</code></pre>
+                        <pre><code>$ java -jar OpenWebslidesConverter.jar -i file.pptx -o out -fl -cl</code></pre>
+                        <h5 id="as-library">As library</h5>
+                        <p>Just include the .jar file as a dependency or library inside your project. Use one of the above static methods.</p>
+                        <h4 id="technical-details">Technical details</h4>
+                        <h5 id="video-conversion">video conversion</h5>
+                        <p>HTML5 only supports three types of video. Those are: MP4, WebM and Ogg. If the video in the PowerPoint file has another extension
+                            a placeholder is shown. The original file could still be inserted within the images folder.</p>
+                    </div>                    
+                </div>               
+            </div>
+        </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="resources/js/404.js"></script>
+    </body>
+</html>
