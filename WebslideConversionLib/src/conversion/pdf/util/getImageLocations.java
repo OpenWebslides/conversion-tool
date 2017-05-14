@@ -21,6 +21,7 @@ package conversion.pdf.util;
  * limitations under the License.
  */
 
+import conversion.pdf.PDFConverter;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,25 +47,32 @@ Info in verband met nummering: nummers tellen voor elke afbeelding zoals die ont
 public class getImageLocations extends PDFTextStripper {
     private static int imageNumber;
     private ArrayList<Image> images= new ArrayList<>();
-    public getImageLocations() throws IOException {
-        
+    private PDFConverter conv;
+    public getImageLocations(PDFConverter p) throws IOException {
         super();
+        this.conv = p;
         imageNumber = 1;
     }
     public int getImageNumber(){
         return imageNumber;
     }
-
+    private int ImagesOnPage = 0;
+    public void resetNumber(){
+        ImagesOnPage = 0;
+    }
+    
+    
     @Override
     protected void startPage(PDPage page) throws IOException {
         // process start of the page
+       
         super.startPage(page);
     }
     /**
      * Fills the images arrayList with image objects found in arguments.
-     * @param operator
-     * @param arguments
-     * @throws IOException 
+     * @param operator PDOperator
+     * @param arguments List
+     * @throws IOException exception
      */
     @Override
     protected void processOperator(PDFOperator operator, List<COSBase> arguments) throws IOException {
@@ -82,13 +90,41 @@ public class getImageLocations extends PDFTextStripper {
               //  System.out.println("gevonden op: " + x + "," + y);
                 
                 Image im = new Image();
-                im.setFilename("img" + imageNumber + ".jpg");
+                im.setFilename("img"  + (conv.getCurrentPageNumber()) + "-"+ ImagesOnPage + ".jpg");
+                    //System.out.println("made image: " + im.getFilename());
+                    ImagesOnPage++;
                 Dimension positie = new Dimension();
                 Dimension afmeting = new Dimension();
+                //size in mm
+                height /= 72;
+                width /= 72;
+                height *= 25.4;
+                width *= 25.4;
+                //size in % tov breedte pagina (de keuze is om 33 cm als pagina breedte te gebruiken!)
+                height /= 190;
+                width /= 330;
+                //size vergroten wegens integers
+                height *= 100;
+                width *= 100;
+                
+                x /= 72;
+                y /= 72;
+                x *= 25.4;
+                y *= 25.4;
+                
+                x /= 330;
+                x *= 100;
+                y/=190;
+                y *=100;
+                y = 100 - y;
+                y = y - height;
                 positie.setSize(x, y);
-                afmeting.setSize(height, width);
+                   
+                afmeting.setSize(width, height);
+                    //System.out.println("picture with size: " + height + width);
                 im.getLocation().setSize(positie);
                 im.getDimension().setSize(afmeting);
+                   // System.out.println(im.toString());
                 images.add(im);
                 imageNumber++;
                 

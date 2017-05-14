@@ -12,7 +12,7 @@ package objects;
 public interface PPTObject {
     
     /**
-     * For testing, this will be different for each PPTObject instance<p>
+     * For testing Javadoc, this will be different for each PPTObject instance<p>
      * Method created by KVH Industries® Copyright © Karel Vanden Houte</p>
      * <ul> 
      *      <li>A PPTList will return the toString() method of all its bullets
@@ -22,11 +22,16 @@ public interface PPTObject {
      *      <li>A Slide will return the toString() of all of its objects</li>
      *      <li>A Text item will return the toString() method of all of its textparts</li>
      *      <li>A Textpart will return it's content, and extra details if he has them</li>
+     *      <li>....Each object has javadoc for it's toString() method</li>
      * </ul>
      * @return String toString
      */
     @Override
     public String toString();
     
+    /**
+     * Return a simple String version of the object, each object has javadoc for its getContent() method
+     * @return String
+     */
     public String getContent();
 }

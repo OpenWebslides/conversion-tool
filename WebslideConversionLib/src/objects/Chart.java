@@ -14,8 +14,14 @@ import java.util.HashMap;
  */
 public class Chart implements PPTObject {
 
+    //A chart has a title
     private String title;
+    
+    //THe values of the chart
+    //A chart has multiple categories with multiple series which contains multiple values
     private final HashMap<String, HashMap<String, ArrayList<Double>>> content;
+    
+    //A chaet has a type, barChart/piechart/...
     private ChartType chartType;
     private String id;
     
@@ -95,15 +101,27 @@ public class Chart implements PPTObject {
         return toret;
     }
 
+    /**
+     * Get the id of the chart
+     * @return String
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Set the id of the chart
+     * @param id String
+     */
     public void setId(String id) {
         this.id = id;
     }
 
     @Override
+    /**
+     * Return the content of the chart
+     * For a chart this returns the same as toString()
+     */
     public String getContent() {
         return toString();
     }

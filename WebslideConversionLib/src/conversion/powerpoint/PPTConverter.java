@@ -5,6 +5,11 @@
  */
 package conversion.powerpoint;
 
+import conversion.powerpoint.sax.PowerpointHandler;
+import conversion.powerpoint.util.InsightHandler;
+import conversion.powerpoint.util.MediaHandler;
+import conversion.powerpoint.util.TextHandler;
+import conversion.powerpoint.util.GarbageHandler;
 import conversion.IConverter;
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,27 +88,30 @@ public class PPTConverter implements IConverter {
             SAXParser sp = factory.newSAXParser();
             DefaultHandler handler;
 
-            for (XSLFSlide slide : slides) {
+           for (XSLFSlide slide : slides) {
+               // XSLFSlide slide = slides.get(13);
                 try {
                     //output.println("+++++++++++++ Slide " + slides.indexOf(slide) + " +++++++++++++");
                     //Webslide object
                     Slide webslide = new Slide();
 
+                    String xml = slide.getXmlObject().getCSld().getSpTree().toString();
+                                        
                     //for testing
-                    //output.println(slide.getXmlObject().getCSld().getSpTree().toString());
+                    //output.println(xml);
                     
                     //handler that will parse the xml data
-                    handler = new PowerpointHandler(webslide.getPptObjects(), output);
+                    handler = new PowerpointHandler(webslide, output);
 
                     //parse
-                    sp.parse(new InputSource(new StringReader(slide.getXmlObject().getCSld().getSpTree().toString())), handler);
+                    sp.parse(new InputSource(new StringReader(xml)), handler);
 
                     //Handle media: video, image, hyperlink, chart
                     MediaHandler.handle(slide, webslide.getPptObjects(), saveLocation, file, output, zip);
 
                     //remove null values from list that got there thanks to irregularities in xml
                     GarbageHandler.handle(webslide.getPptObjects(), output);
-
+                    
                     //Add spaces when necessary between textparts, change list structure
                     TextHandler.handle(webslide.getPptObjects());
 
@@ -114,15 +122,15 @@ public class PPTConverter implements IConverter {
 
                     //print the slide for testing toString details
                     //output.println("------------ toString -------------");
-                    //output.println(webslide.toString());
+                  //output.println(webslide.toString());
 
                     //print the slide for testing getContent
-                    //output.println("------------ getContent -------------");
-                    //output.println(webslide.getContent());
+                  //output.println("------------ getContent -------------");
+                  //output.println(webslide.getContent());
 
                     //Add to ppt
                     ppt.getSlides().add(webslide);
-
+                        
                     // output.println("");
                 } catch (Exception e) {
                     output.println(Logger.error("Error while parsing slide + " + slides.indexOf(slide) + 1 + " in the powerpoint", e));
@@ -135,21 +143,9 @@ public class PPTConverter implements IConverter {
             throw new IllegalArgumentException("This is probably not a valid powerpoint file");
         }
         ppt.getInsight().setConvertTime(new Date().getTime() - startTime);
-        printInsights(ppt);
     }
 
-    private void printInsights(PPT ppt) {
-        output.println("***** Insights ******");
-        output.println("Convert time");
-        output.println("" + (double) ((double)ppt.getInsight().getConvertTime()/1000));
-        output.println("");
-        output.println("Objectcount");
-        output.println(ppt.getInsight().generateDifferentObjectsString());
-        output.println("");
-        output.println("Wordcount");
-        output.println("Number of different words: " + ppt.getInsight().generateDifferentWordsString());
-        output.print("Number of words: ");
-        output.println("" + ppt.getInsight().generateWordString());
-    }
+    
+
 
 }

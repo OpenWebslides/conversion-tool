@@ -9,6 +9,7 @@ package objects;
 /**
  *
  * @author Joann
+ * An Image is nothing more than an extension of Media
  */
 public class Image extends Media{
     
