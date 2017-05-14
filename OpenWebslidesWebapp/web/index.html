@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Open Webslides Portal</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" sizes="96x96" href="https://styleguide.ugent.be/favicon-96x96.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="https://styleguide.ugent.be/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="https://styleguide.ugent.be/favicon-16x16.png">
+        <link rel="icon" sizes="16x16 32x32" href="https://styleguide.ugent.be/favicon.ico">
+        <link rel="stylesheet" type="text/css" href="resources/css/dropzone.css"/>
+        <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css" >
+        <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+    </head>
+    <body>
+        <div class="container header">
+            <div class="col-xs-2">
+                <a href="./">
+                    <img src="resources/images/logo-ugent_en.svg" alt="Ghent University" id="logo-ugent"/>
+                </a>
+            </div>
+            <div class="col-xs-offset-1 col-xs-9 header-text">
+                <div class="col-xs-11">
+                    <h2 class="header-title">Open Webslides Portal</h2>
+                    <p class="header-subtext">A Ghent University project</p>
+                </div>
+                <div class="col-xs-1">
+                    <div class="row">
+                        <span class="language language-selected" id="lang-en">en</span>
+                        <span> | </span>
+                        <span class="language" id="lang-nl">nl</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container blue-box">           
+            <div class="row">
+                <form action="upload" class="dropzone dz-clickable col-xs-12" id="my-awesome-dropzone">
+                </form>
+            </div>
+            <div class="row">
+                <div class="alert alert-danger" role="alert" style="display: none" id="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span class="sr-only">Error:</span>
+                    <span id="message_alert"></span>
+                </div>
+
+                <div class="alert alert-success" role="alert" style="display: none" id="success">
+                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                    <span class="sr-only">Success:</span>
+                    <span id="message_success">Example</span>
+                    <a href="https://styleguide.ugent.be/files/uploads/logo_UGent_EN_RGB_2400_kleur_witbg.png">Download</a>
+                </div>
+            </div>
+            <div class="row">
+                <button class="btn btn-primary btn-roomy col-xs-2" type="button" id="btn-options">
+                    More options...
+                </button>
+
+                <div class="collapse col-xs-3" id="collapse-options">                    
+                    <span id="output-type">Output type:  </span>
+                    <label class="radio-inline"><input type="radio" name="outputType" value="raw" />Raw</label>
+                    <label class="radio-inline"><input type="radio" name="outputType" value="shower" checked/>Shower</label>                       
+                </div>
+                <div class="col-xs-1 col-xs-offset-3">
+                    <button class="btn btn-secondary btn-lg btn-roomy" type="button" id="btn-convert" disabled>Convert</button>
+                </div>
+                <div class="col-xs-1 col-xs-offset-1">
+                    <button class="btn btn-primary btn-roomy" type="button" id="btn-cancel">Cancel</button> 
+                </div>
+            </div>
+        </div>               
+
+        <div class="container blue-box">           
+            <div class="row" id="field-download">
+                <p id="downloads-placeholder">Your converted files will appear here</p>
+
+            </div>     
+            <div class="row">
+                <button type="button" id="download-form-all-btn" class="btn btn-secondary btn-block">Download all </button>
+            </div>
+        </div>
+
+        <div class="container blue-box">
+            <div class="row" id="field-manual">
+                <button type="button" id="field-manual-btn" class="btn btn-primary btn-roomy">How to use this webapp?</button>                
+            </div>
+            <div class="row" id="field-manual-content">
+                <div class="col-xs-3">
+                    <figure>
+                        <img class="img-responsive" src="resources/images/drop_manual.jpg" alt="manual picture 1" />
+                        <figcaption>Click the dropzone to drop a file or drag a file to it then click convert.</figcaption>
+                    </figure>
+                </div>                    
+                <div class="col-xs-1">
+                    <img class="img-responsive" src="resources/images/pijl_manual.jpg" alt="manual arrow" />
+                </div>
+                <div class="col-xs-3">
+                    <figure>
+                        <img class="img-responsive" src="resources/images/convert_manual.jpg" alt="manual picture 2" />
+                        <figcaption id="manual-2">Click convert a blue rotating icon will appear below the dropzone.</figcaption>
+                    </figure>
+                </div>
+                <div class="col-xs-1">
+                    <img class="img-responsive" src="resources/images/pijl_manual.jpg" alt="manual arrow" />                    
+                </div>
+                <div class="col-xs-3">
+                    <figure>
+                        <img class="img-responsive" src="resources/images/download_manual.jpg" alt="manual picture 3" />
+                        <figcaption id="manual-3">Click an individual button to download that file or click the download all button.</figcaption>
+                    </figure>
+                </div>                 
+            </div>           
+        </div>
+
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <a href="resources/application/OpenWebslidesConverter.jar" download="OpenWebslidesConverter.jar" id="download-application">
+                        Download the command line converter application
+                    </a>
+                    <a class="pull-right" href="info.html" target="_blank" rel="noreferrer noopener" id="more-manual">More manual info (includes offline application info)</a>
+                </div>
+            </div>            
+        </footer>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="resources/js/bootstrap.min.js"></script>
+        <script src="resources/js/dropzone.js"></script>
+        <script src="resources/js/dropzone_options.js"></script>
+        <script src="resources/js/websocket.js"></script>          
+        <script src="resources/js/download.js"></script>
+    </body>
+</html>
