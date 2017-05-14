@@ -28,9 +28,11 @@ public class PPTTest {
 
     @Test
     public void main() throws FileNotFoundException {
-        File file = new File("C:\\temp\\testPpts\\Presentatie2.pptx");
+        File file = new File("ppts\\able.pptx");
+       // File file = new File("ppt\\unable.pptx");
+       // File file = new File("ppt\\filled.pptx");
 
-        FileOutputStream dest = new FileOutputStream("C:\\temp\\testPpts\\zip.zip");
+        FileOutputStream dest = new FileOutputStream("zip.zip");
         ZipOutputStream zip = new ZipOutputStream(new BufferedOutputStream(dest));
         
         
@@ -55,32 +57,5 @@ public class PPTTest {
         } catch (Exception ex) {
             java.util.logging.Logger.getLogger(PPTTest.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-   // @Test
-    public void testALotOfPPT() {
-        File file = new File("C:\\temp\\testPpts");
-        for (File f : file.listFiles()) {
-            if(f.isFile()){
-                System.out.println("READING " + f.getName());
-                try {
-                    IConverter converter = ConverterFactory.getConverter(f);
-                    converter.setOutput(new StdLogOutput(new Logger("c:\\temp\\log", "logging", "karel")));
-                    PPT ppt = new PPT();
-                    String folder = f.getName().substring(0,f.getName().lastIndexOf("."));
-                    converter.parse(ppt, "C:\\temp\\testPpts\\" + folder + "\\images");
-                    if (f.getName().equals("1.pptx")||f.getName().equals("sample.ppt")) {
-                        //1.pptx is a corupt pptx and should not be read
-                        assertFalse(true);
-                    }
-                } catch (Exception e) {
-                    if (!f.getName().equals("1.pptx") && !f.getName().equals("sample.ppt")) {
-                        //1.pptx is a corrupt pptx ad shouold not be read
-                        assertFalse(true);
-                    }
-                }
-            }
-        }
-        assertTrue(true);        
     }
 }
