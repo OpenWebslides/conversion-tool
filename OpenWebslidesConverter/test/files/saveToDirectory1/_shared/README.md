@@ -1,0 +1,1 @@
+# Clear theme for Shower

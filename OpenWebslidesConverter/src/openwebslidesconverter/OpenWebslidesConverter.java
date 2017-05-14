@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.security.InvalidParameterException;
 import java.util.Queue;
-import java.util.logging.Level;
 import java.util.zip.ZipOutputStream;
 import output.*;
 import logger.Logger;
@@ -78,11 +77,6 @@ public class OpenWebslidesConverter {
             System.err.println("cannot start the converter because of false argument(s): " + ex.getMessage());
         } catch (IOException | InvalidParameterException | WebslidesConverterException ex) {
             output.error("error while converting: " + ex.getMessage(), ex.getMessage());
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex) {
-            //***//
-            output.error("error while converting: " + ex.getMessage(), ex.getMessage());
-            java.util.logging.Logger.getLogger(OpenWebslidesConverter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

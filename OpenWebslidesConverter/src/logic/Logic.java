@@ -1,5 +1,6 @@
 package logic;
 
+import java.util.ArrayList;
 import java.util.List;
 import objects.*;
 
@@ -7,25 +8,67 @@ import objects.*;
  *
  * @author Joann
  */
-public class Logic implements ILogic {
+public class Logic {
 
     /**
-     * Searches for lists and titles in ppt and converts them
+     * Searches for unordered and ordered lists and titles in ppt and converts
+     * them Groups Text objects with the same FontDecoration
      *
-     * @param ppt
+     * @param ppt The PPT object that needs to be formatted
      */
-    @Override
     public void format(PPT ppt) {
-        //Ordered list checks for multiple levels first in case there is a list in simple form
-        /*ComplexListLogic cll = new ComplexListLogic();
-        cll.formatList(ppt, "(\\d+\\.(\\d+\\.)*(?!\\d))", true, true);*/
-        SimpleListLogic sll = new SimpleListLogic();
-        sll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", false, true);
-        sll.formatList(ppt, "^([A-Z][\\.)])", false, true);
-        sll.formatList(ppt, "^([a-z][\\.)])", false, true);
-        UnorderedListLogic ull = new UnorderedListLogic();
-        ull.formatList(ppt, "^([^a-zA-z0-9]+)", false, false);
         formatTitle(ppt);
+        UnorderedListLogic ull = new UnorderedListLogic();
+        //ull.formatList(ppt, "([•○-–])", false);
+        ull.formatList(ppt, "([\\u2022\\u25cb\\uf0a7\\uf0d8\\uf071\\uf076\\uf0fc\\u002d\\u2013])", false);
+        OrderedListLogic oll = new OrderedListLogic();
+        oll.formatList(ppt, "^(\\d+[\\.)](?!\\d))", true);
+        oll.formatList(ppt, "^([A-Z][\\.)])", true);
+        oll.formatList(ppt, "^([a-z][\\.)])", true);
+        groupFontdecoration(ppt);
+    }
+    
+    private void groupTextparts(Text text) {
+        List<Integer> toRemove = new ArrayList<>();
+        int i = 0;
+        while (i < text.getTextparts().size() - 1) {
+            Textpart tp1 = text.getTextparts().get(i);
+            Textpart tp2 = text.getTextparts().get(i + 1);
+            while (tp1.getType().equals(tp2.getType()) && i < text.getTextparts().size() - 1) {
+                i++;
+                tp1.setContent(tp1.getContent() + tp2.getContent());
+                if (i < text.getTextparts().size() - 1) {
+                    tp2 = text.getTextparts().get(i + 1);
+                }
+                toRemove.add(i);
+            }
+            i++;
+        }
+        for (int j = toRemove.size() - 1; j >= 0; j--) {
+            text.getTextparts().remove((int) toRemove.get(j));
+        }
+    }
+
+    private void groupTextparts(PPTList list) {
+        for (PPTObject obj : list.getBullets()) {
+            groupTextparts(obj);
+        }
+    }
+
+    private void groupTextparts(PPTObject obj) {
+        if (obj instanceof Text) {
+            groupTextparts((Text) obj);
+        } else if (obj instanceof PPTList) {
+            groupTextparts((PPTList) obj);
+        }
+    }
+
+    private void groupFontdecoration(PPT ppt) {
+        for (Slide slide : ppt.getSlides()) {
+            for (PPTObject obj : slide.getPptObjects()) {
+                groupTextparts(obj);
+            }
+        }
     }
 
     private void formatTitle(PPT ppt) {
@@ -58,17 +101,26 @@ public class Logic implements ILogic {
                 }
                 i++;
             }
+            List<Integer> toRemove = new ArrayList<>();
+            List<Title> toAdd = new ArrayList<>();
             for (int j = 0; j < slide.getPptObjects().size(); j++) {
                 if (!hasTitle && slide.getPptObjects().get(j) instanceof Text && !((Text) slide.getPptObjects().get(j)).getTextparts().isEmpty()) {
                     int firstSize = ((Text) slide.getPptObjects().get(j)).getTextparts().get(0).getSize();
-                    if ((firstSize < 1000 && firstSize >= maxSize - 5/*(minSize + (maxSize - minSize) * 4 / 5)*/) || (firstSize >= 1000 && (firstSize > (minSize + (maxSize - minSize) / 3) || firstSize >= 4000))) {
+                    if (firstSize != 0 && ((firstSize < 1000 && firstSize >= maxSize - 5) || (firstSize >= 1000 && (firstSize > (minSize + (maxSize - minSize) / 3) || firstSize >= 4000)))) {
                         Title title = new Title();
                         title.getTextparts().addAll(((Text) slide.getPptObjects().get(j)).getTextparts());
-                        slide.getPptObjects().set(j, title);
+                        toRemove.add(j);
+                        toAdd.add(title);
                     }
                 }
             }
+
+            for (int j = toRemove.size() - 1; j >= 0; j--) {
+                slide.getPptObjects().remove((int) toRemove.get(j));
+            }
+            for (int j = toAdd.size() - 1; j >= 0; j--) {
+                slide.getPptObjects().add(0, toAdd.get(j));
+            }
         }
     }
-
 }

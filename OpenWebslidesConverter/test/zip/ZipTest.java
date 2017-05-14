@@ -58,21 +58,19 @@ public class ZipTest {
     // @Test
     // public void hello() {}
     
-    /*
-     * Tests is afhankelijk van filesystem
     
     @Test
     public void test1() throws FileNotFoundException, ZipException, IOException{
-        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(new File("C:\\temp\\ziptest\\result.zip")));
-        File folder = new File("C:\\temp\\ziptest\\source");
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(new File("test\\files\\ziptest\\result.zip")));
+        File folder = new File("test\\files\\ziptest\\source");
         Zipper.addFolder(zos, folder);
         zos.close();
     }
     
     @Test
     public void test2() throws FileNotFoundException, ZipException, IOException{
-        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(new File("C:\\temp\\ziptest\\result.zip")));
-        File folder = new File("C:\\temp\\ziptest\\source");
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(new File("test\\files\\ziptest\\result.zip")));
+        File folder = new File("test\\files\\ziptest\\source");
         Zipper.addFolder(zos, folder);
         
         
@@ -89,17 +87,17 @@ public class ZipTest {
         
         zos.close();
     }
-    */
+    
     
     @Test
     public void templateTest() throws FileNotFoundException, ZipException, IOException{
         ZipInputStream zis = new ZipInputStream(new BufferedInputStream(Converter.class.getResourceAsStream("/openwebslides/template.zip")));
-        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("C:\\temp\\tests\\templateTest\\result_zip.zip"));
+        ZipOutputStream zos = new ZipOutputStream(new FileOutputStream("test\\files\\templateTest\\result_zip.zip"));
         Zipper.copyZip(zis, zos);
         zos.close();
         
         zis = new ZipInputStream(new BufferedInputStream(Converter.class.getResourceAsStream("/openwebslides/template.zip")));
-        File dir = new File("C:\\temp\\tests\\templateTest");
+        File dir = new File("test\\files\\templateTest");
         Zipper.copyZip(zis, dir);
     }
     

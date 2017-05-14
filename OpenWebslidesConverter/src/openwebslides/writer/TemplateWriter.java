@@ -44,7 +44,7 @@ public class TemplateWriter extends Writer {
         out.write("<!DOCTYPE html>\n" +
             "<html lang=\"en\">\n" +
             "<head>\n" +
-            "\t<title>Introduction</title>\n" +
+            "\t<title>" + course + " - " + chapter + "</title>\n" +
             "\t<meta charset=\"utf-8\">\n" +
             "\t<meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\">\n" +
             "\t<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,maximum-scale=1\">\n" +
@@ -53,8 +53,8 @@ public class TemplateWriter extends Writer {
             "<body class=\"shower list\">\n" +
             "\t<header class=\"caption\">\n" +
             "\t\t<h1>\n" +
-            "\t\t\t<a class=\"series\" href=\"#title\">" + course + "</a><br>\n" +
-            "\t\t\t<a class=\"module\" href=\"#title\">" + chapter + "</a>\n" +
+            "\t\t\t<a class=\"series\" href=\"#\">" + course + "</a><br>\n" +
+            "\t\t\t<a class=\"module\" href=\"#slide0\">" + chapter + "</a>\n" +
             "\t\t</h1>\n" +
             "\t\t<p>\n" +
             "\t\t</p>\n" +

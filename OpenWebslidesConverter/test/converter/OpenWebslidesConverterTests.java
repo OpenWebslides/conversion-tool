@@ -55,34 +55,34 @@ public class OpenWebslidesConverterTests {
     //
     // @Test
     // public void hello() {}
-    /*
+    
     @Test
     public void test1() {
-        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1\\input.pptx",
-                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test1"};
+        String[] args = new String[] {"-i","test\\files\\OpenWebslidesConverterTests\\test1\\input.pptx",
+                                      "-o","test\\files\\OpenWebslidesConverterTests\\test1"};
         OpenWebslidesConverter.main(args);
     }
     
     @Test
     public void test2() {
-        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2\\input.pptx",
-                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test2",
+        String[] args = new String[] {"-i","test\\files\\OpenWebslidesConverterTests\\test2\\input.pptx",
+                                      "-o","test\\files\\OpenWebslidesConverterTests\\test2",
                                       "-zip"};
         OpenWebslidesConverter.main(args);
     }
     
     @Test
     public void test3() {
-        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3\\input.pptx",
-                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test3",
+        String[] args = new String[] {"-i","test\\files\\OpenWebslidesConverterTests\\test3\\input.pptx",
+                                      "-o","test\\files\\OpenWebslidesConverterTests\\test3",
                                       "-t","shower"};
         OpenWebslidesConverter.main(args);
     }
     
     @Test
     public void test4() {
-        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test4\\input.pptx",
-                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\test4",
+        String[] args = new String[] {"-i","test\\files\\OpenWebslidesConverterTests\\test4\\input.pptx",
+                                      "-o","test\\files\\OpenWebslidesConverterTests\\test4",
                                       "-t","shower",
                                       "-zip"};
         OpenWebslidesConverter.main(args);
@@ -90,10 +90,10 @@ public class OpenWebslidesConverterTests {
     
     @Test
     public void test5() throws IOException, WebslidesConverterException {
-        String zipLocation = "C:\\temp\\tests\\OpenWebslidesConverterTests\\test5";
+        String zipLocation = "test\\files\\OpenWebslidesConverterTests\\test5";
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         
-        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test5\\input.pptx"};
+        String[] args = new String[] {"-i","test\\files\\OpenWebslidesConverterTests\\test5\\input.pptx"};
         Queue<String> queue = new ConcurrentLinkedDeque<>();
         long id = 1;
         
@@ -105,10 +105,10 @@ public class OpenWebslidesConverterTests {
     
     @Test
     public void test6() throws IOException, WebslidesConverterException {
-        String zipLocation = "C:\\temp\\tests\\OpenWebslidesConverterTests\\test6";
+        String zipLocation = "test\\files\\OpenWebslidesConverterTests\\test6";
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         
-        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\test6\\input.pptx",
+        String[] args = new String[] {"-i","test\\files\\OpenWebslidesConverterTests\\test6\\input.pptx",
                                       "-t","shower"};
         Queue<String> queue = new ConcurrentLinkedDeque<>();
         long id = 1;
@@ -125,20 +125,22 @@ public class OpenWebslidesConverterTests {
         }
     }
     
-    */
+    
     
     @Test
     public void allElementsTest(){
-        String[] args = new String[] {"-i","C:\\temp\\tests\\OpenWebslidesConverterTests\\allElementsTest\\input.pptx",
-                                      "-o","C:\\temp\\tests\\OpenWebslidesConverterTests\\allElementsTest",
-                                      "-t","shower"};
+        String[] args = new String[] {"-i","test\\files\\OpenWebslidesConverterTests\\allElementsTest\\input.pptx",
+                                      "-o","test\\files\\OpenWebslidesConverterTests\\allElementsTest",
+                                      "-t","shower",
+                                      "-co","Bachelorproef",
+                                      "-ch","All elements"};
         OpenWebslidesConverter.main(args);
     }
-    /*
+    
     @Test
     public void imagesSizes() throws WebslidesConverterException{
-        String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\imagesSizes";
-        String input = "C:\\temp\\tests\\OpenWebslidesConverterTests\\imagesSizes\\input.pptx";
+        String dir = "test\\files\\OpenWebslidesConverterTests\\imagesSizes";
+        String input = "test\\files\\OpenWebslidesConverterTests\\imagesSizes\\input.pptx";
         
         String[] args = new String[] {"-i",input,
                                       "-o",dir,
@@ -149,8 +151,8 @@ public class OpenWebslidesConverterTests {
     
     @Test
     public void pdf1() throws WebslidesConverterException{
-        String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf1";
-        String input = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf1\\input.pdf";
+        String dir = "test\\files\\OpenWebslidesConverterTests\\pdf1";
+        String input = "test\\files\\OpenWebslidesConverterTests\\pdf1\\input.pdf";
         
         String[] args = new String[] {"-i",input,
                                       "-o",dir,
@@ -160,8 +162,8 @@ public class OpenWebslidesConverterTests {
     
     @Test
     public void pdf2() throws WebslidesConverterException{
-        String dir = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf2";
-        String input = "C:\\temp\\tests\\OpenWebslidesConverterTests\\pdf2\\input.pdf";
+        String dir = "test\\files\\OpenWebslidesConverterTests\\pdf2";
+        String input = "test\\files\\OpenWebslidesConverterTests\\pdf2\\input.pdf";
         
         String[] args = new String[] {"-i",input,
                                       "-o",dir,
@@ -169,5 +171,5 @@ public class OpenWebslidesConverterTests {
                                       "-zip"};
         OpenWebslidesConverter.main(args);
     }
-    */
+    
 }
