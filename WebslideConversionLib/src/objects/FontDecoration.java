@@ -8,6 +8,7 @@ package objects;
 /**
  *
  * @author Karel
+ * These are the most popular FontDecorations in PowerPoint
  */
 public enum FontDecoration {
     BOLD,

@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Slide implements PPTObject {
 
+    //A Slide can contains multiple pptObjects
     private final List<PPTObject> pptObjects;
 
     /**
@@ -29,7 +30,7 @@ public class Slide implements PPTObject {
     
     @Override
     /**
-     * Return a string with the content of this slide, for testing purposes
+     * Return a string with the data of this slide, for testing purposes
      */
     public String toString(){
         String toret = "";
@@ -38,6 +39,9 @@ public class Slide implements PPTObject {
     }
 
     @Override
+    /**
+     * Return a String with the content of all of its elements
+     */
     public String getContent() {
         String toret = "";
         for(PPTObject po : pptObjects){
@@ -46,6 +50,11 @@ public class Slide implements PPTObject {
         return toret;
     }
 
+    /**
+     * Return all of the objects in this slide, without containing lists
+     * eg. if a Slide contains multiple lists 3 list items this method will return all of the items in his lists, but not the lists themselves
+     * @return List
+     */
     public List<PPTObject> getAllPptObjects() {
         List<PPTObject> list = new ArrayList<>();
         for (PPTObject po : pptObjects) {

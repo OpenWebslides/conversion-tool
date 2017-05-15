@@ -11,12 +11,11 @@ import objects.PPTObject;
 import objects.Textpart;
 
 /**
- *
+ *Utility class to make powerpoint objects
  * @author Gertjan
  */
 public class Info2Object {
 
-    //OPM dit moet textdeel worden!!! --> merge ergens nodig met karel... 
     public PPTObject convert(ArrayList<TekenPlus> t) {
 
         StringBuilder sb = new StringBuilder();

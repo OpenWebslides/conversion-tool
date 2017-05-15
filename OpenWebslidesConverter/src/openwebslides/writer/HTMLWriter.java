@@ -60,13 +60,18 @@ public class HTMLWriter extends Writer implements Indentation{
         //open slide tag
         String res = TABS + "<div class=\"";
         res += slideIndex==0 ? SLIDE_TITLE : SLIDE_NORMAL;
-        res += "\" id=\"slide" + slideIndex++ + "\">";
+        res += "\" id=\"slide" + slideIndex + "\">";
         
         setTABS(++indentation);
         //content of slide
         for(PPTObject pptObj : slide.getPptObjects()){
             res += "\n" + TABS + objectToHtml(pptObj);
         }
+        
+        //slide number
+        if(slideIndex > 0)
+            res += "\n" + TABS + "<div class=\"slidenumber\">" + slideIndex + "</div>";
+        slideIndex++;
         setTABS(--indentation);
         
         //close slide tag
@@ -178,52 +183,11 @@ public class HTMLWriter extends Writer implements Indentation{
     }
     
     private String printTextparts(List<Textpart> parts){
-        String res = "";
-        for(Textpart textpart : parts){
-            String part = "";
-            if(textpart instanceof Hyperlink){
-                Hyperlink link = (Hyperlink)textpart;
-                part = " <a href=\"" + link.getUrl() + "\">";
-                
-                for(Textpart linkpart: link.getParts()){
-                    part += linkpart.getContent();
-                }
-                part += "</a> ";
-            }
-            else {
-                part = textpart.getContent();
-
-                if(textpart.getType().contains(FontDecoration.BOLD))
-                    part = addSimpleTag("strong", part);
-                if(textpart.getType().contains(FontDecoration.UNDERLINE))
-                    part = "<strong class=\"underline\">" + part + "</strong>";
-                if(textpart.getType().contains(FontDecoration.ITALIC))
-                    part = addSimpleTag("em", part);
-                if(textpart.getType().contains(FontDecoration.STRIKETHROUH))
-                    part = addSimpleTag("strike", part);
-            }
-            res += part;
-        }
-        return res;
+        return TextPrinter.printText(parts);
     }
     
     private String toHtml(PPTList list){
         return toHtml(changeStructure(list));
-        
-        /*String res = "";
-        
-        setTABS(++indentation);
-        for(PPTObject object : list.getBullets()){
-            String html = objectToHtml(object);
-            res += "\n" + TABS + addSimpleTag("li", html);
-        }
-        setTABS(--indentation);
-        res += "\n" + TABS;
-        if(list.isOrdered())
-            return addSimpleTag("ol", res);
-        else
-            return addSimpleTag("ul", res);
-        */
     }
     
     private String toHtml(DeepPPTList list){
@@ -235,7 +199,13 @@ public class HTMLWriter extends Writer implements Indentation{
             for(PPTObject object : item){
                 if(!itemString.equals(""))
                     itemString += "\n" + TABS;
-                itemString += objectToHtml(object);
+                if(object instanceof Text){
+                    Text text = (Text)object;
+                    itemString += printTextparts(text.getTextparts());
+                }
+                else{
+                    itemString += objectToHtml(object);
+                }
             }
             res += "\n" + TABS + addSimpleTag("li", itemString);
         }
@@ -267,67 +237,6 @@ public class HTMLWriter extends Writer implements Indentation{
         return res;
     }
     
-    /*
-    private PPTList extractElementen(PPTList list) {
-        PPTList res = new PPTList();
-        
-        for(PPTObject obj : list.getBullets()){
-            if(obj instanceof PPTList){
-                PPTList l = (PPTList)obj;
-                PPTList inside = extractElementen(l);
-                res.getBullets().addAll(inside.getBullets());
-            }
-            else{
-                res.addPPTObject(obj);
-            }
-        }
-        
-        return res;
-    }
-    
-    
-    private DeepPPTList changeStructure(PPTList list){
-        list = extractElementen(list);
-        DeepPPTList res = new DeepPPTList();
-        int lastParent = list.getBullets().get(0) instanceof Text && getLevel((Text)list.getBullets().get(0))!=null ? getLevel((Text)list.getBullets().get(0)) : 0;
-        
-        int i=0;
-        while(i<list.getBullets().size()){
-            PPTObject obj = list.getBullets().get(i);
-            Text text = setText(obj);
-            
-            //moet while zijn, opletten wat als je een lijst van afbeeldingen hebt, niet op 1 lijn plaatsen!
-            if(text==null || (getLevel(text)!=null && getLevel(text) > lastParent)){
-                //bij vorige item
-                res.getLast().add(obj);
-            }
-            //else if(getLevel(text)==null || getLevel(text) <= lastParent){
-            else{
-                //nieuw item
-                List<PPTObject> nw = new ArrayList<>();
-                nw.add(obj);
-                res.add(nw);
-            }
-            i++;
-        }
-        
-        return res;
-    }
-    
-    private Text setText(PPTObject obj){
-        Text text = null;
-        if(obj instanceof Text){
-            text = (Text)obj;
-        }
-        return text;
-    }
-    
-    private Integer getLevel(Text text){
-        if(text.getLevel()==null)
-            return null;
-        return Integer.parseInt(text.getLevel());
-    }*/
-    
     private String toHtml(Image image){
         if(image.getFilename() == null){
             Placeholder ph = new Placeholder();
@@ -339,20 +248,19 @@ public class HTMLWriter extends Writer implements Indentation{
         String res = TABS + "<img src=\"" + getImageSource(image) + "\">";
         setTABS(--indentation);
         
-        double W = image.getDimension().getWidth()/33;
-        double H = image.getDimension().getHeight()/19;
+        double W = image.getDimension().getWidth();
+        double H = image.getDimension().getHeight();
         
-        if(W>0.9 && (H>1.1 || H<=0.9)){ //full width
+        if(W>90 && (H>110 || H<=90)){ //full width
             res = "<figure class=\"cover width\">\n" + res;
         }
-        else if(H>0.9){ //full height
+        else if(H>90){ //full height
             res = "<figure class=\"cover height\">\n" + res;
         }
         else{ //normal image
             if(image.getDimension().getWidth()>0 && image.getDimension().getHeight()>0){
                 setTABS(++indentation);
-                int width = (int) (image.getDimension().getWidth()/33.0*100.0);
-                res = TABS + "<img src=\"" + getImageSource(image) + "\" width=\"" + width + "%\">";
+                res = TABS + "<img src=\"" + getImageSource(image) + "\" width=\"" + (int)W + "%\">";
                 setTABS(--indentation);
             }
             res = "<figure>\n" + res;
@@ -410,17 +318,42 @@ public class HTMLWriter extends Writer implements Indentation{
     }
     
     private String toHtml(Video video){
-        if(video.getFilename() == null || !validVideoExtension(video)){
-            Placeholder ph = new Placeholder();
-            ph.setContent("video");
-            return toHtml(ph);
+        if(video.getLink() == null){ //local video
+            if(video.getFilename() == null || !validVideoExtension(video)){
+                Placeholder ph = new Placeholder();
+                ph.setContent("video");
+                return toHtml(ph);
+            }
+
+            String res = "<video controls>";
+            setTABS(++indentation);
+            res += "\n" + TABS + "<source src=\"" + getVideoSource(video) + "\" type=\"" + getVideoType(video) + "\">";
+            setTABS(--indentation);
+            return res += "\n" + TABS + "</video>";
         }
-        
-        String res = "<video controls>";
-        setTABS(++indentation);
-        res += "\n" + TABS + "<source src=\"" + video.getFilename() + "\" type=\"" + getVideoType(video) + "\">";
-        setTABS(--indentation);
-        return res += "\n" + TABS + "</video>";
+        else{ //youtube video
+            //https://www.youtube.com/embed/yMjPqr1s-cg?cc_load_policy=1&iv_load_policy=3&disablekb=1&rel=0&showinfo=0&autohide=1
+            String res = "<iframe ";
+            
+            if(video.getDimension().getWidth() > 0  && video.getDimension().getHeight() > 0 &&
+               video.getDimension().getWidth() < 90 && video.getDimension().getHeight() < 90){
+                res += "width=\""+(int)video.getDimension().getWidth()+"%\" height=\""+(int)video.getDimension().getHeight()+"%\" ";
+            }
+            else{
+                res += "class=\"cover width height\" ";
+            }
+            
+            res += "src=\""
+                    + video.getLink()
+                    + "?cc_load_policy=1&iv_load_policy=3&disablekb=1&rel=0&showinfo=0&autohide=1"
+                    + "\"></iframe>";
+            
+            return res;
+        }
+    }
+    
+    private String getVideoSource(Video video){
+        return imagesFolder + "/" + video.getFilename();
     }
     
     private boolean validVideoExtension(Video video){
@@ -430,6 +363,18 @@ public class HTMLWriter extends Writer implements Indentation{
     
     private String getVideoType(Video video){
         return "video/" + FilenameUtils.getExtension(video.getFilename()).toLowerCase();
+    }
+    
+    private String toHtml(Footer footer){
+        String res = "<div class=\"footer\">";
+        
+        setTABS(++indentation);
+        for(PPTObject obj : footer.getPptObjects()){
+            res += "\n" + TABS + objectToHtml(obj);
+        }
+        setTABS(--indentation);
+        
+        return res += "\n" + TABS + "</div>";
     }
     
 }

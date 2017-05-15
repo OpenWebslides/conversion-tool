@@ -10,9 +10,11 @@ import java.util.ArrayList;
 /**
  *
  * @author Karel
+ * A text is a paragraph
  */
 public class Text implements PPTObject {
     
+    //Text is built from multiple textparts
     private final ArrayList<Textpart> textparts;
     
     private String level;
@@ -51,11 +53,10 @@ public class Text implements PPTObject {
         return toret;
     }
 
-   /* public boolean compare(Textpart tp1, Textpart tp2){
-        
-    }
-    */
     @Override
+    /**
+     * Return a String with the content of the text
+     */
     public String getContent(){ 
         String toret = "";
         if(textparts.size()>0){

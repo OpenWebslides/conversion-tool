@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Introduction</title>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+	<link rel="stylesheet" href="_shared/styles/screen-16x10.css">
+</head>
+<body class="shower list">
+	<header class="caption">
+		<h1>
+			<a class="series" href="#title">Opleidingsonderdeel</a><br>
+			<a class="module" href="#title">Hoofdstuk</a>
+		</h1>
+		<p>
+		</p>
+	</header>
+
+
+	<div class="title slide" id="slide0">
+	</div>
+	<div class="slide" id="slide1">
+		<h2>titel van de slide</h2>
+		<div class="placeholder">
+                    <img id="i1" src="images/sign.png" width="150px"/>
+                    <img id="i2" src="images/sign2.png" width="150px"/>
+                    <marquee style="padding: 10px;" behavior="scroll" direction="left" width="350px">This graph could <span style="font-size: 2em; font-weight: bold; color: red;">NOT</span> be converted.</marquee>
+                    
+                    <img src="images/tenor.gif" width="300px"/>
+                </div>
+	</div>
+
+	<footer>
+	</footer>
+	<script src="_shared/scripts/shower.min.js"></script>
+	<script src="_shared/scripts/enhancements.js"></script>
+        <script>
+            window.onload=function(){
+                change();
+                changeimg();
+            };
+            
+            var n = 0;
+            
+            function change(){
+                if(n==0){
+                    n = 1;
+                    color = "red";
+                }
+                else{
+                    n = 0;
+                    color = "yellow";
+                }
+                document.getElementById("slide1").style.background = color;
+                setTimeout(change, 500);
+            }
+            
+            var i = 0;
+            
+            function changeimg(){
+                if(i==0){
+                    i = 1;
+                    document.getElementById("i1").style.display = "none";
+                    document.getElementById("i2").style.display = "inline";
+                }
+                else{
+                    i = 0;
+                    document.getElementById("i2").style.display = "none";
+                    document.getElementById("i1").style.display = "inline";
+                }
+                setTimeout(changeimg, 800);
+            }
+        </script>
+</body>
+</html>
