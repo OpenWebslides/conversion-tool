@@ -1,8 +1,8 @@
 ﻿Datum,Start,Einde,Plaats,Categorie,Omschrijving,Issue #,Opmerkingen
 14/02/17,08:15,10:15,Campus,Projectwerk,inleiding + SCRUM,,
 14/02/17,10:30,12:30,Campus,Projectwerk,inleiding + SCRUM,,
-14/02/17,13:30,15:30,Extern,Projectwerk,Setup Slack, Sketchboard, Webstorm IDE
-14/02/17,19:00,20:30,Extern,Projectwerk,Setup Slack, Github en github slack integratie,
+14/02/17,13:30,15:30,Extern,Projectwerk,Setup Slack Sketchboard Webstorm IDE,,
+14/02/17,19:00,20:30,Extern,Projectwerk,Setup Slack Github en github slack integratie,,
 15/02/17,19:00,21:30,Extern,Projectwerk,Sketchboard product backlog voor sessie van 16/02,,
 16/02/17,13:30,15:30,Campus,Projectwerk,Contactmoment,,
 16/02/17,15:45,17:45,Campus,Communicatie,Sessie 1 presenteren,,
@@ -125,3 +125,4 @@
 13/05/17,19:00,22:15,Extern,Projectwerk,Singleton + standaardisatie & cleanup logging backend & deploy,99,
 14/05/17,19:00,21:30,Extern,Projectwerk,Github PR's & cleanup,,
 14/05/17,23:00,23:30,Extern,Projectwerk,Github PR & logboek,,
+15/05/17,09:45,11:45,Extern,Projectwerk,deploy & update wiki op github,,
