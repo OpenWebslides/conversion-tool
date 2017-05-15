@@ -48,7 +48,7 @@ public class CacheFilter implements Filter {
             log("[WEB]CacheFilter:DoBeforeProcessing()");
         }        
         String requestUri = request.getRequestURI();        
-        response.setHeader("Cache-Control", "public, max-age=24192000");
+        response.setHeader("Cache-Control", "public, max-age=32400000");
     }
 
     /**

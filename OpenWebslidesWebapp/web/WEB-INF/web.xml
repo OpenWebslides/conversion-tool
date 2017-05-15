@@ -36,6 +36,14 @@
         <filter-name>CacheFilter</filter-name>
         <url-pattern>*.svg</url-pattern>
     </filter-mapping>
+    <filter-mapping>
+        <filter-name>CacheFilter</filter-name>
+        <url-pattern>/resources/js/bootstrap.min.js</url-pattern>
+    </filter-mapping>    
+    <filter-mapping>
+        <filter-name>CacheFilter</filter-name>
+        <url-pattern>/resources/js/dropzone.js</url-pattern>
+    </filter-mapping>  
     <servlet>
         <servlet-name>LanguageServlet</servlet-name>
         <servlet-class>servlets.LanguageServlet</servlet-class>
