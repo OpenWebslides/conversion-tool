@@ -52,10 +52,11 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         dropzone.on("sending", function (file, xhr, formData) {
             formData.append("output-type", $('input[name="output_type"]:checked').val());
         });
-        dropzone.on("error", function (file) {
+        dropzone.on("error", function (file,errormessage) {
             if (!file.accepted)
                 this.removeFile(file);            
             $("#alert").attr("style", "");
+            $("#message_alert").text(errormessage);
             setTimeout(function () {
                 $("#alert").fadeOut(700);
             }, 3000);
@@ -64,8 +65,6 @@ var dropzone = Dropzone.options.myAwesomeDropzone = {
         dropzone.on("addedfile",function(file){
             $("#btn-convert").removeAttr('disabled');
         });
-        
-        
         
         dropzone.on("success", function (file) {
             shared_vars.socket.send("File successfully uploaded" + file.toString());

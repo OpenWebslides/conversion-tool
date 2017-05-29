@@ -13,8 +13,8 @@ Dit is de master branch voor de bachelorproef Open-Webslides.
 
 ### Inhoud van de master branch
 * Projectbranches: 
-  * webslides_webapp: front-end
-  * open_webslides-converter: back-end
+  * webslides_webapp
+  * open_webslides_converter
   * zipper, logger en webslides_conversion_lib  zijn elk zelfgeschreven libraries (Er is ook een niet gebruikte DAOLib aanwezig)
 
 Het project is modulair en dat wordt hier weerspiegeld, elk deel kan apart getest worden.  
